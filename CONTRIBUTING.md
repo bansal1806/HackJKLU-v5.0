@@ -1,4 +1,4 @@
-# Contributing to HackJKLU v5.0
+# Contributing to HACKJKLU 5.0
 
 ## Getting Started
 

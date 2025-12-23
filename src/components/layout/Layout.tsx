@@ -47,7 +47,7 @@ export function Layout({ children }: LayoutProps) {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto px-6" style={{ backgroundColor: 'var(--void-black)' }}>
                     <Link to="/" className="block transition-colors">
                         <span className="font-[Cinzel] tracking-[0.2em] font-bold text-sm sm:text-base text-ivory-cream hover:text-gold-shimmer transition-colors">
-                            HACKJKLU v4.0
+                            HACKJKLU 5.0
                         </span>
                     </Link>
                 </div>
