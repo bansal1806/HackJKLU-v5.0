@@ -54,7 +54,7 @@ export function Hero() {
                     className="mb-8 md:mb-12"
                 >
                     <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-[Cinzel] font-bold tracking-wider leading-none px-2" style={{ color: 'var(--ivory-cream)', textShadow: '0 0 30px rgba(74, 14, 14, 0.8), 0 10px 40px rgba(74, 14, 14, 0.6)' }}>
-                        HACKJKLU<br />5.0
+                        HACKJKLU<br />v4.0
                     </h1>
                     <p className="text-sm sm:text-lg md:text-xl font-[Cinzel] mt-4 tracking-[0.2em] uppercase text-glow-amber" style={{ color: 'var(--gold-shimmer)' }}>
                         Ideate. Innovate. Inspire.
@@ -131,7 +131,7 @@ export function Hero() {
                             <div className="w-16 h-16 rounded-full border border-current flex items-center justify-center glow-amber">
                                 <Volume2 className="w-6 h-6" />
                             </div>
-                            <span className="text-xs uppercase tracking-[0.3em]">Enter HACKJKLU 5.0</span>
+                            <span className="text-xs uppercase tracking-[0.3em]">Enter HackJKLU v4.0</span>
                         </motion.button>
                     </motion.div>
                 )}

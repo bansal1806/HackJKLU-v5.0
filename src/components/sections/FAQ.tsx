@@ -6,7 +6,7 @@ import { ChevronDown } from 'lucide-react';
 const faqs = [
     { q: "What is the team size?", a: "You can form teams of 1 to 5 members." },
     { q: "Do I need prior experience?", a: "No! Beginners are welcome. We have mentors to guide you." },
-    { q: "Is there a registration fee?", a: "No, HACKJKLU 5.0 is completely free for all participants." },
+    { q: "Is there a registration fee?", a: "No, HackJKLU is completely free for all participants." },
     { q: "Will accom-modation be provided?", a: "Yes, food and accommodation will be provided for offline participants." },
     { q: "Who can participate?", a: "Any student with a valid ID card from a recognized institute." }
 ];

@@ -1,6 +1,6 @@
-# HACKJKLU 5.0
+# HackJKLU v5.0
 
-A high-performance 3D website for HACKJKLU 5.0 hackathon with Greek mythology theme, featuring stunning visuals, animations, and immersive experiences.
+A high-performance 3D website for HackJKLU hackathon with Greek mythology theme, featuring stunning visuals, animations, and immersive experiences.
 
 ## 🎨 Features
 
@@ -106,7 +106,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ## 📝 License
 
-This project is for HACKJKLU 5.0 event.
+This project is for HackJKLU v5.0 event.
 
 ## 🔗 Links
 
@@ -115,4 +115,4 @@ This project is for HACKJKLU 5.0 event.
 
 ---
 
-Built with ❤️ for HACKJKLU 5.0
+Built with ❤️ for HackJKLU v5.0
