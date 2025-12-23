@@ -14,7 +14,7 @@ import { EventsPage } from './pages/Events';
 
 function App() {
   return (
-    <Layout>
+      <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -28,7 +28,7 @@ function App() {
         <Route path="/team" element={<TeamPage />} />
         <Route path="/events" element={<EventsPage />} />
       </Routes>
-    </Layout>
+      </Layout>
   );
 }
 

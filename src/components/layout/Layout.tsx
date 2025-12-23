@@ -91,7 +91,7 @@ export function Layout({ children }: LayoutProps) {
                         />
                         
                         {/* Sidebar Menu */}
-                        <motion.div
+                    <motion.div
                             initial={{ x: -400 }}
                             animate={{ x: 0 }}
                             exit={{ x: -400 }}
@@ -157,13 +157,13 @@ export function Layout({ children }: LayoutProps) {
                                                     {item.number}.
                                                 </span>
                                                 <span className="font-[Cinzel] text-xl tracking-wide">
-                                                    {item.name}
+                                    {item.name}
                                                 </span>
                                             </Link>
                                         );
                                     })}
                                 </div>
-                            </nav>
+                        </nav>
 
                             {/* Subscribe Section */}
                             <div className="px-8 py-4 border-t" style={{ borderColor: 'rgba(126, 64, 49, 0.3)' }}>
@@ -198,7 +198,7 @@ export function Layout({ children }: LayoutProps) {
                                     Terms of Use & Privacy Policy
                                 </Link>
                             </div>
-                        </motion.div>
+                    </motion.div>
                     </>
                 )}
             </AnimatePresence>
