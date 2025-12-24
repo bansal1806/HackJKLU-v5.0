@@ -1,12 +1,11 @@
-import { Episodes } from '../components/sections/Episodes';
+import { CosmicItinerary } from '../components/sections/CosmicItinerary';
 import { PageNavigation } from '../components/navigation/PageNavigation';
 
 export function Itinerary() {
   return (
     <>
-      <Episodes />
+      <CosmicItinerary />
       <PageNavigation />
     </>
   );
 }
-
