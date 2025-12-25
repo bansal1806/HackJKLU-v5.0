@@ -1,108 +1,68 @@
 @import "tailwindcss";
 
-/* Greek Mythology Theme - CSS Variables */
+@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&display=swap');
+/* Merge: Added fonts for Pendragon Team page */
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+@theme {
+  --font-uncial: "Uncial Antiqua", cursive;
+  --font-cinzel: "Cinzel", serif;
+  --font-medieval: "MedievalSharp", cursive;
+  --font-baskerville: "Libre Baskerville", serif;
+  --font-cursive: "Cinzel Decorative", cursive;
+
+  --color-gold-50: #fff9e6;
+  --color-gold-100: #ffebb3;
+  --color-gold-200: #ffe699;
+  --color-gold-300: #ffd480;
+  --color-gold-400: #ffc266;
+  --color-gold-500: #d4af37;
+  --color-gold-600: #b38f2e;
+  --color-gold-700: #917024;
+  --color-gold-800: #6e521b;
+  --color-gold-900: #4c3611;
+  --color-gold-950: #2b1d09;
+}
+
 :root {
-  /* Primary Colors */
-  --blood-red: #6f1c16;
-  --void-black: #000000;
-  --terracotta: #7e4031;
-  --golden-amber: #ee8a3c;
-  --ivory-cream: #ffecd1;
-  
-  /* Extended Palette */
-  --bronze: #CD7F32;
-  --olive-green: #6B8E23;
-  --marble-white: #F8F8FF;
-  --deep-wine: #4A0E0E;
-  --gold-shimmer: #FFD700;
-  --stone-gray: #8B8680;
-  
-  /* Semantic Colors */
-  --color-primary: var(--blood-red);
-  --color-secondary: var(--terracotta);
-  --color-accent: var(--golden-amber);
-  --color-background: var(--void-black);
-  --color-text: var(--ivory-cream);
-  --color-text-secondary: var(--stone-gray);
-  --color-highlight: var(--gold-shimmer);
-  --color-border: var(--terracotta);
-  --color-glow: var(--golden-amber);
-  --color-shadow: var(--deep-wine);
+  color-scheme: dark;
 }
 
-@layer base {
-  html {
-    @apply antialiased;
-  }
-
-  body {
-    @apply overflow-x-hidden;
-    background-color: var(--void-black);
-    color: var(--ivory-cream);
-    font-family: 'Lato', sans-serif;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: 'Cinzel', serif;
-    color: var(--ivory-cream);
-  }
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #0c0a09;
+  /* cursor: none;  Removed to respect original site lacking customized cursor, unless user explicitly demands it globally. I will leave it normal for now. */
 }
 
-/* Noise texture overlay */
-.bg-noise {
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1c1917;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #44403c;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+/* Texture overlay for mythic feel - KEY for Team page */
+.mythic-texture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-}
-
-/* Greek Mythology Theme Utility Classes */
-.text-blood-red { color: var(--blood-red); }
-.text-terracotta { color: var(--terracotta); }
-.text-golden-amber { color: var(--golden-amber); }
-.text-ivory-cream { color: var(--ivory-cream); }
-.text-bronze { color: var(--bronze); }
-.text-gold-shimmer { color: var(--gold-shimmer); }
-.text-stone-gray { color: var(--stone-gray); }
-
-.bg-blood-red { background-color: var(--blood-red); }
-.bg-terracotta { background-color: var(--terracotta); }
-.bg-golden-amber { background-color: var(--golden-amber); }
-.bg-ivory-cream { background-color: var(--ivory-cream); }
-.bg-bronze { background-color: var(--bronze); }
-.bg-deep-wine { background-color: var(--deep-wine); }
-.bg-stone-gray { background-color: var(--stone-gray); }
-
-.border-blood-red { border-color: var(--blood-red); }
-.border-terracotta { border-color: var(--terracotta); }
-.border-golden-amber { border-color: var(--golden-amber); }
-.border-bronze { border-color: var(--bronze); }
-
-/* Glow effects */
-.glow-blood {
-  box-shadow: 0 0 20px rgba(111, 28, 22, 0.5);
-}
-
-.glow-gold {
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-}
-
-.glow-amber {
-  box-shadow: 0 0 25px rgba(238, 138, 60, 0.5);
-}
-
-/* Text glow */
-.text-glow-gold {
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
-}
-
-.text-glow-amber {
-  text-shadow: 0 0 10px rgba(238, 138, 60, 0.8), 0 0 20px rgba(238, 138, 60, 0.5);
-}
-
-/* Legacy support */
-.text-gold {
-  color: var(--gold-shimmer);
+  pointer-events: none;
+  z-index: 50;
+  mix-blend-mode: overlay;
 }
