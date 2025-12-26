@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 
 // Assets
 import arrowLeft from '../../assets/prizes/arrow-left.png';
@@ -28,9 +28,9 @@ const mainPrizes = [
         role: "Ruler of the Seas",
         textGodDetailsImg: textPoseidonDetails,
         amount: "25K",
-        color: "#C0C0C0",
-        border: "linear-gradient(to bottom right, #a0a0a0, #e0e0e0)",
-        image: poseidonImg
+        color: "#cd7f32",
+        border: "linear-gradient(to bottom right, #cd7f32, #8b4500)",
+        image: hadesImg
     },
     {
         rank: "1",
@@ -52,10 +52,10 @@ const mainPrizes = [
         god: "Hades",
         role: "Ruler of the Underworld",
         textGodDetailsImg: textHadesDetails,
-        amount: "10K",
-        color: "#cd7f32",
-        border: "linear-gradient(to bottom right, #cd7f32, #8b4500)",
-        image: hadesImg
+        amount: "25K",
+        color: "#C0C0C0",
+        border: "linear-gradient(to bottom right, #a0a0a0, #e0e0e0)",
+        image: poseidonImg
     }
 ];
 
@@ -68,6 +68,22 @@ const domainPrizes = [
 
 export function Prizes() {
     const [activeIndex, setActiveIndex] = useState(1); // Default to Zeus (Center)
+    const containerRef = useRef(null);
+
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end end"]
+    });
+
+    // Fade out Main Prizes as we scroll down (0% to 20% of scroll)
+    const opacityMain = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+
+    // Scale down Main Prizes slightly for effect
+    const scaleMain = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+
+    // Fade in Domain Prizes as we approach them (15% to 35% of scroll)
+    const opacityDomain = useTransform(scrollYProgress, [0.15, 0.35], [0, 1]);
+    const yDomain = useTransform(scrollYProgress, [0.15, 0.35], [100, 0]);
 
     const handleNext = () => {
         setActiveIndex((prev) => (prev + 1) % mainPrizes.length);
@@ -87,7 +103,7 @@ export function Prizes() {
 
 
     return (
-        <div className="min-h-screen bg-neutral-950 text-neutral-100 font-cinzel overflow-x-hidden selection:bg-yellow-900 selection:text-white pb-32">
+        <div ref={containerRef} className="min-h-[200vh] bg-neutral-950 text-neutral-100 font-cinzel overflow-x-hidden selection:bg-yellow-900 selection:text-white pb-32">
             {/* Background Effects */}
             <div className="fixed inset-0 pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-yellow-900/10 rounded-full blur-[100px]" />
@@ -100,7 +116,11 @@ export function Prizes() {
                 <img src={logoSmall} alt="HackJKLU" className="w-48 md:w-64 opacity-80" />
             </div>
 
-            <div className="relative z-10 container mx-auto px-4 py-20 flex flex-col items-center">
+            {/* MAIN PRIZES SECTION (Fixed/Sticky behavior or just top part) */}
+            <motion.div
+                style={{ opacity: opacityMain, scale: scaleMain }}
+                className="relative z-10 container mx-auto px-4 py-20 flex flex-col items-center sticky top-0"
+            >
 
                 {/* HEADLINE */}
                 <motion.h1
@@ -140,7 +160,7 @@ export function Prizes() {
                         <motion.div
                             key={`active-${activeIndex}`}
                             initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1.15, opacity: 1, x: -100 }} // Shifted LEFT to make room for text on right
+                            animate={{ scale: 1.15, opacity: 1, x: -190 }} // Shifted LEFT to center the (Card + Text) block
                             exit={{ scale: 0.9, opacity: 0 }}
                             transition={{ duration: 0.5 }}
                             className="z-20 relative shadow-[0_0_50px_rgba(255,215,0,0.2)]"
@@ -164,7 +184,7 @@ export function Prizes() {
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.4, delay: 0.2 }}
                         className="absolute z-20 hidden lg:flex flex-col items-start text-left w-[360px]"
-                        style={{ left: 'calc(50% + 100px)' }} // Positioned relative to center, accounting for the shifted card
+                        style={{ left: 'calc(50% - 20px)' }} // Positioned relative to center: CardRight is at -40px, so -20px gives 20px gap
                     >
                         {/* Title: Text Image or Fallback Text */}
                         {activePrize.textTitleImg ? (
@@ -244,57 +264,57 @@ export function Prizes() {
                     )}
                 </div>
 
+            </motion.div>
 
-                {/* DOMAIN PRIZES SECTION */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    className="w-full max-w-7xl text-center"
-                >
-                    <div className="flex flex-col items-center justify-center mb-16 gap-4">
-                        <h2 className="text-3xl md:text-5xl tracking-[0.2em] text-[#e8dab2] px-4">DOMAIN PRIZES</h2>
+
+            {/* DOMAIN PRIZES SECTION (Comes in after) */}
+            <motion.div
+                style={{ opacity: opacityDomain, y: yDomain }}
+                className="w-full max-w-7xl mx-auto container px-4 mb-40 mt-20"
+            >
+                <div className="flex flex-col items-center justify-center mb-16 gap-4">
+                    <h2 className="text-3xl md:text-5xl tracking-[0.2em] text-[#e8dab2] px-4">DOMAIN PRIZES</h2>
+                </div>
+
+                <div className="relative px-4 md:px-12">
+                    {/* Domain Arrows - Reusing the gold arrows but smaller */}
+                    <button className="hidden md:block absolute left-[-2rem] top-1/2 -translate-y-1/2 hover:scale-110 transition-transform">
+                        <img src={arrowLeft} alt="Prev" className="w-16 opacity-50 hover:opacity-100" />
+                    </button>
+                    <button className="hidden md:block absolute right-[-2rem] top-1/2 -translate-y-1/2 hover:scale-110 transition-transform">
+                        <img src={arrowRight} alt="Next" className="w-16 opacity-50 hover:opacity-100" />
+                    </button>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {domainPrizes.map((domain, i) => (
+                            <motion.div
+                                key={i}
+                                whileHover={{ y: -10, boxShadow: "0 10px 30px rgba(212, 175, 55, 0.2)" }}
+                                className="relative w-full aspect-[3/4.5] rounded-xl overflow-hidden border border-[#d4af37]/30 group bg-neutral-900"
+                            >
+                                <div className="absolute inset-0 bg-cover bg-center contrast-125 saturate-0 group-hover:saturate-100 transition-all duration-500" style={{ backgroundImage: `url(${domain.img})` }} />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90" />
+
+                                {/* Ornate Corner Accents (CSS) */}
+                                {/* Top Left */}
+                                <div className="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-[#d4af37]" />
+                                {/* Top Right */}
+                                <div className="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-[#d4af37]" />
+                                {/* Bottom Left */}
+                                <div className="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-[#d4af37]" />
+                                {/* Bottom Right */}
+                                <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-[#d4af37]" />
+
+                                <div className="absolute bottom-10 left-0 w-full text-center px-4">
+                                    <h4 className="text-2xl text-[#d4af37] font-bold mb-2 font-medieval tracking-wide">{domain.title}</h4>
+                                    <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 border-t border-[#d4af37]/30 pt-3 inline-block">{domain.desc}</p>
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
+                </div>
+            </motion.div>
 
-                    <div className="relative px-4 md:px-12">
-                        {/* Domain Arrows - Reusing the gold arrows but smaller */}
-                        <button className="hidden md:block absolute left-[-2rem] top-1/2 -translate-y-1/2 hover:scale-110 transition-transform">
-                            <img src={arrowLeft} alt="Prev" className="w-16 opacity-50 hover:opacity-100" />
-                        </button>
-                        <button className="hidden md:block absolute right-[-2rem] top-1/2 -translate-y-1/2 hover:scale-110 transition-transform">
-                            <img src={arrowRight} alt="Next" className="w-16 opacity-50 hover:opacity-100" />
-                        </button>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {domainPrizes.map((domain, i) => (
-                                <motion.div
-                                    key={i}
-                                    whileHover={{ y: -10, boxShadow: "0 10px 30px rgba(212, 175, 55, 0.2)" }}
-                                    className="relative w-full aspect-[3/4.5] rounded-xl overflow-hidden border border-[#d4af37]/30 group bg-neutral-900"
-                                >
-                                    <div className="absolute inset-0 bg-cover bg-center contrast-125 saturate-0 group-hover:saturate-100 transition-all duration-500" style={{ backgroundImage: `url(${domain.img})` }} />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90" />
-
-                                    {/* Ornate Corner Accents (CSS) */}
-                                    {/* Top Left */}
-                                    <div className="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-[#d4af37]" />
-                                    {/* Top Right */}
-                                    <div className="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-[#d4af37]" />
-                                    {/* Bottom Left */}
-                                    <div className="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-[#d4af37]" />
-                                    {/* Bottom Right */}
-                                    <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-[#d4af37]" />
-
-                                    <div className="absolute bottom-10 left-0 w-full text-center px-4">
-                                        <h4 className="text-2xl text-[#d4af37] font-bold mb-2 font-medieval tracking-wide">{domain.title}</h4>
-                                        <p className="text-xs uppercase tracking-[0.2em] text-neutral-400 border-t border-[#d4af37]/30 pt-3 inline-block">{domain.desc}</p>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.div>
-
-            </div >
-        </div >
+        </div>
     );
 }

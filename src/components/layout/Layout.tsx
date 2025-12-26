@@ -1,4 +1,6 @@
 import { Volume2, VolumeX, X } from 'lucide-react';
+import owlLogo from '../../assets/owl-logo.png';
+
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
@@ -43,7 +45,12 @@ export function Layout({ children }: LayoutProps) {
                     </button>
                 </div>
 
-                {/* Logo - Center (Removed) */}
+                {/* Logo - Center */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto px-6 h-12 flex items-center justify-center" style={{ backgroundColor: 'var(--void-black)' }}>
+                    <Link to="/" className="block transition-transform hover:scale-110 duration-300">
+                        <img src={owlLogo} alt="HackJKLU Owl" className="h-16 w-auto object-contain mt-8" />
+                    </Link>
+                </div>
 
                 {/* Sound Button - Right */}
                 <div className="absolute top-0 right-8 -translate-y-1/2 pointer-events-auto px-2" style={{ backgroundColor: 'var(--void-black)' }}>
