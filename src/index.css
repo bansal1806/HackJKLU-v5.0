@@ -1,10 +1,10 @@
-@import "tailwindcss";
-
 @import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400;700&display=swap');
 /* Merge: Added fonts for Pendragon Team page */
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+@import "tailwindcss";
 
 @theme {
   --font-uncial: "Uncial Antiqua", cursive;
@@ -28,6 +28,11 @@
 
 :root {
   color-scheme: dark;
+  --void-black: #000000;
+  --ivory-cream: #ffecd1;
+  --golden-amber: #ee8a3c;
+  --gold-shimmer: #FFD700;
+  --stone-gray: #8B8680;
 }
 
 body {
