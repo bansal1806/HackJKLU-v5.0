@@ -36,7 +36,7 @@ export function Layout({ children }: LayoutProps) {
                 <div className="absolute top-0 left-26 right-20 h-px pointer-events-none" style={{ backgroundColor: 'rgba(126, 64, 49, 0.3)' }}></div>
 
                 {/* Menu - Left */}
-                <div className="absolute top-0 left-8 -translate-y-1/2 pointer-events-auto px-2" style={{ backgroundColor: 'var(--void-black)' }}>
+                <div className="absolute top-0 left-8 -translate-y-1/2 pointer-events-auto px-2">
                     <button
                         onClick={() => setIsMenuOpen(true)}
                         className="flex items-center gap-2 group"
@@ -46,14 +46,14 @@ export function Layout({ children }: LayoutProps) {
                 </div>
 
                 {/* Logo - Center */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto px-6 h-12 flex items-center justify-center" style={{ backgroundColor: 'var(--void-black)' }}>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto px-6 h-12 flex items-center justify-center">
                     <Link to="/" className="block transition-transform hover:scale-110 duration-300">
                         <img src={owlLogo} alt="HackJKLU Owl" className="h-16 w-auto object-contain mt-8" />
                     </Link>
                 </div>
 
                 {/* Sound Button - Right */}
-                <div className="absolute top-0 right-8 -translate-y-1/2 pointer-events-auto px-2" style={{ backgroundColor: 'var(--void-black)' }}>
+                <div className="absolute top-0 right-8 -translate-y-1/2 pointer-events-auto px-2">
                     <button
                         onClick={() => setIsMuted(!isMuted)}
                         className="opacity-80 hover:opacity-100 transition-opacity"
