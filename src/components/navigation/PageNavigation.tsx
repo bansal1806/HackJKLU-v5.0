@@ -19,7 +19,7 @@ const pageOrder = [
 export function PageNavigation() {
   const location = useLocation();
   const currentIndex = pageOrder.findIndex(page => page.path === location.pathname);
-  
+
   const previousPage = currentIndex > 0 ? pageOrder[currentIndex - 1] : null;
   const nextPage = currentIndex < pageOrder.length - 1 ? pageOrder[currentIndex + 1] : null;
 
@@ -31,7 +31,7 @@ export function PageNavigation() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="fixed bottom-8 left-8 z-50"
+          className="fixed bottom-8 left-8 z-[10000]"
         >
           <Link
             to={previousPage.path}
@@ -45,9 +45,9 @@ export function PageNavigation() {
               <span className="text-xs uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
                 Previous
               </span>
-              <span 
+              <span
                 className="text-sm md:text-base font-[Cinzel] pb-1 transition-colors"
-                style={{ 
+                style={{
                   borderBottom: '1px solid rgba(255, 215, 0, 0.5)',
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = 'var(--gold-shimmer)'}
@@ -66,7 +66,7 @@ export function PageNavigation() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="fixed bottom-8 right-8 z-50"
+          className="fixed bottom-8 right-8 z-[10000]"
         >
           <Link
             to={nextPage.path}
@@ -79,9 +79,9 @@ export function PageNavigation() {
               <span className="text-xs uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
                 Next
               </span>
-              <span 
+              <span
                 className="text-sm md:text-base font-[Cinzel] pb-1 transition-colors"
-                style={{ 
+                style={{
                   borderBottom: '1px solid rgba(255, 215, 0, 0.5)',
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = 'var(--gold-shimmer)'}
