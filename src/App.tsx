@@ -11,24 +11,26 @@ import { Gallery } from './pages/Gallery';
 import { FAQPage } from './pages/FAQ';
 import { TeamPage } from './pages/Team';
 import { EventsPage } from './pages/Events';
+import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
+import { PageNavigation } from './components/navigation/PageNavigation';
 
 function App() {
   return (
-      <Layout>
+    <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/themes" element={<Themes />} />
         <Route path="/prizes" element={<PrizesPage />} />
         <Route path="/partners" element={<Partners />} />
-        <Route path="/itinerary" element={<Itinerary />} />
+        <Route path="/itinerary" element={<><ComingSoonOverlay><Itinerary /></ComingSoonOverlay><PageNavigation /></>} />
         <Route path="/speakers" element={<SpeakersPage />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/gallery" element={<><ComingSoonOverlay><Gallery /></ComingSoonOverlay><PageNavigation /></>} />
+        <Route path="/faq" element={<><ComingSoonOverlay><FAQPage /></ComingSoonOverlay><PageNavigation /></>} />
         <Route path="/team" element={<TeamPage />} />
-        <Route path="/events" element={<EventsPage />} />
+        <Route path="/events" element={<><ComingSoonOverlay><EventsPage /></ComingSoonOverlay><PageNavigation /></>} />
       </Routes>
-      </Layout>
+    </Layout>
   );
 }
 
