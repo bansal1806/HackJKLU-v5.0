@@ -1,5 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
 
 export function Hero() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -38,146 +39,182 @@ export function Hero() {
     useEffect(() => {
         if (!canvasRef.current) return;
 
-        // Three.js setup
-        const canvas = canvasRef.current;
-        const scene = new (window as any).THREE.Scene();
-        const camera = new (window as any).THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new (window as any).THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.outputColorSpace = (window as any).THREE.SRGBColorSpace;
-        renderer.toneMapping = (window as any).THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.2;
-
-        camera.position.z = 1;
-
-        // Load skybox
-        const textureLoader = new (window as any).THREE.TextureLoader();
-        textureLoader.load('/skybox.jpg', (texture: any) => {
-            texture.colorSpace = (window as any).THREE.SRGBColorSpace;
-            scene.background = texture;
-            scene.environment = texture;
-        });
-
-        // Simple falling gold particle system
-        const particleCount = 400;
-        const particleGeometry = new (window as any).THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        const velocities = new Float32Array(particleCount * 3);
-
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            // Spread particles across the scene
-            positions[i] = (Math.random() - 0.5) * 6;     // X position
-            positions[i + 1] = (Math.random() - 0.5) * 6; // Y position  
-            positions[i + 2] = (Math.random() - 0.5) * 3; // Z position
-            
-            // Gentle falling velocities
-            velocities[i] = (Math.random() - 0.5) * 0.01;      // Slight horizontal drift
-            velocities[i + 1] = -0.008 - Math.random() * 0.005; // Gentle downward
-            velocities[i + 2] = (Math.random() - 0.5) * 0.005;  // Slight depth movement
-        }
-
-        particleGeometry.setAttribute('position', new (window as any).THREE.BufferAttribute(positions, 3));
-        particleGeometry.setAttribute('velocity', new (window as any).THREE.BufferAttribute(velocities, 3));
-
-        // Create circular texture for particles
-        function createCircleTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 64;
-            canvas.height = 64;
-            const context = canvas.getContext('2d')!;
-            
-            // Create radial gradient for smooth circular particles
-            const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
-            gradient.addColorStop(0, 'rgba(255, 215, 0, 1)');    // Gold center
-            gradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.8)'); // Fade
-            gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');     // Transparent edge
-            
-            context.fillStyle = gradient;
-            context.fillRect(0, 0, 64, 64);
-            
-            return new (window as any).THREE.CanvasTexture(canvas);
-        }
-
-        const particleTexture = createCircleTexture();
-        
-        const particleMaterial = new (window as any).THREE.PointsMaterial({
-            color: 0xFFD700, // Gold color
-            size: 4,
-            map: particleTexture,
-            transparent: true,
-            opacity: 0.8,
-            sizeAttenuation: false,
-            alphaTest: 0.1,
-            blending: (window as any).THREE.AdditiveBlending
-        });
-
-        const particles = new (window as any).THREE.Points(particleGeometry, particleMaterial);
-        scene.add(particles);
-
-        // Lighting
-        const ambientLight = new (window as any).THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-
-        const directionalLight = new (window as any).THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
-
-        // Animation variables
+        let scene: THREE.Scene;
+        let camera: THREE.PerspectiveCamera;
+        let renderer: THREE.WebGLRenderer;
         let animationId: number;
 
-        function animate() {
-            animationId = requestAnimationFrame(animate);
+        try {
+            // Three.js setup
+            const canvas = canvasRef.current;
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
 
-            // Simple falling particle animation
-            const positionAttribute = particleGeometry.getAttribute('position');
-            const velocityAttribute = particleGeometry.getAttribute('velocity');
-            const positions = positionAttribute.array;
-            const velocities = velocityAttribute.array;
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+
+            camera.position.z = 1;
+
+            // Set a default background color first
+            scene.background = new THREE.Color(0x000011);
+
+            // Load skybox
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load(
+                '/skybox.jpg', 
+                (texture: THREE.Texture) => {
+                    texture.colorSpace = THREE.SRGBColorSpace;
+                    scene.background = texture;
+                    scene.environment = texture;
+                },
+                undefined,
+                (error) => {
+                    console.warn('Failed to load skybox texture:', error);
+                    // Keep the fallback background color
+                }
+            );
+
+            // Simple falling gold particle system
+            const particleCount = 400;
+            const particleGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const velocities = new Float32Array(particleCount * 3);
 
             for (let i = 0; i < particleCount * 3; i += 3) {
-                // Update positions
-                positions[i] += velocities[i];         // X
-                positions[i + 1] += velocities[i + 1]; // Y
-                positions[i + 2] += velocities[i + 2]; // Z
+                // Spread particles across the scene
+                positions[i] = (Math.random() - 0.5) * 6;     // X position
+                positions[i + 1] = (Math.random() - 0.5) * 6; // Y position  
+                positions[i + 2] = (Math.random() - 0.5) * 3; // Z position
+                
+                // Gentle falling velocities
+                velocities[i] = (Math.random() - 0.5) * 0.01;      // Slight horizontal drift
+                velocities[i + 1] = -0.008 - Math.random() * 0.005; // Gentle downward
+                velocities[i + 2] = (Math.random() - 0.5) * 0.005;  // Slight depth movement
+            }
 
-                // Reset particles that fall below the view
-                if (positions[i + 1] < -3) {
-                    positions[i + 1] = 3;
-                    positions[i] = (Math.random() - 0.5) * 6;
-                    positions[i + 2] = (Math.random() - 0.5) * 3;
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particleGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+
+            // Create circular texture for particles
+            function createCircleTexture() {
+                const canvas = document.createElement('canvas');
+                canvas.width = 64;
+                canvas.height = 64;
+                const context = canvas.getContext('2d')!;
+                
+                // Create radial gradient for smooth circular particles
+                const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
+                gradient.addColorStop(0, 'rgba(255, 215, 0, 1)');    // Gold center
+                gradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.8)'); // Fade
+                gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');     // Transparent edge
+                
+                context.fillStyle = gradient;
+                context.fillRect(0, 0, 64, 64);
+                
+                return new THREE.CanvasTexture(canvas);
+            }
+
+            const particleTexture = createCircleTexture();
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0xFFD700, // Gold color
+                size: 4,
+                map: particleTexture,
+                transparent: true,
+                opacity: 0.8,
+                sizeAttenuation: false,
+                alphaTest: 0.1,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
+            function animate() {
+                animationId = requestAnimationFrame(animate);
+
+                try {
+                    // Simple falling particle animation
+                    const positionAttribute = particleGeometry.getAttribute('position');
+                    const velocityAttribute = particleGeometry.getAttribute('velocity');
+                    const positions = positionAttribute.array as Float32Array;
+                    const velocities = velocityAttribute.array as Float32Array;
+
+                    for (let i = 0; i < particleCount * 3; i += 3) {
+                        // Update positions
+                        positions[i] += velocities[i];         // X
+                        positions[i + 1] += velocities[i + 1]; // Y
+                        positions[i + 2] += velocities[i + 2]; // Z
+
+                        // Reset particles that fall below the view
+                        if (positions[i + 1] < -3) {
+                            positions[i + 1] = 3;
+                            positions[i] = (Math.random() - 0.5) * 6;
+                            positions[i + 2] = (Math.random() - 0.5) * 3;
+                        }
+
+                        // Keep particles within bounds
+                        if (positions[i] > 3) positions[i] = -3;
+                        if (positions[i] < -3) positions[i] = 3;
+                        if (positions[i + 2] > 1.5) positions[i + 2] = -1.5;
+                        if (positions[i + 2] < -1.5) positions[i + 2] = 1.5;
+                    }
+
+                    positionAttribute.needsUpdate = true;
+                    renderer.render(scene, camera);
+                } catch (error) {
+                    console.error('Animation error:', error);
                 }
-
-                // Keep particles within bounds
-                if (positions[i] > 3) positions[i] = -3;
-                if (positions[i] < -3) positions[i] = 3;
-                if (positions[i + 2] > 1.5) positions[i + 2] = -1.5;
-                if (positions[i + 2] < -1.5) positions[i + 2] = 1.5;
             }
 
-            positionAttribute.needsUpdate = true;
-            renderer.render(scene, camera);
+            animate();
+
+            // Handle resize
+            const handleResize = () => {
+                try {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                } catch (error) {
+                    console.error('Resize error:', error);
+                }
+            };
+
+            window.addEventListener('resize', handleResize);
+
+            return () => {
+                try {
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                    }
+                    window.removeEventListener('resize', handleResize);
+                    renderer.dispose();
+                    particleGeometry.dispose();
+                    particleMaterial.dispose();
+                    particleTexture.dispose();
+                } catch (error) {
+                    console.error('Cleanup error:', error);
+                }
+            };
+        } catch (error) {
+            console.error('Three.js initialization error:', error);
+            // Fallback: hide the canvas if Three.js fails
+            if (canvasRef.current) {
+                canvasRef.current.style.display = 'none';
+            }
         }
-
-        animate();
-
-        // Handle resize
-        const handleResize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-            }
-            window.removeEventListener('resize', handleResize);
-            renderer.dispose();
-        };
     }, []);
 
     return (
