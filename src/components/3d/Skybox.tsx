@@ -12,7 +12,7 @@ export function Skybox({ imagePath, intensity = 1 }: SkyboxProps) {
   const { scene } = useThree();
   const [error, setError] = useState<string | null>(null);
   
-  let texture;
+  let texture: THREE.Texture | null = null;
   try {
     texture = useTexture(imagePath);
   } catch (err) {

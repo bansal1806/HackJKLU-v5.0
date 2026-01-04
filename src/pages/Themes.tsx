@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Assets
@@ -92,11 +92,6 @@ const themesData = [
 
 export function Themes() {
   const [activeIndex, setActiveIndex] = useState(2); // Start in the middle
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % themesData.length);

@@ -1,6 +1,6 @@
 import { useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { useRef, createElement } from 'react';
 import * as THREE from 'three';
 
 interface SimpleSkyboxProps {
@@ -16,7 +16,7 @@ export function SimpleSkybox({
 }: SimpleSkyboxProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   
-  let texture;
+  let texture: THREE.Texture | null = null;
   try {
     texture = useTexture(imagePath);
   } catch (error) {
@@ -30,14 +30,13 @@ export function SimpleSkybox({
     }
   });
 
-  return (
-    <mesh ref={meshRef} scale={[-1, 1, 1]}>
-      <sphereGeometry args={[500, 64, 64]} />
-      <meshBasicMaterial 
-        map={texture} 
-        side={THREE.BackSide}
-        toneMapped={false}
-      />
-    </mesh>
+  return createElement('mesh', 
+    { ref: meshRef, scale: [-1, 1, 1] },
+    createElement('sphereGeometry', { args: [500, 64, 64] }),
+    createElement('meshBasicMaterial', { 
+      map: texture, 
+      side: THREE.BackSide,
+      toneMapped: false
+    })
   );
 }
