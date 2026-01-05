@@ -221,8 +221,8 @@ export default function PartnersSections() {
                         key={s.id}
                         onClick={() => switchSection(s.id)}
                         className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${currentSection === s.id
-                                ? 'bg-[#d4af37] border-[#d4af37] shadow-[0_0_15px_rgba(212,175,55,0.6)]'
-                                : 'bg-transparent border-neutral-500 hover:border-[#d4af37]/60'
+                            ? 'bg-[#d4af37] border-[#d4af37] shadow-[0_0_15px_rgba(212,175,55,0.6)]'
+                            : 'bg-transparent border-neutral-500 hover:border-[#d4af37]/60'
                             }`}
                         aria-label={`Go to section ${s.id + 1}`}
                     />
@@ -252,17 +252,17 @@ export default function PartnersSections() {
                                         {tier.title}
                                     </motion.h3>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 xl:gap-20 justify-items-center">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
                                         {tier.partners.map((partner, pIdx) => (
                                             <motion.div
                                                 key={pIdx}
                                                 initial={{ scale: 0.8, opacity: 0 }}
                                                 animate={{ scale: 1, opacity: 1 }}
                                                 transition={{ delay: 0.3 + pIdx * 0.1, duration: 0.5 }}
-                                                className="flex flex-col items-center gap-6 w-full max-w-[280px]"
+                                                className="flex flex-col items-center gap-6"
                                             >
-                                                <div className="relative w-56 h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 flex items-center justify-center group">
-                                                    {/* Rotating Ring - Increased Size */}
+                                                <div className="relative w-48 h-48 lg:w-56 lg:h-56 flex items-center justify-center">
+                                                    {/* Rotating Ring */}
                                                     <motion.div
                                                         animate={{ rotate: 360 }}
                                                         transition={{
@@ -270,30 +270,25 @@ export default function PartnersSections() {
                                                             duration: 30 + pIdx * 5,
                                                             ease: "linear"
                                                         }}
-                                                        className="absolute inset-0 group-hover:scale-110 transition-transform duration-300"
+                                                        className="absolute inset-0"
                                                     >
                                                         <img
                                                             src={tier.ring}
                                                             alt=""
-                                                            className="w-full h-full object-contain opacity-90 brightness-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:brightness-125 group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]"
+                                                            className="w-full h-full object-contain opacity-90 brightness-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
                                                         />
                                                     </motion.div>
 
-                                                    {/* Logo Container - Precise Center Alignment */}
-                                                    <div className="absolute inset-0 flex items-center justify-center p-8 lg:p-10 xl:p-12">
-                                                        <div className="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                                                            <img
-                                                                src={partner.logo}
-                                                                alt={partner.name}
-                                                                className="max-w-[70%] max-h-[70%] object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] group-hover:drop-shadow-[0_0_30px_rgba(0,0,0,0.9)]"
-                                                                style={{
-                                                                    objectPosition: 'center center'
-                                                                }}
-                                                            />
-                                                        </div>
+                                                    {/* Logo */}
+                                                    <div className="absolute inset-0 flex items-center justify-center p-8 lg:p-10">
+                                                        <img
+                                                            src={partner.logo}
+                                                            alt={partner.name}
+                                                            className="w-[70%] h-[70%] object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.8)]"
+                                                        />
                                                     </div>
                                                 </div>
-                                                <h4 className="text-ivory-cream font-cinzel text-sm lg:text-base tracking-widest text-center opacity-80 group-hover:opacity-100 transition-opacity duration-300 font-medium">
+                                                <h4 className="text-ivory-cream font-cinzel text-sm lg:text-base tracking-widest text-center opacity-80">
                                                     {partner.name}
                                                 </h4>
                                             </motion.div>
@@ -303,7 +298,11 @@ export default function PartnersSections() {
                             ))}
                         </div>
                     ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-start pointer-events-auto">
+                        <div
+                            className="w-full h-full flex flex-col items-center justify-start pointer-events-auto"
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                        >
                             {/* Constant Centered Headers */}
                             <div className="relative z-10 space-y-2 mb-8 md:mb-12">
                                 <motion.h3
@@ -326,18 +325,15 @@ export default function PartnersSections() {
                             </div>
 
                             {/* Dynamic Content Area */}
-                            <div 
-                                className="relative z-10 w-full max-w-7xl px-8 md:px-16 flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-24 h-[55vh]"
-                                onMouseEnter={() => setIsHovered(true)}
-                                onMouseLeave={() => setIsHovered(false)}
-                            >
-                                {/* Logo and Ring Container - Fixed Size */}
+                            <div className="relative z-10 w-full max-w-7xl px-8 md:px-16 flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-24 h-[55vh]">
+
+                                {/* Logo and Ring Container */}
                                 <motion.div
                                     layout
-                                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                                    className={`relative flex items-center justify-center transition-all duration-400 ${isHovered ? 'md:w-1/3 md:flex-shrink-0' : 'w-full'}`}
+                                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                                    className={`relative flex items-center justify-center ${isHovered ? 'md:w-1/3' : 'w-full'}`}
                                 >
-                                    {/* Rotating Ring - Keep same size always */}
+                                    {/* Rotating Ring */}
                                     <motion.div
                                         animate={{ rotate: 360 }}
                                         transition={{
@@ -345,25 +341,24 @@ export default function PartnersSections() {
                                             duration: section.ringSpeed || 30,
                                             ease: "linear"
                                         }}
-                                        className="w-[320px] h-[320px] md:w-[420px] md:h-[420px] lg:w-[480px] lg:h-[480px]"
+                                        className={`${isHovered ? 'w-[250px] h-[250px] lg:w-[320px] lg:h-[320px]' : 'w-[320px] h-[320px] md:w-[420px] md:h-[420px] lg:w-[500px] lg:h-[500px]'}`}
                                     >
                                         <img
                                             src={section.ring}
                                             alt=""
-                                            className="w-full h-full object-contain opacity-90 brightness-110 drop-shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:brightness-125 hover:drop-shadow-[0_0_35px_rgba(212,175,55,0.6)] transition-all duration-300"
+                                            className="w-full h-full object-contain opacity-90 brightness-110 drop-shadow-[0_0_25px_rgba(212,175,55,0.4)]"
                                         />
                                     </motion.div>
 
-                                    {/* Logo - Keep same size always */}
-                                    <div className="absolute inset-0 flex items-center justify-center">
+                                    {/* Logo */}
+                                    <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12 lg:p-16">
                                         {section.logo && (
-                                            <div className="w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 flex items-center justify-center">
-                                                <img
-                                                    src={section.logo}
-                                                    alt={section.name}
-                                                    className="max-w-full max-h-full object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] hover:drop-shadow-[0_0_40px_rgba(0,0,0,0.95)] transition-all duration-300"
-                                                />
-                                            </div>
+                                            <motion.img
+                                                layout
+                                                src={section.logo}
+                                                alt={section.name}
+                                                className="w-[60%] h-[60%] object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.9)]"
+                                            />
                                         )}
                                     </div>
                                 </motion.div>
@@ -372,79 +367,46 @@ export default function PartnersSections() {
                                 <AnimatePresence>
                                     {isHovered && section.bio && (
                                         <motion.div
-                                            initial={{ opacity: 0, x: 30, scale: 0.95 }}
-                                            animate={{ opacity: 1, x: 0, scale: 1 }}
-                                            exit={{ opacity: 0, x: 30, scale: 0.95 }}
-                                            transition={{ duration: 0.4, delay: 0.1 }}
-                                            className="md:w-2/3 text-left flex flex-col justify-center min-h-[400px]"
+                                            initial={{ opacity: 0, x: 50 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 50 }}
+                                            transition={{ duration: 0.5, delay: 0.2 }}
+                                            className="md:w-2/3 text-left flex flex-col justify-center"
                                         >
-                                            <h2 className="text-2xl md:text-3xl lg:text-4xl tracking-[0.2em] uppercase mb-6 font-bold" style={{ color: section.nameColor }}>
+                                            <h2 className="text-2xl md:text-3xl lg:text-4xl tracking-[0.2em] uppercase mb-6" style={{ color: section.nameColor }}>
                                                 {section.name}
                                             </h2>
-                                            <div className="text-neutral-300 text-sm md:text-base lg:text-lg leading-relaxed space-y-4 max-w-2xl font-sans text-justify flex-grow">
+                                            <div className="text-neutral-300 text-sm md:text-base lg:text-lg leading-relaxed space-y-4 max-w-2xl font-sans text-justify">
                                                 {section.bio.split('\n\n').map((paragraph, idx) => (
-                                                    <p key={idx} className="opacity-90 hover:opacity-100 transition-opacity duration-200">{paragraph}</p>
+                                                    <p key={idx}>{paragraph}</p>
                                                 ))}
                                             </div>
 
                                             {/* Horizontal Line */}
-                                            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-neutral-600 to-transparent my-8" />
+                                            <div className="w-full h-[1px] bg-neutral-700/50 my-8" />
 
                                             {/* Social Icons */}
-                                            <div className="flex justify-end gap-6 h-8">
-                                                {section.socials?.x && (
-                                                    <a href={section.socials.x} className="hover:scale-125 transition-all duration-200 opacity-70 hover:opacity-100">
-                                                        <img src={xIcon} alt="X" className="h-full invert sepia brightness-50 contrast-150 hover:brightness-75" />
-                                                    </a>
-                                                )}
-                                                {section.socials?.insta && (
-                                                    <a href={section.socials.insta} className="hover:scale-125 transition-all duration-200 opacity-70 hover:opacity-100">
-                                                        <img src={instaIcon} alt="Instagram" className="h-full invert sepia brightness-50 contrast-150 hover:brightness-75" />
-                                                    </a>
-                                                )}
-                                                {section.socials?.linkedin && (
-                                                    <a href={section.socials.linkedin} className="hover:scale-125 transition-all duration-200 opacity-70 hover:opacity-100">
-                                                        <img src={linkedinIcon} alt="LinkedIn" className="h-full invert sepia brightness-50 contrast-150 hover:brightness-75" />
-                                                    </a>
-                                                )}
-                                                {section.socials?.web && (
-                                                    <a href={section.socials.web} className="hover:scale-125 transition-all duration-200 opacity-70 hover:opacity-100">
-                                                        <img src={webIcon} alt="Website" className="h-full invert sepia brightness-50 contrast-150 hover:brightness-75" />
-                                                    </a>
-                                                )}
+                                            <div className="flex justify-end gap-6 h-8 opacity-80">
+                                                {section.socials?.x && <a href={section.socials.x} className="hover:scale-110 transition-transform"><img src={xIcon} alt="X" className="h-full invert sepia brightness-50 contrast-150" /></a>}
+                                                {section.socials?.insta && <a href={section.socials.insta} className="hover:scale-110 transition-transform"><img src={instaIcon} alt="Instagram" className="h-full invert sepia brightness-50 contrast-150" /></a>}
+                                                {section.socials?.linkedin && <a href={section.socials.linkedin} className="hover:scale-110 transition-transform"><img src={linkedinIcon} alt="LinkedIn" className="h-full invert sepia brightness-50 contrast-150" /></a>}
+                                                {section.socials?.web && <a href={section.socials.web} className="hover:scale-110 transition-transform"><img src={webIcon} alt="Website" className="h-full invert sepia brightness-50 contrast-150" /></a>}
                                             </div>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
 
                                 {/* Non-hovered Partner Name */}
-                                <AnimatePresence>
-                                    {!isHovered && section.name && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: 20 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="absolute bottom-[-80px] left-1/2 transform -translate-x-1/2 text-center"
-                                        >
-                                            <h2
-                                                className="text-lg md:text-xl lg:text-2xl xl:text-3xl tracking-[0.25em] drop-shadow-[0_2px_10px_rgba(0,0,0,1)] uppercase font-bold"
-                                                style={{ color: section.nameColor }}
-                                            >
-                                                {section.name}
-                                            </h2>
-                                            {section.bio && (
-                                                <motion.p
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 0.6 }}
-                                                    className="text-xs md:text-sm text-neutral-400 mt-2 tracking-widest uppercase"
-                                                >
-                                                    Hover for details
-                                                </motion.p>
-                                            )}
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+                                {!isHovered && (
+                                    <motion.h2
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="absolute bottom-[-100px] text-lg md:text-xl lg:text-2xl xl:text-3xl tracking-[0.25em] drop-shadow-[0_2px_10px_rgba(0,0,0,1)] uppercase"
+                                        style={{ color: section.nameColor }}
+                                    >
+                                        {section.name}
+                                    </motion.h2>
+                                )}
                             </div>
                         </div>
                     )}
