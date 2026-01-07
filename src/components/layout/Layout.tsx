@@ -31,7 +31,7 @@ export function Layout({ children }: LayoutProps) {
     return (
         <div className="min-h-screen bg-void-black text-ivory-cream font-serif relative" style={{ backgroundColor: 'var(--void-black)', color: 'var(--ivory-cream)' }}>
             {/* Top Line with Menu, Logo, and Sound */}
-            <div className="fixed top-8 left-0 right-0 z-50">
+            <div className="fixed top-12 left-0 right-0 z-50">
                 {/* Horizontal line - Only between Menu and Sound (not extending before/after) */}
                 <div className="absolute top-0 left-26 right-20 h-px pointer-events-none" style={{ backgroundColor: 'rgba(126, 64, 49, 0.3)' }}></div>
 

@@ -125,7 +125,7 @@ export function Themes() {
 
       {/* Mystical Overlay with Animated Particles */}
       <div className="absolute inset-0 bg-black/40 z-0" />
-      
+
       {/* Floating Mystical Particles */}
       <div className="absolute inset-0 z-5">
         {[...Array(20)].map((_, i) => (
@@ -187,7 +187,7 @@ export function Themes() {
           >
             <img src={arrowLeft} alt="Prev" className="w-16 md:w-24" />
           </motion.button>
-          
+
           <motion.button
             onClick={handleNext}
             whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
@@ -271,7 +271,7 @@ export function Themes() {
                           }}
                           transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
                           className="absolute top-0 bottom-0 w-[80px] md:w-[100px] z-20 overflow-hidden"
-                          style={{ 
+                          style={{
                             transformStyle: 'preserve-3d',
                             filter: isCenter ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))' : 'none'
                           }}
@@ -291,7 +291,7 @@ export function Themes() {
                           }}
                           transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
                           className="absolute top-0 bottom-0 w-[80px] md:w-[100px] z-20 overflow-hidden"
-                          style={{ 
+                          style={{
                             transformStyle: 'preserve-3d',
                             filter: isCenter ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))' : 'none'
                           }}
@@ -326,7 +326,7 @@ export function Themes() {
                             style={{ paddingTop: '80px' }}
                           >
                             {/* Title positioned in upper scroll area */}
-                            <motion.h3 
+                            <motion.h3
                               className="text-4xl md:text-6xl font-bold text-[#5c3a21] uppercase tracking-wider text-center mb-6"
                               style={{
                                 textShadow: '0 0 10px rgba(92, 58, 33, 0.5), 0 2px 4px rgba(0,0,0,0.3)',
@@ -338,9 +338,9 @@ export function Themes() {
                             >
                               {theme.title}
                             </motion.h3>
-                            
+
                             {/* Description positioned below title */}
-                            <motion.p 
+                            <motion.p
                               className="text-base md:text-lg font-serif text-[#3e2715] italic leading-relaxed text-center mb-8 max-w-lg"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: isCenter ? 1 : 0 }}
@@ -368,9 +368,9 @@ export function Themes() {
                                 >
                                   <div className="p-6">
                                     <h4 className="text-xl font-bold text-[#5c3a21] mb-4 text-center border-b-2 border-amber-600 pb-3"
-                                        style={{
-                                          textShadow: '0 0 8px rgba(92, 58, 33, 0.6)'
-                                        }}>
+                                      style={{
+                                        textShadow: '0 0 8px rgba(92, 58, 33, 0.6)'
+                                      }}>
                                       Focus Areas
                                     </h4>
                                     <ul className="space-y-3">
@@ -385,7 +385,7 @@ export function Themes() {
                                             textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
                                           }}
                                         >
-                                          <span 
+                                          <span
                                             className="w-2 h-2 rounded-full mr-4 flex-shrink-0"
                                             style={{
                                               background: 'radial-gradient(circle, #d4af37 0%, #b8860b 100%)',
