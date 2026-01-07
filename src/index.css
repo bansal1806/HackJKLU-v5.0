@@ -40,7 +40,19 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #0c0a09;
-  /* cursor: none;  Removed to respect original site lacking customized cursor, unless user explicitly demands it globally. I will leave it normal for now. */
+  /* Golden Greek Spear/Arrow Cursor */
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23d4af37' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E") 2 2, auto;
+}
+
+/* Pointer cursor for interactive elements */
+a,
+button,
+[role="button"],
+input,
+select,
+textarea,
+.cursor-pointer {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23ffd700' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E") 2 2, pointer !important;
 }
 
 /* Custom Scrollbar */
@@ -77,6 +89,7 @@ body {
   from {
     transform: rotate(360deg);
   }
+
   to {
     transform: rotate(0deg);
   }
@@ -103,6 +116,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -110,32 +124,20 @@ body {
 
 /* Ring glow styles */
 .ring-glow-outer {
-  animation: spin-reverse 30s linear infinite;
-  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3)) drop-shadow(0 0 15px rgba(212, 175, 55, 0.15));
   transition: filter 0.4s ease-out;
 }
 
 .ring-glow-middle {
-  animation: spin 20s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.35)) drop-shadow(0 0 12px rgba(255, 215, 0, 0.2));
   transition: filter 0.4s ease-out;
 }
 
 .ring-glow-inner {
-  animation: spin-reverse 15s linear infinite;
-  filter: drop-shadow(0 0 5px rgba(255, 223, 100, 0.4)) drop-shadow(0 0 10px rgba(255, 223, 100, 0.25));
   transition: filter 0.4s ease-out;
 }
 
 /* Hover effects - intensify glow on all rings when hovering the ring container */
-.rings-container:hover .ring-glow-outer {
-  filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8)) drop-shadow(0 0 50px rgba(212, 175, 55, 0.4)) drop-shadow(0 0 80px rgba(212, 175, 55, 0.2));
-}
+.rings-container:hover .ring-glow-outer {}
 
-.rings-container:hover .ring-glow-middle {
-  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 45px rgba(255, 215, 0, 0.5)) drop-shadow(0 0 70px rgba(255, 215, 0, 0.25));
-}
+.rings-container:hover .ring-glow-middle {}
 
-.rings-container:hover .ring-glow-inner {
-  filter: drop-shadow(0 0 18px rgba(255, 223, 100, 1)) drop-shadow(0 0 40px rgba(255, 223, 100, 0.6)) drop-shadow(0 0 60px rgba(255, 223, 100, 0.3));
-}
+.rings-container:hover .ring-glow-inner {}

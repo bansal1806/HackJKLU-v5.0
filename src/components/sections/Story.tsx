@@ -1,6 +1,8 @@
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
+import { CloudTransition } from '../ui/CloudTransition';
 
 const storyContent = [
     {
@@ -18,8 +20,27 @@ const storyContent = [
 ];
 
 export function Story() {
+    const location = useLocation();
+    // Initialize state directly from location to avoid "flash" of content before effect runs
+    const [showTransition, setShowTransition] = useState(() => !!location.state?.transition);
+
+    useEffect(() => {
+        if (location.state?.transition) {
+            // Clear location state to prevent running on refresh/back
+            window.history.replaceState({}, document.title);
+        }
+    }, [location]);
+
     return (
         <section className="relative z-10 bg-black text-white">
+            {/* Cloud Uncover Transition */}
+            {showTransition && (
+                <CloudTransition
+                    type="uncover"
+                    onComplete={() => setShowTransition(false)}
+                />
+            )}
+
             {storyContent.map((item, index) => (
                 <StoryBlock key={index} item={item} index={index} />
             ))}
