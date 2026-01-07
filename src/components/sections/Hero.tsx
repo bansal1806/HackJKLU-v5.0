@@ -14,13 +14,12 @@ export function Hero() {
     // Timer countdown logic
     useEffect(() => {
         // Set target date (you can modify this to your desired countdown target)
-        const targetDate = new Date();
-        targetDate.setDate(targetDate.getDate() + 30); // 30 days from now
-        
+        const targetDate = new Date('2026-03-13T00:00:00');
+
         const timer = setInterval(() => {
             const now = new Date().getTime();
             const distance = targetDate.getTime() - now;
-            
+
             if (distance > 0) {
                 setTimeLeft({
                     days: Math.floor(distance / (1000 * 60 * 60 * 24)),
@@ -65,7 +64,7 @@ export function Hero() {
             // Load skybox
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(
-                '/skybox.jpg', 
+                '/skybox.jpg',
                 (texture: THREE.Texture) => {
                     texture.colorSpace = THREE.SRGBColorSpace;
                     scene.background = texture;
@@ -89,7 +88,7 @@ export function Hero() {
                 positions[i] = (Math.random() - 0.5) * 6;     // X position
                 positions[i + 1] = (Math.random() - 0.5) * 6; // Y position  
                 positions[i + 2] = (Math.random() - 0.5) * 3; // Z position
-                
+
                 // Gentle falling velocities
                 velocities[i] = (Math.random() - 0.5) * 0.01;      // Slight horizontal drift
                 velocities[i + 1] = -0.008 - Math.random() * 0.005; // Gentle downward
@@ -105,21 +104,21 @@ export function Hero() {
                 canvas.width = 64;
                 canvas.height = 64;
                 const context = canvas.getContext('2d')!;
-                
+
                 // Create radial gradient for smooth circular particles
                 const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
                 gradient.addColorStop(0, 'rgba(255, 215, 0, 1)');    // Gold center
                 gradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.8)'); // Fade
                 gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');     // Transparent edge
-                
+
                 context.fillStyle = gradient;
                 context.fillRect(0, 0, 64, 64);
-                
+
                 return new THREE.CanvasTexture(canvas);
             }
 
             const particleTexture = createCircleTexture();
-            
+
             const particleMaterial = new THREE.PointsMaterial({
                 color: 0xFFD700, // Gold color
                 size: 4,
@@ -219,9 +218,9 @@ export function Hero() {
 
     return (
         <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
-            
+
             {/* Three.js Canvas */}
-            <canvas 
+            <canvas
                 ref={canvasRef}
                 className="absolute inset-0 z-0"
                 style={{ display: 'block', width: '100%', height: '100%' }}
@@ -233,8 +232,8 @@ export function Hero() {
                 <div
                     className="absolute"
                     style={{
-                        top: '100px',
-                        left: '959px',
+                        top: '15%',
+                        left: '50%',
                         transform: 'translateX(-50%)',
                         textAlign: 'center',
                         zIndex: 15,
@@ -244,7 +243,7 @@ export function Hero() {
                     <h1
                         className="font-cinzel"
                         style={{
-                            fontSize: '64px',
+                            fontSize: 'clamp(40px, 5vw, 64px)',
                             fontWeight: 'bold',
                             color: '#d4af37',
                             textShadow: '0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4)',
@@ -254,12 +253,12 @@ export function Hero() {
                     >
                         HACKJKLU 5.0
                     </h1>
-                    
+
                     {/* Subtitle */}
                     <p
                         className="font-cinzel"
                         style={{
-                            fontSize: '18px',
+                            fontSize: 'clamp(14px, 2vw, 18px)',
                             fontStyle: 'italic',
                             color: 'rgba(212, 175, 55, 0.9)',
                             textShadow: '0 0 10px rgba(212, 175, 55, 0.5)',
@@ -271,26 +270,29 @@ export function Hero() {
                 </div>
 
                 {/* Rings hover container - sized to match outer ring */}
-                <div 
+                <div
                     className="absolute rings-container"
                     style={{
-                        top: '562px',
-                        left: '1001px',
+                        top: '50%',
+                        left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '1200px',
-                        height: '800px',
+                        width: 'min(600px, 80vw)',
+                        height: 'min(600px, 80vw)', // Keep it square
+                        maxHeight: '60vh', // Don't overflow height
+                        maxWidth: '60vh', // Keep it square based on height too
                         pointerEvents: 'auto',
+                        zIndex: 5,
                     }}
                 >
                     {/* Outer Runic Ring - Outermost, rotates anticlockwise */}
-                    <div 
+                    <div
                         className="absolute"
                         style={{
                             top: '50%',
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '100%',
-                            height: '100%',
+                            width: '100%',   // Full container width
+                            height: '100%',  // Full container height
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -308,16 +310,16 @@ export function Hero() {
                             }}
                         />
                     </div>
-                    
+
                     {/* Middle Ring - Middle, rotates clockwise */}
-                    <div 
+                    <div
                         className="absolute"
                         style={{
                             top: '50%',
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '81.67%',
-                            height: '81.63%',
+                            width: '72%',    // Slightly increased for better flow
+                            height: '72%',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -335,16 +337,16 @@ export function Hero() {
                             }}
                         />
                     </div>
-                    
+
                     {/* Inner Ring - Innermost, rotates anticlockwise */}
-                    <div 
+                    <div
                         className="absolute"
                         style={{
-                            top: '50%',
-                            left: '50%',
+                            top: '49%',      // Nudged up slightly for visual centering
+                            left: '50.2%',   // Nudged right slightly
                             transform: 'translate(-50%, -50%)',
-                            width: '40.83%',
-                            height: '40.88%',
+                            width: '40%',
+                            height: '40%',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -363,7 +365,7 @@ export function Hero() {
                         />
                     </div>
                 </div>
-                
+
                 {/* Lightning Bolt - On top of all rings */}
                 <img
                     src="/lightning-bolt.png"
@@ -386,7 +388,7 @@ export function Hero() {
                 <div
                     className="absolute font-medieval"
                     style={{
-                        top: '900px',
+                        top: '82%',
                         left: '50%',
                         transform: 'translateX(-50%)',
                         zIndex: 15,
@@ -427,7 +429,7 @@ export function Hero() {
                                     marginTop: '4px',
                                 }}
                             >
-                                ΗΜΕΡΕΣ
+                                DAYS
                             </div>
                         </div>
 
@@ -456,7 +458,7 @@ export function Hero() {
                                     marginTop: '4px',
                                 }}
                             >
-                                ΩΡΕΣ
+                                HOURS
                             </div>
                         </div>
 
@@ -485,7 +487,7 @@ export function Hero() {
                                     marginTop: '4px',
                                 }}
                             >
-                                ΛΕΠΤΑ
+                                MINUTES
                             </div>
                         </div>
 
@@ -514,7 +516,7 @@ export function Hero() {
                                     marginTop: '4px',
                                 }}
                             >
-                                ΔΕΥΤ
+                                SECONDS
                             </div>
                         </div>
                     </div>
@@ -524,8 +526,8 @@ export function Hero() {
                 <p
                     className="absolute font-cinzel"
                     style={{
-                        top: '1014px',
-                        left: '952px',
+                        bottom: '5%',
+                        left: '50%',
                         transform: 'translateX(-50%)',
                         fontSize: '13px',
                         fontStyle: 'italic',

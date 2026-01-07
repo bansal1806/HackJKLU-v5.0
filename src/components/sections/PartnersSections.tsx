@@ -1,96 +1,103 @@
-import { useState, useRef, useEffect } from 'react';
+
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 // Assets
 import completeBg from '../../assets/partners/complete-bg.jpg';
+
 import goldRing from '../../assets/partners/gold-ring.png';
 import silverRing from '../../assets/partners/silver-ring.png';
 import bronzeRing from '../../assets/partners/bronze-ring.png';
+
 import entionLogo from '../../assets/partners/ention-logo.png';
 import wsCubeLogo from '../../assets/partners/ws.cubetech-logo.png';
 
-// Silver Logos
+// Silver Partners
 import gfgLogo from '../../assets/partners/geeksforgeeks-logo.png';
 import devfolioLogo from '../../assets/partners/devfolio-logo.png';
 import ethIndiaLogo from '../../assets/partners/ethindia-logo.png';
 
-// Bronze Logos
+// Bronze Partners
 import balsamiqLogo from '../../assets/partners/balsamiq-logo.png';
 import fluxorLogo from '../../assets/partners/fluxor-logo.png';
-import blockpenLogo from '../../assets/partners/blockpen-logo.png';
+import blockPenLogo from '../../assets/partners/blockpen-logo.png';
 
-// Social Assets
+import xIcon from '../../assets/partners/social-x.svg';
 import instaIcon from '../../assets/partners/social-insta.svg';
 import linkedinIcon from '../../assets/partners/social-linkedin.svg';
 import webIcon from '../../assets/partners/social-web.svg';
-import xIcon from '../../assets/partners/social-x.svg';
 
-interface Socials {
-    x?: string;
-    insta?: string;
-    linkedin?: string;
-    web?: string;
-}
+type Partner = {
+    name: string;
+    logo: string;
+};
 
-interface PartnerSection {
+type PartnerGroup = {
+    title: string;
+    ring: string;
+    color: string;
+    partners: Partner[];
+};
+
+type StandardPartnerData = {
     id: number;
-    isGrid?: boolean;
-    type?: string;
-    typeColor?: string;
-    tier?: string;
-    tierColor?: string;
-    name?: string;
-    nameColor?: string;
-    logo?: string | null;
-    ring?: string;
-    ringSpeed?: number;
-    bio?: string;
-    socials?: Socials;
-    tiers?: {
-        title: string;
-        color: string;
-        ring: string;
-        partners: { name: string; logo: string }[];
-    }[];
-}
+    type: "standard";
+    title: string;
+    partnerName: string;
+    ring: string;
+    logo: string | null;
+    description: string[];
+    socials: boolean;
+    themeColor: string;
+};
 
-const sections: PartnerSection[] = [
+type GridPartnerData = {
+    id: number;
+    type: "grid";
+    title: string;
+    groups: PartnerGroup[];
+};
+
+type PartnerData = StandardPartnerData | GridPartnerData;
+
+const partnersData: PartnerData[] = [
     {
         id: 0,
-        type: "PAST PARTNERS",
-        typeColor: "#e8dab2",
-        tier: "GOLD PARTNER",
-        tierColor: "#d4af37",
-        name: "ENTION",
-        nameColor: "#e8dab2",
-        logo: entionLogo,
+        type: "standard",
+        title: "GOLD PARTNER",
+        partnerName: "ENTION",
         ring: goldRing,
-        ringSpeed: 25,
-        bio: "Ention is a leading innovator in digital solutions, empowering businesses with cutting-edge technology and advanced automation tools to optimize operations and drive growth. It was incorporated on 11th Jan, 2023 in India to provide innovative laptop products, helping users stay connected with the latest technology trends. Focused on delivering customer-centric computing solutions, Ention stands apart with a strong emphasis on service and support.\n\nEntion is revolutionizing the laptop experience with high-performance devices designed for creators, gamers, and professionals. Featuring Intel and AMD processors, Ention laptops combine speed, power, and reliability to fuel your ambitions.",
-        socials: { x: "#", insta: "#", linkedin: "#", web: "#" }
+        logo: entionLogo,
+        description: [
+            "Ention is a leading innovator in digital solutions, empowering businesses with cutting-edge technology and advanced automation tools to optimize operations and drive growth. It was incorporated on 28th Jan, 2022 in India to provide innovative laptop products, helping users stay connected with the latest technology trends.",
+            "Focused on delivering customer-centric computing solutions, Ention stands apart with a strong emphasis on service and support. Ention is revolutionizing the laptop experience with high-performance devices designed for creators, gamers, and professionals."
+        ],
+        socials: true,
+        themeColor: '#FFEAA4' // Gold
     },
     {
         id: 1,
-        type: "PRE-HACKATHON PARTNER",
-        typeColor: "#d4af37",
-        tier: "",
-        tierColor: "",
-        name: "WSCUBE TECH",
-        nameColor: "#e8dab2",
-        logo: wsCubeLogo,
+        type: "standard",
+        title: "PRE-HACKATHON PARTNER",
+        partnerName: "WSCUBE TECH",
         ring: goldRing,
-        ringSpeed: 30,
-        bio: "WSCube is a Hybrid Upskilling Edtech, develops and disseminates Tech-powered Career Acceleration Programs and Job Oriented Professional courses for Aspirants of Bharat, readying them for Global workfloor opportunities.\n\nWSCube Tech is providing us with knowledge about HTML, CSS, JS, React, git and GitHub as part of pre-hackathon bootcamp.",
-        socials: { x: "#", insta: "#", linkedin: "#", web: "#" }
+        logo: wsCubeLogo,
+        description: [
+            "WSCube is a Hybrid Upskilling Edtech, develops and disseminates Tech-powered Career Acceleration Programs and Job Oriented Professional curated for Aspirants of Bharat, readying them for Global workforce opportunities.",
+            "WS Cube Tech is providing us with knowledge about HTML, CSS, JS, React, git and Github as part of pre-hackathon bootcamp."
+        ],
+        socials: true,
+        themeColor: '#FFEAA4' // Gold
     },
     {
         id: 2,
-        isGrid: true,
-        tiers: [
+        type: "grid",
+        title: "SILVER & BRONZE PARTNERS",
+        groups: [
             {
                 title: "SILVER PARTNERS",
-                color: "#C0C0C0",
                 ring: silverRing,
+                color: "#C0C0C0",
                 partners: [
                     { name: "Geeks for Geeks", logo: gfgLogo },
                     { name: "Devfolio", logo: devfolioLogo },
@@ -99,57 +106,46 @@ const sections: PartnerSection[] = [
             },
             {
                 title: "BRONZE PARTNERS",
-                color: "#cd7f32",
                 ring: bronzeRing,
+                color: "#CD7F32",
                 partners: [
                     { name: "Balsamiq", logo: balsamiqLogo },
                     { name: "Fluxor", logo: fluxorLogo },
-                    { name: "BlockPen", logo: blockpenLogo }
+                    { name: "BlockPen", logo: blockPenLogo }
                 ]
             }
         ]
     },
     {
         id: 3,
-        type: "SECTION FOUR",
-        typeColor: "#e8dab2",
-        tier: "Community Partners",
-        tierColor: "#cd7f32",
-        name: "COMING SOON",
-        nameColor: "#e8dab2",
+        type: "standard",
+        title: "COMMUNITY PARTNERS",
+        partnerName: "COMING SOON",
+        ring: bronzeRing,
         logo: null,
-        ring: silverRing,
-        ringSpeed: 40,
-        bio: "Further details coming soon.",
-        socials: {}
+        description: [],
+        socials: false,
+        themeColor: '#CD7F32' // Bronze
     }
 ];
 
 export default function PartnersSections() {
     const [currentSection, setCurrentSection] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const switchSection = (nextSection: number) => {
+    const switchSection = useCallback((nextSection: number) => {
         if (isAnimating || nextSection === currentSection) return;
-        if (nextSection < 0 || nextSection >= sections.length) return;
-
         setIsAnimating(true);
         setCurrentSection(nextSection);
-        setIsHovered(false); // Reset hover on section change
-
-        setTimeout(() => {
-            setIsAnimating(false);
-        }, 1000);
-    };
+        setTimeout(() => setIsAnimating(false), 1000);
+    }, [isAnimating, currentSection]);
 
     useEffect(() => {
         const handleWheel = (e: WheelEvent) => {
             e.preventDefault();
             if (isAnimating) return;
-
-            if (e.deltaY > 0 && currentSection < sections.length - 1) {
+            if (e.deltaY > 0 && currentSection < partnersData.length - 1) {
                 switchSection(currentSection + 1);
             } else if (e.deltaY < 0 && currentSection > 0) {
                 switchSection(currentSection - 1);
@@ -158,24 +154,18 @@ export default function PartnersSections() {
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (isAnimating) return;
-
-            switch (e.key) {
-                case 'ArrowUp':
-                    e.preventDefault();
-                    if (currentSection > 0) switchSection(currentSection - 1);
-                    break;
-                case 'ArrowDown':
-                    e.preventDefault();
-                    if (currentSection < sections.length - 1) switchSection(currentSection + 1);
-                    break;
+            if (e.key === 'ArrowDown' && currentSection < partnersData.length - 1) {
+                switchSection(currentSection + 1);
+            } else if (e.key === 'ArrowUp' && currentSection > 0) {
+                switchSection(currentSection - 1);
             }
         };
 
         const container = containerRef.current;
         if (container) {
             container.addEventListener('wheel', handleWheel, { passive: false });
-            window.addEventListener('keydown', handleKeyDown);
         }
+        window.addEventListener('keydown', handleKeyDown);
 
         return () => {
             if (container) {
@@ -183,252 +173,324 @@ export default function PartnersSections() {
             }
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [currentSection, isAnimating]);
-
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, []);
-
-    const section = sections[currentSection];
+    }, [currentSection, isAnimating, switchSection]);
 
     return (
         <div ref={containerRef} className="relative bg-neutral-950 text-neutral-100 min-h-screen overflow-hidden font-cinzel">
 
-            {/* Continuous Background Image */}
-            <motion.div
-                className="fixed inset-0 w-full h-[400vh] z-0"
-                initial={false}
-                animate={{ y: `-${currentSection * 100}vh` }}
-                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            >
-                <div
-                    className="w-full h-full bg-cover bg-center"
-                    style={{
-                        backgroundImage: `url(${completeBg})`,
-                        filter: 'contrast(1.1) saturate(1.1)'
-                    }}
-                />
-                <div className="absolute inset-0 bg-neutral-950/60 z-10" />
-            </motion.div>
-
             {/* Section Navigation Indicators */}
-            <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
-                {sections.map((s) => (
+            <div className="fixed right-4 sm:right-6 md:right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 sm:gap-4 pointer-events-auto">
+                {partnersData.map((section) => (
                     <button
-                        key={s.id}
-                        onClick={() => switchSection(s.id)}
-                        className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${currentSection === s.id
-                            ? 'bg-[#d4af37] border-[#d4af37] shadow-[0_0_15px_rgba(212,175,55,0.6)]'
-                            : 'bg-transparent border-neutral-500 hover:border-[#d4af37]/60'
+                        key={section.id}
+                        onClick={() => switchSection(section.id)}
+                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full border-2 transition-all duration-300 ${currentSection === section.id
+                            ? 'bg-gold-500 border-gold-500 shadow-[0_0_15px_rgba(212,175,55,0.6)]'
+                            : 'bg-transparent border-neutral-500 hover:border-gold-500/60'
                             }`}
-                        aria-label={`Go to section ${s.id + 1}`}
+                        aria-label={`Go to section ${section.id + 1}`}
                     />
                 ))}
             </div>
 
             <AnimatePresence mode="wait">
-                <motion.div
-                    key={currentSection}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="absolute inset-0 flex flex-col items-center justify-start pt-16 md:pt-24"
-                >
-                    {section.isGrid ? (
-                        <div className="relative z-10 w-full max-w-7xl px-8 flex flex-col gap-16 md:gap-24 overflow-y-auto max-h-[85vh] py-10 no-scrollbar">
-                            {section.tiers?.map((tier, tierIdx) => (
-                                <div key={tierIdx} className="space-y-12">
-                                    <motion.h3
-                                        initial={{ y: 20, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.2, duration: 0.5 }}
-                                        className="text-2xl md:text-3xl lg:text-4xl tracking-[0.3em] text-center drop-shadow-[0_2px_10px_rgba(0,0,0,1)] uppercase"
-                                        style={{ color: tier.color }}
-                                    >
-                                        {tier.title}
-                                    </motion.h3>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
-                                        {tier.partners.map((partner, pIdx) => (
-                                            <motion.div
-                                                key={pIdx}
-                                                initial={{ scale: 0.8, opacity: 0 }}
-                                                animate={{ scale: 1, opacity: 1 }}
-                                                transition={{ delay: 0.3 + pIdx * 0.1, duration: 0.5 }}
-                                                className="flex flex-col items-center gap-6"
-                                            >
-                                                <div className="relative w-48 h-48 lg:w-56 lg:h-56 flex items-center justify-center">
-                                                    {/* Rotating Ring */}
-                                                    <motion.div
-                                                        animate={{ rotate: 360 }}
-                                                        transition={{
-                                                            repeat: Infinity,
-                                                            duration: 30 + pIdx * 5,
-                                                            ease: "linear"
-                                                        }}
-                                                        className="absolute inset-0"
-                                                    >
-                                                        <img
-                                                            src={tier.ring}
-                                                            alt=""
-                                                            className="w-full h-full object-contain opacity-90 brightness-110 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-                                                        />
-                                                    </motion.div>
-
-                                                    {/* Logo */}
-                                                    <div className="absolute inset-0 flex items-center justify-center p-8 lg:p-10">
-                                                        <img
-                                                            src={partner.logo}
-                                                            alt={partner.name}
-                                                            className="w-[70%] h-[70%] object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.8)]"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <h4 className="text-ivory-cream font-cinzel text-sm lg:text-base tracking-widest text-center opacity-80">
-                                                    {partner.name}
-                                                </h4>
-                                            </motion.div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div
-                            className="w-full h-full flex flex-col items-center justify-start pointer-events-auto"
-                            onMouseEnter={() => setIsHovered(true)}
-                            onMouseLeave={() => setIsHovered(false)}
-                        >
-                            {/* Constant Centered Headers */}
-                            <div className="relative z-10 space-y-2 mb-8 md:mb-12">
-                                <motion.h3
-                                    animate={{ opacity: 1 }}
-                                    className="text-2xl md:text-3xl lg:text-4xl tracking-[0.3em] text-center drop-shadow-[0_2px_10px_rgba(0,0,0,1)] uppercase"
-                                    style={{ color: section.typeColor }}
-                                >
-                                    {section.type}
-                                </motion.h3>
-
-                                {section.tier && (
-                                    <motion.h4
-                                        animate={{ opacity: 1 }}
-                                        className="text-lg md:text-xl lg:text-2xl tracking-[0.2em] font-bold text-center drop-shadow-[0_2px_10px_rgba(0,0,0,1)] uppercase"
-                                        style={{ color: section.tierColor }}
-                                    >
-                                        {section.tier}
-                                    </motion.h4>
-                                )}
-                            </div>
-
-                            {/* Dynamic Content Area */}
-                            <div className="relative z-10 w-full max-w-7xl px-8 md:px-16 flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-24 h-[55vh]">
-
-                                {/* Logo and Ring Container */}
-                                <motion.div
-                                    layout
-                                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                                    className={`relative flex items-center justify-center ${isHovered ? 'md:w-1/3' : 'w-full'}`}
-                                >
-                                    {/* Rotating Ring */}
-                                    <motion.div
-                                        animate={{ rotate: 360 }}
-                                        transition={{
-                                            repeat: Infinity,
-                                            duration: section.ringSpeed || 30,
-                                            ease: "linear"
-                                        }}
-                                        className={`${isHovered ? 'w-[250px] h-[250px] lg:w-[320px] lg:h-[320px]' : 'w-[320px] h-[320px] md:w-[420px] md:h-[420px] lg:w-[500px] lg:h-[500px]'}`}
-                                    >
-                                        <img
-                                            src={section.ring}
-                                            alt=""
-                                            className="w-full h-full object-contain opacity-90 brightness-110 drop-shadow-[0_0_25px_rgba(212,175,55,0.4)]"
-                                        />
-                                    </motion.div>
-
-                                    {/* Logo */}
-                                    <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12 lg:p-16">
-                                        {section.logo && (
-                                            <motion.img
-                                                layout
-                                                src={section.logo}
-                                                alt={section.name}
-                                                className="w-[60%] h-[60%] object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.9)]"
-                                            />
-                                        )}
-                                    </div>
-                                </motion.div>
-
-                                {/* Hover-only Detailed Content */}
-                                <AnimatePresence>
-                                    {isHovered && section.bio && (
-                                        <motion.div
-                                            initial={{ opacity: 0, x: 50 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: 50 }}
-                                            transition={{ duration: 0.5, delay: 0.2 }}
-                                            className="md:w-2/3 text-left flex flex-col justify-center"
-                                        >
-                                            <h2 className="text-2xl md:text-3xl lg:text-4xl tracking-[0.2em] uppercase mb-6" style={{ color: section.nameColor }}>
-                                                {section.name}
-                                            </h2>
-                                            <div className="text-neutral-300 text-sm md:text-base lg:text-lg leading-relaxed space-y-4 max-w-2xl font-sans text-justify">
-                                                {section.bio.split('\n\n').map((paragraph, idx) => (
-                                                    <p key={idx}>{paragraph}</p>
-                                                ))}
-                                            </div>
-
-                                            {/* Horizontal Line */}
-                                            <div className="w-full h-[1px] bg-neutral-700/50 my-8" />
-
-                                            {/* Social Icons */}
-                                            <div className="flex justify-end gap-6 h-8 opacity-80">
-                                                {section.socials?.x && <a href={section.socials.x} className="hover:scale-110 transition-transform"><img src={xIcon} alt="X" className="h-full invert sepia brightness-50 contrast-150" /></a>}
-                                                {section.socials?.insta && <a href={section.socials.insta} className="hover:scale-110 transition-transform"><img src={instaIcon} alt="Instagram" className="h-full invert sepia brightness-50 contrast-150" /></a>}
-                                                {section.socials?.linkedin && <a href={section.socials.linkedin} className="hover:scale-110 transition-transform"><img src={linkedinIcon} alt="LinkedIn" className="h-full invert sepia brightness-50 contrast-150" /></a>}
-                                                {section.socials?.web && <a href={section.socials.web} className="hover:scale-110 transition-transform"><img src={webIcon} alt="Website" className="h-full invert sepia brightness-50 contrast-150" /></a>}
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-
-                                {/* Non-hovered Partner Name */}
-                                {!isHovered && (
-                                    <motion.h2
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="absolute bottom-[-100px] text-lg md:text-xl lg:text-2xl xl:text-3xl tracking-[0.25em] drop-shadow-[0_2px_10px_rgba(0,0,0,1)] uppercase"
-                                        style={{ color: section.nameColor }}
-                                    >
-                                        {section.name}
-                                    </motion.h2>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                </motion.div>
+                <PartnerSection
+                    key={partnersData[currentSection].id}
+                    data={partnersData[currentSection]}
+                />
             </AnimatePresence>
 
             <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Allrounder:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&display=swap');
         .font-cinzel {
           font-family: 'Cinzel', serif;
         }
-        .font-sans {
-          font-family: 'Inter', sans-serif;
+        .font-allrounder {
+          font-family: 'Allrounder', 'Allrounder Monument', sans-serif;
         }
-        .no-scrollbar::-webkit-scrollbar {
+        .font-imfell {
+          font-family: 'IM Fell English', serif;
+        }
+        
+        /* Custom scrollbar hiding */
+        .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }
-        .no-scrollbar {
+        .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
       `}</style>
         </div>
+    );
+}
+
+function PartnerSection({ data }: { data: PartnerData }) {
+    const [isHovered, setIsHovered] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Check for mobile/tablet screen size
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    const bgPosition = `center ${data.id * (100 / 3)}%`;
+
+    // --- GRID LAYOUT (Silver & Bronze) ---
+    if (data.type === 'grid') {
+        return (
+            <motion.div
+                className="fixed inset-0 w-full h-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8 }}
+            >
+                {/* Background */}
+                <div className="absolute inset-0 w-full h-full z-0">
+                    <div
+                        className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
+                        style={{
+                            backgroundImage: `url(${completeBg})`,
+                            backgroundPosition: bgPosition,
+                            filter: 'contrast(1.1) saturate(1.1)'
+                        }}
+                    />
+                    <div className="absolute inset-0 bg-neutral-950/60 z-10" />
+                </div>
+
+                {/* Grid Content: Stacks on mobile, Split on desktop */}
+                <div className={`fixed inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-20 pb-20' : ''}`}>
+                    {data.groups.map((group, groupIndex) => (
+                        <div
+                            key={groupIndex}
+                            className={`flex flex-col items-center w-full ${isMobile
+                                ? 'relative py-12'
+                                : 'absolute left-0 right-0'
+                                }`}
+                            style={!isMobile ? {
+                                top: groupIndex === 0 ? '0%' : '50%',
+                                height: '50%',
+                                justifyContent: 'center',
+                                paddingTop: groupIndex === 0 ? '120px' : '0px',
+                                paddingBottom: groupIndex === 0 ? '0px' : '40px'
+                            } : {}}
+                        >
+                            <h2
+                                className="text-2xl sm:text-3xl md:text-4xl font-imfell tracking-wider uppercase mb-6 sm:mb-8 md:mb-10 text-center"
+                                style={{
+                                    background: `linear-gradient(to bottom, ${group.color} 60%, #4a4a4a 100%)`,
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    backgroundClip: 'text'
+                                }}
+                            >
+                                {group.title}
+                            </h2>
+                            <div className="flex flex-wrap justify-center gap-8 sm:gap-10 md:gap-14 lg:gap-20 px-4">
+                                {group.partners.map((partner, pIndex) => (
+                                    <div key={pIndex} className="flex flex-col items-center gap-0 group">
+                                        <div className="relative w-[160px] h-[160px] sm:w-[220px] sm:h-[220px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px]">
+                                            <motion.div
+                                                animate={{ rotate: 360 }}
+                                                transition={{
+                                                    repeat: Infinity,
+                                                    duration: 30,
+                                                    ease: "linear"
+                                                }}
+                                                className="absolute inset-0 w-full h-full"
+                                                style={{ transformOrigin: '50% 50%' }}
+                                            >
+                                                <img
+                                                    src={group.ring}
+                                                    alt="Ring"
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            </motion.div>
+                                            <div className="absolute inset-0 flex items-center justify-center p-6 sm:p-8 md:p-10">
+                                                <img
+                                                    src={partner.logo}
+                                                    alt={partner.name}
+                                                    className="max-w-[55%] max-h-[55%] object-contain filter group-hover:brightness-125 transition-all duration-300"
+                                                />
+                                            </div>
+                                        </div>
+                                        <span className="text-sm sm:text-base md:text-xl font-cinzel text-[#EFE3A0]/80 tracking-wide text-center -mt-6 sm:-mt-8 md:-mt-10">
+                                            {partner.name}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </motion.div>
+        );
+    }
+
+    // --- STANDARD LAYOUT (Gold & Pre-Hackathon) ---
+    const gradientStyle = {
+        background: `linear-gradient(to bottom, ${data.themeColor} 60%, #6E561C 100%)`,
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text'
+    };
+
+    return (
+        <motion.div
+            className="fixed inset-0 w-full h-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+        >
+            {/* Background */}
+            <div className="absolute inset-0 w-full h-full z-0">
+                <div
+                    className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
+                    style={{
+                        backgroundImage: `url(${completeBg})`,
+                        backgroundPosition: bgPosition,
+                        filter: 'contrast(1.1) saturate(1.1)'
+                    }}
+                />
+                <div className="absolute inset-0 bg-neutral-950/60 z-10" />
+            </div>
+
+            {/* Header: Fixed Top */}
+            <div className="fixed top-0 left-0 right-0 z-50 flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-24 pointer-events-none px-4 text-center">
+                <h1
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-allrounder tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+                    style={{ color: '#EFE3A0' }}
+                >
+                    PAST PARTNERS
+                </h1>
+                <h2
+                    className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-imfell tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+                    style={gradientStyle}
+                >
+                    {data.title}
+                </h2>
+                <motion.h3
+                    animate={{ opacity: isHovered && data.logo ? 0 : 1 }}
+                    transition={{ duration: 0.4 }}
+                    className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-allrounder tracking-wider uppercase"
+                    style={gradientStyle}
+                >
+                    {data.partnerName}
+                </motion.h3>
+            </div>
+
+            {/* Interaction Area */}
+            <div className={`fixed inset-0 z-40 flex items-center justify-center ${isMobile ? 'pt-44' : ''}`}>
+                <div className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-8' : 'gap-16'}`}>
+
+                    {/* Ring Group */}
+                    <motion.div
+                        className="flex items-center justify-center cursor-pointer"
+                        // Animation: Mobile = Shift UP, Desktop = Shift LEFT
+                        animate={
+                            isHovered && data.logo
+                                ? (isMobile ? { y: -60 } : { x: -300 })
+                                : { x: 0, y: 0 }
+                        }
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        onMouseEnter={() => { if (data.logo) setIsHovered(true); }}
+                    >
+                        {/* Adjust Ring Size for Mobile vs Desktop */}
+                        <div className="relative w-[220px] h-[220px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]">
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{
+                                    repeat: Infinity,
+                                    duration: 30,
+                                    ease: "linear"
+                                }}
+                                className="absolute inset-0 w-full h-full"
+                                style={{ transformOrigin: '50% 50%' }}
+                            >
+                                <img
+                                    src={data.ring}
+                                    alt="Ring"
+                                    className="w-full h-full object-contain"
+                                />
+                            </motion.div>
+
+                            {/* Logo */}
+                            {data.logo && (
+                                <div
+                                    className="absolute left-1/2 top-1/2 w-[110px] h-[110px] sm:w-[160px] sm:h-[160px] md:w-[200px] md:h-[200px] lg:w-[250px] lg:h-[250px] flex items-center justify-center"
+                                    style={{ transform: 'translateX(-50%) translateY(-50%)' }}
+                                >
+                                    <img
+                                        src={data.logo}
+                                        alt="Logo"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </motion.div>
+
+                    {/* Content Details (Visible on Hover) */}
+                    <AnimatePresence>
+                        {isHovered && data.logo && (
+                            <motion.div
+                                // Animation: Mobile = Fade In Bottom, Desktop = Fade In Right
+                                initial={isMobile ? { opacity: 0, y: 50 } : { opacity: 0, x: 50 }}
+                                animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
+                                exit={isMobile ? { opacity: 0, y: 50 } : { opacity: 0, x: 50 }}
+                                transition={{ duration: 0.8, ease: "easeInOut" }}
+                                className={`flex flex-col gap-4 sm:gap-6 text-left ${isMobile ? 'w-[90%] -mt-10 px-4' : 'max-w-xl'}`}
+                            >
+                                <div className="space-y-4 sm:space-y-6">
+                                    <h4
+                                        className="text-2xl sm:text-3xl font-allrounder uppercase tracking-widest border-b pb-2"
+                                        style={{ color: data.themeColor, borderColor: `${data.themeColor}33` }}
+                                    >
+                                        {data.partnerName}
+                                    </h4>
+
+                                    {data.description.map((desc: string, i: number) => (
+                                        <p key={i} className="text-[#FFEAA4] font-imfell leading-relaxed text-sm sm:text-base md:text-lg text-justify opacity-90">
+                                            {desc}
+                                        </p>
+                                    ))}
+                                </div>
+
+                                <div className="w-full h-px my-2" style={{ background: `linear-gradient(to right, ${data.themeColor}80, ${data.themeColor}33, transparent)` }} />
+
+                                {/* Social Links */}
+                                {data.socials && (
+                                    <div className="flex items-center justify-end gap-4 sm:gap-6">
+                                        <SocialIcon icon={xIcon} />
+                                        <SocialIcon icon={instaIcon} />
+                                        <SocialIcon icon={linkedinIcon} />
+                                        <SocialIcon icon={webIcon} />
+                                    </div>
+                                )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
+function SocialIcon({ icon }: { icon: string }) {
+    return (
+        <motion.a
+            href="#"
+            whileHover={{ scale: 1.25, filter: 'brightness(1.5)', y: -5 }}
+            className="w-8 h-8 sm:w-10 sm:h-10 transition-all cursor-pointer opacity-90 hover:opacity-100"
+        >
+            <img src={icon} alt="Social" className="w-full h-full object-contain brightness-125 saturate-150" />
+        </motion.a>
     );
 }
