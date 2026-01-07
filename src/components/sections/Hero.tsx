@@ -1,9 +1,9 @@
 
-import { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CloudTransition } from '../ui/CloudTransition';
 
 export function Hero() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [timeLeft, setTimeLeft] = useState({
         days: 0,
         hours: 0,
@@ -11,10 +11,42 @@ export function Hero() {
         seconds: 0
     });
 
+    // Generate static random particles on mount to avoid re-renders causing "jumping"
+    const [particles] = useState(() => Array.from({ length: 150 }).map((_, i) => ({
+        id: i,
+        top: Math.random() * 100 + '%',
+        left: Math.random() * 100 + '%',
+        size: Math.random() * 4 + 1 + 'px', // 1px to 5px (slightly larger)
+        delay: Math.random() * 5 + 's',
+        duration: Math.random() * 4 + 3 + 's', // Slower, smoother fade (3s to 7s)
+    })));
+
+    // Transition State
+    const navigate = useNavigate();
+    const [isZooming, setIsZooming] = useState(false);
+    const [isCovering, setIsCovering] = useState(false);
+
+    const handleTransition = () => {
+        if (isZooming) return; // Prevent double clicks
+
+        // 1. Start Zoom
+        setIsZooming(true);
+
+        // 2. Start Cloud Cover (Immediately)
+        setIsCovering(true);
+
+        // 3. Navigate after zoom/cover is mostly done
+        setTimeout(() => {
+            navigate('/about', { state: { transition: true } });
+        }, 2800); // Wait for the slow cloud cover
+    };
+
     // Timer countdown logic
     useEffect(() => {
         // Set target date (you can modify this to your desired countdown target)
+        // Set target date (you can modify this to your desired countdown target)
         const targetDate = new Date('2026-03-13T00:00:00');
+        // targetDate.setDate(targetDate.getDate() + 30); // 30 days from now
 
         const timer = setInterval(() => {
             const now = new Date().getTime();
@@ -35,513 +67,623 @@ export function Hero() {
         return () => clearInterval(timer);
     }, []);
 
-    useEffect(() => {
-        if (!canvasRef.current) return;
-
-        let scene: THREE.Scene;
-        let camera: THREE.PerspectiveCamera;
-        let renderer: THREE.WebGLRenderer;
-        let animationId: number;
-
-        try {
-            // Three.js setup
-            const canvas = canvasRef.current;
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.outputColorSpace = THREE.SRGBColorSpace;
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.2;
-
-            camera.position.z = 1;
-
-            // Set a default background color first
-            scene.background = new THREE.Color(0x000011);
-
-            // Load skybox
-            const textureLoader = new THREE.TextureLoader();
-            textureLoader.load(
-                '/skybox.jpg',
-                (texture: THREE.Texture) => {
-                    texture.colorSpace = THREE.SRGBColorSpace;
-                    scene.background = texture;
-                    scene.environment = texture;
-                },
-                undefined,
-                (error) => {
-                    console.warn('Failed to load skybox texture:', error);
-                    // Keep the fallback background color
-                }
-            );
-
-            // Simple falling gold particle system
-            const particleCount = 400;
-            const particleGeometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-            const velocities = new Float32Array(particleCount * 3);
-
-            for (let i = 0; i < particleCount * 3; i += 3) {
-                // Spread particles across the scene
-                positions[i] = (Math.random() - 0.5) * 6;     // X position
-                positions[i + 1] = (Math.random() - 0.5) * 6; // Y position  
-                positions[i + 2] = (Math.random() - 0.5) * 3; // Z position
-
-                // Gentle falling velocities
-                velocities[i] = (Math.random() - 0.5) * 0.01;      // Slight horizontal drift
-                velocities[i + 1] = -0.008 - Math.random() * 0.005; // Gentle downward
-                velocities[i + 2] = (Math.random() - 0.5) * 0.005;  // Slight depth movement
-            }
-
-            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            particleGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
-
-            // Create circular texture for particles
-            function createCircleTexture() {
-                const canvas = document.createElement('canvas');
-                canvas.width = 64;
-                canvas.height = 64;
-                const context = canvas.getContext('2d')!;
-
-                // Create radial gradient for smooth circular particles
-                const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
-                gradient.addColorStop(0, 'rgba(255, 215, 0, 1)');    // Gold center
-                gradient.addColorStop(0.3, 'rgba(255, 215, 0, 0.8)'); // Fade
-                gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');     // Transparent edge
-
-                context.fillStyle = gradient;
-                context.fillRect(0, 0, 64, 64);
-
-                return new THREE.CanvasTexture(canvas);
-            }
-
-            const particleTexture = createCircleTexture();
-
-            const particleMaterial = new THREE.PointsMaterial({
-                color: 0xFFD700, // Gold color
-                size: 4,
-                map: particleTexture,
-                transparent: true,
-                opacity: 0.8,
-                sizeAttenuation: false,
-                alphaTest: 0.1,
-                blending: THREE.AdditiveBlending
-            });
-
-            const particles = new THREE.Points(particleGeometry, particleMaterial);
-            scene.add(particles);
-
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            scene.add(ambientLight);
-
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-            directionalLight.position.set(5, 5, 5);
-            scene.add(directionalLight);
-
-            function animate() {
-                animationId = requestAnimationFrame(animate);
-
-                try {
-                    // Simple falling particle animation
-                    const positionAttribute = particleGeometry.getAttribute('position');
-                    const velocityAttribute = particleGeometry.getAttribute('velocity');
-                    const positions = positionAttribute.array as Float32Array;
-                    const velocities = velocityAttribute.array as Float32Array;
-
-                    for (let i = 0; i < particleCount * 3; i += 3) {
-                        // Update positions
-                        positions[i] += velocities[i];         // X
-                        positions[i + 1] += velocities[i + 1]; // Y
-                        positions[i + 2] += velocities[i + 2]; // Z
-
-                        // Reset particles that fall below the view
-                        if (positions[i + 1] < -3) {
-                            positions[i + 1] = 3;
-                            positions[i] = (Math.random() - 0.5) * 6;
-                            positions[i + 2] = (Math.random() - 0.5) * 3;
-                        }
-
-                        // Keep particles within bounds
-                        if (positions[i] > 3) positions[i] = -3;
-                        if (positions[i] < -3) positions[i] = 3;
-                        if (positions[i + 2] > 1.5) positions[i + 2] = -1.5;
-                        if (positions[i + 2] < -1.5) positions[i + 2] = 1.5;
-                    }
-
-                    positionAttribute.needsUpdate = true;
-                    renderer.render(scene, camera);
-                } catch (error) {
-                    console.error('Animation error:', error);
-                }
-            }
-
-            animate();
-
-            // Handle resize
-            const handleResize = () => {
-                try {
-                    camera.aspect = window.innerWidth / window.innerHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-                } catch (error) {
-                    console.error('Resize error:', error);
-                }
-            };
-
-            window.addEventListener('resize', handleResize);
-
-            return () => {
-                try {
-                    if (animationId) {
-                        cancelAnimationFrame(animationId);
-                    }
-                    window.removeEventListener('resize', handleResize);
-                    renderer.dispose();
-                    particleGeometry.dispose();
-                    particleMaterial.dispose();
-                    particleTexture.dispose();
-                } catch (error) {
-                    console.error('Cleanup error:', error);
-                }
-            };
-        } catch (error) {
-            console.error('Three.js initialization error:', error);
-            // Fallback: hide the canvas if Three.js fails
-            if (canvasRef.current) {
-                canvasRef.current.style.display = 'none';
-            }
-        }
-    }, []);
-
     return (
-        <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+        <section
+            className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden cursor-pointer"
+            onClick={handleTransition}
+            style={{
+                background: 'radial-gradient(circle at 50% 30%, #1a202c 0%, #000000 70%)' // Deep Storm Gradient
+            }}
+        >
+            {/* Transition Overlay */}
+            {isCovering && <CloudTransition type="cover" />}
 
-            {/* Three.js Canvas */}
-            <canvas
-                ref={canvasRef}
-                className="absolute inset-0 z-0"
-                style={{ display: 'block', width: '100%', height: '100%' }}
-            />
+            {/* Zoom Wrapper - Everything else scales inside here */}
+            <div
+                className="absolute inset-0 w-full h-full transition-transform duration-[2000ms] ease-in-out"
+                style={{
+                    transform: isZooming ? 'scale(5) translateY(10%)' : 'scale(1) translateY(0)',
+                    transformOrigin: 'center 60%', // Aim at the lightning bolt
+                }}
+            >
+                {/* Transparent/No background - let content show through */}
 
-            {/* Lightning Bolt Overlay with Rotating Rings */}
-            <div className="absolute inset-0 z-10">
-                {/* Title and Subtitle */}
-                <div
-                    className="absolute"
-                    style={{
-                        top: '15%',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        textAlign: 'center',
-                        zIndex: 15,
-                    }}
-                >
-                    {/* Main Title */}
-                    <h1
-                        className="font-cinzel"
+                {/* Static Cloud Layers with Lightning Flashes */}
+                <div className="absolute inset-0 z-[5] overflow-hidden pointer-events-none">
+
+                    {/* Random Gold Particles Layer */}
+                    {particles.map((p) => (
+                        <div
+                            key={p.id}
+                            className="absolute rounded-full"
+                            style={{
+                                top: p.top,
+                                left: p.left,
+                                width: p.size,
+                                height: p.size,
+                                background: '#ffd700',
+                                boxShadow: '0 0 4px #ffd700',
+                                opacity: 0,
+                                animation: `twinkle ${p.duration} ease-in-out infinite`,
+                                animationDelay: p.delay,
+                            }}
+                        />
+                    ))}
+
+                    {/* --- BACKGROUND LAYER --- */}
+                    {/* Top Left Cloud (Original) */}
+                    <img
+                        src="/Cloud1.webp"
+                        alt="Cloud Top Left"
+                        className="absolute top-[-10%] left-[-10%] w-[50%] h-auto opacity-80 object-contain"
+                        style={{ filter: 'brightness(0.7) contrast(1.2)' }}
+                    />
+                    {/* Top Right Cloud (Original) */}
+                    <img
+                        src="/Cloud2.webp"
+                        alt="Cloud Top Right"
+                        className="absolute top-[-5%] right-[-10%] w-[55%] h-auto opacity-80 object-contain"
+                        style={{ filter: 'brightness(0.8) contrast(1.1)' }}
+                    />
+
+                    {/* Flash Layer 1 (Deep) */}
+                    <div className="absolute inset-0" style={{
+                        background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), transparent 60%)',
+                        animation: 'cloudFlash 7s infinite',
+                        animationDelay: '1s',
+                        opacity: 0,
+                        mixBlendMode: 'overlay'
+                    }} />
+
+
+                    {/* --- MID LAYER --- */}
+                    {/* Mid-Left Flipped (Reuse Cloud 2) */}
+                    <img
+                        src="/Cloud2.webp"
+                        alt="Cloud Mid Left"
+                        className="absolute top-[20%] left-[-20%] w-[40%] h-auto opacity-40 object-contain"
                         style={{
-                            fontSize: 'clamp(40px, 5vw, 64px)',
-                            fontWeight: 'bold',
-                            color: '#d4af37',
-                            textShadow: '0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4)',
-                            letterSpacing: '4px',
-                            marginBottom: '4px',
+                            filter: 'brightness(0.6)',
+                            transform: 'scaleX(-1) rotate(10deg)'
                         }}
-                    >
-                        HACKJKLU 5.0
-                    </h1>
-
-                    {/* Subtitle */}
-                    <p
-                        className="font-cinzel"
+                    />
+                    {/* Mid-Right Flipped (Reuse Cloud 1) */}
+                    <img
+                        src="/Cloud1.webp"
+                        alt="Cloud Mid Right"
+                        className="absolute top-[30%] right-[-15%] w-[45%] h-auto opacity-40 object-contain"
                         style={{
-                            fontSize: 'clamp(14px, 2vw, 18px)',
-                            fontStyle: 'italic',
-                            color: 'rgba(212, 175, 55, 0.9)',
-                            textShadow: '0 0 10px rgba(212, 175, 55, 0.5)',
-                            letterSpacing: '2px',
+                            filter: 'brightness(0.6)',
+                            transform: 'scaleX(-1) rotate(-5deg)'
                         }}
-                    >
-                        13 March - 15 March 2026
-                    </p>
+                    />
+
+                    {/* Flash Layer 2 (Mid) */}
+                    <div className="absolute inset-0" style={{
+                        background: 'radial-gradient(circle at 70% 40%, rgba(200, 220, 255, 0.2), transparent 50%)',
+                        animation: 'cloudFlash 5s infinite',
+                        animationDelay: '3.5s',
+                        opacity: 0,
+                        mixBlendMode: 'screen'
+                    }} />
+
+
+                    {/* --- FOREGROUND LAYER --- */}
+                    {/* Top Center Background (Reuse Cloud 4) */}
+                    <img
+                        src="/Cloud4.webp"
+                        alt="Cloud Top Center"
+                        className="absolute top-[-25%] left-[25%] w-[60%] h-auto opacity-20 object-contain"
+                        style={{
+                            filter: 'brightness(0.4)',
+                            transform: 'rotate(180deg)' // Upside down for variety
+                        }}
+                    />
+                    {/* Bottom Left Cloud - Foggy effect (Original) */}
+                    <img
+                        src="/Cloud3.webp"
+                        alt="Cloud Bottom Left"
+                        className="absolute bottom-[-15%] left-[-5%] w-[60%] h-auto opacity-60 object-contain"
+                        style={{ filter: 'brightness(0.6)' }}
+                    />
+                    {/* Bottom Right Cloud (Original) */}
+                    <img
+                        src="/Cloud4.webp"
+                        alt="Cloud Bottom Right"
+                        className="absolute bottom-[-10%] right-[-15%] w-[65%] h-auto opacity-70 object-contain"
+                        style={{ filter: 'brightness(0.7)' }}
+                    />
+                    {/* Bottom Center Foreground (Reuse Cloud 3) */}
+                    <img
+                        src="/Cloud3.webp"
+                        alt="Cloud Bottom Center"
+                        className="absolute bottom-[-20%] left-[20%] w-[70%] h-auto opacity-30 object-contain"
+                        style={{
+                            filter: 'blur(3px) brightness(0.5)',
+                            transform: 'scale(1.2)'
+                        }}
+                    />
+
+                    {/* Flash Layer 3 (Front/Global) */}
+                    <div className="absolute inset-0" style={{
+                        background: 'radial-gradient(circle at 50% 50%, rgba(255, 230, 150, 0.1), transparent 70%)',
+                        animation: 'cloudFlash 11s infinite', // Long interval random feel
+                        animationDelay: '0s',
+                        opacity: 0,
+                        mixBlendMode: 'soft-light'
+                    }} />
                 </div>
 
-                {/* Rings hover container - sized to match outer ring */}
-                <div
-                    className="absolute rings-container"
-                    style={{
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 'min(600px, 80vw)',
-                        height: 'min(600px, 80vw)', // Keep it square
-                        maxHeight: '60vh', // Don't overflow height
-                        maxWidth: '60vh', // Keep it square based on height too
-                        pointerEvents: 'auto',
-                        zIndex: 5,
-                    }}
-                >
-                    {/* Outer Runic Ring - Outermost, rotates anticlockwise */}
-                    <div
-                        className="absolute"
-                        style={{
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: '100%',   // Full container width
-                            height: '100%',  // Full container height
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <img
-                            src="/outer_runic_ring.png"
-                            alt="Outer Runic Ring"
-                            className="ring-glow-outer"
+
+                {/* Gold Particle Effect - Floating embers */}
+                <div className="absolute inset-0 z-[6] overflow-hidden pointer-events-none">
+                    {[...Array(20)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="absolute rounded-full"
                             style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'contain',
-                                opacity: 0.8,
+                                left: `${10 + Math.random() * 80}%`,
+                                top: `${55 + Math.random() * 40}%`,
+                                width: `${2 + Math.random() * 2}px`,
+                                height: `${2 + Math.random() * 2}px`,
+                                background: 'radial-gradient(circle, #ffd700 0%, rgba(255, 180, 50, 0.8) 40%, transparent 70%)',
+                                boxShadow: '0 0 8px rgba(255, 200, 100, 0.8), 0 0 15px rgba(255, 180, 50, 0.4)',
+                                animation: `particleFloat ${12 + Math.random() * 10}s infinite ease-in-out`,
+                                animationDelay: `${Math.random() * 8}s`,
+                                opacity: 0.7
                             }}
                         />
-                    </div>
+                    ))}
+                </div>
 
-                    {/* Middle Ring - Middle, rotates clockwise */}
+                {/* Lightning Bolt Overlay with Rotating Rings */}
+                <div className="absolute inset-0 z-10">
+                    {/* Title and Subtitle */}
                     <div
                         className="absolute"
                         style={{
-                            top: '50%',
+                            top: '30px', // Moved up to avoid ring overlap
                             left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: '72%',    // Slightly increased for better flow
-                            height: '72%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            transform: 'translateX(-50%)',
+                            textAlign: 'center',
+                            zIndex: 15,
                         }}
                     >
-                        <img
-                            src="/middle_ring.png"
-                            alt="Middle Ring"
-                            className="ring-glow-middle"
+                        {/* Main Title */}
+                        <h1
+                            className="font-cursive"
                             style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'contain',
-                                opacity: 0.85,
+                                fontSize: '96px',
+                                fontWeight: 'bold',
+                                background: `
+                                repeating-linear-gradient(45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
+                                repeating-linear-gradient(-45deg, transparent 0px, transparent 20px, rgba(40,20,0,0.9) 20px, rgba(40,20,0,0.9) 21px),
+                                linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                            `,
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
+                                letterSpacing: '8px',
+                                marginBottom: '0px',
+                                // Simulating "cracks" with a textured heavy font and gradient
                             }}
-                        />
-                    </div>
+                        >
+                            HACKJKLU V
+                        </h1>
 
-                    {/* Inner Ring - Innermost, rotates anticlockwise */}
-                    <div
-                        className="absolute"
-                        style={{
-                            top: '49%',      // Nudged up slightly for visual centering
-                            left: '50.2%',   // Nudged right slightly
-                            transform: 'translate(-50%, -50%)',
-                            width: '40%',
-                            height: '40%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <img
-                            src="/inner_ring.png"
-                            alt="Inner Ring"
-                            className="ring-glow-inner"
+                        {/* Subtitle - New */}
+                        <p
+                            className="font-cinzel"
                             style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'contain',
+                                fontSize: '24px',
+                                color: '#d4af37',
+                                letterSpacing: '6px',
+                                marginBottom: '16px',
+                                textShadow: '0 2px 4px rgba(0,0,0,0.7)',
                                 opacity: 0.9,
                             }}
-                        />
+                        >
+                            CODE OF THE GODS
+                        </p>
+
+                        {/* Date - Silver/Stone Color */}
+                        <p
+                            className="font-cinzel"
+                            style={{
+                                fontSize: '18px',
+                                fontStyle: 'italic',
+                                color: '#d6d3d1', // Stone-300 / Silver
+                                textShadow: '0 0 10px rgba(214, 211, 209, 0.3)',
+                                letterSpacing: '2px',
+                            }}
+                        >
+                            13 March - 15 March 2026
+                        </p>
                     </div>
-                </div>
 
-                {/* Lightning Bolt - On top of all rings */}
-                <img
-                    src="/lightning-bolt.png"
-                    alt="Lightning Bolt"
-                    className="absolute"
-                    style={{
-                        bottom: '0%',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '70%',
-                        height: '85%',
-                        objectFit: 'contain',
-                        objectPosition: 'bottom center',
-                        opacity: 1,
-                        zIndex: 10,
-                    }}
-                />
-
-                {/* Ancient Greek Timer */}
-                <div
-                    className="absolute font-medieval"
-                    style={{
-                        top: '82%',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        zIndex: 15,
-                    }}
-                >
+                    {/* Rings hover container - sized to match outer ring */}
                     <div
+                        className="absolute rings-container"
                         style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '16px',
-                            padding: '16px 32px',
-                            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(184, 134, 11, 0.15))',
-                            border: '2px solid rgba(212, 175, 55, 0.4)',
-                            borderRadius: '4px',
-                            boxShadow: 'inset 0 2px 0 rgba(212, 175, 55, 0.3), 0 0 25px rgba(212, 175, 55, 0.2)',
+                            top: '50%',
+                            left: '50%',
+                            width: '1800px',
+                            height: '1200px',
+                            pointerEvents: 'auto',
+                            transform: 'translate(calc(-50% + 33px), calc(-50% + 33px))', // Align with Lightning Peak (approx coords 993, 573)
                         }}
                     >
-                        {/* Days */}
-                        <div style={{ textAlign: 'center' }}>
-                            <div
-                                className="font-uncial"
+                        {/* Outer Runic Ring - Outermost, rotates anticlockwise */}
+                        <div
+                            className="absolute"
+                            style={{
+                                top: '50%',
+                                left: '50%',
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transform: 'translate(-50%, -50%)', // Centered using transform
+                            }}
+                        >
+                            <img
+                                src="/outer_runic_ring.png"
+                                alt="Outer Runic Ring"
+                                className="ring-glow-outer animate-spin-reverse"
                                 style={{
-                                    fontSize: '28px',
-                                    fontWeight: 'bold',
-                                    color: '#d4af37',
-                                    textShadow: '0 0 12px rgba(212, 175, 55, 0.8)',
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'contain',
+                                    opacity: 0.8,
+                                    animationDuration: '60s',
                                 }}
-                            >
-                                {String(timeLeft.days).padStart(2, '0')}
-                            </div>
-                            <div
-                                className="font-cinzel"
-                                style={{
-                                    fontSize: '11px',
-                                    color: 'rgba(212, 175, 55, 0.8)',
-                                    letterSpacing: '2px',
-                                    textTransform: 'uppercase',
-                                    marginTop: '4px',
-                                }}
-                            >
-                                DAYS
-                            </div>
+                            />
                         </div>
 
-                        <div className="font-uncial" style={{ color: '#d4af37', fontSize: '24px', fontWeight: 'bold' }}>:</div>
-
-                        {/* Hours */}
-                        <div style={{ textAlign: 'center' }}>
-                            <div
-                                className="font-uncial"
+                        {/* Middle Ring - Middle, rotates clockwise */}
+                        <div
+                            className="absolute"
+                            style={{
+                                top: '50%',
+                                left: '50%',
+                                width: '81.67%',
+                                height: '81.63%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transform: 'translate(-50%, calc(-50% + 3px))', // Moved down 3px to fix bottom gap
+                            }}
+                        >
+                            <img
+                                src="/middle_ring.png"
+                                alt="Middle Ring"
+                                className="ring-glow-middle animate-spin"
                                 style={{
-                                    fontSize: '28px',
-                                    fontWeight: 'bold',
-                                    color: '#d4af37',
-                                    textShadow: '0 0 12px rgba(212, 175, 55, 0.8)',
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'contain',
+                                    opacity: 0.85,
+                                    animationDuration: '45s',
                                 }}
-                            >
-                                {String(timeLeft.hours).padStart(2, '0')}
-                            </div>
-                            <div
-                                className="font-cinzel"
-                                style={{
-                                    fontSize: '11px',
-                                    color: 'rgba(212, 175, 55, 0.8)',
-                                    letterSpacing: '2px',
-                                    textTransform: 'uppercase',
-                                    marginTop: '4px',
-                                }}
-                            >
-                                HOURS
-                            </div>
+                            />
                         </div>
 
-                        <div className="font-uncial" style={{ color: '#d4af37', fontSize: '24px', fontWeight: 'bold' }}>:</div>
-
-                        {/* Minutes */}
-                        <div style={{ textAlign: 'center' }}>
-                            <div
-                                className="font-uncial"
+                        {/* Inner Ring - Innermost, rotates anticlockwise */}
+                        <div
+                            className="absolute"
+                            style={{
+                                top: '50%',
+                                left: '50%',
+                                width: '40.83%',
+                                height: '40.88%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transform: 'translate(-50%, calc(-50% - 4px))', // Moved further up (to -4px) as requested
+                            }}
+                        >
+                            <img
+                                src="/inner_ring.png"
+                                alt="Inner Ring"
+                                className="ring-glow-inner animate-spin-reverse"
                                 style={{
-                                    fontSize: '28px',
-                                    fontWeight: 'bold',
-                                    color: '#d4af37',
-                                    textShadow: '0 0 12px rgba(212, 175, 55, 0.8)',
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'contain',
+                                    opacity: 0.9,
+                                    animationDuration: '30s',
                                 }}
-                            >
-                                {String(timeLeft.minutes).padStart(2, '0')}
-                            </div>
-                            <div
-                                className="font-cinzel"
-                                style={{
-                                    fontSize: '11px',
-                                    color: 'rgba(212, 175, 55, 0.8)',
-                                    letterSpacing: '2px',
-                                    textTransform: 'uppercase',
-                                    marginTop: '4px',
-                                }}
-                            >
-                                MINUTES
-                            </div>
+                            />
                         </div>
+                    </div>
 
-                        <div className="font-uncial" style={{ color: '#d4af37', fontSize: '24px', fontWeight: 'bold' }}>:</div>
+                    {/* Lightning Bolt - On top of all rings */}
+                    <img
+                        src="/lightning-bolt.png"
+                        alt="Lightning Bolt"
+                        className="absolute"
+                        style={{
+                            bottom: '0%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: '70%',
+                            height: '85%',
+                            objectFit: 'contain',
+                            objectPosition: 'bottom center',
+                            opacity: 1,
+                            zIndex: 10,
+                        }}
+                    />
 
-                        {/* Seconds */}
-                        <div style={{ textAlign: 'center' }}>
-                            <div
-                                className="font-uncial"
-                                style={{
-                                    fontSize: '28px',
-                                    fontWeight: 'bold',
-                                    color: '#d4af37',
-                                    textShadow: '0 0 12px rgba(212, 175, 55, 0.8)',
-                                }}
-                            >
-                                {String(timeLeft.seconds).padStart(2, '0')}
+                    {/* Ancient Greek Timer */}
+                    <div
+                        className="absolute font-medieval"
+                        style={{
+                            bottom: '8%', // Moved down near footer (above quote)
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            zIndex: 15,
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '32px',
+                                padding: '20px 48px',
+                                // Removed background and glow for "ancient artifact" look
+                                // border: '2px solid rgba(212, 175, 55, 0.5)', // REMOVED BORDER as requested
+                                // borderRadius: '4px', // Sharper corners
+                            }}
+                        >
+                            {/* Days */}
+                            <div style={{ textAlign: 'center' }}>
+                                <div
+                                    className="font-cursive"
+                                    style={{
+                                        fontSize: '56px',
+                                        fontWeight: 'bold',
+                                        // Deep 3D Stone Cracks Effect in Gold
+                                        background: `
+                                        repeating-linear-gradient(45deg, transparent 0px, transparent 10px, rgba(40,20,0,0.9) 10px, rgba(40,20,0,0.9) 11px),
+                                        repeating-linear-gradient(-45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
+                                        linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                                    `,
+                                        backgroundSize: '100% 100%',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        // Heavy 3D Block Shadow for "Stone" look
+                                        filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
+                                        minWidth: '80px',
+                                    }}
+                                >
+                                    {String(timeLeft.days).padStart(2, '0')}
+                                </div>
+                                <div
+                                    className="font-cinzel"
+                                    style={{
+                                        fontSize: '14px',
+                                        color: '#d4af37',
+                                        letterSpacing: '3px',
+                                        textTransform: 'uppercase',
+                                        marginTop: '8px',
+                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                    }}
+                                >
+                                    ΗΜΕΡΕΣ
+                                </div>
                             </div>
-                            <div
-                                className="font-cinzel"
-                                style={{
-                                    fontSize: '11px',
-                                    color: 'rgba(212, 175, 55, 0.8)',
-                                    letterSpacing: '2px',
-                                    textTransform: 'uppercase',
-                                    marginTop: '4px',
-                                }}
-                            >
-                                SECONDS
+
+                            <div className="font-cursive" style={{
+                                fontSize: '48px',
+                                background: `
+                                repeating-linear-gradient(45deg, transparent 0px, transparent 10px, rgba(40,20,0,0.9) 10px, rgba(40,20,0,0.9) 11px),
+                                repeating-linear-gradient(-45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
+                                linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                            `,
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
+                                fontWeight: 'bold',
+                                marginTop: '-20px'
+                            }}>:</div>
+
+                            {/* Hours */}
+                            <div style={{ textAlign: 'center' }}>
+                                <div
+                                    className="font-cursive"
+                                    style={{
+                                        fontSize: '56px',
+                                        fontWeight: 'bold',
+                                        background: `
+                                        repeating-linear-gradient(45deg, transparent 0px, transparent 10px, rgba(40,20,0,0.9) 10px, rgba(40,20,0,0.9) 11px),
+                                        repeating-linear-gradient(-45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
+                                        linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                                    `,
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
+                                        minWidth: '80px',
+                                    }}
+                                >
+                                    {String(timeLeft.hours).padStart(2, '0')}
+                                </div>
+                                <div
+                                    className="font-cinzel"
+                                    style={{
+                                        fontSize: '14px',
+                                        color: '#d4af37',
+                                        letterSpacing: '3px',
+                                        textTransform: 'uppercase',
+                                        marginTop: '8px',
+                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                    }}
+                                >
+                                    ΩΡΕΣ
+                                </div>
+                            </div>
+
+                            <div className="font-cursive" style={{
+                                fontSize: '48px',
+                                background: `
+                                repeating-linear-gradient(45deg, transparent 0px, transparent 10px, rgba(40,20,0,0.9) 10px, rgba(40,20,0,0.9) 11px),
+                                repeating-linear-gradient(-45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
+                                linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                            `,
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
+                                fontWeight: 'bold',
+                                marginTop: '-20px'
+                            }}>:</div>
+
+                            {/* Minutes */}
+                            <div style={{ textAlign: 'center' }}>
+                                <div
+                                    className="font-cursive"
+                                    style={{
+                                        fontSize: '56px',
+                                        fontWeight: 'bold',
+                                        background: `
+                                        repeating-linear-gradient(60deg, transparent 0px, transparent 14px, rgba(40,20,0,0.9) 14px, rgba(40,20,0,0.9) 15px),
+                                        repeating-linear-gradient(-60deg, transparent 0px, transparent 18px, rgba(40,20,0,0.9) 18px, rgba(40,20,0,0.9) 19px),
+                                        linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                                    `,
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
+                                        minWidth: '80px',
+                                    }}
+                                >
+                                    {String(timeLeft.minutes).padStart(2, '0')}
+                                </div>
+                                <div
+                                    className="font-cinzel"
+                                    style={{
+                                        fontSize: '14px',
+                                        color: '#d4af37',
+                                        letterSpacing: '3px',
+                                        textTransform: 'uppercase',
+                                        marginTop: '8px',
+                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                    }}
+                                >
+                                    ΛΕΠΤΑ
+                                </div>
+                            </div>
+
+                            <div className="font-cursive" style={{
+                                fontSize: '48px',
+                                background: `
+                                repeating-linear-gradient(45deg, transparent 0px, transparent 10px, rgba(40,20,0,0.9) 10px, rgba(40,20,0,0.9) 11px),
+                                repeating-linear-gradient(-45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
+                                linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                            `,
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
+                                fontWeight: 'bold',
+                                marginTop: '-20px'
+                            }}>:</div>
+
+                            {/* Seconds */}
+                            <div style={{ textAlign: 'center' }}>
+                                <div
+                                    className="font-cursive"
+                                    style={{
+                                        fontSize: '56px',
+                                        fontWeight: 'bold',
+                                        // Deep 3D Stone Cracks Effect in Gold
+                                        background: `
+                                        repeating-linear-gradient(45deg, transparent 0px, transparent 10px, rgba(40,20,0,0.9) 10px, rgba(40,20,0,0.9) 11px),
+                                        repeating-linear-gradient(-45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
+                                        linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                                    `,
+                                        backgroundSize: '100% 100%',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        // Heavy 3D Block Shadow for "Stone" look
+                                        filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
+                                        minWidth: '80px',
+                                    }}
+                                >
+                                    {String(timeLeft.seconds).padStart(2, '0')}
+                                </div>
+                                <div
+                                    className="font-cinzel"
+                                    style={{
+                                        fontSize: '14px',
+                                        color: '#d4af37',
+                                        letterSpacing: '3px',
+                                        textTransform: 'uppercase',
+                                        marginTop: '8px',
+                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                    }}
+                                >
+                                    ΔΕΥΤ
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    {/* Quote text - inscription style */}
+                    <p
+                        className="absolute font-cinzel"
+                        style={{
+                            bottom: '2%', // Anchored near footer
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            fontSize: '13px',
+                            fontStyle: 'italic',
+                            color: '#d4af37',
+                            letterSpacing: '3px',
+                            textTransform: 'uppercase',
+                            textShadow: '0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(212, 175, 55, 0.3)',
+                            zIndex: 15,
+                        }}
+                    >
+                        — Where Innovation Meets Code —
+                    </p>
                 </div>
+            </div> {/* End Zoom Wrapper */}
 
-                {/* Quote text - inscription style */}
-                <p
-                    className="absolute font-cinzel"
-                    style={{
-                        bottom: '5%',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        fontSize: '13px',
-                        fontStyle: 'italic',
-                        color: '#d4af37',
-                        letterSpacing: '3px',
-                        textTransform: 'uppercase',
-                        textShadow: '0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(212, 175, 55, 0.3)',
-                        zIndex: 15,
-                    }}
-                >
-                    — Where Innovation Meets Code —
-                </p>
-            </div>
+            {/* CSS Animations */}
+            <style>{`
+                @keyframes twinkle {
+                    0% { opacity: 0; transform: scale(0.5); }
+                    50% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700; } /* Intense Glow at peak */
+                    100% { opacity: 0; transform: scale(0.5); }
+                }
 
+                @keyframes cloudFlash {
+                    0%, 90% { opacity: 0; }
+                    92% { opacity: 0.6; }
+                    93% { opacity: 0.2; }
+                    94% { opacity: 0.7; }
+                    96% { opacity: 0; }
+                    100% { opacity: 0; }
+                }
+
+                @keyframes particleFloat {
+                    0%, 100% {
+                        transform: translateY(0) translateX(0);
+                        opacity: 0.3;
+                    }
+                    25% {
+                        transform: translateY(-15px) translateX(8px);
+                        opacity: 0.6;
+                    }
+                    50% {
+                        transform: translateY(-5px) translateX(-5px);
+                        opacity: 0.4;
+                    }
+                    75% {
+                        transform: translateY(-20px) translateX(3px);
+                        opacity: 0.55;
+                    }
+                }
+            `}</style>
         </section>
     );
 }

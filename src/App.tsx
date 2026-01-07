@@ -13,6 +13,7 @@ import { TeamPage } from './pages/Team';
 import { EventsPage } from './pages/Events';
 import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
 import { PageNavigation } from './components/navigation/PageNavigation';
+import { CloudTest } from './pages/CloudTest';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/faq" element={<><ComingSoonOverlay><FAQPage /></ComingSoonOverlay><PageNavigation /></>} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/events" element={<><ComingSoonOverlay><EventsPage /></ComingSoonOverlay><PageNavigation /></>} />
+        <Route path="/cloud-test" element={<CloudTest />} />
       </Routes>
     </Layout>
   );
