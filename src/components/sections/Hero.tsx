@@ -128,11 +128,20 @@ export function Hero() {
 
                     {/* Flash Layer 1 (Deep) */}
                     <div className="absolute inset-0" style={{
-                        background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), transparent 60%)',
-                        animation: 'cloudFlash 7s infinite',
+                        background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), transparent 60%)',
+                        animation: 'cloudFlash 2s infinite', // Faster: Every 2 seconds
                         animationDelay: '1s',
                         opacity: 0,
                         mixBlendMode: 'overlay'
+                    }} />
+
+                    {/* Flash Layer 2 (Bright/Center) - NEW for extra intensity */}
+                    <div className="absolute inset-0" style={{
+                        background: 'radial-gradient(circle at 50% 40%, rgba(200, 200, 255, 0.4), transparent 50%)',
+                        animation: 'cloudFlash 3s infinite', // Offset timing
+                        animationDelay: '0.5s',
+                        opacity: 0,
+                        mixBlendMode: 'screen'
                     }} />
 
 
@@ -239,39 +248,37 @@ export function Hero() {
                 {/* Lightning Bolt Overlay with Rotating Rings */}
                 <div className="absolute inset-0 z-10">
                     {/* Title and Subtitle */}
+                    {/* Main Title - LOGO (Positioned Independently to resize freely) */}
+                    <img
+                        src="/Title.webp"
+                        alt="HACKJKLU 5.0"
+                        className="absolute object-contain"
+                        style={{
+                            top: '-50px', // Moved up to hide transparent border padding
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            height: '300px', // Doubled Size as requested
+                            width: 'auto',
+                            maxWidth: '95vw', // Maximize width usage
+                            zIndex: 14, // Lowered zIndex behind text (15) to allow overlap
+                            // Enhanced Visuals
+                            filter: 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(0 5px 10px rgba(0,0,0,0.8))',
+                            opacity: 0.95,
+                        }}
+                    />
+
+                    {/* Text Container - Fixed Position (Preserved Location) */}
                     <div
                         className="absolute"
                         style={{
-                            top: '30px', // Moved up to avoid ring overlap
+                            top: '175px', // Fixed position approx where "Code of Gods" was previously (30+120+20)
                             left: '50%',
                             transform: 'translateX(-50%)',
                             textAlign: 'center',
                             zIndex: 15,
                         }}
                     >
-                        {/* Main Title */}
-                        <h1
-                            className="font-cursive"
-                            style={{
-                                fontSize: '96px',
-                                fontWeight: 'bold',
-                                background: `
-                                repeating-linear-gradient(45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
-                                repeating-linear-gradient(-45deg, transparent 0px, transparent 20px, rgba(40,20,0,0.9) 20px, rgba(40,20,0,0.9) 21px),
-                                linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
-                            `,
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                filter: 'drop-shadow(2px 2px 0px #3d2b00) drop-shadow(4px 4px 0px #2a1a00) drop-shadow(6px 6px 4px rgba(0,0,0,0.8))',
-                                letterSpacing: '8px',
-                                marginBottom: '0px',
-                                // Simulating "cracks" with a textured heavy font and gradient
-                            }}
-                        >
-                            HACKJKLU V
-                        </h1>
-
-                        {/* Subtitle - New */}
+                        {/* Subtitle - Now Date (Gold Style) */}
                         <p
                             className="font-cinzel"
                             style={{
@@ -283,21 +290,7 @@ export function Hero() {
                                 opacity: 0.9,
                             }}
                         >
-                            CODE OF THE GODS
-                        </p>
-
-                        {/* Date - Silver/Stone Color */}
-                        <p
-                            className="font-cinzel"
-                            style={{
-                                fontSize: '18px',
-                                fontStyle: 'italic',
-                                color: '#d6d3d1', // Stone-300 / Silver
-                                textShadow: '0 0 10px rgba(214, 211, 209, 0.3)',
-                                letterSpacing: '2px',
-                            }}
-                        >
-                            13 March - 15 March 2026
+                            13 MARCH - 15 MARCH 2026
                         </p>
                     </div>
 
@@ -307,10 +300,10 @@ export function Hero() {
                         style={{
                             top: '50%',
                             left: '50%',
-                            width: '1800px',
-                            height: '1200px',
+                            width: '1500px', // Enforce Square Aspect Ratio
+                            height: '1500px', // Enforce Square Aspect Ratio
                             pointerEvents: 'auto',
-                            transform: 'translate(calc(-50% + 33px), calc(-50% + 33px))', // Align with Lightning Peak (approx coords 993, 573)
+                            transform: 'translate(calc(-50% + 33px), calc(-50% + 33px))', // Center on Lightning Peak
                         }}
                     >
                         {/* Outer Runic Ring - Outermost, rotates anticlockwise */}
@@ -324,11 +317,11 @@ export function Hero() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                transform: 'translate(-50%, -50%)', // Centered using transform
+                                transform: 'translate(-50%, -50%)', // Centered
                             }}
                         >
                             <img
-                                src="/outer_runic_ring.png"
+                                src="/outer_runic_ring.webp"
                                 alt="Outer Runic Ring"
                                 className="ring-glow-outer animate-spin-reverse"
                                 style={{
@@ -347,16 +340,16 @@ export function Hero() {
                             style={{
                                 top: '50%',
                                 left: '50%',
-                                width: '81.67%',
-                                height: '81.63%',
+                                width: '88%', // Adjusted to 88% (Slightly smaller than 93% to prevent overlap, still tight gap)
+                                height: '88%', // Adjusted to 88%
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                transform: 'translate(-50%, calc(-50% + 3px))', // Moved down 3px to fix bottom gap
+                                transform: 'translate(-50%, -50%)', // Centered
                             }}
                         >
                             <img
-                                src="/middle_ring.png"
+                                src="/middle_ring.webp"
                                 alt="Middle Ring"
                                 className="ring-glow-middle animate-spin"
                                 style={{
@@ -375,16 +368,16 @@ export function Hero() {
                             style={{
                                 top: '50%',
                                 left: '50%',
-                                width: '40.83%',
-                                height: '40.88%',
+                                width: '44%', // Adjusted proportionately (half of 88%)
+                                height: '44%', // Adjusted proportionately
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                transform: 'translate(-50%, calc(-50% - 4px))', // Moved further up (to -4px) as requested
+                                transform: 'translate(-50%, -50%)', // Centered
                             }}
                         >
                             <img
-                                src="/inner_ring.png"
+                                src="/inner_ring.webp"
                                 alt="Inner Ring"
                                 className="ring-glow-inner animate-spin-reverse"
                                 style={{
@@ -400,7 +393,7 @@ export function Hero() {
 
                     {/* Lightning Bolt - On top of all rings */}
                     <img
-                        src="/lightning-bolt.png"
+                        src="/lightning-bolt.webp"
                         alt="Lightning Bolt"
                         className="absolute"
                         style={{
@@ -658,9 +651,9 @@ export function Hero() {
 
                 @keyframes cloudFlash {
                     0%, 90% { opacity: 0; }
-                    92% { opacity: 0.6; }
-                    93% { opacity: 0.2; }
-                    94% { opacity: 0.7; }
+                    92% { opacity: 0.9; } /* Peak Brightness increased */
+                    93% { opacity: 0.4; }
+                    94% { opacity: 1; }   /* Full Intensity Flash */
                     96% { opacity: 0; }
                     100% { opacity: 0; }
                 }

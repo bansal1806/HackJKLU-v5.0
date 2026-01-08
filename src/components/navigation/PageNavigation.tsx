@@ -9,10 +9,8 @@ const pageOrder = [
   { path: '/prizes', name: 'Prizes' },
   { path: '/partners', name: 'Partners' },
   { path: '/itinerary', name: 'Itinerary' },
-  { path: '/speakers', name: 'Speakers' },
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },
-  { path: '/team', name: 'Our Team' },
   { path: '/events', name: 'Events' },
 ];
 

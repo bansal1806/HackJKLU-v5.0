@@ -27,6 +27,16 @@ import instaIcon from '../../assets/partners/social-insta.svg';
 import linkedinIcon from '../../assets/partners/social-linkedin.svg';
 import webIcon from '../../assets/partners/social-web.svg';
 
+// Community Partners
+import gdgLogo from '../../assets/partners/gdg.webp';
+import codingNinjasLogo from '../../assets/partners/coding-ninjas.webp';
+import devStationLogo from '../../assets/partners/dev-station.webp';
+import devArmyLogo from '../../assets/partners/devarmy.webp';
+import iiitDelhiLogo from '../../assets/partners/iiit_delhi.webp';
+import iitDelhiLogo from '../../assets/partners/iit_delhi.webp';
+import iitKharagpurLogo from '../../assets/partners/iit_kharagpur.webp';
+import iitPatnaLogo from '../../assets/partners/iit_patna.webp';
+
 type Partner = {
     name: string;
     logo: string;
@@ -58,7 +68,21 @@ type GridPartnerData = {
     groups: PartnerGroup[];
 };
 
-type PartnerData = StandardPartnerData | GridPartnerData;
+type CommunityPartnerData = {
+    id: number;
+    type: "community";
+    title: string;
+    partnerName: string; // Used for "COMMUNITY PARTNERS" title or similar
+    ring: string; // Will hold the table image path
+    bgImage: string; // NEW field for the background image
+    partners: { name: string; logo: string }[]; // List of partners for the slots
+    logo: null;
+    description: string[];
+    socials: boolean;
+    themeColor: string;
+};
+
+type PartnerData = StandardPartnerData | GridPartnerData | CommunityPartnerData;
 
 const partnersData: PartnerData[] = [
     {
@@ -118,14 +142,25 @@ const partnersData: PartnerData[] = [
     },
     {
         id: 3,
-        type: "standard",
+        type: "community",
         title: "COMMUNITY PARTNERS",
-        partnerName: "COMING SOON",
-        ring: bronzeRing,
+        partnerName: "",
+        ring: "/community_table.webp",
+        bgImage: completeBg, // Explicitly pass the background
+        partners: [
+            { name: "GDG", logo: gdgLogo },
+            { name: "Coding Ninjas", logo: codingNinjasLogo },
+            { name: "Dev Station", logo: devStationLogo },
+            { name: "Dev Army", logo: devArmyLogo },
+            { name: "IIIT Delhi", logo: iiitDelhiLogo },
+            { name: "IIT Delhi", logo: iitDelhiLogo },
+            { name: "IIT Kharagpur", logo: iitKharagpurLogo },
+            { name: "IIT Patna", logo: iitPatnaLogo },
+        ],
         logo: null,
         description: [],
         socials: false,
-        themeColor: '#CD7F32' // Bronze
+        themeColor: '#CD7F32'
     }
 ];
 
@@ -329,6 +364,141 @@ function PartnerSection({ data }: { data: PartnerData }) {
                         </div>
                     ))}
                 </div>
+            </motion.div>
+        );
+    }
+
+    // --- COMMUNITY PARTNERS LAYOUT ---
+    if (data.type === 'community') {
+        const [hoveredPartner, setHoveredPartner] = useState<{ name: string; logo: string } | null>(null);
+
+        const logoSlots = [
+            // User manually positioned slots
+            { top: '5.5%', left: '50.5%', transform: 'translate(-50%, 0)' },   // 12:00 (Top)
+            { top: '20%', right: '12%', transform: 'translate(0, 0)' },    // 1:30
+            { top: '52%', right: '4.5%', transform: 'translate(0, -50%)' },  // 3:00 (Right)
+            { bottom: '17%', right: '17.5%', transform: 'translate(0, 0)' }, // 4:30
+            { bottom: '5.5%', left: '49.5%', transform: 'translate(-50%, 0)' },// 6:00 (Bottom)
+            { bottom: '17%', left: '16.5%', transform: 'translate(0, 0)' }, // 7:30
+            { top: '52%', left: '4%', transform: 'translate(0, -50%)' },   // 9:00 (Left)
+            { top: '20%', left: '11%', transform: 'translate(0, 0)' }      // 10:30
+        ];
+
+        return (
+            <motion.div
+                className="fixed inset-0 w-full h-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8 }}
+            >
+                {/* Background (Same as Standard to preserve BG) */}
+                <div className="absolute inset-0 w-full h-full z-0">
+                    <div
+                        className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
+                        style={{
+                            backgroundImage: `url(${data.bgImage || completeBg})`,
+                            backgroundPosition: bgPosition,
+                            filter: 'contrast(1.1) saturate(1.1)'
+                        }}
+                    />
+                    <div className="absolute inset-0 bg-neutral-950/60 z-10" />
+                </div>
+
+                {/* Header */}
+                <div className="fixed top-0 left-0 right-0 z-50 flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-24 pointer-events-none px-4 text-center">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-allrounder tracking-wider uppercase mb-1 sm:mb-2 md:mb-4" style={{ color: '#EFE3A0' }}>
+                        PAST PARTNERS
+                    </h1>
+                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-imfell tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+                        style={{
+                            background: `linear-gradient(to bottom, ${data.themeColor || '#CD7F32'} 60%, #6E561C 100%)`,
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text'
+                        }}>
+                        {data.title}
+                    </h2>
+                </div>
+
+                {/* Interactive Table Area */}
+                <div className={`fixed inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-32' : 'pt-24'}`}>
+                    <motion.div
+                        className="relative w-[340px] h-[340px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] mt-12"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                    >
+                        {/* Main Table Image */}
+                        <img
+                            src={data.ring} // Using 'ring' field for the table image
+                            alt="Community Table"
+                            className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(205,127,50,0.3)]"
+                        />
+
+                        {/* Logo Slots */}
+                        {logoSlots.map((pos, index) => {
+                            const partner = data.partners && data.partners[index];
+                            return (
+                                <div
+                                    key={index}
+                                    className="absolute w-[50px] h-[50px] sm:w-[70px] sm:h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] rounded-full flex items-center justify-center cursor-pointer z-50 group"
+                                    style={pos}
+                                    onMouseEnter={() => partner && setHoveredPartner(partner)}
+                                    onMouseLeave={() => setHoveredPartner(null)}
+                                >
+                                    {partner ? (
+                                        <motion.div
+                                            className="w-full h-full flex items-center justify-center"
+                                            animate={{ rotate: -360 }}
+                                            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                                        >
+                                            <img
+                                                src={partner.logo}
+                                                alt={partner.name}
+                                                className={`w-[60%] h-[60%] object-contain drop-shadow-md transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(239,227,160,0.8)] group-hover:brightness-125 ${partner.name === 'IIIT Delhi' ? 'scale-110 group-hover:scale-125' : partner.name === 'IIT Delhi' ? 'scale-125 group-hover:scale-140 object-cover' : 'group-hover:scale-125'}`}
+                                            />
+                                        </motion.div>
+                                    ) : (
+                                        <div className="w-full h-full rounded-full bg-black/20" />
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </motion.div>
+
+                    {/* Footer / Hover Name Display */}
+                    <div className="h-20 sm:h-24 mt-4 sm:mt-8 flex flex-col items-center justify-center text-center transition-opacity duration-300">
+                        <AnimatePresence mode="wait">
+                            {hoveredPartner ? (
+                                <motion.div
+                                    key={hoveredPartner.name}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="flex flex-col items-center gap-1"
+                                >
+                                    <span className="text-gold-400 font-cinzel tracking-widest text-sm sm:text-base uppercase opacity-80">
+                                        Community Partner
+                                    </span>
+                                    <span className="text-xl sm:text-3xl md:text-4xl font-allrounder text-[#EFE3A0] uppercase tracking-wider">
+                                        {hoveredPartner.name}
+                                    </span>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="placeholder"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 0.5 }}
+                                    exit={{ opacity: 0 }}
+                                    className="text-white/30 font-cinzel text-sm sm:text-base italic"
+                                >
+                                    Hover over the sigils...
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                </div>
+
             </motion.div>
         );
     }
