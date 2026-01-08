@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 
 const modules = import.meta.glob('../../assets/gallery/*.{jpg,JPG,jpeg,png,webp}', { eager: true });
 const galleryImages = Object.values(modules).map((mod: any) => mod.default);
@@ -10,28 +10,52 @@ const captions = [
     "THE ODYSSEY BEGINS", "SPARTAN DISCIPLINE", "ATHENIAN WISDOM", "DELPHI'S VISION"
 ];
 
-const photos = galleryImages.map((src, i) => {
-    // Grid-based scattering for compact layout
-    // 5 Columns to spread across the entire screen width
-    const cols = 5;
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-
-    // Calculate base position with random jitter
-    return {
-        src,
-        caption: captions[i % captions.length],
-        rotation: Math.random() * 20 - 10,
-        // Top: Distribute rows evenly
-        top: `${(row * 10) + 2 + (Math.random() * 4 - 2)}%`,
-        // Left: Distribute cols across 0-90% of screen
-        left: `${(col * 19) + 1 + (Math.random() * 5 - 2.5)}%`,
-        zIndex: Math.floor(Math.random() * 50) + 1
-    };
-});
-
 export function PastPhotos() {
     const containerRef = useRef(null);
+    const [columns, setColumns] = useState(5);
+
+    // Responsive column calculation
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 640) setColumns(2); // Mobile: 2 columns
+            else if (window.innerWidth < 1024) setColumns(3); // Tablet: 3 columns
+            else setColumns(5); // Desktop: 5 columns
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Memoize photo positions to prevent random jumping on re-renders, but updating on column change
+    const photos = useMemo(() => {
+        const rowHeight = columns < 3 ? 280 : 380; // Pixel height per row
+
+        return galleryImages.map((src, i) => {
+            const col = i % columns;
+            const row = Math.floor(i / columns);
+
+            // Calculate strictly aligned grid positions with minimal random jitter
+            // This ensures "more aligned" and "easily visible" photos
+            return {
+                src,
+                caption: captions[i % captions.length],
+                // Subtle rotation for organic feel without chaos
+                rotation: (i % 2 === 0 ? 1 : -1) * (2 + Math.random() * 3),
+                // Pixel-based top position for stability
+                top: row * rowHeight + 20 + (Math.random() * 15),
+                // Percentage-based left position centered in column slot
+                left: `${(col * (100 / columns)) + (columns < 3 ? 2 : 1)}%`,
+                // Dynamic width to fill column cleanly
+                width: columns < 3 ? '46%' : columns === 3 ? '30%' : '18%',
+                zIndex: i + 1
+            };
+        });
+    }, [columns]);
+
+    // Calculate container height ensuring all items fit
+    const rowHeight = columns < 3 ? 280 : 380;
+    const totalHeight = Math.ceil(galleryImages.length / columns) * rowHeight + 200;
 
     return (
         <section className="min-h-screen bg-[#0c0a09] relative overflow-hidden flex flex-col items-center py-20 px-4 mythic-texture">
@@ -46,29 +70,34 @@ export function PastPhotos() {
                 </p>
             </div>
 
-            {/* Scattered Gallery Container - Full Width */}
-            <div ref={containerRef} className="relative w-full h-[1000px] md:h-[1300px]">
+            {/* Scattered Gallery Container - Dynamic Height */}
+            <div
+                ref={containerRef}
+                className="relative w-full max-w-[1400px]"
+                style={{ height: `${totalHeight}px` }}
+            >
                 {photos.map((photo, i) => (
                     <motion.div
                         key={i}
                         drag
                         dragConstraints={containerRef}
-                        whileHover={{ scale: 1.15, rotate: 0, zIndex: 1000 }}
+                        whileHover={{ scale: 1.1, rotate: 0, zIndex: 1000 }}
                         whileDrag={{ scale: 1.1, zIndex: 1000 }}
-                        initial={{ opacity: 0, scale: 0.5, y: 100 }}
+                        initial={{ opacity: 0, scale: 0.8, y: 50 }}
                         whileInView={{ opacity: 1, scale: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
-                        transition={{ duration: 0.6, delay: Math.min(i * 0.05, 1.0) }} // Cap delay so last photos don't take forever
+                        transition={{ duration: 0.5, delay: (i % columns) * 0.1 }}
                         className="absolute cursor-grab active:cursor-grabbing group touch-none"
                         style={{
                             top: photo.top,
                             left: photo.left,
+                            width: photo.width,
                             rotate: photo.rotation,
                             zIndex: photo.zIndex
                         }}
                     >
                         {/* Photo Frame */}
-                        <div className="bg-[#f0e6d2] p-2 pb-6 md:p-3 md:pb-10 shadow-[0_10px_30px_rgba(0,0,0,0.6)] transform transition-colors duration-300 border border-[#d4af37]/40 w-[22vw] md:w-[240px] lg:w-[280px]">
+                        <div className="bg-[#f0e6d2] p-2 pb-6 md:p-3 md:pb-10 shadow-[0_10px_20px_rgba(0,0,0,0.5)] transform transition-colors duration-300 border border-[#d4af37]/40 w-full">
                             <div className="relative overflow-hidden aspect-[4/3] border border-black/10">
                                 {/* Vintage Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-tr from-[#3e2715]/20 to-transparent mix-blend-overlay z-10 pointer-events-none"></div>
@@ -84,7 +113,7 @@ export function PastPhotos() {
 
                             {/* Caption */}
                             <div className="absolute bottom-2 md:bottom-3 left-0 right-0 text-center">
-                                <p className="font-[Cinzel] text-[#3e2715] text-[10px] md:text-xs font-bold tracking-[0.15em] opacity-70 group-hover:opacity-100 uppercase">
+                                <p className="font-[Cinzel] text-[#3e2715] text-[9px] md:text-[11px] font-bold tracking-[0.15em] opacity-70 group-hover:opacity-100 uppercase truncate px-2">
                                     {photo.caption}
                                 </p>
                             </div>
