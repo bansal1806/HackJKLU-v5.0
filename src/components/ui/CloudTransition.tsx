@@ -64,7 +64,7 @@ export function CloudTransition({ type, onComplete }: CloudTransitionProps) {
                         style={{
                             transform: active ? finalTransform : initialTransform,
                             transitionDelay: cloud.delay,
-                            filter: 'brightness(0.8) contrast(1.1)', // Brighter, visible storms
+                            // OPTIMIZATION: Removed expensive filter (brightness/contrast) to fix transition lag
                             opacity: type === 'cover' ? (active ? 1 : 0) : (active ? 0 : 1),
                             transition: `transform 2.5s ease-in-out ${cloud.delay}, opacity 1.5s ease-in-out ${cloud.delay}`
                         }}

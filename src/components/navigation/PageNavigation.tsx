@@ -8,6 +8,7 @@ const pageOrder = [
   { path: '/themes', name: 'Themes' },
   { path: '/prizes', name: 'Prizes' },
   { path: '/partners', name: 'Partners' },
+  { path: '/speakers', name: 'Speakers' },
   { path: '/itinerary', name: 'Itinerary' },
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },
@@ -29,22 +30,22 @@ export function PageNavigation() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="fixed bottom-8 left-8 z-[10000]"
+          className="fixed bottom-4 left-4 md:bottom-8 md:left-8 z-[10000]"
         >
           <Link
             to={previousPage.path}
-            className="group flex items-center gap-3 transition-colors duration-300"
+            className="group flex items-center gap-2 md:gap-3 transition-colors duration-300"
             style={{ color: 'var(--ivory-cream)' }}
             onMouseEnter={(e) => e.currentTarget.style.color = 'var(--gold-shimmer)'}
             onMouseLeave={(e) => e.currentTarget.style.color = 'var(--ivory-cream)'}
           >
-            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
             <div className="flex flex-col">
-              <span className="text-xs uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
+              <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
                 Previous
               </span>
               <span
-                className="text-sm md:text-base font-[Cinzel] pb-1 transition-colors"
+                className="text-xs md:text-base font-[Cinzel] pb-1 transition-colors"
                 style={{
                   borderBottom: '1px solid rgba(255, 215, 0, 0.5)',
                 }}
@@ -64,21 +65,21 @@ export function PageNavigation() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="fixed bottom-8 right-8 z-[10000]"
+          className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-[10000]"
         >
           <Link
             to={nextPage.path}
-            className="group flex items-center gap-3 transition-colors duration-300"
+            className="group flex items-center gap-2 md:gap-3 transition-colors duration-300"
             style={{ color: 'var(--ivory-cream)' }}
             onMouseEnter={(e) => e.currentTarget.style.color = 'var(--gold-shimmer)'}
             onMouseLeave={(e) => e.currentTarget.style.color = 'var(--ivory-cream)'}
           >
             <div className="flex flex-col items-end">
-              <span className="text-xs uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
+              <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-80 group-hover:opacity-100 transition-opacity">
                 Next
               </span>
               <span
-                className="text-sm md:text-base font-[Cinzel] pb-1 transition-colors"
+                className="text-xs md:text-base font-[Cinzel] pb-1 transition-colors"
                 style={{
                   borderBottom: '1px solid rgba(255, 215, 0, 0.5)',
                 }}
@@ -88,7 +89,7 @@ export function PageNavigation() {
                 {nextPage.name}
               </span>
             </div>
-            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
       )}

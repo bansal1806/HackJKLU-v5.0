@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Assets
@@ -9,6 +9,7 @@ import zeusImg from '../../assets/prizes/zeus.jpg';
 import poseidonImg from '../../assets/prizes/poseidon.jpg';
 import hadesImg from '../../assets/prizes/hades.jpg';
 import domainSpartan from '../../assets/prizes/domain-spartan.jpg';
+import bgImage from '../../assets/prizes/bg.webp';
 
 
 const mainPrizes = [
@@ -58,7 +59,18 @@ export default function Prizes() {
     const [currentSection, setCurrentSection] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // Responsive check for mobile devices
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     const prevIndex = (activeIndex - 1 + mainPrizes.length) % mainPrizes.length;
     const nextIndex = (activeIndex + 1) % mainPrizes.length;
@@ -70,8 +82,11 @@ export default function Prizes() {
     ];
 
     // Generate random values once for particles using useState lazy initialization
-    const [flameParticles] = useState(() =>
-        Array.from({ length: 20 }).map(() => ({
+    // Reduced particle count on mobile for performance
+    const [flameParticles] = useState(() => {
+        const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+        const count = isMobileDevice ? 10 : 20;
+        return Array.from({ length: count }).map(() => ({
             width: Math.random() * 4 + 2,
             height: Math.random() * 6 + 3,
             left: Math.random() * 100,
@@ -80,11 +95,13 @@ export default function Prizes() {
             rotate: Math.random() * 180 - 90,
             duration: Math.random() * 6 + 8,
             delay: Math.random() * 10
-        }))
-    );
+        }));
+    });
 
-    const [fireEmberParticles] = useState(() =>
-        Array.from({ length: 25 }).map(() => ({
+    const [fireEmberParticles] = useState(() => {
+        const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+        const count = isMobileDevice ? 12 : 25;
+        return Array.from({ length: count }).map(() => ({
             width: Math.random() * 3 + 1,
             height: Math.random() * 3 + 1,
             left: Math.random() * 100,
@@ -93,11 +110,13 @@ export default function Prizes() {
             x2: Math.random() * 40 - 20,
             duration: Math.random() * 8 + 10,
             delay: Math.random() * 12
-        }))
-    );
+        }));
+    });
 
-    const [ashParticles] = useState(() =>
-        Array.from({ length: 30 }).map(() => ({
+    const [ashParticles] = useState(() => {
+        const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+        const count = isMobileDevice ? 15 : 30;
+        return Array.from({ length: count }).map(() => ({
             width: Math.random() * 2.5 + 1,
             height: Math.random() * 2.5 + 1,
             left: Math.random() * 100,
@@ -106,11 +125,13 @@ export default function Prizes() {
             rotate: Math.random() * 180,
             duration: Math.random() * 7 + 9,
             delay: Math.random() * 12
-        }))
-    );
+        }));
+    });
 
-    const [debrisParticles] = useState(() =>
-        Array.from({ length: 15 }).map(() => ({
+    const [debrisParticles] = useState(() => {
+        const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+        const count = isMobileDevice ? 8 : 15;
+        return Array.from({ length: count }).map(() => ({
             width: Math.random() * 3 + 2,
             height: Math.random() * 3 + 2,
             left: Math.random() * 100,
@@ -118,25 +139,25 @@ export default function Prizes() {
             x: Math.random() * 40 - 20,
             duration: Math.random() * 10 + 12,
             delay: Math.random() * 15
-        }))
-    );
+        }));
+    });
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         if (isAnimating) return;
         setActiveIndex((prev) => (prev + 1) % mainPrizes.length);
-    };
+    }, [isAnimating]);
 
-    const handlePrev = () => {
+    const handlePrev = useCallback(() => {
         if (isAnimating) return;
         setActiveIndex((prev) => (prev - 1 + mainPrizes.length) % mainPrizes.length);
-    };
+    }, [isAnimating]);
 
-    const goToSlide = (index: number) => {
+    const goToSlide = useCallback((index: number) => {
         if (isAnimating || index === activeIndex) return;
         setActiveIndex(index);
-    };
+    }, [isAnimating, activeIndex]);
 
-    const switchSection = (nextSection: number) => {
+    const switchSection = useCallback((nextSection: number) => {
         if (isAnimating || nextSection === currentSection) return;
 
         setIsAnimating(true);
@@ -145,7 +166,7 @@ export default function Prizes() {
         setTimeout(() => {
             setIsAnimating(false);
         }, 1000);
-    };
+    }, [isAnimating, currentSection]);
 
     useEffect(() => {
         const handleWheel = (e: WheelEvent) => {
@@ -207,7 +228,7 @@ export default function Prizes() {
                 document.removeEventListener('keydown', handleKeyDown);
             }
         };
-    }, [currentSection, isAnimating, isPaused, activeIndex]);
+    }, [currentSection, isAnimating, isPaused, activeIndex, handleNext, handlePrev, switchSection, sections.length]);
 
     // Auto-play functionality
     useEffect(() => {
@@ -218,7 +239,7 @@ export default function Prizes() {
 
             return () => clearInterval(interval);
         }
-    }, [activeIndex, currentSection, isPaused, isAnimating]);
+    }, [activeIndex, currentSection, isPaused, isAnimating, handleNext]);
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -228,68 +249,68 @@ export default function Prizes() {
     }, []);
 
     return (
-        <div ref={containerRef} className="relative bg-neutral-950 text-neutral-100 min-h-screen h-[100dvh] overflow-hidden selection:bg-yellow-900 selection:text-white pt-20 sm:pt-24 md:pt-32 lg:pt-40 xl:pt-48 pb-16 sm:pb-20 md:pb-24">
-            {/* Section Navigation Indicators */}
-            <div className="fixed right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 sm:gap-3 md:gap-4">
+        <div ref={containerRef} className="relative bg-neutral-950 text-neutral-100 min-h-screen h-dvh overflow-hidden selection:bg-yellow-900 selection:text-white pt-16 xs:pt-18 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-40 2xl:pt-48 pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24">
+            {/* Background Image with Black Mask */}
+            <div className="fixed inset-0 z-0 will-change-transform">
+                <img 
+                    src={bgImage} 
+                    alt="Background" 
+                    className="w-full h-full object-cover"
+                    loading="eager"
+                    decoding="async"
+                    style={{ willChange: 'transform' }}
+                />
+                <div className="absolute inset-0 bg-black/60" />
+            </div>
+
+            {/* Section Navigation Indicators - Touch-friendly */}
+            <div className="fixed right-2 xs:right-3 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 xs:gap-2.5 sm:gap-3 md:gap-4">
                 {sections.map((section) => (
                     <button
                         key={section.id}
                         onClick={() => switchSection(section.id)}
-                        className={`w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 rounded-full border-2 transition-all duration-300 ${currentSection === section.id
-                            ? 'bg-[#d4af37] border-[#d4af37] shadow-[0_0_15px_rgba(212,175,55,0.6)]'
-                            : 'bg-transparent border-neutral-500 hover:border-[#d4af37]/60'
+                        className={`w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full border-2 transition-all duration-300 touch-manipulation ${currentSection === section.id
+                            ? 'bg-[#d4af37] border-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.6)] scale-110'
+                            : 'bg-transparent border-neutral-500 hover:border-[#d4af37]/60 active:border-[#d4af37]/80'
                             }`}
                         aria-label={`Go to ${section.label}`}
                     />
                 ))}
             </div>
 
-            {/* Scroll Hint with enhanced styling - Only show if not last section */}
+            {/* Scroll Hint with enhanced styling - Only show if not last section, positioned above footer */}
             <AnimatePresence>
                 {currentSection < sections.length - 1 && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed bottom-12 sm:bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 z-50 text-center"
+                        className="fixed bottom-3 xs:bottom-4 sm:bottom-5 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 text-center pointer-events-none px-2"
                     >
-                        {/* Slide Indicators - Show for both sections appropriately */}
-                        <div className="flex justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                            {currentSection === 0 && mainPrizes.map((_, index) => (
-                                <button
-                                    key={`main-${index}`}
-                                    onClick={() => goToSlide(index)}
-                                    className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${index === activeIndex
-                                        ? 'bg-[#d4af37] shadow-[0_0_10px_rgba(212,175,55,0.6)]'
-                                        : 'bg-neutral-600 hover:bg-neutral-500'
-                                        }`}
-                                    aria-label={`Go to ${mainPrizes[index].god} prize`}
-                                />
-                            ))}
-                        </div>
-
                         {/* Keyboard Instructions */}
                         <motion.p
                             initial={{ opacity: 0.6 }}
                             animate={{ opacity: [0.6, 1, 0.6] }}
                             transition={{ duration: 2, repeat: Infinity }}
-                            className="text-xs sm:text-sm text-neutral-400 mb-2 sm:mb-3 font-heading tracking-wider"
+                            className="text-[10px] xs:text-xs sm:text-sm md:text-base text-neutral-400 mb-1.5 xs:mb-2 sm:mb-2.5 md:mb-3 font-heading tracking-wider leading-tight"
                         >
-                            {currentSection <= 1 ? 'Use ← → keys or scroll to explore' : 'Scroll to explore'}
+                            {currentSection === 0 ? (isMobile ? 'Swipe or scroll' : 'Use ← → keys or scroll to explore') : 'Scroll to explore'}
                         </motion.p>
 
-                        {/* Mouse Indicator */}
-                        <motion.div
-                            className="w-5 h-8 sm:w-6 sm:h-10 md:w-8 md:h-12 border-2 border-neutral-500 rounded-full mx-auto relative"
-                            whileHover={{ scale: 1.1, borderColor: '#d4af37' }}
-                            transition={{ duration: 0.3 }}
-                        >
+                        {/* Mouse Indicator - Hidden on mobile */}
+                        {!isMobile && (
                             <motion.div
-                                className="w-0.5 h-1.5 sm:w-1 sm:h-2 md:w-1.5 md:h-3 bg-neutral-400 rounded-full absolute top-1.5 sm:top-2 left-1/2 -translate-x-1/2"
-                                animate={{ y: [0, 8, 0] }}
-                                transition={{ duration: 1.5, repeat: Infinity }}
-                            />
-                        </motion.div>
+                                className="w-4 h-6 xs:w-5 xs:h-8 sm:w-6 sm:h-10 md:w-7 md:h-11 lg:w-8 lg:h-12 border-2 border-neutral-500 rounded-full mx-auto relative"
+                                whileHover={{ scale: 1.1, borderColor: '#d4af37' }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <motion.div
+                                    className="w-0.5 h-1 xs:h-1.5 sm:w-1 sm:h-2 md:w-1.5 md:h-2.5 lg:h-3 bg-neutral-400 rounded-full absolute top-1 xs:top-1.5 sm:top-2 left-1/2 -translate-x-1/2"
+                                    animate={{ y: [0, 6, 0] }}
+                                    transition={{ duration: 1.5, repeat: Infinity }}
+                                />
+                            </motion.div>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -348,22 +369,23 @@ export default function Prizes() {
                 }
             `}</style>
 
-            {/* ULTIMATE: Combined Fire + Ash Particles */}
-            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+            {/* ULTIMATE: Combined Fire + Ash Particles - Optimized */}
+            <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden" style={{ contain: 'layout style paint' }}>
                 {/* FIRE PARTICLES - Rising from ground */}
                 {/* Large flame particles rising from bottom */}
                 {flameParticles.map((particle, i) => (
                     <motion.div
                         key={`flame-${i}`}
-                        className="absolute rounded-full shadow-lg"
+                        className="absolute rounded-full shadow-lg will-change-transform"
                         style={{
-                            width: `${particle.width}px`,
-                            height: `${particle.height}px`,
+                            width: isMobile ? `${particle.width * 0.7}px` : `${particle.width}px`,
+                            height: isMobile ? `${particle.height * 0.7}px` : `${particle.height}px`,
                             left: `${particle.left}%`,
                             bottom: `-20px`,
                             borderRadius: `50% 50% 50% 50% / 60% 60% 40% 40%`,
                             backgroundColor: 'rgba(255, 140, 0, 0.8)',
                             boxShadow: '0 0 8px rgba(255, 140, 0, 0.6), 0 0 16px rgba(255, 69, 0, 0.4)',
+                            transform: 'translateZ(0)',
                         }}
                         animate={{
                             y: ['0vh', '-120vh'],
@@ -384,15 +406,16 @@ export default function Prizes() {
                 {fireEmberParticles.map((particle, i) => (
                     <motion.div
                         key={`fire-ember-${i}`}
-                        className="absolute rounded-full shadow-md"
+                        className="absolute rounded-full shadow-md will-change-transform"
                         style={{
-                            width: `${particle.width}px`,
-                            height: `${particle.height}px`,
+                            width: isMobile ? `${particle.width * 0.7}px` : `${particle.width}px`,
+                            height: isMobile ? `${particle.height * 0.7}px` : `${particle.height}px`,
                             left: `${particle.left}%`,
                             bottom: `-15px`,
                             borderRadius: `${particle.borderRadius}%`,
                             backgroundColor: 'rgba(255, 69, 0, 0.7)',
                             boxShadow: '0 0 6px rgba(255, 69, 0, 0.5)',
+                            transform: 'translateZ(0)',
                         }}
                         animate={{
                             y: ['0vh', '-110vh'],
@@ -414,15 +437,16 @@ export default function Prizes() {
                 {ashParticles.map((particle, i) => (
                     <motion.div
                         key={`ash-${i}`}
-                        className="absolute rounded-full shadow-md"
+                        className="absolute rounded-full shadow-md will-change-transform"
                         style={{
-                            width: `${particle.width}px`,
-                            height: `${particle.height}px`,
+                            width: isMobile ? `${particle.width * 0.7}px` : `${particle.width}px`,
+                            height: isMobile ? `${particle.height * 0.7}px` : `${particle.height}px`,
                             left: `${particle.left}%`,
                             top: `-15px`,
                             borderRadius: `${particle.borderRadius}%`,
                             backgroundColor: 'rgba(245, 245, 220, 0.6)',
                             boxShadow: '0 0 3px rgba(139, 69, 19, 0.4)',
+                            transform: 'translateZ(0)',
                         }}
                         animate={{
                             y: ['0vh', '108vh'],
@@ -443,15 +467,16 @@ export default function Prizes() {
                 {debrisParticles.map((particle, i) => (
                     <motion.div
                         key={`falling-debris-${i}`}
-                        className="absolute rounded-full shadow-lg"
+                        className="absolute rounded-full shadow-lg will-change-transform"
                         style={{
-                            width: `${particle.width}px`,
-                            height: `${particle.height}px`,
+                            width: isMobile ? `${particle.width * 0.7}px` : `${particle.width}px`,
+                            height: isMobile ? `${particle.height * 0.7}px` : `${particle.height}px`,
                             left: `${particle.left}%`,
                             top: `-20px`,
                             borderRadius: `${particle.borderRadius}%`,
                             backgroundColor: 'rgba(139, 69, 19, 0.7)',
                             boxShadow: '0 0 4px rgba(0, 0, 0, 0.5)',
+                            transform: 'translateZ(0)',
                         }}
                         animate={{
                             y: ['0vh', '110vh'],
@@ -470,131 +495,6 @@ export default function Prizes() {
                 ))}
             </div>
 
-            {/* Burning Battlefield Background - Using client color palette */}
-            <div className="fixed inset-0 pointer-events-none z-0 opacity-70">
-                {/* Battlefield fire and smoke layers */}
-                <motion.div
-                    className="absolute inset-0"
-                    style={{
-                        background: `
-                            radial-gradient(ellipse 600px 300px at 20% 80%, rgba(139, 69, 19, 0.4) 0%, rgba(160, 82, 45, 0.2) 40%, transparent 80%),
-                            radial-gradient(ellipse 500px 250px at 80% 70%, rgba(178, 34, 34, 0.5) 0%, rgba(139, 69, 19, 0.3) 50%, transparent 90%),
-                            radial-gradient(ellipse 400px 200px at 40% 20%, rgba(255, 140, 0, 0.3) 0%, rgba(255, 69, 0, 0.2) 60%, transparent 100%),
-                            radial-gradient(ellipse 700px 350px at 70% 90%, rgba(139, 69, 19, 0.6) 0%, rgba(160, 82, 45, 0.4) 30%, transparent 70%)
-                        `
-                    }}
-                    animate={{
-                        backgroundPosition: ['0% 0%', '100% 100%'],
-                    }}
-                    transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        repeatType: 'reverse',
-                        ease: 'linear',
-                    }}
-                />
-                <motion.div
-                    className="absolute inset-0"
-                    style={{
-                        background: `
-                            radial-gradient(ellipse 450px 200px at 60% 30%, rgba(255, 140, 0, 0.4) 0%, rgba(255, 69, 0, 0.2) 50%, transparent 80%),
-                            radial-gradient(ellipse 350px 180px at 30% 60%, rgba(178, 34, 34, 0.3) 0%, rgba(139, 69, 19, 0.2) 60%, transparent 100%)
-                        `
-                    }}
-                    animate={{
-                        backgroundPosition: ['100% 0%', '0% 100%'],
-                        scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                        duration: 25,
-                        repeat: Infinity,
-                        repeatType: 'reverse',
-                        ease: 'linear',
-                    }}
-                />
-                {/* Animated smoke and fire wisps */}
-                <div
-                    className="absolute inset-0 opacity-80"
-                    style={{
-                        background: `
-                            radial-gradient(ellipse 500px 250px at 25% 40%, rgba(105, 105, 105, 0.6) 0%, rgba(169, 169, 169, 0.3) 40%, transparent 80%),
-                            radial-gradient(ellipse 400px 200px at 75% 60%, rgba(139, 69, 19, 0.5) 0%, rgba(160, 82, 45, 0.2) 50%, transparent 90%),
-                            radial-gradient(ellipse 350px 180px at 50% 80%, rgba(255, 140, 0, 0.4) 0%, rgba(255, 69, 0, 0.2) 60%, transparent 100%)
-                        `,
-                        animation: 'battlefield-drift 30s ease-in-out infinite',
-                    }}
-                />
-            </div>
-
-            {/* Enhanced battlefield smoke */}
-            <div className="fixed inset-0 pointer-events-none z-0 opacity-50">
-                <motion.div
-                    className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/fog.png')] opacity-70"
-                    style={{ filter: 'sepia(30%) saturate(150%) hue-rotate(15deg)' }}
-                    animate={{
-                        backgroundPosition: ['0% 0%', '100% 0%'],
-                    }}
-                    transition={{
-                        duration: 35,
-                        repeat: Infinity,
-                        ease: 'linear',
-                    }}
-                />
-                <motion.div
-                    className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/fog.png')] opacity-60"
-                    style={{ filter: 'sepia(50%) saturate(200%) hue-rotate(30deg)' }}
-                    animate={{
-                        backgroundPosition: ['100% 100%', '0% 0%'],
-                    }}
-                    transition={{
-                        duration: 40,
-                        repeat: Infinity,
-                        ease: 'linear',
-                    }}
-                />
-            </div>
-
-            {/* Burning Battlefield Effects - Using client color palette */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                {/* Battlefield fires using client colors - Classes removed to prevent oklch conflicts */}
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[100px]" style={{ backgroundColor: 'rgba(255, 140, 0, 0.2)' }} />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[100px]" style={{ backgroundColor: 'rgba(178, 34, 34, 0.25)' }} />
-                <div className="absolute top-[15%] right-[-5%] w-[40%] h-[40%] rounded-full blur-[80px]" style={{ backgroundColor: 'rgba(255, 69, 0, 0.18)' }} />
-                <div className="absolute bottom-[15%] left-[-5%] w-[45%] h-[45%] rounded-full blur-[120px]" style={{ backgroundColor: 'rgba(139, 69, 19, 0.22)' }} />
-                <div className="absolute w-[35%] h-[35%] rounded-full blur-[60px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style={{ backgroundColor: 'rgba(178, 34, 34, 0.18)' }} />
-
-                {/* Additional battlefield fire sources */}
-                <div className="absolute top-[30%] left-[20%] w-[25%] h-[25%] rounded-full blur-[70px]" style={{ backgroundColor: 'rgba(255, 140, 0, 0.15)' }} />
-                <div className="absolute bottom-[30%] right-[20%] w-[30%] h-[30%] rounded-full blur-[90px]" style={{ backgroundColor: 'rgba(160, 82, 45, 0.16)' }} />
-
-                {/* Battlefield smoke atmosphere using client grays and browns */}
-                <div className="absolute inset-0 bg-gradient-to-b from-gray-800/20 via-gray-700/12 to-gray-600/25" />
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-700/8 via-gray-600/15 to-gray-700/8" />
-                <div className="absolute inset-0 bg-gradient-to-t from-amber-900/8 via-transparent to-orange-900/6" style={{
-                    background: 'linear-gradient(to top, rgba(139, 69, 19, 0.08) 0%, transparent 50%, rgba(255, 140, 0, 0.06) 100%)'
-                }} />
-
-                {/* Battlefield texture */}
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0wIDBoNnY2SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTEgMWgxdjFIMXoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjEiLz48L3N2Zz4=')] opacity-40" />
-
-                {/* Animated battlefield heat shimmer */}
-                <motion.div
-                    className="absolute inset-0"
-                    style={{
-                        background: 'linear-gradient(to top, rgba(255, 140, 0, 0.04) 0%, rgba(178, 34, 34, 0.06) 50%, rgba(255, 69, 0, 0.04) 100%)'
-                    }}
-                    animate={{
-                        opacity: [0.3, 0.7, 0.3],
-                        scale: [1, 1.02, 1],
-                    }}
-                    transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                    }}
-                />
-            </div>
-
             <AnimatePresence mode="wait">
                 {/* SECTION 1: MAIN PRIZES */}
                 <motion.section
@@ -605,49 +505,64 @@ export default function Prizes() {
                     transition={{ duration: 0.8, ease: "easeInOut" }}
                     className={`absolute inset-0 flex flex-col items-center justify-center z-10 font-heading ${currentSection === 0 ? 'block' : 'hidden'}`}
                 >
-                    <div className="container mx-auto px-3 sm:px-6 md:px-8 py-4 sm:py-8 md:py-12 flex flex-col items-center justify-center h-full">
+                    <div className="container mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8 py-3 xs:py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12 pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24 flex flex-col items-center justify-center h-full">
                         {/* HEADLINE */}
                         <motion.h1
                             initial={{ opacity: 0, y: -30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
-                            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl mb-4 sm:mb-6 md:mb-10 lg:mb-12 xl:mb-16 text-center tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.25em] xl:tracking-[0.3em] text-[#e8dab2] drop-shadow-[0_0_20px_rgba(232,218,178,0.4)] mt-4 sm:mt-6 md:mt-12 lg:mt-8"
+                            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl mb-3 xs:mb-4 sm:mb-5 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-14 text-center tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.25em] xl:tracking-[0.3em] text-[#e8dab2] drop-shadow-[0_0_15px_rgba(232,218,178,0.3)] sm:drop-shadow-[0_0_20px_rgba(232,218,178,0.4)] mt-2 xs:mt-3 sm:mt-4 md:mt-6 lg:mt-8 leading-tight"
                         >
                             PRIZES
                         </motion.h1>
 
                         {/* MAIN PRIZES CAROUSEL */}
-                        <div className="relative w-full max-w-7xl h-[380px] sm:h-[450px] md:h-[500px] lg:h-[550px] xl:h-[600px] flex items-center justify-center">
-                            {/* Navigation Buttons */}
-                            {/* Navigation Buttons */}
+                        <div className="relative w-full max-w-7xl h-[280px] xs:h-[320px] sm:h-[400px] md:h-[480px] lg:h-[550px] xl:h-[600px] 2xl:h-[650px] flex items-center justify-center">
+                            {/* Navigation Buttons - Responsive positioning */}
                             <button
                                 onClick={handlePrev}
-                                className="absolute left-[-10px] sm:left-[-20px] md:left-2 lg:left-4 xl:left-[-60px] 2xl:left-[-100px] top-1/2 z-30 p-2 sm:p-3 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none opacity-80 hover:opacity-100"
+                                className="absolute left-1 xs:left-2 sm:left-4 md:left-8 lg:left-12 xl:left-16 2xl:left-20 top-1/2 z-30 p-1.5 xs:p-2 sm:p-2.5 md:p-3 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none opacity-70 hover:opacity-100 touch-manipulation"
                                 aria-label="Previous prize"
                             >
-                                <img src={arrowLeft} alt="" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
+                                <img 
+                                    src={arrowLeft} 
+                                    alt="" 
+                                    className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
+                                    loading="eager"
+                                    decoding="async"
+                                />
                             </button>
                             <button
                                 onClick={handleNext}
-                                className="absolute right-[-10px] sm:right-[-20px] md:right-2 lg:right-4 xl:right-[-60px] 2xl:right-[-100px] top-1/2 z-30 p-2 sm:p-3 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none opacity-80 hover:opacity-100"
+                                className="absolute right-1 xs:right-2 sm:right-4 md:right-8 lg:right-12 xl:right-16 2xl:right-20 top-1/2 z-30 p-1.5 xs:p-2 sm:p-2.5 md:p-3 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none opacity-70 hover:opacity-100 touch-manipulation"
                                 aria-label="Next prize"
                             >
-                                <img src={arrowRight} alt="" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
+                                <img 
+                                    src={arrowRight} 
+                                    alt="" 
+                                    className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
+                                    loading="eager"
+                                    decoding="async"
+                                />
                             </button>
 
                             {/* Cards Container */}
-                            <div className="relative w-full h-full flex items-center justify-center px-2 sm:px-4 md:px-8 lg:px-12">
-                                {/* Left Card (Previous) - Symmetrical positioning */}
+                            <div className="relative w-full h-full flex items-center justify-center px-1 xs:px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12">
+                                {/* Left Card (Previous) - Symmetrical positioning, hidden on mobile */}
                                 <motion.div
                                     key={`prev-${prevIndex}`}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.25, x: 0, scale: 0.6 }}
-                                    className="absolute left-[2%] sm:left-[4%] md:left-[6%] lg:left-[8%] xl:left-[10%] blur-[1px] z-10 cursor-pointer hidden md:block"
+                                    className="absolute left-[1%] md:left-[3%] lg:left-[5%] xl:left-[8%] 2xl:left-[10%] blur-[1px] z-10 cursor-pointer hidden md:block will-change-transform"
                                     onClick={handlePrev}
+                                    style={{ transform: 'translateZ(0)' }}
                                 >
                                     <div
-                                        className="w-[140px] h-[210px] sm:w-[160px] sm:h-[240px] md:w-[180px] md:h-[270px] lg:w-[200px] lg:h-[300px] xl:w-[220px] xl:h-[330px] 2xl:w-[260px] 2xl:h-[390px] rounded-xl overflow-hidden bg-cover bg-center border border-neutral-700/50"
-                                        style={{ backgroundImage: `url(${mainPrizes[prevIndex].image})` }}
+                                        className="w-[100px] h-[150px] md:w-[120px] md:h-[180px] lg:w-[160px] lg:h-[240px] xl:w-[200px] xl:h-[300px] 2xl:w-[240px] 2xl:h-[360px] rounded-lg md:rounded-xl overflow-hidden bg-cover bg-center border border-neutral-700/50"
+                                        style={{ 
+                                            backgroundImage: `url(${mainPrizes[prevIndex].image})`,
+                                            willChange: 'transform'
+                                        }}
                                     />
                                 </motion.div>
 
@@ -659,34 +574,42 @@ export default function Prizes() {
                                         animate={{ scale: 1, opacity: 1, x: 0, rotateY: 0 }}
                                         exit={{ scale: 0.85, opacity: 0, rotateY: 15 }}
                                         transition={{ duration: 0.6, ease: "easeOut" }}
-                                        className="z-20 relative group cursor-pointer"
-                                        style={{ transformStyle: 'preserve-3d' }}
-                                        whileHover={{ scale: 1.05, y: -10 }}
-                                        onMouseEnter={() => setIsPaused(true)}
-                                        onMouseLeave={() => setIsPaused(false)}
+                                        className="z-20 relative group cursor-pointer will-change-transform"
+                                        style={{ 
+                                            transformStyle: 'preserve-3d',
+                                            transform: 'translateZ(0)'
+                                        }}
+                                        whileHover={!isMobile ? { scale: 1.05, y: -10 } : {}}
+                                        onMouseEnter={() => !isMobile && setIsPaused(true)}
+                                        onMouseLeave={() => !isMobile && setIsPaused(false)}
                                     >
                                         <div
-                                            className="w-[220px] h-[330px] sm:w-[260px] sm:h-[390px] md:w-[280px] md:h-[420px] lg:w-[320px] lg:h-[480px] xl:w-[360px] xl:h-[540px] rounded-xl overflow-hidden bg-cover bg-center border-[3px] transition-all duration-500 group-hover:brightness-110"
+                                            className="w-[180px] h-[270px] xs:w-[200px] xs:h-[300px] sm:w-[240px] sm:h-[360px] md:w-[260px] md:h-[390px] lg:w-[300px] lg:h-[450px] xl:w-[340px] xl:h-[510px] 2xl:w-[380px] 2xl:h-[570px] rounded-lg md:rounded-xl overflow-hidden bg-cover bg-center border-2 md:border-[3px] transition-all duration-500 group-hover:brightness-110"
                                             style={{
                                                 backgroundImage: `url(${activePrize.image})`,
-                                                boxShadow: `0 0 40px ${activePrize.color}50, 0 20px 60px rgba(0,0,0,0.5)`,
-                                                borderColor: activePrize.color
+                                                boxShadow: `0 0 30px ${activePrize.color}40, 0 15px 40px rgba(0,0,0,0.4)`,
+                                                borderColor: activePrize.color,
+                                                willChange: 'transform'
                                             }}
                                         />
                                     </motion.div>
                                 </AnimatePresence>
 
-                                {/* Right Card (Next) - Symmetrical positioning */}
+                                {/* Right Card (Next) - Symmetrical positioning, hidden on mobile */}
                                 <motion.div
                                     key={`next-${nextIndex}`}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.25, x: 0, scale: 0.6 }}
-                                    className="absolute right-[1%] sm:right-[1%] md:right-[1%] lg:right-[1%] xl:right-[1%] blur-[1px] z-10 cursor-pointer hidden md:block"
+                                    className="absolute right-[1%] md:right-[3%] lg:right-[5%] xl:right-[8%] 2xl:right-[10%] blur-[1px] z-10 cursor-pointer hidden md:block will-change-transform"
                                     onClick={handleNext}
+                                    style={{ transform: 'translateZ(0)' }}
                                 >
                                     <div
-                                        className="w-[140px] h-[210px] sm:w-[160px] sm:h-[240px] md:w-[180px] md:h-[270px] lg:w-[200px] lg:h-[300px] xl:w-[220px] xl:h-[330px] 2xl:w-[260px] 2xl:h-[390px] rounded-xl overflow-hidden bg-cover bg-center border border-neutral-700/50"
-                                        style={{ backgroundImage: `url(${mainPrizes[nextIndex].image})` }}
+                                        className="w-[100px] h-[150px] md:w-[120px] md:h-[180px] lg:w-[160px] lg:h-[240px] xl:w-[200px] xl:h-[300px] 2xl:w-[240px] 2xl:h-[360px] rounded-lg md:rounded-xl overflow-hidden bg-cover bg-center border border-neutral-700/50"
+                                        style={{ 
+                                            backgroundImage: `url(${mainPrizes[nextIndex].image})`,
+                                            willChange: 'transform'
+                                        }}
                                     />
                                 </motion.div>
 
@@ -698,20 +621,20 @@ export default function Prizes() {
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: -30 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
-                                        className="hidden xl:flex absolute right-[5%] 2xl:right-[8%] flex-col items-start text-left w-[280px] 2xl:w-[320px] z-20"
+                                        className="hidden xl:flex absolute right-[2%] xl:right-[4%] 2xl:right-[6%] flex-col items-start text-left w-[240px] xl:w-[280px] 2xl:w-[320px] z-20"
                                     >
-                                        <h2 className="text-[64px] font-heading tracking-[0.2em] mb-2 xl:mb-3" style={{ color: activePrize.color }}>
+                                        <h2 className="text-5xl xl:text-6xl 2xl:text-7xl font-heading tracking-[0.15em] xl:tracking-[0.2em] mb-1.5 xl:mb-2 2xl:mb-3 leading-tight" style={{ color: activePrize.color }}>
                                             {activePrize.title}
                                         </h2>
-                                        <h3 className="text-[48px] font-subheading font-bold italic text-[#DEC169] mb-2 xl:mb-3 leading-tight">
+                                        <h3 className="text-3xl xl:text-4xl 2xl:text-5xl font-subheading font-bold italic text-[#DEC169] mb-1.5 xl:mb-2 2xl:mb-3 leading-tight">
                                             {activePrize.god}
                                         </h3>
-                                        <p className="text-[36px] italic text-neutral-400 font-subheading mb-4 xl:mb-6 pb-3 xl:pb-4 w-full">
+                                        <p className="text-xl xl:text-2xl 2xl:text-3xl italic text-neutral-400 font-subheading mb-3 xl:mb-4 2xl:mb-6 pb-2 xl:pb-3 2xl:pb-4 w-full leading-snug">
                                             {activePrize.role}
                                         </p>
-                                        <div className="text-[96px] font-normal font-heading tracking-tighter" style={{
+                                        <div className="text-6xl xl:text-7xl 2xl:text-8xl font-normal font-heading tracking-tighter leading-none" style={{
                                             color: activePrize.color,
-                                            textShadow: `0 0 35px ${activePrize.color}60`
+                                            textShadow: `0 0 30px ${activePrize.color}50, 0 0 60px ${activePrize.color}30`
                                         }}>
                                             {activePrize.amount}
                                         </div>
@@ -728,25 +651,55 @@ export default function Prizes() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.5 }}
-                                className="xl:hidden text-center mt-6 sm:mt-8 md:mt-10 lg:mt-12 flex flex-col items-center px-4"
+                                className="xl:hidden text-center mt-4 xs:mt-5 sm:mt-6 md:mt-8 lg:mt-10 flex flex-col items-center px-3 xs:px-4 sm:px-6 mb-3 sm:mb-4 md:mb-6"
                             >
-                                <h2 className="text-[40px] sm:text-[50px] md:text-[64px] tracking-[0.1em] mb-1 sm:mb-2 font-bold font-heading" style={{ color: activePrize.color }}>
+                                <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-widest mb-1 xs:mb-1.5 sm:mb-2 font-bold font-heading leading-tight" style={{ color: activePrize.color }}>
                                     {activePrize.title}
                                 </h2>
-                                <h3 className="text-[32px] sm:text-[40px] md:text-[48px] font-subheading font-bold italic text-[#DEC169] mb-1 sm:mb-2 leading-tight drop-shadow-md">
+                                <h3 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-subheading font-bold italic text-[#DEC169] mb-1 xs:mb-1.5 sm:mb-2 leading-tight drop-shadow-md">
                                     {activePrize.god}
                                 </h3>
-                                <p className="text-[24px] sm:text-[30px] md:text-[36px] italic text-neutral-400 font-subheading mb-3 sm:mb-4">
+                                <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl italic text-neutral-400 font-subheading mb-2 xs:mb-2.5 sm:mb-3 md:mb-4 leading-snug px-2">
                                     {activePrize.role}
                                 </p>
-                                <div className="text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px] font-normal font-heading tracking-tighter" style={{
+                                <div className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal font-heading tracking-tighter mb-3 xs:mb-4 sm:mb-5 md:mb-6 leading-none" style={{
                                     color: activePrize.color,
-                                    textShadow: `0 0 30px ${activePrize.color}50`
+                                    textShadow: `0 0 20px ${activePrize.color}40, 0 0 40px ${activePrize.color}20`
                                 }}>
                                     {activePrize.amount}
                                 </div>
+
+                                {/* Carousel Indicators - Below Cards - Touch-friendly on mobile */}
+                                <div className="flex justify-center gap-2 xs:gap-2.5 sm:gap-3 mt-2 xs:mt-2.5 sm:mt-3 md:mt-4">
+                                    {mainPrizes.map((_, index) => (
+                                        <button
+                                            key={`main-indicator-${index}`}
+                                            onClick={() => goToSlide(index)}
+                                            className={`w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 rounded-full transition-all duration-300 touch-manipulation ${index === activeIndex
+                                                ? 'bg-[#d4af37] shadow-[0_0_8px_rgba(212,175,55,0.6)] scale-110'
+                                                : 'bg-neutral-600 hover:bg-neutral-500 active:bg-neutral-400'
+                                                }`}
+                                            aria-label={`Go to ${mainPrizes[index].god} prize`}
+                                        />
+                                    ))}
+                                </div>
                             </motion.div>
                         </AnimatePresence>
+
+                        {/* Desktop Carousel Indicators - Below Cards (Only for desktop) */}
+                        <div className="hidden xl:flex justify-center gap-3 mt-4 mb-4">
+                            {mainPrizes.map((_, index) => (
+                                <button
+                                    key={`desktop-indicator-${index}`}
+                                    onClick={() => goToSlide(index)}
+                                    className={`w-3 h-3 rounded-full transition-all duration-300 ${index === activeIndex
+                                        ? 'bg-[#d4af37] shadow-[0_0_10px_rgba(212,175,55,0.6)] scale-110'
+                                        : 'bg-neutral-600 hover:bg-neutral-500'
+                                        }`}
+                                    aria-label={`Go to ${mainPrizes[index].god} prize`}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </motion.section>
             </AnimatePresence>
@@ -761,58 +714,62 @@ export default function Prizes() {
                 className={`absolute inset-0 flex flex-col items-center justify-center z-20 font-heading ${currentSection === 1 ? 'block' : 'hidden'}`}
             >
                 {/* Container with dynamic padding based on screen height */}
-                <div className="container mx-auto px-4 w-full h-full flex flex-col justify-center items-center pt-16 sm:pt-20 md:pt-24 pb-4">
+                <div className="container mx-auto px-2 xs:px-3 sm:px-4 md:px-6 w-full h-full flex flex-col justify-center items-center pt-12 xs:pt-14 sm:pt-16 md:pt-20 lg:pt-24 pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24">
                     <motion.h2
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.8 }}
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.1em] text-[#e8dab2] text-center mb-4 sm:mb-8 drop-shadow-[0_0_15px_rgba(232,218,178,0.3)] shrink-0"
+                        className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-widest text-[#e8dab2] text-center mb-3 xs:mb-4 sm:mb-6 md:mb-8 lg:mb-10 drop-shadow-[0_0_12px_rgba(232,218,178,0.25)] sm:drop-shadow-[0_0_15px_rgba(232,218,178,0.3)] shrink-0 leading-tight px-2"
                     >
                         DOMAIN PRIZES
                     </motion.h2>
 
-                    {/* DOMAIN PRIZES GRID - Responsive Height */}
-                    <div className="w-full max-w-[1400px] flex flex-wrap justify-center items-center content-center gap-4 sm:gap-6 lg:gap-8 perspective-1000">
+                    {/* DOMAIN PRIZES GRID - Fully Responsive */}
+                    <div className="w-full max-w-[1400px] flex flex-wrap justify-center items-center content-center gap-3 xs:gap-4 sm:gap-5 md:gap-6 lg:gap-7 xl:gap-8 perspective-1000 px-2 xs:px-3 sm:px-4">
                         {domainPrizes.map((prize, index) => (
                             <motion.div
                                 key={`domain-card-${index}`}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
+                                viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="relative group w-[160px] h-[240px] XS:w-[180px] XS:h-[280px] sm:w-[220px] sm:h-[320px] md:w-[200px] md:h-[300px] lg:w-[240px] lg:h-[380px] xl:w-[280px] xl:h-[420px] rounded-xl overflow-hidden cursor-pointer border border-[#d4af37]/40 hover:border-[#d4af37] transition-all duration-500 bg-[#0a0a0a]"
-                                whileHover={{ scale: 1.05, zIndex: 10 }}
+                                className="relative group w-[140px] h-[210px] xs:w-[160px] xs:h-[240px] sm:w-[180px] sm:h-[270px] md:w-[200px] md:h-[300px] lg:w-[220px] lg:h-[330px] xl:w-[260px] xl:h-[390px] 2xl:w-[300px] 2xl:h-[450px] rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border border-[#d4af37]/40 hover:border-[#d4af37] transition-all duration-500 bg-[#0a0a0a] will-change-transform"
+                                whileHover={!isMobile ? { scale: 1.05, zIndex: 10 } : {}}
+                                style={{ transform: 'translateZ(0)' }}
                             >
                                 {/* Background Image - Blurs on Hover */}
                                 <div
                                     className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-out group-hover:blur-[2px] group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
-                                    style={{ backgroundImage: `url(${prize.img})` }}
+                                    style={{ 
+                                        backgroundImage: `url(${prize.img})`,
+                                        willChange: 'transform'
+                                    }}
                                 />
 
                                 {/* Dark Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent group-hover:bg-black/60 transition-all duration-500" />
 
                                 {/* Static Border Frame (Golden) */}
-                                <div className="absolute inset-2 border border-[#d4af37]/20 rounded-lg pointer-events-none z-20 transition-colors group-hover:border-[#d4af37]/60" />
+                                <div className="absolute inset-1.5 xs:inset-2 border border-[#d4af37]/20 rounded-lg pointer-events-none z-20 transition-colors group-hover:border-[#d4af37]/60" />
 
                                 {/* Content Container - Centered */}
-                                <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
+                                <div className="absolute inset-0 flex flex-col items-center justify-center p-2 xs:p-3 sm:p-4 text-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
                                     <h3
-                                        className="text-lg sm:text-xl md:text-2xl font-bold mb-2 font-medieval tracking-widest text-[#e8dab2] drop-shadow-lg"
+                                        className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-1 xs:mb-1.5 sm:mb-2 font-medieval tracking-widest text-[#e8dab2] drop-shadow-lg leading-tight px-2"
                                     >
                                         {prize.title}
                                     </h3>
-                                    <div className="w-8 h-0.5 bg-[#d4af37] mb-2 shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
-                                    <p className="text-neutral-200 font-baskerville italic text-xs sm:text-sm tracking-wider drop-shadow-md">
+                                    <div className="w-6 xs:w-7 sm:w-8 h-0.5 bg-[#d4af37] mb-1 xs:mb-1.5 sm:mb-2 shadow-[0_0_8px_rgba(212,175,55,0.8)]" />
+                                    <p className="text-[10px] xs:text-xs sm:text-sm md:text-base font-baskerville italic tracking-wider drop-shadow-md leading-snug px-2">
                                         {prize.desc}
                                     </p>
                                 </div>
 
                                 {/* Default View Title (Visible only when NOT hovering) */}
-                                <div className="absolute bottom-4 left-0 w-full text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-4 z-20">
-                                    <div className="bg-black/60 backdrop-blur-sm border-y border-[#d4af37]/30 py-1.5 sm:py-2 mx-2 sm:mx-4">
-                                        <h3 className="text-sm sm:text-lg font-bold text-[#e8dab2] tracking-widest font-cinzel">
+                                <div className="absolute bottom-2 xs:bottom-3 sm:bottom-4 left-0 w-full text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-4 z-20">
+                                    <div className="bg-black/60 backdrop-blur-sm border-y border-[#d4af37]/30 py-1 xs:py-1.5 sm:py-2 mx-1.5 xs:mx-2 sm:mx-3 md:mx-4">
+                                        <h3 className="text-xs xs:text-sm sm:text-base md:text-lg font-bold text-[#e8dab2] tracking-widest font-cinzel leading-tight px-1">
                                             {prize.title}
                                         </h3>
                                     </div>

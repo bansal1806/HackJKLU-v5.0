@@ -1,419 +1,398 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 
 // Assets
 import bgThemes from '../assets/themes/bg-themes.jpg';
 import scrollOpen from '../assets/themes/scroll-open.png';
 import scrollRolled from '../assets/themes/scroll-rolled.png';
-
-// Reusing arrows from prizes if available, or imports
 import arrowLeft from '../assets/prizes/arrow-left.png';
 import arrowRight from '../assets/prizes/arrow-right.png';
 import { PageNavigation } from '../components/navigation/PageNavigation';
-
 
 const themesData = [
   {
     id: 1,
     title: "FinTech",
-    description: "Revolutionizing finance with blockchain and AI.",
+    description: "Revolutionizing finance with blockchain and AI. This Hackathon empowers contestants to develop innovative solutions that reshape the future of financial services.",
+    image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=400&fit=crop",
     content: [
       "Digital Banking Solutions",
       "Cryptocurrency & Blockchain",
       "AI-Powered Financial Analytics",
       "Robo-Advisory Platforms",
       "Payment Gateway Innovations",
-      "RegTech & Compliance",
-      "InsurTech Solutions",
-      "Peer-to-Peer Lending"
+      "RegTech & Compliance"
     ]
   },
   {
     id: 2,
     title: "HealthTech",
-    description: "Innovating healthcare for a better tomorrow.",
+    description: "Innovating healthcare for a better tomorrow. Empowering contestants to create technologies that transform medical care and improve patient outcomes.",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=400&fit=crop",
     content: [
       "Telemedicine Platforms",
       "AI Diagnostics & Imaging",
       "Electronic Health Records",
       "Wearable Health Monitoring",
       "Mental Health Applications",
-      "Drug Discovery & Research",
-      "Surgical Robotics",
-      "Personalized Medicine"
+      "Drug Discovery & Research"
     ]
   },
   {
     id: 3,
     title: "EdTech",
-    description: "Transforming education through technology.",
+    description: "Merges STEM (Science, Technology, Engineering, & Mathematics), AI (Artificial Intelligence), AR (Augmented Reality), and innovative technologies. This Hackathon empowers contestants to develop captivating technologies that redefine and reshape the future of learning across all domains.",
+    image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&h=400&fit=crop",
     content: [
-      "Virtual Learning Environments",
+      "Online Learning Platforms",
+      "Virtual Classrooms",
       "AI-Powered Tutoring Systems",
       "Gamified Learning Platforms",
       "Skill Assessment Tools",
-      "Language Learning Apps",
-      "STEM Education Solutions",
-      "Accessibility in Education",
-      "Micro-Learning Platforms"
+      "Language Learning Apps"
     ]
   },
   {
     id: 4,
     title: "Open Innovation",
-    description: "Solving real-world problems with creative solutions.",
+    description: "Solving real-world problems with creative solutions. Encouraging innovative thinking to address global challenges through technology and collaboration.",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=400&fit=crop",
     content: [
       "Smart City Solutions",
       "Environmental Monitoring",
       "Disaster Management Systems",
       "Agricultural Technology",
       "Transportation Innovation",
-      "Energy Management",
-      "Social Impact Applications",
-      "Community Engagement Tools"
+      "Energy Management"
     ]
   },
   {
     id: 5,
     title: "Web3",
-    description: "Building the decentralized future.",
+    description: "Building the decentralized future. Empowering developers to create next-generation applications on blockchain and decentralized networks.",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=400&fit=crop",
     content: [
-      "Decentralized Applications (DApps)",
+      "Decentralized Applications",
       "NFT Marketplaces",
       "DeFi Protocols",
       "Blockchain Infrastructure",
       "Smart Contract Development",
-      "Metaverse Platforms",
-      "DAO Governance Systems",
-      "Cross-Chain Solutions"
+      "Metaverse Platforms"
+    ]
+  },
+  {
+    id: 6,
+    title: "Cyber Security",
+    description: "Safeguarding the digital frontier. Empowering contestants to develop robust security solutions that protect against evolving cyber threats.",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=400&fit=crop",
+    content: [
+      "Threat Intelligence Systems",
+      "Zero Trust Architecture",
+      "Biometric Authentication",
+      "Network Forensics",
+      "Privacy-Preserving Tech",
+      "Security Automation"
+    ]
+  },
+  {
+    id: 7,
+    title: "Future Tech",
+    description: "Pioneering the next generation of AI & Robotics. Encouraging innovation in cutting-edge technologies that will shape tomorrow's world.",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop",
+    content: [
+      "Generative AI Models",
+      "Autonomous Robotics",
+      "Quantum Computing Apps",
+      "Human-Computer Interface",
+      "Sustainable Tech Solutions",
+      "AR/VR Innovations"
     ]
   }
 ];
 
 export function Themes() {
-  const [activeIndex, setActiveIndex] = useState(2); // Start in the middle
+  const [activeIndex, setActiveIndex] = useState(2); // Start with EdTech (index 2)
+  const [isMobile, setIsMobile] = useState(false);
 
-  const handleNext = () => {
+  // Responsive check
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const handleNext = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % themesData.length);
-  };
+  }, []);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setActiveIndex((prev) => (prev - 1 + themesData.length) % themesData.length);
-  };
+  }, []);
 
-  // Helper to determine visual position index
-  const getPosition = (index: number) => {
-    const diff = (index - activeIndex + themesData.length) % themesData.length;
-    if (diff === 0) return 0;
-    if (diff === 1) return 1;
-    if (diff === 2) return 2;
-    if (diff === themesData.length - 1) return -1;
-    if (diff === themesData.length - 2) return -2;
-    return 100; // Hidden
-  };
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') handlePrev();
+      if (e.key === 'ArrowRight') handleNext();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleNext, handlePrev]);
+
+  // Calculate relative position from center (-3 to +3)
+  const getRelativePosition = useCallback((index: number, activeIdx: number, total: number) => {
+    let diff = (index - activeIdx) % total;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+    return diff;
+  }, []);
+
+  // Background particles - Generated once on mount using lazy initializer
+  const [particles] = useState(() => {
+    return Array.from({ length: 20 }).map((_, i) => {
+      // Use index-based deterministic values for consistency
+      const seed = i * 0.618; // Golden ratio for better distribution
+      const x = Math.abs((Math.sin(seed) * 50 + 50) % 100);
+      const y = Math.abs((Math.cos(seed * 1.3) * 50 + 50) % 100);
+      const size = (Math.abs((i * 0.14159) % 1) * 3) + 1;
+      const duration = (Math.abs((i * 0.2718) % 1) * 10) + 10;
+      return { id: i, x, y, size, duration };
+    });
+  });
 
   return (
-    <div className="min-h-screen relative overflow-hidden font-cinzel text-[#e8dab2]">
-      {/* Animated Background */}
-      <motion.div
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 2, ease: "easeOut" }}
-        className="absolute inset-0 bg-cover bg-center z-0 contrast-125 brightness-50"
+    <div className="h-screen relative overflow-hidden font-cinzel text-[#e8dab2] flex flex-col bg-neutral-900">
+      {/* Background with Ornate Pattern */}
+      <div
+        className="absolute inset-0 bg-cover bg-center z-0 opacity-40"
         style={{ backgroundImage: `url(${bgThemes})` }}
       />
+      <div className="absolute inset-0 bg-black/60 z-0" />
 
-      {/* Mystical Overlay with Animated Particles */}
-      <div className="absolute inset-0 bg-black/40 z-0" />
-
-      {/* Floating Mystical Particles */}
-      <div className="absolute inset-0 z-5">
-        {[...Array(20)].map((_, i) => (
+      {/* Floating Particles */}
+      <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden">
+        {particles.map(p => (
           <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-gold-400 rounded-full opacity-60"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+            key={p.id}
+            className="absolute bg-gold-400 rounded-full opacity-40"
+            style={{
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              left: `${p.x}%`,
+              top: `${p.y}%`,
+              boxShadow: '0 0 5px #d4af37'
             }}
             animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              y: [0, -100],
+              opacity: [0.4, 0]
             }}
             transition={{
-              duration: Math.random() * 20 + 10,
+              duration: p.duration,
               repeat: Infinity,
-              repeatType: "reverse",
               ease: "linear"
-            }}
-            style={{
-              boxShadow: '0 0 6px #d4af37, 0 0 12px #d4af37',
             }}
           />
         ))}
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-24 flex flex-col items-center justify-center min-h-screen">
-
-        {/* Enhanced Header with Glow */}
+      {/* Header - THEMES Title */}
+      <div className="absolute top-0 left-0 right-0 z-20 pt-8 sm:pt-12 md:pt-16 pb-4 text-center pointer-events-none">
         <motion.h1
-          initial={{ opacity: 0, y: -50, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="text-5xl md:text-7xl mb-20 text-center tracking-[0.2em] font-bold drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]"
+          className="text-4xl md:text-7xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-amber-100 to-amber-600 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
           style={{
-            background: 'linear-gradient(to bottom, #fff8e7 0%, #d4af37 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            textShadow: '0 0 30px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.4)',
-            filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.6))'
+            textShadow: '0 0 30px rgba(212,175,55,0.5)'
           }}
         >
           THEMES
         </motion.h1>
+      </div>
 
-        {/* Enhanced Carousel */}
-        <div className="relative w-full h-[700px] flex items-center justify-center perspective-[1000px]">
+      {/* Main Carousel Area */}
+      <div className="absolute inset-0 flex items-center justify-center w-full z-10 ">
 
-          {/* Enhanced Navigation Arrows with Glow */}
-          <motion.button
-            onClick={handlePrev}
-            whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
-            whileTap={{ scale: 0.95 }}
-            className="absolute left-4 md:left-20 z-50 p-2 transition-all duration-300 cursor-pointer"
-            style={{
-              filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
-            }}
-          >
-            <img src={arrowLeft} alt="Prev" className="w-16 md:w-24" />
-          </motion.button>
+        {/* Navigation Arrows */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-4 md:left-12 z-50 p-2 opacity-70 hover:opacity-100 transition-all hover:scale-110 active:scale-95"
+          aria-label="Previous theme"
+        >
+          <img
+            src={arrowLeft}
+            alt="Prev"
+            className="w-12 h-12 md:w-20 md:h-20 drop-shadow-[0_0_10px_rgba(212,175,55,0.6)]"
+            loading="eager"
+          />
+        </button>
+        <button
+          onClick={handleNext}
+          className="absolute right-4 md:right-12 z-50 p-2 opacity-70 hover:opacity-100 transition-all hover:scale-110 active:scale-95"
+          aria-label="Next theme"
+        >
+          <img
+            src={arrowRight}
+            alt="Next"
+            className="w-12 h-12 md:w-20 md:h-20 drop-shadow-[0_0_10px_rgba(212,175,55,0.6)]"
+            loading="eager"
+          />
+        </button>
 
-          <motion.button
-            onClick={handleNext}
-            whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
-            whileTap={{ scale: 0.95 }}
-            className="absolute right-4 md:right-20 z-50 p-2 transition-all duration-300 cursor-pointer"
-            style={{
-              filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
-            }}
-          >
-            <img src={arrowRight} alt="Next" className="w-16 md:w-24" />
-          </motion.button>
+        {/* Scroll Carousel */}
+        <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden pointer-events-none">
+          {themesData.map((theme, index) => {
+            const position = getRelativePosition(index, activeIndex, themesData.length);
+            const isCenter = position === 0;
 
-          {/* Scroll Items with Enhanced Effects */}
-          <div className="relative w-full max-w-7xl h-full flex items-center justify-center">
-            {themesData.map((theme, i) => {
-              const position = getPosition(i);
-              if (Math.abs(position) > 2 && position !== 100) return null;
+            // Calculate positioning and scaling with perspective
+            const centerX = 50; // Viewport center
+            const spacing = isMobile ? 18 : 20; // Space between scrolls
 
-              const isCenter = position === 0;
-              const isOuter = Math.abs(position) === 2;
+            let left = '30%';
+            let scale = 1;
+            let zIndex = 50;
+            let opacity = 1;
+            let rotateY = 0;
+            let brightness = 1;
 
-              const xOffset = isCenter ? 0 : position * 280;
-              const scale = isCenter ? 1.0 : isOuter ? 0.6 : 0.8;
-              const zIndex = isCenter ? 30 : isOuter ? 10 : 20;
-              const rotateY = isCenter ? 0 : position > 0 ? -15 : 15;
+            if (!isCenter) {
+              if (Math.abs(position) > 3) return null; // Hide scrolls beyond visible range
 
-              return (
-                <motion.div
-                  key={theme.id}
-                  initial={false}
-                  animate={{
-                    x: xOffset,
-                    scale: scale,
-                    zIndex: zIndex,
-                    rotateY: rotateY,
-                    width: isCenter ? 1000 : 180,
-                    filter: isCenter ? 'drop-shadow(0 0 25px rgba(212, 175, 55, 0.6))' : 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.3))'
-                  }}
-                  transition={{
-                    x: { type: "spring", stiffness: 60, damping: 20 },
-                    scale: { type: "spring", stiffness: 60, damping: 20 },
-                    rotateY: { type: "spring", stiffness: 60, damping: 20 },
-                    width: { duration: 1.0, ease: "easeInOut" },
-                    filter: { duration: 0.5 },
-                    zIndex: { duration: 0 }
-                  }}
-                  className="absolute flex items-center justify-center"
-                  style={{
-                    height: '700px',
-                    perspective: '1000px'
-                  }}
-                >
-                  {/* ROLLED SCROLL with Glow */}
-                  <motion.div
-                    className="absolute inset-0 flex items-center justify-center p-2 transition-opacity duration-0"
-                    style={{ opacity: isCenter ? 0 : 1 }}
-                    animate={{
-                      filter: !isCenter ? 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.4))' : 'none'
+              left = `${centerX + (position * spacing)}%`;
+              // Progressive scaling: closer scrolls larger, further smaller
+              scale = Math.max(0.45, 1 - Math.abs(position) * 0.18);
+              zIndex = 50 - Math.abs(position) * 12;
+              opacity = Math.max(0.5, 1 - Math.abs(position) * 0.2);
+              brightness = Math.max(0.55, 1 - Math.abs(position) * 0.12);
+              // Subtle perspective rotation for depth effect
+              rotateY = position > 0 ? -6 : 6;
+            }
+
+            return (
+              <motion.div
+                key={theme.id}
+                initial={false}
+                animate={{
+                  left: left,
+                  scale: scale,
+                  zIndex: zIndex,
+                  opacity: opacity,
+                  rotateY: rotateY,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 25,
+                  mass: 1
+                }}
+                className="absolute top-[30%] flex items-center justify-center will-change-transform pointer-events-auto"
+                style={{
+                  transform: 'translate(-50%, -50%) translateZ(0)',
+                  width: isCenter ? (isMobile ? 'min(90vw, 700px)' : 'min(75vw, 900px)') : (isMobile ? '100px' : '160px'),
+                  height: isCenter ? 'auto' : '70%',
+                  transformStyle: 'preserve-3d'
+                }}
+              >
+                {isCenter ? (
+                  // OPEN SCROLL (Active)
+                  <div className="relative w-full flex items-center justify-center">
+                    <motion.img
+                      src={scrollOpen}
+                      alt="Open Scroll"
+                      className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5 }}
+                      loading="eager"
+                    />
+
+                    {/* Content Layer */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="absolute inset-0 flex flex-col items-center justify-center px-[14%] pt-[14%] pb-[14%] text-center"
+                    >
+                      {/* Theme Image */}
+                      <div className="w-full max-w-[70%] mb-0 md:mb-5 rounded overflow-hidden grayscale opacity-75 max-h[100%]">
+                        <img
+                          src={theme.image}
+                          alt={theme.title}
+                          className="w-full h-[100%] object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+
+                      {/* Title */}
+                      <h2 className="text-xl md:text-3xl lg:text-4xl font-bold uppercase mb-3 md:mb-4 tracking-widest text-[#5c3a21] border-b-2 border-[#5c3a21]/30 pb-2 md:pb-3 w-full max-w-[90%]">
+                        {theme.title}
+                      </h2>
+
+                      {/* Description */}
+                      <p className="text-xs md:text-sm lg:text-base font-serif text-[#3e2715] mb-4 md:mb-6 leading-relaxed max-w-[95%] text-justify px-2">
+                        {theme.description}
+                      </p>
+
+                      {/* Focus Areas */}
+                      <div className="w-full max-w-[95%] px-2 mt-auto">
+                        <h3 className="text-xs md:text-sm uppercase font-bold tracking-widest mb-2 md:mb-3 text-[#5c3a21] opacity-60 border-b border-[#5c3a21]/30 pb-1.5">
+                          Focus Areas
+                        </h3>
+                        <ul className="text-xs md:text-sm font-medium text-[#3e2715] space-y-1.5 max-h-[120px] overflow-y-auto hide-scrollbar">
+                          {theme.content.slice(0, 6).map((item, i) => (
+                            <li key={i} className="flex items-center gap-2 text-left">
+                              <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-600 shrink-0"></span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.div>
+                  </div>
+                ) : (
+                  // ROLLED SCROLL (Inactive)
+                  <div
+                    className="relative w-full h-full flex items-center justify-center cursor-pointer transition-all duration-300"
+                    onClick={() => setActiveIndex(index)}
+                    style={{
+                      filter: `brightness(${brightness})`
                     }}
                   >
                     <img
                       src={scrollRolled}
                       alt="Rolled Scroll"
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
+                      loading="lazy"
                     />
-                  </motion.div>
-
-                  {/* OPEN SCROLL COMPOSITION with Enhanced Effects */}
-                  <div
-                    className="absolute inset-0 w-full h-full transition-opacity duration-0"
-                    style={{ opacity: isCenter ? 1 : 0 }}
-                  >
-                    {(isCenter || Math.abs(position) <= 1) && (
-                      <div className="relative w-full h-full flex items-center justify-center">
-
-                        {/* Enhanced Left Handle with Mystical Glow */}
-                        <motion.div
-                          animate={{
-                            left: isCenter ? '0%' : 'calc(50% - 90px)',
-                            rotateY: isCenter ? -360 : 0
-                          }}
-                          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-                          className="absolute top-0 bottom-0 w-[80px] md:w-[100px] z-20 overflow-hidden"
-                          style={{
-                            transformStyle: 'preserve-3d',
-                            filter: isCenter ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))' : 'none'
-                          }}
-                        >
-                          <img
-                            src={scrollOpen}
-                            className="absolute top-0 left-0 w-[1000px] max-w-none h-full object-contain object-left"
-                            alt=""
-                          />
-                        </motion.div>
-
-                        {/* Enhanced Right Handle */}
-                        <motion.div
-                          animate={{
-                            right: isCenter ? '0%' : 'calc(50% - 90px)',
-                            rotateY: isCenter ? 360 : 0
-                          }}
-                          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-                          className="absolute top-0 bottom-0 w-[80px] md:w-[100px] z-20 overflow-hidden"
-                          style={{
-                            transformStyle: 'preserve-3d',
-                            filter: isCenter ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))' : 'none'
-                          }}
-                        >
-                          <img
-                            src={scrollOpen}
-                            className="absolute top-0 right-0 w-[1000px] max-w-none h-full object-contain object-right"
-                            alt=""
-                          />
-                        </motion.div>
-
-                        {/* Enhanced Middle Body with Scrollable Content */}
-                        <motion.div
-                          animate={{ width: isCenter ? 'calc(100% - 180px)' : '0px' }}
-                          transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
-                          className="absolute top-0 bottom-0 z-10 overflow-hidden"
-                        >
-                          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-full">
-                            <img
-                              src={scrollOpen}
-                              className="w-full h-full object-contain"
-                              alt=""
-                              style={{ clipPath: 'inset(0 10% 0 10%)' }}
-                            />
-                          </div>
-
-                          {/* Enhanced Content Overlay with Scrollable Section */}
-                          <motion.div
-                            animate={{ opacity: isCenter ? 1 : 0, scale: isCenter ? 1 : 0.9 }}
-                            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                            className="absolute inset-0 flex flex-col items-center text-neutral-900 p-12 md:p-16"
-                            style={{ paddingTop: '80px' }}
-                          >
-                            {/* Title positioned in upper scroll area */}
-                            <motion.h3
-                              className="text-4xl md:text-6xl font-bold text-[#5c3a21] uppercase tracking-wider text-center mb-6"
-                              style={{
-                                textShadow: '0 0 10px rgba(92, 58, 33, 0.5), 0 2px 4px rgba(0,0,0,0.3)',
-                                marginTop: '0'
-                              }}
-                              animate={{
-                                textShadow: isCenter ? '0 0 15px rgba(92, 58, 33, 0.8), 0 2px 4px rgba(0,0,0,0.5)' : '0 0 5px rgba(92, 58, 33, 0.3)'
-                              }}
-                            >
-                              {theme.title}
-                            </motion.h3>
-
-                            {/* Description positioned below title */}
-                            <motion.p
-                              className="text-base md:text-lg font-serif text-[#3e2715] italic leading-relaxed text-center mb-8 max-w-lg"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: isCenter ? 1 : 0 }}
-                              transition={{ delay: 0.6 }}
-                            >
-                              {theme.description}
-                            </motion.p>
-
-                            {/* Transparent Scrollable Content Section */}
-                            <AnimatePresence>
-                              {isCenter && (
-                                <motion.div
-                                  initial={{ opacity: 0, y: 20 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, y: -20 }}
-                                  transition={{ delay: 0.8, duration: 0.6 }}
-                                  className="w-full max-w-lg h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-700 scrollbar-track-transparent flex-1"
-                                  style={{
-                                    background: 'transparent',
-                                    border: '2px solid rgba(212, 175, 55, 0.4)',
-                                    borderRadius: '12px',
-                                    boxShadow: '0 0 20px rgba(212, 175, 55, 0.15), inset 0 0 20px rgba(255, 248, 231, 0.1)',
-                                    maxHeight: '280px'
-                                  }}
-                                >
-                                  <div className="p-6">
-                                    <h4 className="text-xl font-bold text-[#5c3a21] mb-4 text-center border-b-2 border-amber-600 pb-3"
-                                      style={{
-                                        textShadow: '0 0 8px rgba(92, 58, 33, 0.6)'
-                                      }}>
-                                      Focus Areas
-                                    </h4>
-                                    <ul className="space-y-3">
-                                      {theme.content.map((item, idx) => (
-                                        <motion.li
-                                          key={idx}
-                                          initial={{ opacity: 0, x: -20 }}
-                                          animate={{ opacity: 1, x: 0 }}
-                                          transition={{ delay: 1 + idx * 0.1 }}
-                                          className="text-sm md:text-base text-[#3e2715] flex items-center hover:text-[#5c3a21] transition-colors duration-200 font-medium"
-                                          style={{
-                                            textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
-                                          }}
-                                        >
-                                          <span
-                                            className="w-2 h-2 rounded-full mr-4 flex-shrink-0"
-                                            style={{
-                                              background: 'radial-gradient(circle, #d4af37 0%, #b8860b 100%)',
-                                              boxShadow: '0 0 6px rgba(212, 175, 55, 0.8)'
-                                            }}
-                                          ></span>
-                                          {item}
-                                        </motion.li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </motion.div>
-                        </motion.div>
-
-                      </div>
-                    )}
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
-
       </div>
+
       <PageNavigation />
-    </div >
+
+      {/* Custom Scrollbar Styles */}
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .hide-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(92, 58, 33, 0.4);
+          border-radius: 2px;
+        }
+        .hide-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(92, 58, 33, 0.6);
+        }
+      `}</style>
+    </div>
   );
 }

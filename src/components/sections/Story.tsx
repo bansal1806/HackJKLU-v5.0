@@ -25,13 +25,14 @@ export function Story() {
         }
     }, [location]);
 
-    // Scroll animation for the text container
-    // const { scrollYProgress } = useScroll();
-    // const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
-    // const y = useTransform(scrollYProgress, [0, 0.2], [50, 0]);
-
     return (
-        <section className="relative z-10 text-white min-h-screen flex items-center justify-center px-8 md:px-16 lg:px-24 py-20">
+        <section
+            className="relative z-10 text-white min-h-screen flex items-center justify-center py-20 overflow-hidden"
+            style={{
+                paddingLeft: 'clamp(20px, 5vw, 96px)',
+                paddingRight: 'clamp(20px, 5vw, 96px)',
+            }}
+        >
             {/* Cloud Uncover Transition */}
             {showTransition && (
                 <CloudTransition
@@ -40,7 +41,7 @@ export function Story() {
                 />
             )}
 
-            <div className="flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl gap-12">
+            <div className="flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl" style={{ gap: 'clamp(40px, 8vw, 80px)' }}>
                 {/* Text Content - Left Side */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
@@ -48,11 +49,25 @@ export function Story() {
                     transition={{ duration: 0.8, delay: 0.5 }}
                     className="w-full lg:w-3/5"
                 >
-                    <h1 className="text-4xl md:text-6xl font-heading font-bold text-amber-500 mb-8 drop-shadow-md">
+                    <h1
+                        className="font-heading font-bold text-amber-500 mb-8 drop-shadow-md"
+                        style={{
+                            fontSize: 'clamp(2.5rem, 5vw, 4rem)', // Fluid Heading
+                            lineHeight: '1.1'
+                        }}
+                    >
                         {aboutText.title}
                     </h1>
 
-                    <div className="space-y-6 text-lg md:text-xl text-stone-300 font-subheading leading-relaxed tracking-wide text-justify">
+                    <div
+                        className="text-stone-300 font-subheading leading-relaxed tracking-wide text-justify"
+                        style={{
+                            fontSize: 'clamp(1rem, 1.2vw, 1.25rem)', // Fluid Body Text
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1.5rem'
+                        }}
+                    >
                         {aboutText.paragraphs.map((para, index) => (
                             <p key={index} className="drop-shadow-sm">
                                 {para}
@@ -61,103 +76,105 @@ export function Story() {
                     </div>
                 </motion.div>
 
-                {/* Animated Logo - Right Side */}
+
                 {/* Animated Logo - Right Side */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1, delay: 0.8 }}
-                    className="w-full lg:w-2/5 flex justify-center lg:justify-end items-center lg:-mr-16" // Shifted right with negative margin
+                    className="w-full lg:w-2/5 flex justify-center lg:justify-end items-center"
+                    style={{
+                        marginTop: 'clamp(0px, 5vw, 0px)', // Gap handling via parent, but extra safety
+                    }}
                 >
-                    <motion.div
-                        animate={{
-                            y: [0, -20, 0],
-                            filter: [
-                                "drop-shadow(0 0 8px rgba(212, 175, 55, 0.2)) brightness(1)",
-                                "drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)) brightness(1.1)",
-                                "drop-shadow(0 0 8px rgba(212, 175, 55, 0.2)) brightness(1)"
-                            ]
+                    <div
+                        className="relative"
+                        style={{
+                            width: 'clamp(280px, 40vw, 400px)', // Fluid Logo Size
+                            aspectRatio: '1/1',
                         }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                        className="relative w-full max-w-[400px] aspect-square"
                     >
-                        {/* Swirling Gold Particles */}
+                        {/* CSS Optimized Swirling Particles - HIGH DENSITY */}
                         <div className="absolute inset-0 pointer-events-none z-0">
-                            {[...Array(12)].map((_, i) => (
-                                <motion.div
-                                    key={i}
-                                    className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-amber-400 rounded-full shadow-[0_0_8px_rgba(251,191,36,0.8)]"
-                                    initial={{
-                                        x: 0,
-                                        y: 0,
-                                        scale: Math.random() * 0.5 + 0.5,
-                                        opacity: 0
-                                    }}
-                                    animate={{
-                                        x: [
-                                            (Math.cos(i * 30 * (Math.PI / 180)) * 120),
-                                            (Math.cos((i * 30 + 120) * (Math.PI / 180)) * 140),
-                                            (Math.cos((i * 30 + 240) * (Math.PI / 180)) * 120),
-                                            (Math.cos(i * 30 * (Math.PI / 180)) * 120)
-                                        ],
-                                        y: [
-                                            (Math.sin(i * 30 * (Math.PI / 180)) * 40), // Elliptical orbit (flatter Y)
-                                            (Math.sin((i * 30 + 120) * (Math.PI / 180)) * 60),
-                                            (Math.sin((i * 30 + 240) * (Math.PI / 180)) * 40),
-                                            (Math.sin(i * 30 * (Math.PI / 180)) * 40)
-                                        ],
-                                        opacity: [0.4, 0.8, 0.4],
-                                        scale: [0.5, 1, 0.5]
-                                    }}
-                                    transition={{
-                                        duration: 8 + Math.random() * 4,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                        delay: i * 0.2
-                                    }}
-                                />
-                            ))}
+                            {/* Ring 1 - Fast Inner Orbit (Clockwise) - 6 Particles */}
+                            <div className="absolute inset-0 animate-spin-normal">
+                                <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-amber-400 rounded-full shadow-[0_0_8px_#fbbf24] -translate-x-1/2 -translate-y-[140%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-amber-300 rounded-full shadow-[0_0_5px_#fcd34d] -translate-x-1/2 translate-y-[140%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-[0_0_8px_#eab308] translate-x-[140%] -translate-y-1/2"></div>
+                                {/* New Particles Ring 1 */}
+                                <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-amber-200 rounded-full shadow-[0_0_4px_#fde68a] translate-x-[100%] translate-y-[100%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-yellow-400 rounded-full shadow-[0_0_6px_#facc15] -translate-x-[100%] -translate-y-[100%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-orange-300 rounded-full shadow-[0_0_4px_#fdba74] -translate-x-[100%] translate-y-[100%]"></div>
+                            </div>
 
-                            {/* Counter-rotating outer ring of particles */}
-                            {[...Array(8)].map((_, i) => (
-                                <motion.div
-                                    key={`outer-${i}`}
-                                    className="absolute top-1/2 left-1/2 w-1 h-1 bg-yellow-200 rounded-full shadow-[0_0_5px_rgba(255,255,200,0.6)]"
-                                    animate={{
-                                        rotate: -360
-                                    }}
-                                    style={{
-                                        translateX: '160px', // Fixed radius from center
-                                        originX: '-160px',   // Rotate around center
-                                        originY: '0px'
-                                    }}
-                                    transition={{
-                                        duration: 15 + Math.random() * 5,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                        delay: i * 1.5
-                                    }}
-                                >
-                                    {/* Offset the particle from its own center to create variation */}
-                                    <div style={{ transform: `translate(${Math.random() * 20}px, ${Math.random() * 20}px)` }} />
-                                </motion.div>
-                            ))}
+                            {/* Ring 2 - Slow Outer Orbit (Counter-Clockwise) - 6 Particles */}
+                            <div className="absolute inset-0 animate-spin-reverse-slower" style={{ opacity: 0.8 }}>
+                                <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-yellow-200 rounded-full shadow-[0_0_10px_#fef08a] -translate-x-1/2 -translate-y-[280%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-amber-200 rounded-full shadow-[0_0_6px_#fde68a] -translate-x-1/2 translate-y-[280%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-yellow-300 rounded-full shadow-[0_0_8px_#fde047] translate-x-[280%] -translate-y-1/2"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-amber-100 rounded-full shadow-[0_0_4px_#fef3c7] -translate-x-[280%] -translate-y-1/2"></div>
+                                {/* New Particles Ring 2 */}
+                                <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-yellow-100 rounded-full shadow-[0_0_5px_#fef9c3] translate-x-[200%] translate-y-[200%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-amber-50 rounded-full shadow-[0_0_4px_#fffbeb] -translate-x-[200%] -translate-y-[200%]"></div>
+                            </div>
+
+                            {/* Ring 3 - Tilted Elliptical Orbit - 4 Particles */}
+                            <div className="absolute inset-0 animate-spin-slow" style={{ transform: 'rotate(45deg)' }}>
+                                <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-amber-500 rounded-full shadow-[0_0_12px_#f59e0b] translate-x-[200%] translate-y-[200%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-orange-400 rounded-full shadow-[0_0_6px_#fb923c] -translate-x-[200%] -translate-y-[200%]"></div>
+                                {/* New Particles Ring 3 */}
+                                <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-amber-600 rounded-full shadow-[0_0_10px_#d97706] -translate-x-[200%] translate-y-[200%]"></div>
+                                <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-yellow-500 rounded-full shadow-[0_0_5px_#eab308] translate-x-[200%] -translate-y-[200%]"></div>
+                            </div>
+
+                            {/* Ring 4 - Random Scatter (Pulse) */}
+                            <div className="absolute inset-0 animate-pulse-slow">
+                                <div className="absolute top-[20%] left-[20%] w-1 h-1 bg-white rounded-full opacity-60"></div>
+                                <div className="absolute bottom-[20%] right-[30%] w-1.5 h-1.5 bg-amber-200 rounded-full opacity-50"></div>
+                                <div className="absolute top-[40%] right-[10%] w-1 h-1 bg-yellow-100 rounded-full opacity-70"></div>
+                            </div>
                         </div>
+
+                        {/* Static CSS Glow - INTENSIFIED */}
+                        <div className="absolute inset-0 bg-amber-500/30 blur-[60px] rounded-full z-[-1] animate-pulse-slow" />
 
                         <img
                             src="/logo2.webp"
                             alt="HackJKLU Logo"
-                            className="w-full h-full object-contain drop-shadow-2xl opacity-90 relative z-10"
+                            className="w-full h-full object-contain relative z-10"
+                            style={{
+                                filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))', // Static shadow is efficient
+                                animation: 'float 6s ease-in-out infinite'
+                            }}
                         />
-                        {/* Eerie Glow Behind */}
-                        <div className="absolute inset-0 bg-amber-500/10 blur-[40px] rounded-full -z-10 animate-pulse" />
-                    </motion.div>
+                    </div>
                 </motion.div>
             </div>
+
+            {/* CSS Keyframes for performance */}
+            <style>{`
+                @keyframes spin-slow {
+                    to { transform: rotate(360deg); }
+                }
+                @keyframes spin-reverse-slower {
+                    to { transform: rotate(-360deg); }
+                }
+                @keyframes spin-normal {
+                    to { transform: rotate(360deg); }
+                }
+                @keyframes float {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-15px); }
+                }
+                @keyframes pulse-slow {
+                    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+                    50% { opacity: 0.6; transform: scale(1.1); }
+                }
+                .animate-spin-slow { animation: spin-slow 12s linear infinite; }
+                .animate-spin-reverse-slower { animation: spin-reverse-slower 18s linear infinite; }
+                .animate-spin-normal { animation: spin-normal 8s linear infinite; }
+                .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+            `}</style>
         </section>
     );
 }
