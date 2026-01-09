@@ -11,6 +11,7 @@ import { FAQPage } from './pages/FAQ';
 import { EventsPage } from './pages/Events';
 import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
 import { PageNavigation } from './components/navigation/PageNavigation';
+import { SpeakersPage } from './pages/Speakers';
 import { CloudTest } from './pages/CloudTest';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/themes" element={<Themes />} />
         <Route path="/prizes" element={<PrizesPage />} />
         <Route path="/partners" element={<Partners />} />
+        <Route path="/speakers" element={<SpeakersPage />} />
         <Route path="/itinerary" element={<><ComingSoonOverlay><Itinerary /></ComingSoonOverlay><PageNavigation /></>} />
         <Route path="/gallery" element={<><Gallery /><PageNavigation /></>} />
         <Route path="/faq" element={<><FAQPage /><PageNavigation /></>} />

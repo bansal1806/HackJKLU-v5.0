@@ -18,7 +18,8 @@ const menuItems = [
     { number: 'VI', name: 'Itinerary', path: '/itinerary' },
     { number: 'VII', name: 'Past Photos', path: '/gallery' },
     { number: 'VIII', name: 'FAQ', path: '/faq' },
-    { number: 'IX', name: 'Events', path: '/events' }
+    { number: 'IX', name: 'Events', path: '/events' },
+    { number: 'X', name: 'Speakers', path: '/speakers' }
 ];
 
 export function Layout({ children }: LayoutProps) {

@@ -12,6 +12,7 @@ const pageOrder = [
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },
   { path: '/events', name: 'Events' },
+  { path: '/speakers', name: 'Speakers' },
 ];
 
 export function PageNavigation() {
