@@ -32,7 +32,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
 
     return (
         <motion.div
-            className="fixed inset-0 w-full h-full"
+            className={isMobile ? 'relative w-full min-h-screen' : 'fixed inset-0 w-full h-full'}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -52,7 +52,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
             </div>
 
             {/* Grid Content: Stacks on mobile, Split on desktop */}
-            <div className={`fixed inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-24 pb-24 hide-scrollbar' : ''}`}>
+            <div className={`absolute inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-24 pb-24 hide-scrollbar' : ''}`}>
                 {data.groups.map((group, groupIndex) => (
                     <div
                         key={groupIndex}

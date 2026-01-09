@@ -66,7 +66,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
 
     return (
         <motion.div
-            className="fixed inset-0 w-full h-full"
+            className={isMobile ? 'relative w-full min-h-screen overflow-hidden' : 'fixed inset-0 w-full h-full'}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -85,8 +85,8 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                 <div className="absolute inset-0 bg-neutral-950/60 z-10" />
             </div>
 
-            {/* Header: Fixed Top */}
-            <div className="fixed top-0 left-0 right-0 z-50 flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-24 pointer-events-none px-4 text-center">
+            {/* Header: Fixed Top -> Absolute (scrolls with section) */}
+            <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-24 pointer-events-none px-4 text-center">
                 <h1
                     className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]"
                 >
@@ -109,7 +109,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
             </div>
 
             {/* Interaction Area */}
-            <div className={`fixed inset-0 z-40 flex items-center justify-center ${isMobile ? 'pt-44' : ''}`}>
+            <div className={`absolute inset-0 z-40 flex items-center justify-center ${isMobile ? 'pt-44' : ''}`}>
                 <div className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-8' : 'gap-16'}`}>
 
                     {/* Ring Group - Clickable on Mobile */}

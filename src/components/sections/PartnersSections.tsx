@@ -210,6 +210,33 @@ export default function PartnersSections() {
         };
     }, [currentSection, isAnimating, switchSection]);
 
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // --- MOBILE/TABLET VIEW (Scrollable Stack) ---
+    if (isMobile) {
+        return (
+            <div className="bg-neutral-950 text-neutral-100 min-h-screen font-heading overflow-y-auto overflow-x-hidden">
+                <style>{`
+                    ::-webkit-scrollbar { width: 4px; }
+                    ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+                `}</style>
+
+                {partnersData.map((section) => (
+                    <div key={section.id} className="relative w-full min-h-screen shrink-0">
+                        <PartnerSection data={section} />
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
     return (
         <div ref={containerRef} className="relative bg-neutral-950 text-neutral-100 min-h-screen overflow-hidden font-heading">
 
@@ -237,8 +264,6 @@ export default function PartnersSections() {
 
             <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
-        
-
         
         /* Custom scrollbar hiding */
         .hide-scrollbar::-webkit-scrollbar {
@@ -288,7 +313,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
         ];
         return (
             <motion.div
-                className="fixed inset-0 w-full h-full"
+                className={isMobile ? 'relative w-full min-h-screen' : 'fixed inset-0 w-full h-full'}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -309,7 +334,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                 </div>
 
                 {/* Header */}
-                <div className="fixed top-0 left-0 right-0 z-50 flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-24 pointer-events-none px-4 text-center">
+                <div className={`absolute top-0 left-0 right-0 z-50 flex flex-col items-center pointer-events-none px-4 text-center ${isMobile ? 'pt-24' : 'pt-8 sm:pt-12 md:pt-16 lg:pt-24'}`}>
                     <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
                         style={{
                             background: `linear-gradient(to bottom, ${data.themeColor || '#CD7F32'} 60%, #6E561C 100%)`,
@@ -322,7 +347,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                 </div>
 
                 {/* Interactive Table Area */}
-                <div className={`fixed inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-32' : 'pt-24'}`}>
+                <div className={`absolute inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-32' : 'pt-24'}`}>
                     <motion.div
                         className="relative w-[340px] h-[340px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] mt-12"
                         animate={{ rotate: 360 }}

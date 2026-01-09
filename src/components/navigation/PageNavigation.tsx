@@ -8,7 +8,6 @@ const pageOrder = [
   { path: '/themes', name: 'Themes' },
   { path: '/prizes', name: 'Prizes' },
   { path: '/partners', name: 'Partners' },
-  { path: '/speakers', name: 'Speakers' },
   { path: '/itinerary', name: 'Itinerary' },
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },

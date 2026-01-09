@@ -61,6 +61,10 @@ export default function Prizes() {
     const [isPaused, setIsPaused] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const touchStartX = useRef<number | null>(null);
+    const touchStartY = useRef<number | null>(null);
+    const touchEndX = useRef<number | null>(null);
+    const touchEndY = useRef<number | null>(null);
 
     // Responsive check for mobile devices
     useEffect(() => {
@@ -168,6 +172,62 @@ export default function Prizes() {
         }, 1000);
     }, [isAnimating, currentSection]);
 
+    // Touch gesture handlers for mobile
+    const minSwipeDistance = 50;
+    const minVerticalSwipeDistance = 80; // Higher threshold for vertical (section switching)
+
+    const onTouchStart = useCallback((e: React.TouchEvent) => {
+        touchEndX.current = null;
+        touchEndY.current = null;
+        touchStartX.current = e.targetTouches[0].clientX;
+        touchStartY.current = e.targetTouches[0].clientY;
+    }, []);
+
+    const onTouchMove = useCallback((e: React.TouchEvent) => {
+        touchEndX.current = e.targetTouches[0].clientX;
+        touchEndY.current = e.targetTouches[0].clientY;
+    }, []);
+
+    const onTouchEnd = useCallback(() => {
+        if (!touchStartX.current || !touchEndX.current || !touchStartY.current || !touchEndY.current) return;
+        
+        const distanceX = touchStartX.current - touchEndX.current;
+        const distanceY = touchStartY.current - touchEndY.current;
+        const absDistanceX = Math.abs(distanceX);
+        const absDistanceY = Math.abs(distanceY);
+
+        // Determine if it's primarily horizontal or vertical swipe
+        if (absDistanceY > absDistanceX) {
+            // Vertical swipe - Switch sections
+            if (absDistanceY > minVerticalSwipeDistance && !isAnimating) {
+                if (distanceY > 0 && currentSection < sections.length - 1) {
+                    // Swipe up - Next section
+                    switchSection(currentSection + 1);
+                } else if (distanceY < 0 && currentSection > 0) {
+                    // Swipe down - Previous section
+                    switchSection(currentSection - 1);
+                }
+            }
+        } else {
+            // Horizontal swipe - Navigate carousel (only in main prizes section)
+            if (absDistanceX > minSwipeDistance && currentSection === 0 && !isAnimating) {
+                if (distanceX > 0) {
+                    // Swipe left - Next prize
+                    handleNext();
+                } else {
+                    // Swipe right - Previous prize
+                    handlePrev();
+                }
+            }
+        }
+
+        // Reset touch points
+        touchStartX.current = null;
+        touchStartY.current = null;
+        touchEndX.current = null;
+        touchEndY.current = null;
+    }, [currentSection, sections.length, handleNext, handlePrev, switchSection, isAnimating]);
+
     useEffect(() => {
         const handleWheel = (e: WheelEvent) => {
             e.preventDefault();
@@ -249,7 +309,14 @@ export default function Prizes() {
     }, []);
 
     return (
-        <div ref={containerRef} className="relative bg-neutral-950 text-neutral-100 min-h-screen h-dvh overflow-hidden selection:bg-yellow-900 selection:text-white pt-16 xs:pt-18 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-40 2xl:pt-48 pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24">
+        <div 
+            ref={containerRef} 
+            className="relative bg-neutral-950 text-neutral-100 min-h-screen h-dvh overflow-hidden selection:bg-yellow-900 selection:text-white pt-16 xs:pt-18 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-40 2xl:pt-48 pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24"
+            style={{ touchAction: 'pan-y pan-x pinch-zoom' }}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+        >
             {/* Background Image with Black Mask */}
             <div className="fixed inset-0 z-0 will-change-transform">
                 <img 
@@ -294,7 +361,7 @@ export default function Prizes() {
                             transition={{ duration: 2, repeat: Infinity }}
                             className="text-[10px] xs:text-xs sm:text-sm md:text-base text-neutral-400 mb-1.5 xs:mb-2 sm:mb-2.5 md:mb-3 font-heading tracking-wider leading-tight"
                         >
-                            {currentSection === 0 ? (isMobile ? 'Swipe or scroll' : 'Use ← → keys or scroll to explore') : 'Scroll to explore'}
+                            {currentSection === 0 ? (isMobile ? 'Swipe ← → for prizes, ⬆️ ⬇️ for sections' : 'Use ← → keys or scroll to explore') : (isMobile ? 'Swipe ⬆️ ⬇️ to navigate' : 'Scroll to explore')}
                         </motion.p>
 
                         {/* Mouse Indicator - Hidden on mobile */}
@@ -670,14 +737,14 @@ export default function Prizes() {
                                 </div>
 
                                 {/* Carousel Indicators - Below Cards - Touch-friendly on mobile */}
-                                <div className="flex justify-center gap-2 xs:gap-2.5 sm:gap-3 mt-2 xs:mt-2.5 sm:mt-3 md:mt-4">
+                                <div className="flex justify-center gap-2.5 xs:gap-3 sm:gap-3.5 md:gap-4 mt-3 xs:mt-3.5 sm:mt-4 md:mt-5">
                                     {mainPrizes.map((_, index) => (
                                         <button
                                             key={`main-indicator-${index}`}
                                             onClick={() => goToSlide(index)}
-                                            className={`w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 rounded-full transition-all duration-300 touch-manipulation ${index === activeIndex
-                                                ? 'bg-[#d4af37] shadow-[0_0_8px_rgba(212,175,55,0.6)] scale-110'
-                                                : 'bg-neutral-600 hover:bg-neutral-500 active:bg-neutral-400'
+                                            className={`w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 rounded-full transition-all duration-300 touch-manipulation p-1.5 ${index === activeIndex
+                                                ? 'bg-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.8)] scale-125'
+                                                : 'bg-neutral-600/70 hover:bg-neutral-500 active:bg-neutral-400 active:scale-95'
                                                 }`}
                                             aria-label={`Go to ${mainPrizes[index].god} prize`}
                                         />
