@@ -1,16 +1,38 @@
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 
 // Load all gallery images
-const modules = import.meta.glob('../../assets/gallery/*.{jpg,JPG,jpeg,png,webp}', { eager: true });
-const galleryImages = Object.values(modules).map((mod: any) => mod.default);
+// Load all gallery images from subdirectories
+const modules = import.meta.glob('../../assets/gallery/*/*.{jpg,JPG,jpeg,png,webp}', { eager: true });
 
-// Mythic Captions
-const captions = [
-    "LEGENDARY MOMENTS", "HEROES CODING", "THE ORACLE SPEAKS", "BUILDING OLYMPUS",
-    "CODE OF THE GODS", "TITAN'S WORK", "MYTHIC CREATIONS", "VICTORY FEAST",
-    "THE ODYSSEY BEGINS", "SPARTAN DISCIPLINE", "ATHENIAN WISDOM", "DELPHI'S VISION"
-];
+// Map folder names to display captions (handling typos in folder names if necessary)
+const categoryMap: Record<string, string> = {
+    "legendary moments": "LEGENDARY MOMENTS",
+    "heroes coding": "HEROES CODING",
+    "the oracle speaks": "THE ORACLE SPEAKS",
+    "building olympus": "BUILDING OLYMPUS",
+    "code of the gods": "CODE OF THE GODS",
+    "titan's work": "TITAN'S WORK",
+    "mythic creations": "MYTHIC CREATIONS",
+    "victory feast": "VICTORY FEAST",
+    "the odyssey begins": "THE ODYSSEY BEGINS",
+    "spartan discpline": "SPARTAN DISCIPLINE", // Handling folder typo
+    "athenian wisdom": "ATHENIAN WISDOM",
+    "delphi's vision": "DELPHI'S VISION"
+};
+
+const galleryImages = Object.entries(modules).map(([path, mod]: [string, any], index) => {
+    // path example: ../../assets/gallery/legendary moments/image.webp
+    const parts = path.split('/');
+    const folderName = parts[parts.length - 2].toLowerCase();
+    const caption = categoryMap[folderName] || folderName.toUpperCase();
+
+    return {
+        src: mod.default,
+        caption: caption,
+        id: index
+    };
+});
 
 interface GalleryImage {
     src: string;
@@ -21,6 +43,8 @@ interface GalleryImage {
 export function PastPhotos() {
     const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
     const [columns, setColumns] = useState(4);
+    const [visibleCount, setVisibleCount] = useState(12); // Pagine images
+    const scrollRef = useRef(null);
 
     // Responsive Column Calculation
     useEffect(() => {
@@ -30,39 +54,52 @@ export function PastPhotos() {
             else if (window.innerWidth < 1400) setColumns(3);
             else setColumns(4);
         };
+
+        let timeoutId: NodeJS.Timeout;
+        const debouncedResize = () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(handleResize, 100);
+        };
+
         handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        window.addEventListener('resize', debouncedResize);
+        return () => {
+            window.removeEventListener('resize', debouncedResize);
+            clearTimeout(timeoutId);
+        };
     }, []);
+
+    // Visible subset of images
+    const visibleImages = useMemo(() => galleryImages.slice(0, visibleCount), [visibleCount]);
 
     // Split images into columns for true Masonry layout
     const columnStreams = useMemo(() => {
         const streams = Array.from({ length: columns }, () => [] as GalleryImage[]);
-        galleryImages.forEach((img, i) => {
-            streams[i % columns].push({
-                src: img as string,
-                caption: captions[i % captions.length],
-                id: i
-            });
+        visibleImages.forEach((img, i) => {
+            streams[i % columns].push(img);
         });
         return streams;
-    }, [columns]);
+    }, [columns, visibleImages]);
+
+    const handleLoadMore = () => {
+        setVisibleCount(prev => Math.min(prev + 12, galleryImages.length));
+    };
 
     // Background Parallax for "Floating Dust"
-    const { scrollYProgress } = useScroll();
+    const { scrollYProgress } = useScroll({ container: scrollRef });
     const yBg = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
     // Memoize particles to prevent hydration mismatch
-    const particles = useMemo(() => Array.from({ length: 20 }).map((_, i) => ({
+    const particles = useMemo(() => Array.from({ length: 15 }).map((_, i) => ({
         id: i,
         top: Math.random() * 100,
         left: Math.random() * 100,
-        size: Math.random() * 4 + 1,
-        opacity: Math.random() * 0.5 + 0.2
+        size: Math.random() * 3 + 1, // Slightly smaller particles
+        opacity: Math.random() * 0.4 + 0.1
     })), []);
 
     return (
-        <section className="relative min-h-screen bg-neutral-950 overflow-hidden py-24 px-4 sm:px-8">
+        <section className="relative h-screen bg-neutral-950 overflow-hidden">
             {/* --- MYTHIC BACKGROUND --- */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-20 mix-blend-overlay"></div>
@@ -81,6 +118,7 @@ export function PastPhotos() {
                                 width: `${p.size}px`,
                                 height: `${p.size}px`,
                                 opacity: p.opacity,
+                                willChange: 'transform'
                             }}
                         />
                     ))}
@@ -89,44 +127,66 @@ export function PastPhotos() {
                 <div className="absolute inset-0 bg-gradient-to-b from-neutral-950 via-transparent to-neutral-950 z-10"></div>
             </div>
 
-            {/* --- HEADER --- */}
-            <div className="relative z-10 text-center mb-16 md:mb-24">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-[Cinzel] text-transparent bg-clip-text bg-gradient-to-b from-amber-100 to-amber-700 drop-shadow-[0_5px_15px_rgba(212,175,55,0.2)] tracking-widest mb-4 px-2">
-                        HALL OF MEMORIES
-                    </h2>
-                    <div className="flex items-center justify-center gap-4 mb-6">
-                        <div className="h-[1px] w-12 sm:w-32 bg-gradient-to-r from-transparent to-amber-600"></div>
-                        <span className="text-amber-500 font-[Cinzel] text-xl">✦</span>
-                        <div className="h-[1px] w-12 sm:w-32 bg-gradient-to-l from-transparent to-amber-600"></div>
-                    </div>
-                    <p className="font-[Cinzel] text-amber-100/60 uppercase tracking-[0.3em] text-[10px] sm:text-xs md:text-sm">
-                        32 Artifacts Discovered
-                    </p>
-                </motion.div>
-            </div>
+            {/* --- SCROLLABLE CONTENT --- */}
+            <div
+                ref={scrollRef}
+                className="h-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] py-24 px-4 sm:px-8"
+            >
 
-            {/* --- MASONRY GRID --- */}
-            <div className="relative z-10 max-w-[1600px] mx-auto grid gap-4 sm:gap-6 md:gap-8"
-                style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+                {/* --- HEADER --- */}
+                <div className="relative z-10 text-center mb-16 md:mb-24">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-[Cinzel] text-transparent bg-clip-text bg-gradient-to-b from-amber-100 to-amber-700 drop-shadow-[0_5px_15px_rgba(212,175,55,0.2)] tracking-widest mb-4 px-2">
+                            HALL OF MEMORIES
+                        </h2>
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                            <div className="h-[1px] w-12 sm:w-32 bg-gradient-to-r from-transparent to-amber-600"></div>
+                            <span className="text-amber-500 font-[Cinzel] text-xl">✦</span>
+                            <div className="h-[1px] w-12 sm:w-32 bg-gradient-to-l from-transparent to-amber-600"></div>
+                        </div>
+                        <p className="font-[Cinzel] text-amber-100/60 uppercase tracking-[0.3em] text-[10px] sm:text-xs md:text-sm">
+                            {galleryImages.length} Artifacts Discovered
+                        </p>
+                    </motion.div>
+                </div>
 
-                {columnStreams.map((column, colIndex) => (
-                    <div key={colIndex} className="flex flex-col gap-4 sm:gap-6 md:gap-8">
-                        {column.map((item: any, i: number) => (
-                            <GalleryItem
-                                key={item.id}
-                                item={item}
-                                index={i}
-                                colIndex={colIndex}
-                                onClick={() => setSelectedImage(item)}
-                            />
-                        ))}
+                {/* --- MASONRY GRID --- */}
+                <div className="relative z-10 max-w-[1600px] mx-auto grid gap-4 sm:gap-6 md:gap-8 mb-16"
+                    style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+
+                    {columnStreams.map((column, colIndex) => (
+                        <div key={colIndex} className="flex flex-col gap-4 sm:gap-6 md:gap-8">
+                            {column.map((item: any, i: number) => (
+                                <GalleryItem
+                                    key={item.id}
+                                    item={item}
+                                    index={i}
+                                    onClick={() => setSelectedImage(item)}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </div>
+
+                {/* --- LOAD MORE BUTTON --- */}
+                {visibleCount < galleryImages.length && (
+                    <div className="relative z-20 flex justify-center pb-20">
+                        <button
+                            onClick={handleLoadMore}
+                            className="group relative px-8 py-3 bg-transparent border border-amber-500/30 overflow-hidden transition-all duration-300 hover:border-amber-500/80 hover:bg-amber-950/30"
+                        >
+                            <div className="absolute inset-0 bg-amber-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                            <span className="relative z-10 font-[Cinzel] text-amber-100 tracking-[0.2em] group-hover:text-amber-50 uppercase text-sm">
+                                Reveal More Artifacts
+                            </span>
+                        </button>
                     </div>
-                ))}
+                )}
+
             </div>
 
             {/* --- LIGHTBOX MODAL --- */}
@@ -137,7 +197,7 @@ export function PastPhotos() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelectedImage(null)}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 sm:p-8 cursor-pointer"
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 sm:p-8 cursor-pointer"
                     >
                         <motion.div
                             layoutId={`image-${selectedImage.src}`}
@@ -180,54 +240,47 @@ export function PastPhotos() {
 interface GalleryItemProps {
     item: { src: string; caption: string };
     index: number;
-    colIndex: number;
     onClick: () => void;
 }
 
-function GalleryItem({ item, index, colIndex, onClick }: GalleryItemProps) {
+function GalleryItem({ item, index, onClick }: GalleryItemProps) {
     return (
         <motion.div
             layoutId={`container-${item.src}`}
-            initial={{ opacity: 0, y: 50, filter: 'grayscale(100%)' }}
-            whileInView={{ opacity: 1, y: 0, filter: 'grayscale(80%)' }}
+            initial={{ opacity: 0, y: 30 }} // Reduced distance
+            whileInView={{ opacity: 1, y: 0 }}
             whileHover={{
-                scale: 1.03,
-                filter: 'grayscale(0%) contrast(1.1)',
+                scale: 1.02, // Reduced scale
                 zIndex: 10,
-                transition: { duration: 0.3 }
+                transition: { duration: 0.2 } // Faster transition
             }}
             viewport={{ once: true, margin: "50px" }}
-            transition={{ duration: 0.8, delay: (colIndex * 0.2) + (index * 0.1) }}
+            transition={{ duration: 0.5, delay: (index % 4) * 0.05 }} // Faster stagger
             onClick={onClick}
-            className="group relative cursor-pointer overflow-hidden rounded-sm border-[1px] border-amber-900/20 bg-neutral-900 shadow-lg transition-all duration-500 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] hover:border-amber-500/40"
+            className="group relative cursor-pointer overflow-hidden rounded-sm border-[1px] border-amber-900/20 bg-neutral-900 shadow-md transition-all duration-300 hover:shadow-[0_0_20px_rgba(212,175,55,0.1)] hover:border-amber-500/30"
+            style={{ willChange: 'transform' }} // Optimization
         >
             {/* Image Container */}
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden bg-neutral-900">
                 <motion.img
                     layoutId={`image-${item.src}`}
                     src={item.src}
                     alt={item.caption}
-                    className="w-full h-auto transform transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-auto transform transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
+                    decoding="async"
                 />
 
-                {/* Vintage Overlay - Fades out on hover */}
-                <div className="absolute inset-0 bg-sepia/20 mix-blend-multiply group-hover:opacity-0 transition-opacity duration-500 pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+                {/* Optimized Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
             </div>
 
-            {/* Caption Overlay - Appears on hover */}
-            <div className="absolute bottom-0 inset-x-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out bg-black/60 backdrop-blur-sm border-t border-amber-500/20">
+            {/* Caption Overlay */}
+            <div className="absolute bottom-0 inset-x-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out bg-black/80 border-t border-amber-500/20">
                 <p className="text-amber-100 font-[Cinzel] text-xs sm:text-sm text-center tracking-[0.2em]">
                     {item.caption}
                 </p>
             </div>
-
-            {/* Corner Accents */}
-            <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-amber-600/0 group-hover:border-amber-600/60 transition-colors duration-500" />
-            <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-amber-600/0 group-hover:border-amber-600/60 transition-colors duration-500" />
-            <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-amber-600/0 group-hover:border-amber-600/60 transition-colors duration-500" />
-            <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-amber-600/0 group-hover:border-amber-600/60 transition-colors duration-500" />
         </motion.div>
     );
 }

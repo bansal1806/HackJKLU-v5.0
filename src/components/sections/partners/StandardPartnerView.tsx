@@ -1,7 +1,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, memo } from 'react';
-import completeBg from '../../../assets/partners/complete-bg.jpg';
+import completeBg from '../../../assets/partners/complete-bg.webp';
 
 // Social Icons
 import xIcon from '../../../assets/partners/social-x.svg';

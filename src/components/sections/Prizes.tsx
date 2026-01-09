@@ -3,12 +3,12 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Assets
-import arrowLeft from '../../assets/prizes/arrow-left.png';
-import arrowRight from '../../assets/prizes/arrow-right.png';
-import zeusImg from '../../assets/prizes/zeus.jpg';
-import poseidonImg from '../../assets/prizes/poseidon.jpg';
-import hadesImg from '../../assets/prizes/hades.jpg';
-import domainSpartan from '../../assets/prizes/domain-spartan.jpg';
+import arrowLeft from '../../assets/prizes/arrow-left.webp';
+import arrowRight from '../../assets/prizes/arrow-right.webp';
+import zeusImg from '../../assets/prizes/zeus.webp';
+import poseidonImg from '../../assets/prizes/poseidon.webp';
+import hadesImg from '../../assets/prizes/hades.webp';
+import domainSpartan from '../../assets/prizes/domain-spartan.webp';
 import bgImage from '../../assets/prizes/bg.webp';
 
 
@@ -31,17 +31,17 @@ const mainPrizes = [
         amount: "25K",
         color: "#C0C0C0",
         border: "linear-gradient(to bottom right, #a0a0a0, #e0e0e0)",
-        image: hadesImg
+        image: poseidonImg
     },
     {
         rank: "3",
         title: "3RD PRIZE",
         god: "Hades",
         role: "Ruler of the Underworld",
-        amount: "25K",
+        amount: "15K",
         color: "#cd7f32",
         border: "linear-gradient(to bottom right, #cd7f32, #8b4500)",
-        image: poseidonImg
+        image: hadesImg
     }
 ];
 
@@ -190,7 +190,7 @@ export default function Prizes() {
 
     const onTouchEnd = useCallback(() => {
         if (!touchStartX.current || !touchEndX.current || !touchStartY.current || !touchEndY.current) return;
-        
+
         const distanceX = touchStartX.current - touchEndX.current;
         const distanceY = touchStartY.current - touchEndY.current;
         const absDistanceX = Math.abs(distanceX);
@@ -309,8 +309,8 @@ export default function Prizes() {
     }, []);
 
     return (
-        <div 
-            ref={containerRef} 
+        <div
+            ref={containerRef}
             className="relative bg-neutral-950 text-neutral-100 min-h-screen h-dvh overflow-hidden selection:bg-yellow-900 selection:text-white pt-16 xs:pt-18 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-40 2xl:pt-48 pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24"
             style={{ touchAction: 'pan-y pan-x pinch-zoom' }}
             onTouchStart={onTouchStart}
@@ -319,9 +319,9 @@ export default function Prizes() {
         >
             {/* Background Image with Black Mask */}
             <div className="fixed inset-0 z-0 will-change-transform">
-                <img 
-                    src={bgImage} 
-                    alt="Background" 
+                <img
+                    src={bgImage}
+                    alt="Background"
                     className="w-full h-full object-cover"
                     loading="eager"
                     decoding="async"
@@ -345,21 +345,25 @@ export default function Prizes() {
                 ))}
             </div>
 
-            {/* Scroll Hint with enhanced styling - Only show if not last section, positioned above footer */}
+            {/* Scroll Hint with enhanced styling - Positioned above header, always visible */}
             <AnimatePresence>
                 {currentSection < sections.length - 1 && (
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed bottom-3 xs:bottom-4 sm:bottom-5 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 text-center pointer-events-none px-2"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.5 }}
+                        className="fixed bottom-0 xs:bottom-0.5 sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-3 2xl:bottom-4 left-1/2 -translate-x-1/2 z-[60] text-center pointer-events-none px-2 xs:px-3 sm:px-4"
                     >
+                        {/* Background blur for better visibility */}
+                        <div className="absolute inset-0 -mx-2 xs:-mx-3 sm:-mx-4 bg-black/40 backdrop-blur-sm rounded-lg -z-10" />
+
                         {/* Keyboard Instructions */}
                         <motion.p
-                            initial={{ opacity: 0.6 }}
-                            animate={{ opacity: [0.6, 1, 0.6] }}
+                            initial={{ opacity: 0.7 }}
+                            animate={{ opacity: [0.7, 1, 0.7] }}
                             transition={{ duration: 2, repeat: Infinity }}
-                            className="text-[10px] xs:text-xs sm:text-sm md:text-base text-neutral-400 mb-1.5 xs:mb-2 sm:mb-2.5 md:mb-3 font-heading tracking-wider leading-tight"
+                            className="text-[9px] xs:text-[10px] sm:text-xs md:text-sm lg:text-base text-neutral-300 xs:text-neutral-200 mb-1 xs:mb-1.5 sm:mb-2 font-heading tracking-wider leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
                         >
                             {currentSection === 0 ? (isMobile ? 'Swipe ← → for prizes, ⬆️ ⬇️ for sections' : 'Use ← → keys or scroll to explore') : (isMobile ? 'Swipe ⬆️ ⬇️ to navigate' : 'Scroll to explore')}
                         </motion.p>
@@ -367,13 +371,13 @@ export default function Prizes() {
                         {/* Mouse Indicator - Hidden on mobile */}
                         {!isMobile && (
                             <motion.div
-                                className="w-4 h-6 xs:w-5 xs:h-8 sm:w-6 sm:h-10 md:w-7 md:h-11 lg:w-8 lg:h-12 border-2 border-neutral-500 rounded-full mx-auto relative"
+                                className="w-3 h-4 xs:w-3.5 xs:h-5 sm:w-4 sm:h-6 md:w-5 md:h-7 lg:w-6 lg:h-8 border-2 border-neutral-400 rounded-full mx-auto relative drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
                                 whileHover={{ scale: 1.1, borderColor: '#d4af37' }}
                                 transition={{ duration: 0.3 }}
                             >
                                 <motion.div
-                                    className="w-0.5 h-1 xs:h-1.5 sm:w-1 sm:h-2 md:w-1.5 md:h-2.5 lg:h-3 bg-neutral-400 rounded-full absolute top-1 xs:top-1.5 sm:top-2 left-1/2 -translate-x-1/2"
-                                    animate={{ y: [0, 6, 0] }}
+                                    className="w-0.5 h-0.5 xs:h-1 sm:w-1 sm:h-1.5 md:w-1 md:h-2 lg:w-1.5 lg:h-2.5 bg-neutral-300 rounded-full absolute top-0.5 xs:top-1 sm:top-1.5 left-1/2 -translate-x-1/2"
+                                    animate={{ y: [0, 4, 0] }}
                                     transition={{ duration: 1.5, repeat: Infinity }}
                                 />
                             </motion.div>
@@ -591,9 +595,9 @@ export default function Prizes() {
                                 className="absolute left-1 xs:left-2 sm:left-4 md:left-8 lg:left-12 xl:left-16 2xl:left-20 top-1/2 z-30 p-1.5 xs:p-2 sm:p-2.5 md:p-3 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none opacity-70 hover:opacity-100 touch-manipulation"
                                 aria-label="Previous prize"
                             >
-                                <img 
-                                    src={arrowLeft} 
-                                    alt="" 
+                                <img
+                                    src={arrowLeft}
+                                    alt=""
                                     className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
                                     loading="eager"
                                     decoding="async"
@@ -604,9 +608,9 @@ export default function Prizes() {
                                 className="absolute right-1 xs:right-2 sm:right-4 md:right-8 lg:right-12 xl:right-16 2xl:right-20 top-1/2 z-30 p-1.5 xs:p-2 sm:p-2.5 md:p-3 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none opacity-70 hover:opacity-100 touch-manipulation"
                                 aria-label="Next prize"
                             >
-                                <img 
-                                    src={arrowRight} 
-                                    alt="" 
+                                <img
+                                    src={arrowRight}
+                                    alt=""
                                     className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
                                     loading="eager"
                                     decoding="async"
@@ -626,7 +630,7 @@ export default function Prizes() {
                                 >
                                     <div
                                         className="w-[100px] h-[150px] md:w-[120px] md:h-[180px] lg:w-[160px] lg:h-[240px] xl:w-[200px] xl:h-[300px] 2xl:w-[240px] 2xl:h-[360px] rounded-lg md:rounded-xl overflow-hidden bg-cover bg-center border border-neutral-700/50"
-                                        style={{ 
+                                        style={{
                                             backgroundImage: `url(${mainPrizes[prevIndex].image})`,
                                             willChange: 'transform'
                                         }}
@@ -642,7 +646,7 @@ export default function Prizes() {
                                         exit={{ scale: 0.85, opacity: 0, rotateY: 15 }}
                                         transition={{ duration: 0.6, ease: "easeOut" }}
                                         className="z-20 relative group cursor-pointer will-change-transform"
-                                        style={{ 
+                                        style={{
                                             transformStyle: 'preserve-3d',
                                             transform: 'translateZ(0)'
                                         }}
@@ -673,7 +677,7 @@ export default function Prizes() {
                                 >
                                     <div
                                         className="w-[100px] h-[150px] md:w-[120px] md:h-[180px] lg:w-[160px] lg:h-[240px] xl:w-[200px] xl:h-[300px] 2xl:w-[240px] 2xl:h-[360px] rounded-lg md:rounded-xl overflow-hidden bg-cover bg-center border border-neutral-700/50"
-                                        style={{ 
+                                        style={{
                                             backgroundImage: `url(${mainPrizes[nextIndex].image})`,
                                             willChange: 'transform'
                                         }}
@@ -808,7 +812,7 @@ export default function Prizes() {
                                 {/* Background Image - Blurs on Hover */}
                                 <div
                                     className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-out group-hover:blur-[2px] group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0"
-                                    style={{ 
+                                    style={{
                                         backgroundImage: `url(${prize.img})`,
                                         willChange: 'transform'
                                     }}

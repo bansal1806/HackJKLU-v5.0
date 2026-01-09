@@ -38,7 +38,7 @@ export const CountdownTimer = memo(function CountdownTimer() {
         <div
             className="absolute font-medieval w-full flex justify-center"
             style={{
-                bottom: '12%',
+                bottom: '6%',
                 zIndex: 15,
                 pointerEvents: 'none' // Ensure clicks pass through to Hero transition
             }}
@@ -78,24 +78,21 @@ export const CountdownTimer = memo(function CountdownTimer() {
 const TimeUnit = ({ value, label }: { value: number, label: string }) => (
     <div style={{ textAlign: 'center' }}>
         <div
-            className="font-cursive"
             style={{
+                fontFamily: 'GodOfThunder',
                 fontSize: 'clamp(2rem, 6vw, 3.5rem)',
-                fontWeight: 'bold',
-                // Deep 3D Stone Cracks Effect in Gold
+                fontWeight: '400',
                 background: `
-                    repeating-linear-gradient(45deg, transparent 0px, transparent 10px, rgba(40,20,0,0.9) 10px, rgba(40,20,0,0.9) 11px),
-                    repeating-linear-gradient(-45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
-                    linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #8b4513 80%, #ffd700 100%)
+                repeating-linear-gradient(45deg, transparent 0px, transparent 10px, rgba(40,20,0,0.9) 10px, rgba(40,20,0,0.9) 11px),
+                repeating-linear-gradient(-45deg, transparent 0px, transparent 15px, rgba(40,20,0,0.9) 15px, rgba(40,20,0,0.9) 16px),
+                linear-gradient(180deg, #ffd700 0%, #b8860b 20%, #fffacd 40%, #ffd700 60%, #d7d2cf 80%, #ffd700 100%)
                 `,
-                backgroundSize: '100% 100%',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                // OPTIMIZATION: Use text-shadow instead of filter: drop-shadow for better performance
-                textShadow: '2px 2px 0px #3d2b00, 4px 4px 0px #2a1a00, 6px 6px 4px rgba(0,0,0,0.8)',
+                textShadow: '2px 2px 0px #b8850f, 4px 4px 0px #2a1a00, 6px 6px 4px rgba(116, 33, 33, 0.8)',
                 minWidth: 'clamp(40px, 10vw, 80px)',
             }}
-        >
+            >
             {String(value).padStart(2, '0')}
         </div>
         <div

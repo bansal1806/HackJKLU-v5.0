@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
 // Real assets
-import outerRingImg from '../../assets/partners/outer-ring.png';
-import innerRingsImg from '../../assets/partners/inner-rings.png';
-import entionLogoImg from '../../assets/partners/ention-logo.png';
-import bgMistImg from '../../assets/partners/bg-mist.jpg';
+import outerRingImg from '../../assets/partners/outer-ring.webp';
+import innerRingsImg from '../../assets/partners/inner-rings.webp';
+import entionLogoImg from '../../assets/partners/ention-logo.webp';
+import bgMistImg from '../../assets/partners/bg-mist.webp';
 
 // Social Icons (with double extension as found in directory)
 import xIcon from '../../assets/partners/social-x.svg';
@@ -85,7 +85,7 @@ export function PartnerCard() {
                         transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
                         className="relative w-72 h-72 md:w-[500px] md:h-[500px] flex items-center justify-center flex-shrink-0"
                     >
-                        {/* Outer rotating ring (the meander png) */}
+                        {/* Outer rotating ring (the meander webp) */}
                         <motion.div
                             animate={{ rotate: 360 }}
                             transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
@@ -94,7 +94,7 @@ export function PartnerCard() {
                             <img src={outerRingImg} alt="Outer Ring" className="w-full h-full object-contain opacity-95 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" />
                         </motion.div>
 
-                        {/* Middle & Inner Stationary Rings (one png) */}
+                        {/* Middle & Inner Stationary Rings (one webp) */}
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-0">
                             <img src={innerRingsImg} alt="Inner Rings" className="w-[88%] h-[88%] object-contain opacity-95 drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]" />
                         </div>

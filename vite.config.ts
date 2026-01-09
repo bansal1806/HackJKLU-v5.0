@@ -16,6 +16,9 @@ export default defineConfig({
       ext: '.gz',
     }),
   ],
+    server: {
+    allowedHosts: ['aayan.dophera.xyz'],
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
