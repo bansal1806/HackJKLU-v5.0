@@ -326,6 +326,8 @@ function PartnerSection({ data }: { data: PartnerData }) {
                         style={{
                             backgroundImage: `url(${data.bgImage || completeBg})`,
                             backgroundPosition: bgPosition,
+                            backgroundSize: isMobile ? 'auto 400%' : 'cover',
+                            backgroundRepeat: 'no-repeat',
                             filter: 'contrast(1.1) saturate(1.1)'
                         }}
                     />
@@ -334,7 +336,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                 </div>
 
                 {/* Header */}
-                <div className={`absolute top-0 left-0 right-0 z-50 flex flex-col items-center pointer-events-none px-4 text-center ${isMobile ? 'pt-24' : 'pt-8 sm:pt-12 md:pt-16 lg:pt-24'}`}>
+                <div className={`absolute top-0 left-0 right-0 z-50 flex flex-col items-center pointer-events-none px-4 text-center ${isMobile ? 'pt-20' : 'pt-8 sm:pt-12 md:pt-16 lg:pt-24'}`}>
                     <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
                         style={{
                             background: `linear-gradient(to bottom, ${data.themeColor || '#CD7F32'} 60%, #6E561C 100%)`,
@@ -347,9 +349,9 @@ function PartnerSection({ data }: { data: PartnerData }) {
                 </div>
 
                 {/* Interactive Table Area */}
-                <div className={`absolute inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-32' : 'pt-24'}`}>
+                <div className={`absolute inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-24' : 'pt-24'}`}>
                     <motion.div
-                        className="relative w-[340px] h-[340px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] mt-12"
+                        className="relative w-[90vw] h-[90vw] max-w-[340px] max-h-[340px] sm:max-w-none sm:max-h-none sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] mt-8 sm:mt-12"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
                     >
@@ -366,10 +368,12 @@ function PartnerSection({ data }: { data: PartnerData }) {
                             return (
                                 <div
                                     key={index}
-                                    className="absolute w-[50px] h-[50px] sm:w-[70px] sm:h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] rounded-full flex items-center justify-center cursor-pointer z-50 group"
+                                    className="absolute w-[14%] h-[14%] sm:w-[70px] sm:h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] rounded-full flex items-center justify-center cursor-pointer z-50 group"
                                     style={pos}
                                     onMouseEnter={() => partner && setHoveredPartner(partner)}
                                     onMouseLeave={() => setHoveredPartner(null)}
+                                    // Mobile Tap Support
+                                    onClick={() => partner && setHoveredPartner(partner === hoveredPartner ? null : partner)}
                                 >
                                     {partner ? (
                                         <motion.div
@@ -392,7 +396,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                     </motion.div>
 
                     {/* Footer / Hover Name Display */}
-                    <div className="h-20 sm:h-24 mt-4 sm:mt-8 flex flex-col items-center justify-center text-center transition-opacity duration-300">
+                    <div className="h-20 sm:h-24 mt-4 sm:mt-8 flex flex-col items-center justify-center text-center transition-opacity duration-300 px-4">
                         <AnimatePresence mode="wait">
                             {hoveredPartner ? (
                                 <motion.div
@@ -402,10 +406,10 @@ function PartnerSection({ data }: { data: PartnerData }) {
                                     exit={{ opacity: 0, y: -10 }}
                                     className="flex flex-col items-center gap-1"
                                 >
-                                    <span className="text-gold-400 font-heading tracking-widest text-sm sm:text-base uppercase opacity-80">
+                                    <span className="text-gold-400 font-heading tracking-widest text-xs sm:text-sm md:text-base uppercase opacity-80">
                                         Community Partner
                                     </span>
-                                    <span className="text-xl sm:text-3xl md:text-4xl font-heading text-[#EFE3A0] uppercase tracking-wider">
+                                    <span className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-heading text-[#EFE3A0] uppercase tracking-wider">
                                         {hoveredPartner.name}
                                     </span>
                                 </motion.div>
@@ -415,9 +419,9 @@ function PartnerSection({ data }: { data: PartnerData }) {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.5 }}
                                     exit={{ opacity: 0 }}
-                                    className="text-white/30 font-heading text-sm sm:text-base italic"
+                                    className="text-white/30 font-heading text-xs sm:text-sm md:text-base italic"
                                 >
-                                    Hover over the sigils...
+                                    {isMobile ? "Tap to reveal..." : "Hover over the sigils..."}
                                 </motion.div>
                             )}
                         </AnimatePresence>

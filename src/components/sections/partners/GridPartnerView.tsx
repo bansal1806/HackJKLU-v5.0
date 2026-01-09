@@ -45,6 +45,8 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                     style={{
                         backgroundImage: `url(${completeBg})`,
                         backgroundPosition: bgPosition,
+                        backgroundSize: isMobile ? 'auto 400%' : 'cover',
+                        backgroundRepeat: 'no-repeat',
                         filter: 'contrast(1.1) saturate(1.1)'
                     }}
                 />
@@ -52,12 +54,12 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
             </div>
 
             {/* Grid Content: Stacks on mobile, Split on desktop */}
-            <div className={`absolute inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-24 pb-24 hide-scrollbar' : ''}`}>
+            <div className={`absolute inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-24 pb-12 hide-scrollbar' : ''}`}>
                 {data.groups.map((group, groupIndex) => (
                     <div
                         key={groupIndex}
                         className={`flex flex-col items-center w-full ${isMobile
-                            ? 'relative py-8 border-b border-white/5 last:border-none'
+                            ? 'relative py-6 border-b border-white/5 last:border-none'
                             : 'absolute left-0 right-0'
                             }`}
                         style={!isMobile ? {
@@ -69,7 +71,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                         } : {}}
                     >
                         <h2
-                            className="text-2xl sm:text-3xl md:text-4xl font-heading tracking-wider uppercase mb-8 sm:mb-10 text-center relative z-10"
+                            className="text-xl sm:text-3xl md:text-4xl font-heading tracking-wider uppercase mb-6 sm:mb-10 text-center relative z-10"
                             style={{
                                 background: `linear-gradient(to bottom, ${group.color} 60%, #4a4a4a 100%)`,
                                 WebkitBackgroundClip: 'text',
@@ -79,10 +81,10 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                         >
                             {group.title}
                         </h2>
-                        <div className="flex flex-wrap justify-center gap-x-8 gap-y-12 sm:gap-14 md:gap-16 lg:gap-20 px-4 w-full max-w-[95%] xl:max-w-screen-2xl mx-auto">
+                        <div className="flex flex-wrap justify-center gap-x-4 gap-y-8 sm:gap-x-14 sm:gap-y-12 md:gap-16 lg:gap-20 px-2 w-full max-w-[98%] xl:max-w-screen-2xl mx-auto">
                             {group.partners.map((partner, pIndex) => (
                                 <div key={pIndex} className="flex flex-col items-center gap-0 group relative">
-                                    <div className="relative w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] lg:w-[260px] lg:h-[260px] will-change-transform">
+                                    <div className="relative w-[40vw] h-[40vw] max-w-[140px] max-h-[140px] sm:max-w-none sm:max-h-none sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] lg:w-[260px] lg:h-[260px] will-change-transform">
                                         <motion.div
                                             animate={{ rotate: 360 }}
                                             transition={{
@@ -100,7 +102,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                                                 loading="lazy"
                                             />
                                         </motion.div>
-                                        <div className="absolute inset-0 flex items-center justify-center p-6 sm:p-8">
+                                        <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8">
                                             <div className="relative w-full h-full flex items-center justify-center">
                                                 <img
                                                     src={partner.logo}
@@ -112,7 +114,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                                         </div>
                                     </div>
                                     <span
-                                        className="text-sm sm:text-base md:text-lg font-heading text-[#EFE3A0]/80 tracking-wide text-center -mt-4 sm:-mt-6 transition-colors group-hover:text-[#EFE3A0]"
+                                        className="text-xs sm:text-base md:text-lg font-heading text-[#EFE3A0]/80 tracking-wide text-center -mt-2 sm:-mt-6 transition-colors group-hover:text-[#EFE3A0]"
                                     >
                                         {partner.name}
                                     </span>

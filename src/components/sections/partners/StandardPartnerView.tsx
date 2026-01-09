@@ -79,6 +79,8 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                     style={{
                         backgroundImage: `url(${completeBg})`,
                         backgroundPosition: bgPosition,
+                        backgroundSize: isMobile ? 'auto 400%' : 'cover',
+                        backgroundRepeat: 'no-repeat',
                         filter: 'contrast(1.1) saturate(1.1)'
                     }}
                 />
@@ -109,8 +111,8 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
             </div>
 
             {/* Interaction Area */}
-            <div className={`absolute inset-0 z-40 flex items-center justify-center ${isMobile ? 'pt-44' : ''}`}>
-                <div className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-8' : 'gap-16'}`}>
+            <div className={`absolute inset-0 z-40 flex items-center justify-center ${isMobile ? 'pt-32' : ''}`}>
+                <div className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-4' : 'gap-16'}`}>
 
                     {/* Ring Group - Clickable on Mobile */}
                     <motion.div
@@ -118,8 +120,8 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                         // Animation: Mobile = Shift UP, Desktop = Shift LEFT
                         animate={
                             isHovered && data.logo
-                                ? (isMobile ? { y: -60 } : { x: -300 })
-                                : { x: 0, y: 0 }
+                                ? (isMobile ? { y: -50, scale: 0.8 } : { x: -300 })
+                                : { x: 0, y: 0, scale: 1 }
                         }
                         transition={{ duration: 0.8, ease: "easeInOut" }}
                         onMouseEnter={() => { if (!isMobile && data.logo) setIsHovered(true); }}
@@ -137,7 +139,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                         )}
 
                         {/* Adjust Ring Size for Mobile vs Desktop */}
-                        <div className="relative w-[220px] h-[220px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] will-change-transform max-h-[50vh] object-contain">
+                        <div className="relative w-[70vw] h-[70vw] max-w-[280px] max-h-[280px] sm:max-w-none sm:max-h-none sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] will-change-transform object-contain">
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{
@@ -160,10 +162,10 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                             {/* Logo */}
                             {data.logo && (
                                 <div
-                                    className="absolute left-1/2 top-1/2 w-[110px] h-[110px] sm:w-[160px] sm:h-[160px] md:w-[200px] md:h-[200px] lg:w-[250px] lg:h-[250px] flex items-center justify-center"
+                                    className="absolute left-1/2 top-1/2 w-[50%] h-[50%] flex items-center justify-center"
                                     style={{ transform: 'translate(-50%, -50%)' }}
                                 >
-                                    <div className="relative w-full h-full flex items-center justify-center p-4">
+                                    <div className="relative w-full h-full flex items-center justify-center p-2">
                                         <img
                                             src={data.logo}
                                             alt="Logo"
@@ -181,15 +183,15 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                         {isHovered && data.logo && (
                             <motion.div
                                 // Animation: Mobile = Fade In Bottom, Desktop = Fade In Right
-                                initial={isMobile ? { opacity: 0, y: 50 } : { opacity: 0, x: 50 }}
+                                initial={isMobile ? { opacity: 0, y: 30 } : { opacity: 0, x: 50 }}
                                 animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
-                                exit={isMobile ? { opacity: 0, y: 50 } : { opacity: 0, x: 50 }}
-                                transition={{ duration: 0.8, ease: "easeInOut" }}
-                                className={`flex flex-col gap-4 sm:gap-6 text-left ${isMobile ? 'w-[90%] max-w-2xl mx-auto -mt-10 px-4 max-h-[40vh] overflow-y-auto hide-scrollbar' : 'max-w-xl'}`}
+                                exit={isMobile ? { opacity: 0, y: 30 } : { opacity: 0, x: 50 }}
+                                transition={{ duration: 0.6, ease: "easeInOut" }}
+                                className={`flex flex-col gap-4 sm:gap-6 text-left ${isMobile ? 'w-[90%] max-w-2xl mx-auto -mt-6 px-4 max-h-[45vh] overflow-y-auto hide-scrollbar bg-neutral-950/40 backdrop-blur-sm rounded-xl p-4' : 'max-w-xl'}`}
                             >
-                                <div className="space-y-4 sm:space-y-6">
+                                <div className="space-y-3 sm:space-y-6">
                                     <h4
-                                        className="text-2xl sm:text-3xl font-heading uppercase tracking-widest border-b pb-2"
+                                        className="text-xl sm:text-3xl font-heading uppercase tracking-widest border-b pb-2"
                                         style={{ color: data.themeColor, borderColor: `${data.themeColor}33` }}
                                     >
                                         {data.partnerName}
@@ -206,7 +208,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
 
                                 {/* Social Links */}
                                 {data.socials && (
-                                    <div className="flex items-center justify-end gap-4 sm:gap-6 pb-4 sm:pb-0">
+                                    <div className="flex items-center justify-end gap-6 sm:gap-6 pb-2 sm:pb-0">
                                         <SocialIcon icon={xIcon} />
                                         <SocialIcon icon={instaIcon} />
                                         <SocialIcon icon={linkedinIcon} />
