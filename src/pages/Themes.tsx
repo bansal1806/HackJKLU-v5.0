@@ -160,7 +160,7 @@ export function Themes() {
           initial={{ opacity: 0, y: -50, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          className="text-5xl md:text-7xl mb-20 text-center tracking-[0.2em] font-bold drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]"
+          className="text-2xl sm:text-4xl md:text-5xl mb-10 md:mb-20 text-center tracking-[0.1em] md:tracking-[0.2em] font-bold drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]"
           style={{
             background: 'linear-gradient(to bottom, #fff8e7 0%, #d4af37 100%)',
             WebkitBackgroundClip: 'text',
@@ -173,7 +173,7 @@ export function Themes() {
         </motion.h1>
 
         {/* Enhanced Carousel */}
-        <div className="relative w-full h-[700px] flex items-center justify-center perspective-[1000px]">
+        <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] flex items-center justify-center perspective-[1000px]">
 
           {/* Enhanced Navigation Arrows with Glow */}
           <motion.button
@@ -185,7 +185,7 @@ export function Themes() {
               filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
             }}
           >
-            <img src={arrowLeft} alt="Prev" className="w-16 md:w-24" />
+            <img src={arrowLeft} alt="Prev" className="w-10 sm:w-16 md:w-24" />
           </motion.button>
 
           <motion.button
@@ -197,11 +197,17 @@ export function Themes() {
               filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
             }}
           >
-            <img src={arrowRight} alt="Next" className="w-16 md:w-24" />
+            <img src={arrowRight} alt="Next" className="w-10 sm:w-16 md:w-24" />
           </motion.button>
 
           {/* Scroll Items with Enhanced Effects */}
-          <div className="relative w-full max-w-7xl h-full flex items-center justify-center">
+          <div
+            className="relative w-full max-w-7xl h-full flex items-center justify-center"
+            style={{
+              transformStyle: 'flat',
+              perspective: '1000px',
+            }}
+          >
             {themesData.map((theme, i) => {
               const position = getPosition(i);
               if (Math.abs(position) > 2 && position !== 100) return null;
@@ -223,27 +229,30 @@ export function Themes() {
                     scale: scale,
                     zIndex: zIndex,
                     rotateY: rotateY,
+                    opacity: 1,
                     width: isCenter ? 1000 : 180,
                     filter: isCenter ? 'drop-shadow(0 0 25px rgba(212, 175, 55, 0.6))' : 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.3))'
                   }}
                   transition={{
-                    x: { type: "spring", stiffness: 60, damping: 20 },
-                    scale: { type: "spring", stiffness: 60, damping: 20 },
-                    rotateY: { type: "spring", stiffness: 60, damping: 20 },
-                    width: { duration: 1.0, ease: "easeInOut" },
+                    x: isOuter ? { duration: 0 } : { type: "spring", stiffness: 60, damping: 20 },
+                    scale: isOuter ? { duration: 0 } : { type: "spring", stiffness: 60, damping: 20 },
+                    rotateY: { duration: 0 },
+                    opacity: { duration: 0 },
+                    width: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
                     filter: { duration: 0.5 },
                     zIndex: { duration: 0 }
                   }}
                   className="absolute flex items-center justify-center"
                   style={{
                     height: '700px',
-                    perspective: '1000px'
+                    perspective: '1000px',
+                    backfaceVisibility: 'hidden'
                   }}
                 >
                   {/* ROLLED SCROLL with Glow */}
                   <motion.div
                     className="absolute inset-0 flex items-center justify-center p-2 transition-opacity duration-0"
-                    style={{ opacity: isCenter ? 0 : 1 }}
+                    style={{ opacity: isCenter ? 0 : 1, backfaceVisibility: 'hidden' }}
                     animate={{
                       filter: !isCenter ? 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.4))' : 'none'
                     }}
@@ -258,7 +267,7 @@ export function Themes() {
                   {/* OPEN SCROLL COMPOSITION with Enhanced Effects */}
                   <div
                     className="absolute inset-0 w-full h-full transition-opacity duration-0"
-                    style={{ opacity: isCenter ? 1 : 0 }}
+                    style={{ opacity: isCenter ? 1 : 0, backfaceVisibility: 'hidden' }}
                   >
                     {(isCenter || Math.abs(position) <= 1) && (
                       <div className="relative w-full h-full flex items-center justify-center">
@@ -266,11 +275,11 @@ export function Themes() {
                         {/* Enhanced Left Handle with Mystical Glow */}
                         <motion.div
                           animate={{
-                            left: isCenter ? '0%' : 'calc(50% - 90px)',
+                            left: isCenter ? '0px' : 'calc(50% - 50px)',
                             rotateY: isCenter ? -360 : 0
                           }}
-                          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-                          className="absolute top-0 bottom-0 w-[80px] md:w-[100px] z-20 overflow-hidden"
+                          transition={{ left: { duration: 0.8, ease: [0.4, 0, 0.2, 1] }, rotateY: { duration: 0 } }}
+                          className="absolute top-0 bottom-0 w-[100px] z-20 overflow-hidden"
                           style={{
                             transformStyle: 'preserve-3d',
                             filter: isCenter ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))' : 'none'
@@ -286,11 +295,11 @@ export function Themes() {
                         {/* Enhanced Right Handle */}
                         <motion.div
                           animate={{
-                            right: isCenter ? '0%' : 'calc(50% - 90px)',
+                            right: isCenter ? '0px' : 'calc(50% - 50px)',
                             rotateY: isCenter ? 360 : 0
                           }}
-                          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-                          className="absolute top-0 bottom-0 w-[80px] md:w-[100px] z-20 overflow-hidden"
+                          transition={{ right: { duration: 0.8, ease: [0.4, 0, 0.2, 1] }, rotateY: { duration: 0 } }}
+                          className="absolute top-0 bottom-0 w-[100px] z-20 overflow-hidden"
                           style={{
                             transformStyle: 'preserve-3d',
                             filter: isCenter ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))' : 'none'
@@ -305,8 +314,11 @@ export function Themes() {
 
                         {/* Enhanced Middle Body with Scrollable Content */}
                         <motion.div
-                          animate={{ width: isCenter ? 'calc(100% - 180px)' : '0px' }}
-                          transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
+                          animate={{
+                            width: isCenter ? 'calc(100% - 200px)' : '0px',
+                            left: isCenter ? '100px' : '50%'
+                          }}
+                          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
                           className="absolute top-0 bottom-0 z-10 overflow-hidden"
                         >
                           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-full">
@@ -323,11 +335,11 @@ export function Themes() {
                             animate={{ opacity: isCenter ? 1 : 0, scale: isCenter ? 1 : 0.9 }}
                             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                             className="absolute inset-0 flex flex-col items-center text-neutral-900 p-12 md:p-16"
-                            style={{ paddingTop: '80px' }}
+                            style={{ paddingTop: '160px' }}
                           >
                             {/* Title positioned in upper scroll area */}
                             <motion.h3
-                              className="text-4xl md:text-6xl font-bold text-[#5c3a21] uppercase tracking-wider text-center mb-6"
+                              className="text-2xl md:text-4xl font-bold text-[#5c3a21] uppercase tracking-wider text-center mb-1"
                               style={{
                                 textShadow: '0 0 10px rgba(92, 58, 33, 0.5), 0 2px 4px rgba(0,0,0,0.3)',
                                 marginTop: '0'
@@ -341,7 +353,7 @@ export function Themes() {
 
                             {/* Description positioned below title */}
                             <motion.p
-                              className="text-base md:text-lg font-serif text-[#3e2715] italic leading-relaxed text-center mb-8 max-w-lg"
+                              className="text-base md:text-lg font-serif text-[#3e2715] italic leading-tight text-center mb-2 max-w-xl"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: isCenter ? 1 : 0 }}
                               transition={{ delay: 0.6 }}
