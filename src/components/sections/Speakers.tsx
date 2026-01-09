@@ -294,7 +294,7 @@ function FloorCarousel() {
 
 
             <AnimatePresence mode='popLayout'>
-                {visibleSpeakers.map((speaker, i) => {
+                {visibleSpeakers.map((speaker) => {
                     // Position Logic
                     const step = (endAngle - startAngle) / (visibleCount - 1);
                     // Use indexPosition (0 to 6) to determine slot
