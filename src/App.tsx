@@ -24,7 +24,7 @@ function App() {
         <Route path="/partners" element={<Partners />} />
         <Route path="/itinerary" element={<><ComingSoonOverlay><Itinerary /></ComingSoonOverlay><PageNavigation /></>} />
         <Route path="/gallery" element={<><Gallery /><PageNavigation /></>} />
-        <Route path="/faq" element={<><ComingSoonOverlay><FAQPage /></ComingSoonOverlay><PageNavigation /></>} />
+        <Route path="/faq" element={<><FAQPage /><PageNavigation /></>} />
         <Route path="/events" element={<><ComingSoonOverlay><EventsPage /></ComingSoonOverlay><PageNavigation /></>} />
         <Route path="/cloud-test" element={<CloudTest />} />
       </Routes>
