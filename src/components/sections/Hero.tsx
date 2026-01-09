@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { CloudTransition } from '../ui/CloudTransition';
 import { CountdownTimer } from '../ui/CountdownTimer';
 import { HeroStaticLayers } from './HeroStaticLayers';
+import { PageNavigation } from '../navigation/PageNavigation';
+
 
 export function Hero() {
     // Transition State
@@ -27,8 +29,8 @@ export function Hero() {
 
     return (
         <section
-            className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden cursor-pointer bg-void-black"
-            onClick={handleTransition}
+            className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-void-black"
+            // onClick={handleTransition}
             style={{
                 background: 'radial-gradient(circle at 50% 30%, #1a202c 0%, #000000 70%)'
             }}
@@ -83,7 +85,7 @@ export function Hero() {
                     <div
                         className="absolute w-full flex justify-center"
                         style={{
-                            top: 'clamp(140px, 25vh, 240px)',
+                            top: 'clamp(140px, 0vh, 240px)',
                             zIndex: 15,
                         }}
                     >
@@ -98,7 +100,7 @@ export function Hero() {
                                 opacity: 0.9,
                             }}
                         >
-                            13 MARCH - 15 MARCH 2026
+                              13 MARCH - 15 MARCH
                         </p>
                     </div>
 
@@ -160,6 +162,7 @@ export function Hero() {
                     }
                 }
             `}</style>
+            <PageNavigation onNext={handleTransition} />
         </section>
     );
 }

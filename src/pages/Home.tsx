@@ -5,7 +5,6 @@ export function Home() {
   return (
     <>
       <Hero />
-      <PageNavigation />
     </>
   );
 }

@@ -46,6 +46,14 @@
   font-style: italic;
 }
 
+@font-face {
+  font-family: 'GodOfThunder';
+  src: url('./assets/fonts/Godofthunder-0WO1P.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 
 @theme {
