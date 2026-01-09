@@ -157,7 +157,7 @@ function FloorCarousel() {
         visibleSpeakers.push({ ...speakers[index], indexPosition: i });
     }
 
-    const xRadius = isMobile ? window.innerWidth * 0.42 : 800;
+    const xRadius = isMobile ? window.innerWidth * 0.42 : Math.min(800, window.innerWidth * 0.4);
     const yRadius = isMobile ? 120 : 250;
     const startAngle = 180;
     const endAngle = 360;
@@ -239,7 +239,7 @@ function FloorCarousel() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 50, scale: 0.9 }}
                             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                            className="pointer-events-auto max-w-[90vw] w-[350px] md:w-[600px] bg-black/80 backdrop-blur-xl border border-[#d4af37]/40 rounded-xl p-5 md:p-8 flex flex-col md:flex-row gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative group overflow-hidden"
+                            className="pointer-events-auto max-w-[90vw] w-[350px] md:w-[600px] max-h-[70vh] overflow-y-auto bg-black/80 backdrop-blur-xl border border-[#d4af37]/40 rounded-xl p-5 md:p-8 flex flex-col md:flex-row gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative group"
                             onMouseEnter={handlePanelEnter}
                             onMouseLeave={handlePanelLeave}
                         >

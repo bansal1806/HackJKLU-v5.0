@@ -15,11 +15,11 @@ const menuItems = [
     { number: 'III', name: 'Themes', path: '/themes' },
     { number: 'IV', name: 'Prizes', path: '/prizes' },
     { number: 'V', name: 'Partners', path: '/partners' },
-    { number: 'VI', name: 'Itinerary', path: '/itinerary' },
-    { number: 'VII', name: 'Past Photos', path: '/gallery' },
-    { number: 'VIII', name: 'FAQ', path: '/faq' },
-    { number: 'IX', name: 'Events', path: '/events' },
-    { number: 'X', name: 'Speakers', path: '/speakers' }
+    { number: 'VI', name: 'Speakers', path: '/speakers' },
+    { number: 'VII', name: 'Itinerary', path: '/itinerary' },
+    { number: 'VIII', name: 'Past Photos', path: '/gallery' },
+    { number: 'IX', name: 'FAQ', path: '/faq' },
+    { number: 'X', name: 'Events', path: '/events' },
 ];
 
 export function Layout({ children }: LayoutProps) {
