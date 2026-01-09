@@ -83,7 +83,7 @@ export function Hero() {
                     <div
                         className="absolute w-full flex justify-center"
                         style={{
-                            top: 'clamp(140px, 25vh, 240px)',
+                            top: 'clamp(140px, 0vh, 240px)',
                             zIndex: 15,
                         }}
                     >
@@ -98,7 +98,7 @@ export function Hero() {
                                 opacity: 0.9,
                             }}
                         >
-                            13 MARCH - 15 MARCH 2026
+                              13 MARCH - 15 MARCH
                         </p>
                     </div>
 

@@ -247,6 +247,7 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
             </div>
 
             {/* Lightning Bolt */}
+            {/* Code By IJ -- Responsive hai ab */}
             <img
                 src="/lightning-bolt.webp"
                 alt="Lightning Bolt"
@@ -255,8 +256,8 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
                     bottom: '0%',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    width: 'clamp(300px, 90vw, 700px)',
-                    height: '85%',
+                    width: 'auto',
+                    height: 'clamp(26vh, 60vh, 65vh)', 
                     objectFit: 'contain',
                     objectPosition: 'bottom center',
                     opacity: 1,
