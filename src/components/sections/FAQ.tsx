@@ -1,15 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Zap,
-    Hammer,
-    Sun,
-    Search,
-    ChevronDown,
-    ChevronRight,
-    Shield,
-    Scroll
-} from 'lucide-react';
+import { Search, ChevronRight, ChevronDown, Zap, Shield, Hammer, Sun } from 'lucide-react';
 
 // --- Types ---
 type ThemeColors = {

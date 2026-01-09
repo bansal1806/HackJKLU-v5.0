@@ -165,7 +165,6 @@ export function PastPhotos() {
                                     key={item.id}
                                     item={item}
                                     index={i}
-                                    colIndex={colIndex}
                                     onClick={() => setSelectedImage(item)}
                                 />
                             ))}
@@ -241,11 +240,10 @@ export function PastPhotos() {
 interface GalleryItemProps {
     item: { src: string; caption: string };
     index: number;
-    colIndex: number;
     onClick: () => void;
 }
 
-function GalleryItem({ item, index, colIndex, onClick }: GalleryItemProps) {
+function GalleryItem({ item, index, onClick }: GalleryItemProps) {
     return (
         <motion.div
             layoutId={`container-${item.src}`}
