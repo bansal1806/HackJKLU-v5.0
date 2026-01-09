@@ -15,9 +15,9 @@ const menuItems = [
     { number: 'III', name: 'Themes', path: '/themes' },
     { number: 'IV', name: 'Prizes', path: '/prizes' },
     { number: 'V', name: 'Partners', path: '/partners' },
-    { number: 'VI', name: 'Itinerary', path: '/itinerary' },
-    { number: 'VII', name: 'Past Photos', path: '/gallery' },
-    { number: 'VIII', name: 'FAQ', path: '/faq' },
+    { number: 'VI', name: 'Past Photos', path: '/gallery' },
+    { number: 'VII', name: 'FAQ', path: '/faq' },
+    { number: 'VIII', name: 'Itinerary', path: '/itinerary' },
     { number: 'IX', name: 'Events', path: '/events' }
 ];
 

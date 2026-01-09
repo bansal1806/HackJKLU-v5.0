@@ -1,7 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect, memo } from 'react';
-import completeBg from '../../../assets/partners/complete-bg.jpg';
+import completeBg from '../../../assets/partners/complete-bg.webp';
 
 export interface PartnerGroup {
     title: string;

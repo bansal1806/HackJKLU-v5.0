@@ -63,44 +63,39 @@ export function Hero() {
                     style={{ opacity: isZooming ? 0 : 1 }}
                 >
 
-                    {/* Title Image */}
-                    <img
-                        src="/Title.webp"
-                        alt="HACKJKLU 5.0"
-                        className="absolute object-contain"
-                        style={{
-                            top: '5%',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            height: 'clamp(120px, 20vh, 300px)',
-                            width: 'auto',
-                            maxWidth: '90vw',
-                            zIndex: 14,
-                            filter: 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(0 5px 10px rgba(0,0,0,0.8))',
-                            opacity: 0.95,
-                        }}
-                    />
-
-                    {/* Date Subtitle */}
+                    {/* Title and Date Container */}
                     <div
-                        className="absolute w-full flex justify-center"
-                        style={{
-                            top: 'clamp(140px, 0vh, 240px)',
-                            zIndex: 15,
-                        }}
+                        className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center w-full z-20 pointer-events-none"
+                        style={{ top: '5%' }} // Moved up to clear rings
                     >
+                        {/* Title Image */}
+                        <img
+                            src="/Title.webp"
+                            alt="HACKJKLU 5.0"
+                            className="object-contain"
+                            style={{
+                                height: 'clamp(120px, 18vh, 280px)',
+                                width: 'auto',
+                                maxWidth: '90vw',
+                                filter: 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(0 5px 10px rgba(0,0,0,0.8))',
+                                opacity: 0.95,
+                                marginBottom: 'clamp(-60px, -6vh, -30px)',
+                            }}
+                        />
+
+                        {/* Date Subtitle */}
                         <p
                             className="font-cinzel text-center px-4"
                             style={{
-                                fontSize: 'clamp(16px, 2.5vw, 24px)',
+                                fontSize: 'clamp(14px, 3vw, 24px)',
                                 color: '#d4af37',
-                                letterSpacing: 'clamp(3px, 0.5vw, 6px)',
-                                marginBottom: '16px',
+                                letterSpacing: 'clamp(2px, 1vw, 6px)',
                                 textShadow: '0 2px 4px rgba(0,0,0,0.7)',
                                 opacity: 0.9,
+                                marginLeft: 'clamp(20px, 4vw, 50px)',
                             }}
                         >
-                              13 MARCH - 15 MARCH
+                            13 MARCH - 15 MARCH
                         </p>
                     </div>
 

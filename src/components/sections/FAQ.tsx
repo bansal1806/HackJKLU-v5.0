@@ -71,7 +71,7 @@ const halls: Hall[] = [
         questions: [
             { id: 'a1', q: "What is the team size?", a: "You can form an alliance of 1 to 5 members. Choose your companions wisely." },
             { id: 'a2', q: "Will accommodation be provided?", a: "Yes, for our offline champions. Food and shelter will be provided within the campus grounds during the event." },
-            { id: 'a3', q: "What is the event schedule?", a: "The hackathon is a 36-hour marathon. Detailed timelines will be revealed in the Hall of Apollo closer to the date." }
+            { id: 'a3', q: "What is the event schedule?", a: "The hackathon is a 48-hour marathon. Detailed timelines will be revealed in the Hall of Apollo closer to the date." }
         ]
     },
     {
@@ -105,9 +105,9 @@ const halls: Hall[] = [
             glow: 'rgba(255, 215, 0, 0.6)'
         },
         questions: [
-            { id: 'ap1', q: "When is the registration deadline?", a: "The oracle decrees that registrations close 2 days before the event. Act swiftly!" },
+            { id: 'ap1', q: "When is the registration deadline?", a: "The oracle decrees that registrations close few days before the event. Act swiftly!" },
             { id: 'ap2', q: "Is there a registration fee?", a: "No tribute is required. HACKJKLU 5.0 is completely free for all participants." },
-            { id: 'ap3', q: "What is the timeline?", a: "The event happens on [Date]. Hacking begins at [Time] and ends 36 hours later." }
+            { id: 'ap3', q: "What is the timeline?", a: "The event happens on 13 to 15 March 2026. Hacking begins at 02:00 PM and ends 48 hours later." }
         ]
     }
 ];
@@ -216,7 +216,7 @@ export function FAQ() {
     };
 
     return (
-        <section className="min-h-screen bg-[#0F172A] text-white py-12 md:py-20 relative overflow-hidden font-cinzel">
+        <section className="h-screen bg-[#0F172A] text-white relative overflow-hidden font-cinzel flex flex-col">
 
             {/* Background Ambience */}
             <div className="absolute inset-0 pointer-events-none">
@@ -232,35 +232,30 @@ export function FAQ() {
                 />
             </div>
 
-            <div className="container mx-auto px-4 relative z-10 max-w-7xl">
+            <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-24 pb-20 md:pt-28 md:pb-24">
 
                 {/* Page Header */}
-                <header className="text-center mb-16">
+                <header className="text-center mb-8 shrink-0">
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 drop-shadow-sm">
+                        <h1 className="text-3xl md:text-5xl font-bold mb-2 tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 drop-shadow-sm">
                             MOUNT OLYMPUS LIBRARY
                         </h1>
-                        <p className="text-gray-400 font-serif italic text-lg opacity-80 decoration-slice">
+                        <p className="text-gray-400 font-serif italic text-base md:text-lg opacity-80 decoration-slice">
                             "Seek wisdom from the divine ones"
                         </p>
-                        <div className="flex items-center justify-center gap-4 mt-6 opacity-60">
-                            <div className="h-px w-24 bg-gradient-to-r from-transparent to-yellow-500" />
-                            <Scroll className="w-5 h-5 text-yellow-500" />
-                            <div className="h-px w-24 bg-gradient-to-l from-transparent to-yellow-500" />
-                        </div>
                     </motion.div>
                 </header>
 
-                <div className="flex flex-col lg:flex-row gap-8 min-h-[600px]">
+                <div className="flex flex-col lg:flex-row gap-6 h-full overflow-hidden">
 
                     {/* Sidebar / Navigation */}
-                    <aside className="w-full lg:w-[300px] shrink-0">
+                    <aside className="w-full lg:w-[300px] shrink-0 lg:h-full flex flex-col gap-4">
                         {/* Search Bar */}
-                        <div className="relative mb-8 group">
+                        <div className="relative group shrink-0">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-white transition-colors" />
                             <input
                                 type="text"
@@ -271,8 +266,8 @@ export function FAQ() {
                             />
                         </div>
 
-                        {/* Hall Navigation */}
-                        <nav className="flex flex-col gap-2">
+                        {/* Hall Navigation - Scrollable if needed */}
+                        <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pr-1 pb-1">
                             {halls.map((hall) => {
                                 const isActive = activeHallId === hall.id && !searchQuery;
                                 const Icon = hall.icon;
@@ -281,7 +276,7 @@ export function FAQ() {
                                     <button
                                         key={hall.id}
                                         onClick={() => handleHallChange(hall.id)}
-                                        className={`relative group w-full text-left p-4 rounded-lg border transition-all duration-300 overflow-hidden ${isActive ? 'bg-neutral-800/80 border-transparent shadow-lg' : 'bg-transparent border-transparent hover:bg-neutral-800/30'}`}
+                                        className={`relative group shrink-0 lg:w-full text-left p-4 rounded-lg border transition-all duration-300 overflow-hidden ${isActive ? 'bg-neutral-800/80 border-transparent shadow-lg' : 'bg-transparent border-transparent hover:bg-neutral-800/30'}`}
                                     >
                                         {/* Hover Glow Background */}
                                         <div
@@ -297,7 +292,7 @@ export function FAQ() {
                                             />
                                         )}
 
-                                        <div className="flex items-center justify-between relative z-10">
+                                        <div className="flex items-center justify-between relative z-10 w-full">
                                             <div className="flex items-center gap-3">
                                                 <div
                                                     className={`p-2 rounded-md transition-colors duration-300 ${isActive ? 'bg-neutral-900' : 'bg-neutral-800'}`}
@@ -307,7 +302,7 @@ export function FAQ() {
                                                         style={{ color: isActive ? hall.colors.primary : '#9CA3AF' }}
                                                     />
                                                 </div>
-                                                <div>
+                                                <div className="hidden sm:block">
                                                     <h3 className={`font-bold text-sm tracking-wide ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
                                                         {hall.name}
                                                     </h3>
@@ -318,7 +313,7 @@ export function FAQ() {
                                             </div>
 
                                             {isActive && (
-                                                <motion.div layoutId="active-dot">
+                                                <motion.div layoutId="active-dot" className="hidden sm:block">
                                                     <ChevronRight className="w-4 h-4 text-white opacity-50" />
                                                 </motion.div>
                                             )}
@@ -330,108 +325,110 @@ export function FAQ() {
                     </aside>
 
                     {/* Main Content Area */}
-                    <main className="flex-1 bg-neutral-900/20 rounded-2xl border border-white/5 p-6 md:p-10 relative overflow-hidden backdrop-blur-sm min-h-[600px]">
+                    <main className="flex-1 bg-neutral-900/20 rounded-2xl border border-white/5 p-6 md:p-8 relative overflow-hidden backdrop-blur-sm flex flex-col min-h-0">
 
-                        {/* SEARCH RESULTS VIEW */}
-                        {searchQuery ? (
-                            <div className="space-y-8">
-                                <h2 className="text-xl font-bold text-gray-400 mb-6 flex items-center gap-2">
-                                    <Search className="w-5 h-5" />
-                                    Search Results for "{searchQuery}"
-                                </h2>
-                                {filteredHalls.map(hall => (
-                                    <div key={hall.id} className="mb-8">
-                                        <h3 className="text-sm uppercase tracking-widest mb-4 font-bold flex items-center gap-2" style={{ color: hall.colors.primary }}>
-                                            <hall.icon className="w-4 h-4" />
-                                            {hall.name}
-                                        </h3>
+                        {/* Scrollable Inner Content */}
+                        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pr-2">
+                            {/* SEARCH RESULTS VIEW */}
+                            {searchQuery ? (
+                                <div className="space-y-8">
+                                    <h2 className="text-xl font-bold text-gray-400 mb-6 flex items-center gap-2">
+                                        <Search className="w-5 h-5" />
+                                        Search Results for "{searchQuery}"
+                                    </h2>
+                                    {filteredHalls.map(hall => (
+                                        <div key={hall.id} className="mb-8">
+                                            <h3 className="text-sm uppercase tracking-widest mb-4 font-bold flex items-center gap-2" style={{ color: hall.colors.primary }}>
+                                                <hall.icon className="w-4 h-4" />
+                                                {hall.name}
+                                            </h3>
+                                            <div className="space-y-4">
+                                                {hall.questions.map(q => (
+                                                    <QuestionCard
+                                                        key={q.id}
+                                                        question={q}
+                                                        hallColors={hall.colors}
+                                                        isOpen={openQuestionId === q.id}
+                                                        onToggle={() => setOpenQuestionId(openQuestionId === q.id ? null : q.id)}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {filteredHalls.length === 0 && (
+                                        <div className="text-center py-20 text-gray-500">
+                                            <p className="text-lg italic">"The scrolls contain no wisdom matching your query..."</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                /* HALL VIEW */
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={activeHall.id}
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -20 }}
+                                        transition={{ duration: 0.4 }}
+                                        className="flex flex-col"
+                                    >
+                                        {/* Hall Header */}
+                                        <div className="mb-8 text-center md:text-left border-b border-white/10 pb-6 relative shrink-0">
+                                            <div
+                                                className="absolute top-0 right-0 w-32 h-32 opacity-10 blur-3xl rounded-full pointer-events-none"
+                                                style={{ backgroundColor: activeHall.colors.primary }}
+                                            />
+
+                                            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-4">
+                                                <div
+                                                    className="p-3 rounded-xl bg-neutral-800/50 backdrop-blur-md shadow-xl border border-white/10"
+                                                >
+                                                    <activeHall.icon
+                                                        className="w-8 h-8 md:w-10 md:h-10"
+                                                        style={{ color: activeHall.colors.primary, filter: `drop-shadow(0 0 10px ${activeHall.colors.glow})` }}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <h2
+                                                        className="text-2xl md:text-3xl font-bold tracking-wider mb-2"
+                                                        style={{ color: activeHall.colors.primary }}
+                                                    >
+                                                        {activeHall.name}
+                                                    </h2>
+                                                    <h3 className="text-lg text-gray-400 font-serif italic">
+                                                        {activeHall.subtitle}
+                                                    </h3>
+                                                </div>
+                                            </div>
+
+                                            <p className="text-gray-300 font-sans leading-relaxed max-w-2xl mx-auto md:mx-0 text-sm md:text-base">
+                                                {activeHall.description}
+                                            </p>
+                                        </div>
+
+                                        {/* Questions List */}
                                         <div className="space-y-4">
-                                            {hall.questions.map(q => (
-                                                <QuestionCard
+                                            {activeHall.questions.map((q, i) => (
+                                                <motion.div
                                                     key={q.id}
-                                                    question={q}
-                                                    hallColors={hall.colors}
-                                                    isOpen={openQuestionId === q.id}
-                                                    onToggle={() => setOpenQuestionId(openQuestionId === q.id ? null : q.id)}
-                                                />
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ delay: i * 0.1 }}
+                                                >
+                                                    <QuestionCard
+                                                        question={q}
+                                                        hallColors={activeHall.colors}
+                                                        isOpen={openQuestionId === q.id}
+                                                        onToggle={() => setOpenQuestionId(openQuestionId === q.id ? null : q.id)}
+                                                    />
+                                                </motion.div>
                                             ))}
                                         </div>
-                                    </div>
-                                ))}
-                                {filteredHalls.length === 0 && (
-                                    <div className="text-center py-20 text-gray-500">
-                                        <p className="text-lg italic">"The scrolls contain no wisdom matching your query..."</p>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            /* HALL VIEW */
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={activeHall.id}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ duration: 0.4 }}
-                                    className="h-full flex flex-col"
-                                >
-                                    {/* Hall Header */}
-                                    <div className="mb-10 text-center md:text-left border-b border-white/10 pb-6 relative">
-                                        <div
-                                            className="absolute top-0 right-0 w-32 h-32 opacity-10 blur-3xl rounded-full pointer-events-none"
-                                            style={{ backgroundColor: activeHall.colors.primary }}
-                                        />
 
-                                        <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-4">
-                                            <div
-                                                className="p-3 rounded-xl bg-neutral-800/50 backdrop-blur-md shadow-xl border border-white/10"
-                                            >
-                                                <activeHall.icon
-                                                    className="w-8 h-8 md:w-10 md:h-10"
-                                                    style={{ color: activeHall.colors.primary, filter: `drop-shadow(0 0 10px ${activeHall.colors.glow})` }}
-                                                />
-                                            </div>
-                                            <div>
-                                                <h2
-                                                    className="text-3xl md:text-4xl font-bold tracking-wider mb-2"
-                                                    style={{ color: activeHall.colors.primary }}
-                                                >
-                                                    {activeHall.name}
-                                                </h2>
-                                                <h3 className="text-lg md:text-xl text-gray-400 font-serif italic">
-                                                    {activeHall.subtitle}
-                                                </h3>
-                                            </div>
-                                        </div>
-
-                                        <p className="text-gray-300 font-sans leading-relaxed max-w-2xl mx-auto md:mx-0">
-                                            {activeHall.description}
-                                        </p>
-                                    </div>
-
-                                    {/* Questions List */}
-                                    <div className="space-y-4">
-                                        {activeHall.questions.map((q, i) => (
-                                            <motion.div
-                                                key={q.id}
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: i * 0.1 }}
-                                            >
-                                                <QuestionCard
-                                                    question={q}
-                                                    hallColors={activeHall.colors}
-                                                    isOpen={openQuestionId === q.id}
-                                                    onToggle={() => setOpenQuestionId(openQuestionId === q.id ? null : q.id)}
-                                                />
-                                            </motion.div>
-                                        ))}
-                                    </div>
-
-                                </motion.div>
-                            </AnimatePresence>
-                        )}
-
+                                    </motion.div>
+                                </AnimatePresence>
+                            )}
+                        </div>
                     </main>
                 </div>
             </div>

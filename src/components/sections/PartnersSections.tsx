@@ -3,27 +3,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 // Assets
-import completeBg from '../../assets/partners/complete-bg.jpg';
+import completeBg from '../../assets/partners/complete-bg.webp';
 
 import StandardPartnerView from './partners/StandardPartnerView';
 import GridPartnerView from './partners/GridPartnerView';
 
-import goldRing from '../../assets/partners/gold-ring.png';
-import silverRing from '../../assets/partners/silver-ring.png';
-import bronzeRing from '../../assets/partners/bronze-ring.png';
+import goldRing from '../../assets/partners/gold-ring.webp';
+import silverRing from '../../assets/partners/silver-ring.webp';
+import bronzeRing from '../../assets/partners/bronze-ring.webp';
 
-import entionLogo from '../../assets/partners/ention-logo.png';
-import wsCubeLogo from '../../assets/partners/ws.cubetech-logo.png';
+import entionLogo from '../../assets/partners/ention-logo.webp';
+import wsCubeLogo from '../../assets/partners/ws.cubetech-logo.webp';
 
 // Silver Partners
-import gfgLogo from '../../assets/partners/geeksforgeeks-logo.png';
-import devfolioLogo from '../../assets/partners/devfolio-logo.png';
-import ethIndiaLogo from '../../assets/partners/ethindia-logo.png';
+import gfgLogo from '../../assets/partners/geeksforgeeks-logo.webp';
+import devfolioLogo from '../../assets/partners/devfolio-logo.webp';
+import ethIndiaLogo from '../../assets/partners/ethindia-logo.webp';
 
 // Bronze Partners
-import balsamiqLogo from '../../assets/partners/balsamiq-logo.png';
-import fluxorLogo from '../../assets/partners/fluxor-logo.png';
-import blockPenLogo from '../../assets/partners/blockpen-logo.png';
+import balsamiqLogo from '../../assets/partners/balsamiq-logo.webp';
+import fluxorLogo from '../../assets/partners/fluxor-logo.webp';
+import blockPenLogo from '../../assets/partners/blockpen-logo.webp';
 
 
 
