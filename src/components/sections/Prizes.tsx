@@ -273,7 +273,7 @@ export default function Prizes() {
                             initial={{ opacity: 0.6 }}
                             animate={{ opacity: [0.6, 1, 0.6] }}
                             transition={{ duration: 2, repeat: Infinity }}
-                            className="text-xs sm:text-sm text-neutral-400 mb-2 sm:mb-3 font-cinzel tracking-wider"
+                            className="text-xs sm:text-sm text-neutral-400 mb-2 sm:mb-3 font-heading tracking-wider"
                         >
                             {currentSection <= 1 ? 'Use ← → keys or scroll to explore' : 'Scroll to explore'}
                         </motion.p>
@@ -312,18 +312,8 @@ export default function Prizes() {
                     display: none;
                 }
                 body {
-                    font-family: 'Cinzel', serif;
+                    font-family: 'IM Fell English', serif;
                     overscroll-behavior: none; /* Prevent bounce on mobile */
-                }
-                .font-cinzel {
-                    font-family: 'Cinzel', serif;
-                }
-                .font-baskerville {
-                    font-family: 'Libre Baskerville', serif;
-                }
-                .font-medieval {
-                    font-family: 'Cinzel', serif;
-                    font-weight: 700;
                 }
                 @keyframes animate-clouds {
                     from { background-position: 0 0; }
@@ -613,7 +603,7 @@ export default function Prizes() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.8, ease: "easeInOut" }}
-                    className={`absolute inset-0 flex flex-col items-center justify-center z-10 font-cinzel ${currentSection === 0 ? 'block' : 'hidden'}`}
+                    className={`absolute inset-0 flex flex-col items-center justify-center z-10 font-heading ${currentSection === 0 ? 'block' : 'hidden'}`}
                 >
                     <div className="container mx-auto px-3 sm:px-6 md:px-8 py-4 sm:py-8 md:py-12 flex flex-col items-center justify-center h-full">
                         {/* HEADLINE */}
@@ -710,16 +700,16 @@ export default function Prizes() {
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                         className="hidden xl:flex absolute right-[5%] 2xl:right-[8%] flex-col items-start text-left w-[280px] 2xl:w-[320px] z-20"
                                     >
-                                        <h2 className="text-2xl xl:text-3xl 2xl:text-4xl tracking-[0.2em] xl:tracking-[0.25em] 2xl:tracking-[0.3em] mb-2 xl:mb-3" style={{ color: activePrize.color }}>
+                                        <h2 className="text-[64px] font-heading tracking-[0.2em] mb-2 xl:mb-3" style={{ color: activePrize.color }}>
                                             {activePrize.title}
                                         </h2>
-                                        <h3 className="text-4xl xl:text-5xl 2xl:text-6xl font-medieval text-white mb-2 xl:mb-3 leading-tight">
+                                        <h3 className="text-[48px] font-subheading font-bold italic text-[#DEC169] mb-2 xl:mb-3 leading-tight">
                                             {activePrize.god}
                                         </h3>
-                                        <p className="text-base xl:text-lg 2xl:text-xl italic text-neutral-400 font-baskerville mb-4 xl:mb-6 pb-3 xl:pb-4 w-full">
+                                        <p className="text-[36px] italic text-neutral-400 font-subheading mb-4 xl:mb-6 pb-3 xl:pb-4 w-full">
                                             {activePrize.role}
                                         </p>
-                                        <div className="text-5xl xl:text-6xl 2xl:text-7xl font-bold font-baskerville tracking-tighter" style={{
+                                        <div className="text-[96px] font-normal font-heading tracking-tighter" style={{
                                             color: activePrize.color,
                                             textShadow: `0 0 35px ${activePrize.color}60`
                                         }}>
@@ -740,16 +730,16 @@ export default function Prizes() {
                                 transition={{ duration: 0.5 }}
                                 className="xl:hidden text-center mt-6 sm:mt-8 md:mt-10 lg:mt-12 flex flex-col items-center px-4"
                             >
-                                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] mb-1 sm:mb-2 font-bold" style={{ color: activePrize.color }}>
+                                <h2 className="text-[40px] sm:text-[50px] md:text-[64px] tracking-[0.1em] mb-1 sm:mb-2 font-bold font-heading" style={{ color: activePrize.color }}>
                                     {activePrize.title}
                                 </h2>
-                                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medieval text-white mb-1 sm:mb-2 leading-tight drop-shadow-md">
+                                <h3 className="text-[32px] sm:text-[40px] md:text-[48px] font-subheading font-bold italic text-[#DEC169] mb-1 sm:mb-2 leading-tight drop-shadow-md">
                                     {activePrize.god}
                                 </h3>
-                                <p className="text-sm sm:text-base md:text-lg lg:text-xl italic text-neutral-400 font-baskerville mb-3 sm:mb-4">
+                                <p className="text-[24px] sm:text-[30px] md:text-[36px] italic text-neutral-400 font-subheading mb-3 sm:mb-4">
                                     {activePrize.role}
                                 </p>
-                                <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-baskerville tracking-tighter" style={{
+                                <div className="text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px] font-normal font-heading tracking-tighter" style={{
                                     color: activePrize.color,
                                     textShadow: `0 0 30px ${activePrize.color}50`
                                 }}>
@@ -768,7 +758,7 @@ export default function Prizes() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
-                className={`absolute inset-0 flex flex-col items-center justify-center z-20 font-cinzel ${currentSection === 1 ? 'block' : 'hidden'}`}
+                className={`absolute inset-0 flex flex-col items-center justify-center z-20 font-heading ${currentSection === 1 ? 'block' : 'hidden'}`}
             >
                 {/* Container with dynamic padding based on screen height */}
                 <div className="container mx-auto px-4 w-full h-full flex flex-col justify-center items-center pt-16 sm:pt-20 md:pt-24 pb-4">

@@ -4,13 +4,65 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
+@font-face {
+  font-family: 'Allrounder Monument Test';
+  src: url('./assets/fonts/AllrounderMonumentTest-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Allrounder Monument Test';
+  src: url('./assets/fonts/AllrounderMonumentTest-Book.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Allrounder Monument Test';
+  src: url('./assets/fonts/AllrounderMonumentTest-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Allrounder Monument Test';
+  src: url('./assets/fonts/AllrounderMonumentTest-Medium.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IM Fell English';
+  src: url('./assets/fonts/IMFellEnglish-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IM Fell English';
+  src: url('./assets/fonts/IMFellEnglish-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
 @import "tailwindcss";
+
+@theme {
+  --font-heading: "Allrounder Monument Test", "Cinzel", serif;
+  --font-subheading: "IM Fell English", "Libre Baskerville", serif;
+
+  /* Override default serif to use Subheading font */
+  --font-serif: "IM Fell English", "Libre Baskerville", serif;
+}
 
 :root {
   --font-uncial: "Uncial Antiqua", cursive;
-  --font-cinzel: "Cinzel", serif;
+  --font-cinzel: "Allrounder Monument Test", "Cinzel", serif;
+  /* Remapped to Heading */
   --font-medieval: "MedievalSharp", cursive;
-  --font-baskerville: "Libre Baskerville", serif;
+  --font-baskerville: "IM Fell English", "Libre Baskerville", serif;
+  /* Remapped to Subheading */
   --font-cursive: "Cinzel Decorative", cursive;
 
   --color-gold-50: #fff9e6;
@@ -40,6 +92,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #0c0a09;
+  font-family: 'IM Fell English', serif;
   /* Golden Greek Spear/Arrow Cursor */
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23d4af37' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E") 2 2, auto;
 }

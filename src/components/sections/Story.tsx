@@ -48,11 +48,11 @@ export function Story() {
                     transition={{ duration: 0.8, delay: 0.5 }}
                     className="w-full lg:w-3/5"
                 >
-                    <h1 className="text-4xl md:text-6xl font-cinzel font-bold text-amber-500 mb-8 drop-shadow-md">
+                    <h1 className="text-4xl md:text-6xl font-heading font-bold text-amber-500 mb-8 drop-shadow-md">
                         {aboutText.title}
                     </h1>
 
-                    <div className="space-y-6 text-lg md:text-xl text-stone-300 font-serif leading-relaxed tracking-wide text-justify">
+                    <div className="space-y-6 text-lg md:text-xl text-stone-300 font-subheading leading-relaxed tracking-wide text-justify">
                         {aboutText.paragraphs.map((para, index) => (
                             <p key={index} className="drop-shadow-sm">
                                 {para}

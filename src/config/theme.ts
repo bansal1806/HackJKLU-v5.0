@@ -11,7 +11,7 @@ export const theme = {
     'terracotta': '#7e4031',
     'golden-amber': '#ee8a3c',
     'ivory-cream': '#ffecd1',
-    
+
     // Extended Palette
     'bronze': '#CD7F32',
     'olive-green': '#6B8E23',
@@ -20,7 +20,7 @@ export const theme = {
     'gold-shimmer': '#FFD700',
     'stone-gray': '#8B8680',
   },
-  
+
   // Semantic color mappings
   semantic: {
     primary: '#6f1c16',      // blood-red
@@ -34,7 +34,7 @@ export const theme = {
     glow: '#ee8a3c',          // golden-amber
     shadow: '#4A0E0E',        // deep-wine
   },
-  
+
   // Greek mythology inspired gradients
   gradients: {
     blood: 'linear-gradient(135deg, #6f1c16 0%, #4A0E0E 100%)',
@@ -43,13 +43,13 @@ export const theme = {
     marble: 'linear-gradient(135deg, #F8F8FF 0%, #ffecd1 100%)',
     bronze: 'linear-gradient(135deg, #CD7F32 0%, #7e4031 100%)',
   },
-  
+
   // Typography
   fonts: {
-    serif: "'Cinzel', serif",      // Greek-inspired serif
-    sans: "'Lato', sans-serif",    // Clean sans-serif
+    serif: "'Allrounder Monument Test', 'Cinzel', serif",      // primary heading
+    sans: "'IM Fell English', 'Libre Baskerville', serif",    // secondary / body
   },
-  
+
   // Effects
   effects: {
     glow: {

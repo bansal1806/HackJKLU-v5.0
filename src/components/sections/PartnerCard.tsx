@@ -45,26 +45,26 @@ export function PartnerCard() {
                     transition={{ duration: 0.8, ease: "easeInOut" }}
                     className="text-center mb-16 hidden md:block"
                 >
-                    <h2 className="text-5xl md:text-6xl font-[Cinzel] text-ivory-cream mb-6 tracking-[0.4em] font-bold drop-shadow-[0_0_20px_rgba(255,236,209,0.3)]">
+                    <h2 className="text-5xl md:text-6xl font-heading text-ivory-cream mb-6 tracking-[0.4em] font-bold drop-shadow-[0_0_20px_rgba(255,236,209,0.3)]">
                         PAST PARTNERS
                     </h2>
-                    <h3 className="text-2xl md:text-3xl font-[Cinzel] text-stone-400 tracking-[0.3em] mb-4 uppercase">
+                    <h3 className="text-2xl md:text-3xl font-heading text-stone-400 tracking-[0.3em] mb-4 uppercase">
                         GOLD PARTNER
                     </h3>
-                    <h4 className="text-xl md:text-2xl font-[Cinzel] text-stone-500 tracking-[0.3em] uppercase">
+                    <h4 className="text-xl md:text-2xl font-heading text-stone-500 tracking-[0.3em] uppercase">
                         ENTION
                     </h4>
                 </motion.div>
 
                 {/* Mobile Headers */}
                 <div className="text-center mb-12 md:hidden">
-                    <h2 className="text-3xl font-[Cinzel] text-ivory-cream mb-2 tracking-[0.2em] font-bold">
+                    <h2 className="text-3xl font-heading text-ivory-cream mb-2 tracking-[0.2em] font-bold">
                         PAST PARTNERS
                     </h2>
-                    <h3 className="text-lg font-[Cinzel] text-stone-400 tracking-[0.1em] mb-1 uppercase">
+                    <h3 className="text-lg font-heading text-stone-400 tracking-[0.1em] mb-1 uppercase">
                         GOLD PARTNER
                     </h3>
-                    <h4 className="text-sm font-[Cinzel] text-stone-500 tracking-[0.1em] uppercase">
+                    <h4 className="text-sm font-heading text-stone-500 tracking-[0.1em] uppercase">
                         ENTION
                     </h4>
                 </div>
@@ -120,12 +120,12 @@ export function PartnerCard() {
                                 className="max-w-xl flex flex-col gap-6 text-left p-6 md:p-0"
                             >
                                 <div className="space-y-6">
-                                    <h4 className="text-3xl font-[Cinzel] text-ivory-cream uppercase md:block hidden tracking-widest border-b border-gold-500/20 pb-2">ENTION</h4>
-                                    <h4 className="text-2xl font-[Cinzel] text-ivory-cream uppercase md:hidden tracking-wider text-center">ENTION</h4>
-                                    <p className="text-stone-300 font-sans leading-relaxed text-sm md:text-lg text-justify opacity-90">
+                                    <h4 className="text-3xl font-heading text-ivory-cream uppercase md:block hidden tracking-widest border-b border-gold-500/20 pb-2">ENTION</h4>
+                                    <h4 className="text-2xl font-heading text-ivory-cream uppercase md:hidden tracking-wider text-center">ENTION</h4>
+                                    <p className="text-stone-300 font-subheading leading-relaxed text-sm md:text-lg text-justify opacity-90">
                                         Ention is a leading innovator in digital solutions, empowering businesses with cutting-edge technology and advanced automation tools to optimize operations and drive growth. It was incorporated on 28th Jan, 2022 in India to provide innovative laptop products, helping users stay connected with the latest technology trends. Focused on delivering customer-centric computing solutions, Ention stands apart with a strong emphasis on service and support.
                                     </p>
-                                    <p className="text-stone-300 font-sans leading-relaxed text-sm md:text-lg text-justify opacity-90">
+                                    <p className="text-stone-300 font-subheading leading-relaxed text-sm md:text-lg text-justify opacity-90">
                                         Ention is revolutionizing the laptop experience with high-performance devices designed for creators, gamers, and professionals. Featuring Intel and AMD processors, Ention laptops combine speed, power, and reliability to fuel your ambitions.
                                     </p>
                                 </div>

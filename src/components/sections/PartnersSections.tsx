@@ -211,7 +211,7 @@ export default function PartnersSections() {
     }, [currentSection, isAnimating, switchSection]);
 
     return (
-        <div ref={containerRef} className="relative bg-neutral-950 text-neutral-100 min-h-screen overflow-hidden font-cinzel">
+        <div ref={containerRef} className="relative bg-neutral-950 text-neutral-100 min-h-screen overflow-hidden font-heading">
 
             {/* Section Navigation Indicators */}
             <div className="fixed right-4 sm:right-6 md:right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 sm:gap-4 pointer-events-auto">
@@ -236,18 +236,9 @@ export default function PartnersSections() {
             </AnimatePresence>
 
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Allrounder:wght@400;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&display=swap');
-        .font-cinzel {
-          font-family: 'Cinzel', serif;
-        }
-        .font-allrounder {
-          font-family: 'Allrounder', 'Allrounder Monument', sans-serif;
-        }
-        .font-imfell {
-          font-family: 'IM Fell English', serif;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
+        
+
         
         /* Custom scrollbar hiding */
         .hide-scrollbar::-webkit-scrollbar {
@@ -317,7 +308,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                             } : {}}
                         >
                             <h2
-                                className="text-2xl sm:text-3xl md:text-4xl font-imfell tracking-wider uppercase mb-6 sm:mb-8 md:mb-10 text-center"
+                                className="text-2xl sm:text-3xl md:text-4xl font-heading tracking-wider uppercase mb-6 sm:mb-8 md:mb-10 text-center"
                                 style={{
                                     background: `linear-gradient(to bottom, ${group.color} 60%, #4a4a4a 100%)`,
                                     WebkitBackgroundClip: 'text',
@@ -355,7 +346,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                                                 />
                                             </div>
                                         </div>
-                                        <span className="text-sm sm:text-base md:text-xl font-cinzel text-[#EFE3A0]/80 tracking-wide text-center -mt-6 sm:-mt-8 md:-mt-10">
+                                        <span className="text-sm sm:text-base md:text-xl font-heading text-[#EFE3A0]/80 tracking-wide text-center -mt-6 sm:-mt-8 md:-mt-10">
                                             {partner.name}
                                         </span>
                                     </div>
@@ -407,10 +398,10 @@ function PartnerSection({ data }: { data: PartnerData }) {
 
                 {/* Header */}
                 <div className="fixed top-0 left-0 right-0 z-50 flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-24 pointer-events-none px-4 text-center">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-allrounder tracking-wider uppercase mb-1 sm:mb-2 md:mb-4" style={{ color: '#EFE3A0' }}>
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4" style={{ color: '#EFE3A0' }}>
                         PAST PARTNERS
                     </h1>
-                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-imfell tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
                         style={{
                             background: `linear-gradient(to bottom, ${data.themeColor || '#CD7F32'} 60%, #6E561C 100%)`,
                             WebkitBackgroundClip: 'text',
@@ -477,10 +468,10 @@ function PartnerSection({ data }: { data: PartnerData }) {
                                     exit={{ opacity: 0, y: -10 }}
                                     className="flex flex-col items-center gap-1"
                                 >
-                                    <span className="text-gold-400 font-cinzel tracking-widest text-sm sm:text-base uppercase opacity-80">
+                                    <span className="text-gold-400 font-heading tracking-widest text-sm sm:text-base uppercase opacity-80">
                                         Community Partner
                                     </span>
-                                    <span className="text-xl sm:text-3xl md:text-4xl font-allrounder text-[#EFE3A0] uppercase tracking-wider">
+                                    <span className="text-xl sm:text-3xl md:text-4xl font-heading text-[#EFE3A0] uppercase tracking-wider">
                                         {hoveredPartner.name}
                                     </span>
                                 </motion.div>
@@ -490,7 +481,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.5 }}
                                     exit={{ opacity: 0 }}
-                                    className="text-white/30 font-cinzel text-sm sm:text-base italic"
+                                    className="text-white/30 font-heading text-sm sm:text-base italic"
                                 >
                                     Hover over the sigils...
                                 </motion.div>
@@ -535,13 +526,13 @@ function PartnerSection({ data }: { data: PartnerData }) {
             {/* Header: Fixed Top */}
             <div className="fixed top-0 left-0 right-0 z-50 flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-24 pointer-events-none px-4 text-center">
                 <h1
-                    className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-allrounder tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
                     style={{ color: '#EFE3A0' }}
                 >
                     PAST PARTNERS
                 </h1>
                 <h2
-                    className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-imfell tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+                    className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
                     style={gradientStyle}
                 >
                     {data.title}
@@ -549,7 +540,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                 <motion.h3
                     animate={{ opacity: isHovered && data.logo ? 0 : 1 }}
                     transition={{ duration: 0.4 }}
-                    className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-allrounder tracking-wider uppercase"
+                    className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-heading tracking-wider uppercase"
                     style={gradientStyle}
                 >
                     {data.partnerName}
@@ -620,14 +611,14 @@ function PartnerSection({ data }: { data: PartnerData }) {
                             >
                                 <div className="space-y-4 sm:space-y-6">
                                     <h4
-                                        className="text-2xl sm:text-3xl font-allrounder uppercase tracking-widest border-b pb-2"
+                                        className="text-2xl sm:text-3xl font-heading uppercase tracking-widest border-b pb-2"
                                         style={{ color: data.themeColor, borderColor: `${data.themeColor}33` }}
                                     >
                                         {data.partnerName}
                                     </h4>
 
                                     {data.description.map((desc: string, i: number) => (
-                                        <p key={i} className="text-[#FFEAA4] font-imfell leading-relaxed text-sm sm:text-base md:text-lg text-justify opacity-90">
+                                        <p key={i} className="text-[#FFEAA4] font-subheading leading-relaxed text-sm sm:text-base md:text-lg text-justify opacity-90">
                                             {desc}
                                         </p>
                                     ))}

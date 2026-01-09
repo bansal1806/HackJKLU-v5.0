@@ -20,12 +20,12 @@ export function HeroWith3D() {
 
     return (
         <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
-            
+
             {/* 3D Skybox Background */}
             <div className="absolute inset-0 z-0">
                 <Canvas
-                    gl={{ 
-                        antialias: true, 
+                    gl={{
+                        antialias: true,
                         alpha: false,
                         powerPreference: "high-performance",
                     }}
@@ -35,8 +35,8 @@ export function HeroWith3D() {
                         <div className="w-full h-full bg-gradient-to-b from-purple-900 to-black" />
                     }>
                         <PerspectiveCamera makeDefault position={[0, 0, 0]} />
-                        <SimpleSkybox 
-                            imagePath="/skybox.jpg" 
+                        <SimpleSkybox
+                            imagePath="/skybox.jpg"
                             autoRotate={true}
                             rotationSpeed={0.001}
                         />
@@ -53,7 +53,7 @@ export function HeroWith3D() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
                 >
-                    <h2 className="text-sm md:text-base tracking-[0.3em] uppercase mb-4 font-sans" style={{ color: 'var(--stone-gray)' }}>
+                    <h2 className="text-sm md:text-base tracking-[0.3em] uppercase mb-4 font-subheading" style={{ color: 'var(--stone-gray)' }}>
                         March 13<sup className="text-[0.6em] lowercase">th</sup> - 15<sup className="text-[0.6em] lowercase">th</sup>, 2026 • JK Lakshmipat University
                     </h2>
                 </motion.div>
@@ -64,10 +64,10 @@ export function HeroWith3D() {
                     transition={{ duration: 1.8, delay: 0.4, ease: "easeOut" }}
                     className="mb-8 md:mb-12"
                 >
-                    <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-[Cinzel] font-bold tracking-wider leading-none px-2" style={{ color: 'var(--ivory-cream)', textShadow: '0 0 30px rgba(74, 14, 14, 0.8), 0 10px 40px rgba(74, 14, 14, 0.6)' }}>
+                    <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-heading font-bold tracking-wider leading-none px-2" style={{ color: 'var(--ivory-cream)', textShadow: '0 0 30px rgba(74, 14, 14, 0.8), 0 10px 40px rgba(74, 14, 14, 0.6)' }}>
                         HACKJKLU<br />5.0
                     </h1>
-                    <p className="text-sm sm:text-lg md:text-xl font-[Cinzel] mt-4 tracking-[0.2em] uppercase text-glow-amber" style={{ color: 'var(--gold-shimmer)' }}>
+                    <p className="text-sm sm:text-lg md:text-xl font-heading mt-4 tracking-[0.2em] uppercase text-glow-amber" style={{ color: 'var(--gold-shimmer)' }}>
                         Where innovation meets code
                     </p>
                 </motion.div>
