@@ -2,6 +2,12 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ChevronRight, ChevronDown, Zap, Shield, Hammer, Sun } from 'lucide-react';
 
+// Background Images
+import zeusBg from '../../assets/faq/zeus.webp';
+import athenaBg from '../../assets/faq/athena.webp';
+import hephaestusBg from '../../assets/faq/hephatesus.webp';
+import apolloBg from '../../assets/faq/apollo.webp';
+
 // --- Types ---
 type ThemeColors = {
     primary: string;
@@ -25,6 +31,7 @@ type Hall = {
     description: string;
     colors: ThemeColors;
     questions: Question[];
+    backgroundImage: string;
 };
 
 // --- Data ---
@@ -41,6 +48,7 @@ const halls: Hall[] = [
             accent: '#FFFFFF',
             glow: 'rgba(212, 175, 55, 0.6)'
         },
+        backgroundImage: zeusBg,
         questions: [
             { id: 'z1', q: "Who can participate?", a: "Any student with a valid ID card from a recognized institute can participate. Both undergraduate and postgraduate students are welcome into the arena." },
             { id: 'z2', q: "Do I need prior experience?", a: "No! The gods favor the bold. Beginners are welcome, and we have mentors to guide you through your first odyssey." },
@@ -59,6 +67,7 @@ const halls: Hall[] = [
             accent: '#9CAF88', // Sage Green
             glow: 'rgba(192, 192, 192, 0.6)'
         },
+        backgroundImage: athenaBg,
         questions: [
             { id: 'a1', q: "What is the team size?", a: "You can form an alliance of 1 to 5 members. Choose your companions wisely." },
             { id: 'a2', q: "Will accommodation be provided?", a: "Yes, for our offline champions. Food and shelter will be provided within the campus grounds during the event." },
@@ -77,6 +86,7 @@ const halls: Hall[] = [
             accent: '#FF6B35', // Orange
             glow: 'rgba(205, 127, 50, 0.6)'
         },
+        backgroundImage: hephaestusBg,
         questions: [
             { id: 'h1', q: "Do we need specific tech stacks?", a: "No specific stack is mandated. You are free to forge your creation using any tools or languages you prefer." },
             { id: 'h2', q: "What are the judging criteria?", a: "Innovation, Technical Complexity, Practicality, and Presentation. Impress the judges with a complete, working prototype." },
@@ -95,6 +105,7 @@ const halls: Hall[] = [
             accent: '#FFFFFF',
             glow: 'rgba(255, 215, 0, 0.6)'
         },
+        backgroundImage: apolloBg,
         questions: [
             { id: 'ap1', q: "When is the registration deadline?", a: "The oracle decrees that registrations close few days before the event. Act swiftly!" },
             { id: 'ap2', q: "Is there a registration fee?", a: "No tribute is required. HACKJKLU 5.0 is completely free for all participants." },
@@ -122,9 +133,9 @@ const QuestionCard = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className={`group relative overflow-hidden rounded-lg border transition-all duration-300 ${isOpen ? 'bg-neutral-900/50' : 'bg-transparent hover:bg-neutral-900/30'}`}
+            className={`group relative overflow-hidden rounded-lg border transition-all duration-300 backdrop-blur-sm ${isOpen ? 'bg-black/40' : 'bg-black/20 hover:bg-black/30'}`}
             style={{
-                borderColor: isOpen ? hallColors.primary : 'rgba(255,255,255,0.1)',
+                borderColor: isOpen ? hallColors.primary : 'rgba(255,255,255,0.2)',
                 boxShadow: isOpen ? `0 0 20px ${hallColors.glow}` : 'none'
             }}
         >
@@ -171,7 +182,7 @@ const QuestionCard = ({
                                 className="h-px w-full mb-4 opacity-30"
                                 style={{ backgroundColor: hallColors.primary }}
                             />
-                            <p className="text-gray-300 leading-relaxed font-sans text-sm md:text-base">
+                            <p className="text-gray-200 leading-relaxed font-sans text-sm md:text-base drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                                 {question.a}
                             </p>
                         </div>
@@ -209,14 +220,44 @@ export function FAQ() {
     return (
         <section className="h-screen bg-[#0F172A] text-white relative overflow-hidden font-cinzel flex flex-col">
 
-            {/* Background Ambience */}
+            {/* Background Ambience with Hall Images */}
             <div className="absolute inset-0 pointer-events-none">
-                <div
-                    className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] opacity-10 blur-[100px]"
+                {/* Hall Background Image */}
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={activeHall.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="absolute inset-0"
+                    >
+                        <img
+                            src={activeHall.backgroundImage}
+                            alt={`${activeHall.name} background`}
+                            className="w-full h-full object-cover"
+                            style={{
+                                filter: 'brightness(0.4) contrast(1.1)',
+                                transform: 'scale(1.05)',
+                            }}
+                        />
+                        {/* Very subtle overlay for minimal text readability */}
+                        <div className="absolute inset-0 bg-black/20" />
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* Colored Glow Effect */}
+                <motion.div
+                    key={`glow-${activeHall.id}`}
+                    initial={{ opacity: 0.1 }}
+                    animate={{ opacity: 0.15 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] blur-[100px]"
                     style={{ backgroundColor: activeHall.colors.primary }}
                 />
+
                 {/* Greek Pattern Overlay */}
-                <div className="absolute inset-0 opacity-[0.03]"
+                <div className="absolute inset-0 opacity-[0.02]"
                     style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`
                     }}
@@ -253,7 +294,7 @@ export function FAQ() {
                                 placeholder="Search wisdom..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full bg-neutral-900/50 border border-neutral-700 rounded-lg py-3 pl-10 pr-4 text-sm font-sans focus:outline-none focus:border-yellow-500/50 transition-all placeholder:text-gray-600"
+                                className="w-full bg-black/40 backdrop-blur-sm border border-white/20 rounded-lg py-3 pl-10 pr-4 text-sm font-sans focus:outline-none focus:border-yellow-500/50 transition-all placeholder:text-gray-500"
                             />
                         </div>
 
@@ -267,7 +308,7 @@ export function FAQ() {
                                     <button
                                         key={hall.id}
                                         onClick={() => handleHallChange(hall.id)}
-                                        className={`relative group shrink-0 lg:w-full text-left p-4 rounded-lg border transition-all duration-300 overflow-hidden ${isActive ? 'bg-neutral-800/80 border-transparent shadow-lg' : 'bg-transparent border-transparent hover:bg-neutral-800/30'}`}
+                                        className={`relative group shrink-0 lg:w-full text-left p-4 rounded-lg border transition-all duration-300 overflow-hidden backdrop-blur-sm ${isActive ? 'bg-black/40 border-white/20 shadow-lg' : 'bg-black/20 border-white/10 hover:bg-black/30'}`}
                                     >
                                         {/* Hover Glow Background */}
                                         <div
@@ -286,7 +327,7 @@ export function FAQ() {
                                         <div className="flex items-center justify-between relative z-10 w-full">
                                             <div className="flex items-center gap-3">
                                                 <div
-                                                    className={`p-2 rounded-md transition-colors duration-300 ${isActive ? 'bg-neutral-900' : 'bg-neutral-800'}`}
+                                                    className={`p-2 rounded-md transition-colors duration-300 backdrop-blur-sm ${isActive ? 'bg-black/50' : 'bg-black/30'}`}
                                                 >
                                                     <Icon
                                                         className="w-5 h-5"
@@ -316,7 +357,7 @@ export function FAQ() {
                     </aside>
 
                     {/* Main Content Area */}
-                    <main className="flex-1 bg-neutral-900/20 rounded-2xl border border-white/5 p-6 md:p-8 relative overflow-hidden backdrop-blur-sm flex flex-col min-h-0">
+                    <main className="flex-1 rounded-2xl p-6 md:p-8 relative overflow-hidden flex flex-col min-h-0">
 
                         {/* Scrollable Inner Content */}
                         <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pr-2">
@@ -363,17 +404,17 @@ export function FAQ() {
                                         transition={{ duration: 0.4 }}
                                         className="flex flex-col"
                                     >
-                                        {/* Hall Header */}
-                                        <div className="mb-8 text-center md:text-left border-b border-white/10 pb-6 relative shrink-0">
-                                            <div
-                                                className="absolute top-0 right-0 w-32 h-32 opacity-10 blur-3xl rounded-full pointer-events-none"
-                                                style={{ backgroundColor: activeHall.colors.primary }}
-                                            />
+                        {/* Hall Header */}
+                        <div className="mb-8 text-center md:text-left border-b border-white/20 pb-6 relative shrink-0">
+                            <div
+                                className="absolute top-0 right-0 w-32 h-32 opacity-15 blur-3xl rounded-full pointer-events-none"
+                                style={{ backgroundColor: activeHall.colors.primary }}
+                            />
 
                                             <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-4">
-                                                <div
-                                                    className="p-3 rounded-xl bg-neutral-800/50 backdrop-blur-md shadow-xl border border-white/10"
-                                                >
+                                            <div
+                                                className="p-3 rounded-xl bg-black/40 backdrop-blur-md shadow-xl border border-white/20"
+                                            >
                                                     <activeHall.icon
                                                         className="w-8 h-8 md:w-10 md:h-10"
                                                         style={{ color: activeHall.colors.primary, filter: `drop-shadow(0 0 10px ${activeHall.colors.glow})` }}
@@ -386,13 +427,13 @@ export function FAQ() {
                                                     >
                                                         {activeHall.name}
                                                     </h2>
-                                                    <h3 className="text-lg text-gray-400 font-serif italic">
+                                                    <h3 className="text-lg text-gray-300 font-serif italic drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                                                         {activeHall.subtitle}
                                                     </h3>
                                                 </div>
                                             </div>
 
-                                            <p className="text-gray-300 font-sans leading-relaxed max-w-2xl mx-auto md:mx-0 text-sm md:text-base">
+                                            <p className="text-gray-200 font-sans leading-relaxed max-w-2xl mx-auto md:mx-0 text-sm md:text-base drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                                                 {activeHall.description}
                                             </p>
                                         </div>

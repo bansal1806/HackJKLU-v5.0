@@ -2,7 +2,8 @@ import { memo, useMemo } from 'react';
 
 export const HeroStaticLayers = memo(function HeroStaticLayers() {
     // Generate static random particles ONCE
-    const particles = useMemo(() => Array.from({ length: 150 }).map((_, i) => ({
+    // OPTIMIZATION: Reduced from 150 to 50 for better mobile performance
+    const particles = useMemo(() => Array.from({ length: 50 }).map((_, i) => ({
         id: i,
         top: Math.random() * 100 + '%',
         left: Math.random() * 100 + '%',
@@ -191,9 +192,19 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
                     // To keep original overlap logic, we might need z-indices to be handled carefully. 
                     // BUT, checking Hero.tsx, rings are behind the text.
                     zIndex: 10,
-                    transform: 'translate(calc(-50% + 33px), calc(-50% + 33px))',
+                    // transform moved to CSS for responsive control
                 }}
             >
+                <style>{`
+                    .rings-container {
+                        transform: translate(calc(-50% + 33px), calc(-50% + 33px));
+                    }
+                    @media (max-width: 768px) {
+                        .rings-container {
+                            transform: translate(-50%, -50%);
+                        }
+                    }
+                `}</style>
                 {/* Outer Runic Ring */}
                 <div className="absolute inset-0 flex items-center justify-center">
                     <img
@@ -257,7 +268,7 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
                     left: '50%',
                     transform: 'translateX(-50%)',
                     width: 'auto',
-                    height: 'clamp(26vh, 60vh, 65vh)', 
+                    height: 'clamp(26vh, 60vh, 65vh)',
                     objectFit: 'contain',
                     objectPosition: 'bottom center',
                     opacity: 1,

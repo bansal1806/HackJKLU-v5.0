@@ -306,11 +306,16 @@ function FloorCarousel() {
 
                     // Perspective Scale
                     const normalizedY = (y + yRadius) / (yRadius * 2);
-                    const scale = 0.5 + (normalizedY * 0.5);
+                    let scale = 0.5 + (normalizedY * 0.5);
                     const zIndex = Math.floor(normalizedY * 100);
 
                     // Center is index 3 in a 7-item array (0 1 2 [3] 4 5 6)
                     const isCenter = speaker.indexPosition === 3;
+
+                    // SCALE BOOST for center item (Responsive)
+                    if (isCenter) {
+                        scale *= isMobile ? 1.3 : 1.6; // 30% boost on mobile, 60% on desktop
+                    }
 
                     return (
                         <SpeakerCard

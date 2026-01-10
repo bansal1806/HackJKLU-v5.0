@@ -48,27 +48,27 @@ export const CountdownTimer = memo(function CountdownTimer() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: 'clamp(8px, 4vw, 32px)',
+                    gap: 'clamp(12px, 4vw, 32px)',
                     padding: '20px clamp(10px, 5vw, 48px)',
                 }}
             >
                 {/* Days */}
-                <TimeUnit value={timeLeft.days} label="ΗΜΕΡΕΣ" />
+                <TimeUnit value={timeLeft.days} label="DAYS" />
 
                 <Separator />
 
                 {/* Hours */}
-                <TimeUnit value={timeLeft.hours} label="ΩΡΕΣ" />
+                <TimeUnit value={timeLeft.hours} label="HOURS" />
 
                 <Separator />
 
                 {/* Minutes */}
-                <TimeUnit value={timeLeft.minutes} label="ΛΕΠΤΑ" />
+                <TimeUnit value={timeLeft.minutes} label="MINS" />
 
                 <Separator />
 
                 {/* Seconds */}
-                <TimeUnit value={timeLeft.seconds} label="ΔΕΥΤ" />
+                <TimeUnit value={timeLeft.seconds} label="SEC" />
             </div>
         </div>
     );
@@ -92,7 +92,7 @@ const TimeUnit = ({ value, label }: { value: number, label: string }) => (
                 textShadow: '2px 2px 0px #b8850f, 4px 4px 0px #2a1a00, 6px 6px 4px rgba(116, 33, 33, 0.8)',
                 minWidth: 'clamp(40px, 10vw, 80px)',
             }}
-            >
+        >
             {String(value).padStart(2, '0')}
         </div>
         <div

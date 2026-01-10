@@ -40,13 +40,19 @@ const SocialIcon = memo(({ icon }: { icon: string }) => (
 const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [isCompactDesktop, setIsCompactDesktop] = useState(false);
 
-    // Check for mobile/tablet screen size
+    // Check for mobile/tablet and compact desktop screen size
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
+        const handleResize = () => {
+            const width = window.innerWidth;
+            setIsMobile(width < 1024);
+            setIsCompactDesktop(width >= 1024 && width < 1400);
+        };
+
+        handleResize(); // Initial check
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     const toggleView = () => {
@@ -88,7 +94,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
             </div>
 
             {/* Header: Fixed Top -> Absolute (scrolls with section) */}
-            <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-24 pointer-events-none px-4 text-center">
+            <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-12 sm:pt-16 md:pt-28 lg:pt-32 pointer-events-none px-4 text-center transition-all duration-300">
                 <h1
                     className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]"
                 >
@@ -111,16 +117,19 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
             </div>
 
             {/* Interaction Area */}
-            <div className={`absolute inset-0 z-40 flex items-center justify-center ${isMobile ? 'pt-32' : ''}`}>
-                <div className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-4' : 'gap-16'}`}>
+            <div className={`absolute inset-0 z-40 flex items-center justify-center ${isMobile ? 'pt-[25vh] md:pt-[30vh] landscape:pt-16' : 'pt-32 lg:pt-40'}`}>
+                <div className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-2 sm:gap-4' : 'gap-8 lg:gap-16'}`}>
 
                     {/* Ring Group - Clickable on Mobile */}
                     <motion.div
                         className="flex items-center justify-center cursor-pointer relative"
                         // Animation: Mobile = Shift UP, Desktop = Shift LEFT
+                        // Dynamic shift amount: less for compact desktop
                         animate={
                             isHovered && data.logo
-                                ? (isMobile ? { y: -50, scale: 0.8 } : { x: -300 })
+                                ? (isMobile
+                                    ? { y: -50, scale: 0.8 }
+                                    : { x: isCompactDesktop ? -180 : -300 })
                                 : { x: 0, y: 0, scale: 1 }
                         }
                         transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -132,14 +141,15 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="absolute -top-8 text-[#EFE3A0]/60 text-xs font-heading tracking-widest uppercase"
+                                className="absolute -bottom-12 text-[#EFE3A0]/60 text-xs font-heading tracking-widest uppercase"
                             >
                                 Tap to view details
                             </motion.div>
                         )}
 
                         {/* Adjust Ring Size for Mobile vs Desktop */}
-                        <div className="relative w-[70vw] h-[70vw] max-w-[280px] max-h-[280px] sm:max-w-none sm:max-h-none sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] will-change-transform object-contain">
+                        {/* Added max-w constraints for intermediate screens */}
+                        <div className="relative w-[70vw] h-[70vw] max-w-[280px] max-h-[280px] sm:max-w-none sm:max-h-none sm:w-[320px] sm:h-[320px] md:w-[360px] md:h-[360px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] will-change-transform object-contain">
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{

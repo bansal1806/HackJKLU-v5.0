@@ -241,7 +241,7 @@ export default function PartnersSections() {
         <div ref={containerRef} className="relative bg-neutral-950 text-neutral-100 min-h-screen overflow-hidden font-heading">
 
             {/* Section Navigation Indicators */}
-            <div className="fixed right-4 sm:right-6 md:right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 sm:gap-4 pointer-events-auto">
+            <div className="fixed right-2 sm:right-6 md:right-8 lg:right-12 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 sm:gap-4 pointer-events-auto">
                 {partnersData.map((section) => (
                     <button
                         key={section.id}

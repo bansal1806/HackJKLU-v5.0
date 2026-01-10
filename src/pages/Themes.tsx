@@ -249,7 +249,7 @@ export function Themes() {
               onClick={handlePrev}
               whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
               whileTap={{ scale: 0.95 }}
-              className="absolute left-[320px] md:left-20 z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none"
+              className="absolute z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none left-[25%] bottom-[-60px] md:left-20 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
               style={{
                 filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
               }}
@@ -261,7 +261,7 @@ export function Themes() {
               onClick={handleNext}
               whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
               whileTap={{ scale: 0.95 }}
-              className="absolute right-[320px] md:right-20 z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none"
+              className="absolute z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none right-[25%] bottom-[-60px] md:right-20 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
               style={{
                 filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
               }}
