@@ -464,7 +464,7 @@ export function Themes() {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -20 }}
                                     transition={{ delay: 0.8, duration: 0.6 }}
-                                    className="w-full max-w-md h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-700 scrollbar-track-transparent flex-1"
+                                    className="w-full max-w-md h-48 overflow-y-auto themes-scrollbar flex-1"
                                     style={{
                                       background: 'transparent',
                                       border: '1px solid rgba(212, 175, 55, 0.4)',

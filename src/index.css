@@ -103,8 +103,7 @@ body {
   font-family: 'IM Fell English', serif;
   /* Golden Greek Spear/Arrow Cursor */
   cursor:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23d4af37' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E")
-      2 2,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23d4af37' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E") 2 2,
     auto;
 }
 
@@ -117,8 +116,7 @@ select,
 textarea,
 .cursor-pointer {
   cursor:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23ffd700' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E")
-      2 2,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23ffd700' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E") 2 2,
     pointer !important;
 }
 
@@ -200,4 +198,32 @@ textarea,
 
 .ring-glow-inner {
   transition: filter 0.4s ease-out;
+}
+
+/* Custom Scrollbar for Themes Page Content */
+.themes-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #5c3a21 rgba(62, 39, 21, 0.1);
+}
+
+.themes-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.themes-scrollbar::-webkit-scrollbar-track {
+  background: rgba(62, 39, 21, 0.05);
+  border-radius: 4px;
+  margin: 4px 0;
+}
+
+.themes-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #5c3a21 0%, #8b5a2b 50%, #5c3a21 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(92, 58, 33, 0.3);
+  box-shadow: 0 0 4px rgba(62, 39, 21, 0.2);
+}
+
+.themes-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #6d4528 0%, #a06b35 50%, #6d4528 100%);
+  box-shadow: 0 0 6px rgba(62, 39, 21, 0.4);
 }
