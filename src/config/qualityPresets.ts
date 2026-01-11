@@ -49,4 +49,3 @@ export const qualityPresets: Record<'high' | 'medium' | 'low', QualityPreset> = 
     textureMaxSize: 1024,
   },
 };
-

@@ -8,12 +8,12 @@ export const theme = {
     // Primary Colors
     'blood-red': '#6f1c16',
     'void-black': '#000000',
-    'terracotta': '#7e4031',
+    terracotta: '#7e4031',
     'golden-amber': '#ee8a3c',
     'ivory-cream': '#ffecd1',
 
     // Extended Palette
-    'bronze': '#CD7F32',
+    bronze: '#CD7F32',
     'olive-green': '#6B8E23',
     'marble-white': '#F8F8FF',
     'deep-wine': '#4A0E0E',
@@ -23,16 +23,16 @@ export const theme = {
 
   // Semantic color mappings
   semantic: {
-    primary: '#6f1c16',      // blood-red
-    secondary: '#7e4031',     // terracotta
-    accent: '#ee8a3c',        // golden-amber
-    background: '#000000',    // void-black
-    text: '#ffecd1',          // ivory-cream
+    primary: '#6f1c16', // blood-red
+    secondary: '#7e4031', // terracotta
+    accent: '#ee8a3c', // golden-amber
+    background: '#000000', // void-black
+    text: '#ffecd1', // ivory-cream
     textSecondary: '#8B8680', // stone-gray
-    highlight: '#FFD700',     // gold-shimmer
-    border: '#7e4031',        // terracotta
-    glow: '#ee8a3c',          // golden-amber
-    shadow: '#4A0E0E',        // deep-wine
+    highlight: '#FFD700', // gold-shimmer
+    border: '#7e4031', // terracotta
+    glow: '#ee8a3c', // golden-amber
+    shadow: '#4A0E0E', // deep-wine
   },
 
   // Greek mythology inspired gradients
@@ -46,8 +46,8 @@ export const theme = {
 
   // Typography
   fonts: {
-    serif: "'Allrounder Monument Test', 'Cinzel', serif",      // primary heading
-    sans: "'IM Fell English', 'Libre Baskerville', serif",    // secondary / body
+    serif: "'Allrounder Monument Test', 'Cinzel', serif", // primary heading
+    sans: "'IM Fell English', 'Libre Baskerville', serif", // secondary / body
   },
 
   // Effects
@@ -67,4 +67,3 @@ export const theme = {
 
 export type ThemeColors = typeof theme.colors;
 export type SemanticColors = typeof theme.semantic;
-

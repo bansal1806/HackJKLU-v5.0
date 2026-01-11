@@ -40,7 +40,5 @@ export function Skybox({ imagePath, intensity = 1 }: SkyboxProps) {
     };
   }, [texture, scene, intensity]);
 
-
-
   return null; // This component doesn't render anything visible itself
 }

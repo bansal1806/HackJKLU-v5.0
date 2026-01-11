@@ -13,12 +13,12 @@ interface SceneProps {
   adaptiveQuality?: boolean;
 }
 
-export function Scene({ 
-  children, 
+export function Scene({
+  children,
   cameraPosition = [0, 0, 5],
   enableControls = true,
   enableEnvironment = true,
-  adaptiveQuality = true
+  adaptiveQuality = true,
 }: SceneProps) {
   const { quality } = useAdaptiveQuality();
   const preset = adaptiveQuality ? qualityPresets[quality] : qualityPresets.high;
@@ -27,10 +27,10 @@ export function Scene({
     <div className="w-full h-full">
       <Leva collapsed />
       <Canvas
-        gl={{ 
-          antialias: preset.antialias, 
+        gl={{
+          antialias: preset.antialias,
           alpha: true,
-          powerPreference: "high-performance",
+          powerPreference: 'high-performance',
         }}
         shadows={preset.shadowMap}
         dpr={preset.pixelRatio} // Adaptive pixel ratio
@@ -46,4 +46,3 @@ export function Scene({
     </div>
   );
 }
-

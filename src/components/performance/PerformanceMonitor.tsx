@@ -6,9 +6,8 @@ export function PerformanceMonitor() {
   const { quality } = useAdaptiveQuality();
 
   // Only show on development or with query param
-  const showMonitor = 
-    import.meta.env.DEV || 
-    new URLSearchParams(window.location.search).has('perf');
+  const showMonitor =
+    import.meta.env.DEV || new URLSearchParams(window.location.search).has('perf');
 
   if (!showMonitor) return null;
 
@@ -17,7 +16,11 @@ export function PerformanceMonitor() {
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <span className="text-white/60">FPS:</span>
-          <span className={fps >= 55 ? 'text-green-400' : fps >= 30 ? 'text-yellow-400' : 'text-red-400'}>
+          <span
+            className={
+              fps >= 55 ? 'text-green-400' : fps >= 30 ? 'text-yellow-400' : 'text-red-400'
+            }
+          >
             {fps}
           </span>
         </div>
@@ -33,4 +36,3 @@ export function PerformanceMonitor() {
     </div>
   );
 }
-

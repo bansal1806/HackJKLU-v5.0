@@ -47,4 +47,3 @@ export function useAdaptiveQuality() {
 
   return { quality, fps, setQuality };
 }
-

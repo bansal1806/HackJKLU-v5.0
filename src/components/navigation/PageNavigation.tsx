@@ -47,8 +47,12 @@ export function PageNavigation({ onNext }: { onNext?: () => void }) {
               <span
                 className="text-xs md:text-base font-[Cinzel] pb-1 transition-colors"
                 style={{ borderBottom: '1px solid rgba(255, 215, 0, 0.5)' }}
-                onMouseEnter={(e) => (e.currentTarget.style.borderBottomColor = 'var(--gold-shimmer)')}
-                onMouseLeave={(e) => (e.currentTarget.style.borderBottomColor = 'rgba(255, 215, 0, 0.5)')}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.borderBottomColor = 'var(--gold-shimmer)')
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.borderBottomColor = 'rgba(255, 215, 0, 0.5)')
+                }
               >
                 {previousPage.name}
               </span>
@@ -109,8 +113,12 @@ export function PageNavigation({ onNext }: { onNext?: () => void }) {
                 <span
                   className="text-xs md:text-base font-[Cinzel] pb-1 transition-colors"
                   style={{ borderBottom: '1px solid rgba(255, 215, 0, 0.5)' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderBottomColor = 'var(--gold-shimmer)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderBottomColor = 'rgba(255, 215, 0, 0.5)')}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.borderBottomColor = 'var(--gold-shimmer)')
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.borderBottomColor = 'rgba(255, 215, 0, 0.5)')
+                  }
                 >
                   {nextPage.name}
                 </span>

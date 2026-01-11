@@ -12,13 +12,13 @@ interface ModelProps {
   animationSpeed?: number;
 }
 
-export function Model({ 
-  path, 
+export function Model({
+  path,
   position = [0, 0, 0],
   rotation = [0, 0, 0],
   scale = 1,
   animate = false,
-  animationSpeed = 1
+  animationSpeed = 1,
 }: ModelProps) {
   const { scene } = useGLTF(path);
   const groupRef = useRef<THREE.Group>(null);
@@ -52,4 +52,3 @@ export function Model({
 Model.preload = (path: string) => {
   useGLTF.preload(path);
 };
-

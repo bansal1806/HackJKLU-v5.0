@@ -16,7 +16,7 @@ export function useAudio({
   loop = false,
   autoplay = false,
   spatial = false,
-  position = [0, 0, 0]
+  position = [0, 0, 0],
 }: UseAudioOptions) {
   const howlRef = useRef<Howl | null>(null);
 
@@ -64,12 +64,11 @@ export function useAudio({
     howlRef.current?.volume(vol);
   }, []);
 
-  return { 
-    play, 
-    pause, 
-    stop, 
-    setVolume, 
-    howl: howlRef.current 
+  return {
+    play,
+    pause,
+    stop,
+    setVolume,
+    howl: howlRef.current,
   };
 }
-

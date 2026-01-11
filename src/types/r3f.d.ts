@@ -2,10 +2,10 @@ import { extend, ThreeElements } from '@react-three/fiber';
 import * as THREE from 'three';
 
 // Extend the catalog with Three.js objects
-extend({ 
-  Mesh: THREE.Mesh, 
-  SphereGeometry: THREE.SphereGeometry, 
-  MeshBasicMaterial: THREE.MeshBasicMaterial 
+extend({
+  Mesh: THREE.Mesh,
+  SphereGeometry: THREE.SphereGeometry,
+  MeshBasicMaterial: THREE.MeshBasicMaterial,
 });
 
 declare module '@react-three/fiber' {
@@ -22,4 +22,3 @@ declare module '@react-three/fiber' {
     }
   }
 }
-

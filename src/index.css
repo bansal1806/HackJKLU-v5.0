@@ -54,24 +54,24 @@
   font-display: swap;
 }
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-heading: "Allrounder Monument Test", "Cinzel", serif;
-  --font-subheading: "IM Fell English", "Libre Baskerville", serif;
+  --font-heading: 'Allrounder Monument Test', 'Cinzel', serif;
+  --font-subheading: 'IM Fell English', 'Libre Baskerville', serif;
 
   /* Override default serif to use Subheading font */
-  --font-serif: "IM Fell English", "Libre Baskerville", serif;
+  --font-serif: 'IM Fell English', 'Libre Baskerville', serif;
 }
 
 :root {
-  --font-uncial: "Uncial Antiqua", cursive;
-  --font-cinzel: "Allrounder Monument Test", "Cinzel", serif;
+  --font-uncial: 'Uncial Antiqua', cursive;
+  --font-cinzel: 'Allrounder Monument Test', 'Cinzel', serif;
   /* Remapped to Heading */
-  --font-medieval: "MedievalSharp", cursive;
-  --font-baskerville: "IM Fell English", "Libre Baskerville", serif;
+  --font-medieval: 'MedievalSharp', cursive;
+  --font-baskerville: 'IM Fell English', 'Libre Baskerville', serif;
   /* Remapped to Subheading */
-  --font-cursive: "Cinzel Decorative", cursive;
+  --font-cursive: 'Cinzel Decorative', cursive;
 
   --color-gold-50: #fff9e6;
   --color-gold-100: #ffebb3;
@@ -91,8 +91,8 @@
   --void-black: #000000;
   --ivory-cream: #ffecd1;
   --golden-amber: #ee8a3c;
-  --gold-shimmer: #FFD700;
-  --stone-gray: #8B8680;
+  --gold-shimmer: #ffd700;
+  --stone-gray: #8b8680;
 }
 
 body {
@@ -102,18 +102,24 @@ body {
   background-color: #0c0a09;
   font-family: 'IM Fell English', serif;
   /* Golden Greek Spear/Arrow Cursor */
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23d4af37' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E") 2 2, auto;
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23d4af37' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E")
+      2 2,
+    auto;
 }
 
 /* Pointer cursor for interactive elements */
 a,
 button,
-[role="button"],
+[role='button'],
 input,
 select,
 textarea,
 .cursor-pointer {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23ffd700' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E") 2 2, pointer !important;
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23ffd700' stroke='%233d2b00' stroke-width='1.5'%3E%3Cpath d='M2 2l11 19l-3-8l8-3L2 2z'/%3E%3C/svg%3E")
+      2 2,
+    pointer !important;
 }
 
 /* Custom Scrollbar */
@@ -136,7 +142,7 @@ textarea,
 
 /* Texture overlay for mythic feel - KEY for Team page */
 .mythic-texture::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");

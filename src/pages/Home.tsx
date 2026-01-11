@@ -1,4 +1,4 @@
-import { Hero } from '../components/sections/Hero';
+import { Hero } from '../components/sections/hero-section';
 
 export function Home() {
   return (
@@ -7,4 +7,3 @@ export function Home() {
     </>
   );
 }
-

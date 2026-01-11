@@ -6,11 +6,7 @@ export function About() {
     <div className="relative min-h-screen">
       {/* Fixed Background Image */}
       <div className="fixed inset-0 z-0">
-        <img
-          src="/About_bg.webp"
-          alt="Background"
-          className="w-full h-full object-cover"
-        />
+        <img src="/About_bg.webp" alt="Background" className="w-full h-full object-cover" />
         {/* Soft black overlay */}
         <div className="absolute inset-0 bg-black/20" />
       </div>
@@ -23,4 +19,3 @@ export function About() {
     </div>
   );
 }
-

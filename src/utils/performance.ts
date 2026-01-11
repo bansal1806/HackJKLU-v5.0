@@ -8,15 +8,15 @@ import { useEffect, useState, useRef } from 'react';
 export function useIntersectionObserver(
   ref: React.RefObject<HTMLElement>,
   callback: (isIntersecting: boolean) => void,
-  options?: IntersectionObserverInit
+  options?: IntersectionObserverInit,
 ) {
   useEffect(() => {
     if (!ref.current) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => callback(entry.isIntersecting),
-      { threshold: 0.1, ...options }
-    );
+    const observer = new IntersectionObserver(([entry]) => callback(entry.isIntersecting), {
+      threshold: 0.1,
+      ...options,
+    });
 
     observer.observe(ref.current);
 
@@ -98,4 +98,3 @@ export async function getCachedModel(url: string): Promise<ArrayBuffer | null> {
     };
   });
 }
-
