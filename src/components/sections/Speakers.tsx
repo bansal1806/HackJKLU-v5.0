@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import arrowLeft from '../../assets/prizes/arrow-left.webp';
+import arrowRight from '../../assets/prizes/arrow-right.webp';
 
 // --- ASSETS ---
 import bgImage from '../../assets/speakers/bg-amphitheater.jpg';
@@ -18,7 +19,7 @@ const speakers = [
     id: 1,
     name: 'Ankur Warikoo',
     role: 'Content Creator',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fspeakers%2Fankur-warikoo.webp&w=3840&q=75',
+    image: '/speakers/ankur.webp',
     tag: '@warikoo',
     bio: 'Entrepreneur, mentor, and content creator inspiring millions to take charge of their lives.',
     socials: { linkedin: 'https://www.linkedin.com/in/warikoo/' },
@@ -27,7 +28,7 @@ const speakers = [
     id: 2,
     name: 'Sandeep Jain',
     role: 'Founder & CEO, GFG',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fspeakers%2Fsandeep-jain.webp&w=3840&q=75',
+    image: '/speakers/sandeep.jpeg',
     tag: '@sandeep_gfg',
     bio: 'Founder of GeeksforGeeks. Revolutionizing the way students learn programming.',
     socials: { linkedin: 'https://www.linkedin.com/in/sandeep-jain-geeksforgeeks/' },
@@ -36,7 +37,7 @@ const speakers = [
     id: 3,
     name: 'Bhagirath Giri',
     role: 'MD, WsCube Tech',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fspeakers%2Fbhagirath-giri.webp&w=1080&q=75',
+    image: '/speakers/Bhagirath.jpeg',
     tag: '@bhagirath_tech',
     bio: 'Leading ed-tech innovation at WsCube Tech, empowering careers in digital skills.',
     socials: { linkedin: 'https://www.linkedin.com/in/bhagirath-giri/' },
@@ -45,7 +46,7 @@ const speakers = [
     id: 4,
     name: 'Jaskaran Singh',
     role: 'SWE @Google',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F4.webp&w=1080&q=75',
+    image: '/speakers/Jaskaran.jpeg',
     tag: '@jaskaran_code',
     bio: 'ICPC World Finalist 2023. Cracking complex problems at Google.',
     socials: { linkedin: 'https://www.linkedin.com/in/jaskaran-singh-8b8450200/' },
@@ -54,7 +55,7 @@ const speakers = [
     id: 5,
     name: 'Kanishak Chaurasia',
     role: 'Founder, PolyCrypt',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F3.webp&w=1080&q=75',
+    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F3.webp&w=1080&q=75', // Keep remote if no local text
     tag: '@kanishak_poly',
     bio: 'Building the future of decentralized security at PolyCrypt HQ.',
     socials: { linkedin: 'https://www.linkedin.com/in/dappdost/' },
@@ -63,7 +64,7 @@ const speakers = [
     id: 6,
     name: 'Harshvardhan Singh',
     role: 'Tech Staff, GFG',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F1.webp&w=1080&q=75',
+    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F1.webp&w=1080&q=75', // Keep remote
     tag: '@harsh_dev',
     bio: 'Mentoring the next generation of developers at GeeksforGeeks.',
     socials: { linkedin: 'https://www.linkedin.com/in/harshvardhan-singh-43bb86242/' },
@@ -72,14 +73,111 @@ const speakers = [
     id: 7,
     name: 'Vikas Thakur',
     role: 'Tech Staff, GFG',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F2.webp&w=1080&q=75',
+    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F2.webp&w=1080&q=75', // Keep remote
     tag: '@vikas_gfg',
     bio: 'Expert in algorithms and data structures, shaping the GFG curriculum.',
     socials: { linkedin: '' },
   },
 ];
 
+const judges = [
+  {
+    id: 101,
+    name: 'Pranav M',
+    role: 'SDE-II at Microsoft',
+    image: '/judges/pranav.webp', // Need fallback
+    tag: '@pranav_ms',
+    bio: 'SDE-II at Microsoft',
+    socials: { linkedin: 'https://www.linkedin.com/in/candidatepstx-95adfsdk23/' },
+  },
+  {
+    id: 102,
+    name: 'Sudarshan Iyengar',
+    role: 'Head CSE at IIT Ropar',
+    image: '/speakers/profiyengar.jpeg',
+    tag: '@prof_iyengar',
+    bio: 'Head CSE at IIT Ropar',
+    socials: { linkedin: 'https://www.linkedin.com/in/sudarshan-iyengar-3560b8145/' },
+  },
+  {
+    id: 103,
+    name: 'Sandhita Agarwal',
+    role: 'Founder at Hygge',
+    image: '/judges/sandhitaagarwal.webp',
+    tag: '@sandhita',
+    bio: 'Founder at Hygge',
+    socials: { linkedin: 'https://www.linkedin.com/in/sandhitaagarwal/' },
+  },
+  {
+    id: 104,
+    name: 'Aman',
+    role: 'Founder at Ecovia',
+    image: '/judges/aman.webp',
+    tag: '@aman',
+    bio: 'Founder at Ecovia',
+    socials: { linkedin: 'https://ecovia-pro.com/' },
+  },
+  {
+    id: 105,
+    name: 'Rishabh Nag',
+    role: 'Co-Founder at Humanli AI',
+    image: '/judges/rishabhnag.webp',
+    tag: '@rishabh',
+    bio: 'Co-Founder at Humanli AI',
+    socials: { linkedin: 'https://www.linkedin.com/in/rishabh-nag-founder03/' },
+  },
+  {
+    id: 106,
+    name: 'Devendra Parihar',
+    role: 'Lead Data Scientist',
+    image: '/judges/devendraparihar.webp',
+    tag: '@devendra',
+    bio: 'Lead Data Scientist at KainSkep',
+    socials: { linkedin: 'https://www.linkedin.com/in/devendra-parihar/' },
+  },
+  {
+    id: 107,
+    name: 'Rohit Mehta',
+    role: 'Head of QA',
+    image: '/speakers/rohit metha.webp',
+    tag: '@rohit_qa',
+    bio: 'Head of Quality and Automation Testing',
+    socials: { linkedin: 'https://www.linkedin.com/in/rohitmehta086/' },
+  },
+  {
+    id: 108,
+    name: 'Harshaditya Gaur',
+    role: 'Remote Sensing Eng.',
+    image: '/speakers/harsh aditya gaur.webp',
+    tag: '@harshaditya',
+    bio: 'Remote Sensing Engineer at BharatRohan',
+    socials: { linkedin: 'https://www.linkedin.com/in/harshadityagaur/' },
+  },
+  {
+    id: 109,
+    name: 'Vineet Sharma',
+    role: 'Associate SWE',
+    image: '/judges/vineetsharma.webp',
+    tag: '@vineet',
+    bio: 'Associate Software Engineer at Celebal Technologies',
+    socials: { linkedin: 'https://www.linkedin.com/in/vineetsharma-24/' },
+  },
+  {
+    id: 110,
+    name: 'Sparsh Agarwal',
+    role: 'Associate SWE',
+    image: '/judges/sparshagarwal.webp',
+    tag: '@sparsh',
+    bio: 'Associate Software Engineer at CoinDCX',
+    socials: { linkedin: 'https://linkedin.com/in/akathecoder' },
+  },
+];
+
 export function Speakers() {
+  const [activeCategory, setActiveCategory] = useState<'speakers' | 'judges'>('speakers');
+
+  const currentData = activeCategory === 'speakers' ? speakers : judges;
+
   return (
     <section className="relative w-full h-screen overflow-hidden bg-black font-cinzel">
       {/* Background & Overlay */}
@@ -102,25 +200,53 @@ export function Speakers() {
         >
           The Council
         </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="text-[#d4af37]/80 text-sm md:text-lg tracking-[0.3em] font-light mt-2 uppercase"
-        >
-          Past Speakers & Judges
-        </motion.p>
+
+
+        {/* Category Toggle */}
+        <div className="mt-6 flex justify-center gap-6 pointer-events-auto">
+          <button
+            onClick={() => setActiveCategory('speakers')}
+            className={`text-sm md:text-lg tracking-[0.2em] relative px-4 py-2 transition-all duration-300 ${activeCategory === 'speakers' ? 'text-[#d4af37] font-bold' : 'text-neutral-500 hover:text-[#d4af37]/70'}`}
+          >
+            SPEAKERS
+            {activeCategory === 'speakers' && (
+              <motion.div
+                layoutId="activeTab"
+                className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#d4af37] shadow-[0_0_10px_#d4af37]"
+              />
+            )}
+          </button>
+
+          <div className="w-[1px] h-6 bg-neutral-700 self-center" />
+
+          <button
+            onClick={() => setActiveCategory('judges')}
+            className={`text-sm md:text-lg tracking-[0.2em] relative px-4 py-2 transition-all duration-300 ${activeCategory === 'judges' ? 'text-[#d4af37] font-bold' : 'text-neutral-500 hover:text-[#d4af37]/70'}`}
+          >
+            JUDGES
+            {activeCategory === 'judges' && (
+              <motion.div
+                layoutId="activeTab"
+                className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#d4af37] shadow-[0_0_10px_#d4af37]"
+              />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* 3D Floor Container */}
       <div className="absolute inset-0 top-0 flex items-center justify-center perspective-[1200px] overflow-hidden">
-        <FloorCarousel />
+        <FloorCarousel data={currentData} key={activeCategory} />
       </div>
     </section>
   );
 }
 
-function FloorCarousel() {
+interface FloorCarouselProps {
+  data: typeof speakers;
+}
+
+function FloorCarousel({ data }: FloorCarouselProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
   const [hoveredSpeaker, setHoveredSpeaker] = useState<any>(null);
@@ -139,18 +265,18 @@ function FloorCarousel() {
   }, []);
 
   const nextSlide = () => {
-    setStartIndex((prev) => (prev + 1) % speakers.length);
+    setStartIndex((prev) => (prev + 1) % data.length);
   };
 
   const prevSlide = () => {
-    setStartIndex((prev) => (prev - 1 + speakers.length) % speakers.length);
+    setStartIndex((prev) => (prev - 1 + data.length) % data.length);
   };
 
   // Calculate Visible Speakers
   const visibleSpeakers = [];
   for (let i = 0; i < visibleCount; i++) {
-    const index = (startIndex + i) % speakers.length;
-    visibleSpeakers.push({ ...speakers[index], indexPosition: i });
+    const index = (startIndex + i) % data.length;
+    visibleSpeakers.push({ ...data[index], indexPosition: i });
   }
 
   const xRadius = isMobile ? window.innerWidth * 0.42 : Math.min(800, window.innerWidth * 0.4);
@@ -189,18 +315,28 @@ function FloorCarousel() {
       style={{ transformStyle: 'preserve-3d' }}
     >
       {/* --- NAVIGATION CONTROLS --- */}
-      <div className="absolute z-50 flex justify-between w-full max-w-[90vw] md:max-w-[1400px] px-4 top-1/2 -translate-y-1/2 pointer-events-none">
+      <div className="absolute z-[1000] flex justify-between w-full max-w-[95vw] md:max-w-[1400px] px-2 md:px-4 top-[35%] -translate-y-1/2 pointer-events-none">
         <button
           onClick={prevSlide}
-          className="pointer-events-auto p-4 rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+          className="pointer-events-auto p-1.5 md:p-3 rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+          aria-label="Previous speaker"
         >
-          <ChevronLeft className="w-8 h-8 text-[#d4af37]/70 group-hover:text-[#d4af37] group-hover:scale-110 transition-transform" />
+          <img
+            src={arrowLeft}
+            alt="Prev"
+            className="w-10 h-10 md:w-16 md:h-16 drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
+          />
         </button>
         <button
           onClick={nextSlide}
-          className="pointer-events-auto p-4 rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+          className="pointer-events-auto p-1.5 md:p-3 rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+          aria-label="Next speaker"
         >
-          <ChevronRight className="w-8 h-8 text-[#d4af37]/70 group-hover:text-[#d4af37] group-hover:scale-110 transition-transform" />
+          <img
+            src={arrowRight}
+            alt="Next"
+            className="w-10 h-10 md:w-16 md:h-16 drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
+          />
         </button>
       </div>
 
@@ -389,11 +525,11 @@ function SpeakerCard({
           isHovered
             ? { duration: 0.3 }
             : {
-                duration: 6,
-                ease: 'easeInOut',
-                repeat: Infinity,
-                delay: -randomOffset,
-              }
+              duration: 6,
+              ease: 'easeInOut',
+              repeat: Infinity,
+              delay: -randomOffset,
+            }
         }
         className="relative group"
       >
@@ -415,7 +551,7 @@ function SpeakerCard({
 
         {/* CARD CONTAINER */}
         <motion.div
-          className={`${isMobile ? 'w-24 h-24' : 'w-56 h-56'} relative cursor-pointer`} // Slightly smaller for 7 items
+          className={`${isMobile ? 'w-32 h-32' : 'w-56 h-56'} relative cursor-pointer`} // Increased mobile size
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
           whileHover={{ scale: 1.15, y: -20 }}
@@ -457,7 +593,7 @@ function SpeakerCard({
 
           {/* Default Name Tag (Visible when NOT hovered) */}
           <motion.div
-            className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-max text-center pointer-events-none"
+            className={`absolute ${isMobile ? '-bottom-20' : '-bottom-24'} left-1/2 -translate-x-1/2 w-max text-center pointer-events-none`}
             animate={{ opacity: isHovered ? 0 : 1 }}
             transition={{ duration: 0.2 }}
           >

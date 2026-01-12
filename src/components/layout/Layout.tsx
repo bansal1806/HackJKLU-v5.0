@@ -33,50 +33,52 @@ export function Layout({ children }: LayoutProps) {
       style={{ backgroundColor: 'var(--void-black)', color: 'var(--ivory-cream)' }}
     >
       {/* Top Line with Menu, Logo, and Sound */}
-      <div className="fixed top-6 md:top-12 left-0 right-0 z-50 transition-all duration-300">
-        {/* Horizontal line - Only between Menu and Sound (not extending before/after) */}
-        <div
-          className="absolute top-0 left-16 right-16 md:left-26 md:right-20 h-px pointer-events-none"
-          style={{ backgroundColor: 'rgba(126, 64, 49, 0.3)' }}
-        ></div>
+      <div className="fixed top-0 left-0 right-0 h-24 md:h-32 z-50 transition-all duration-300 bg-transparent">
+        <div className="relative w-full h-full mt-10 md:mt-12">
+          {/* Horizontal line - Only between Menu and Sound (not extending before/after) */}
+          <div
+            className="absolute top-0 left-20 right-20 md:left-26 md:right-20 h-px pointer-events-none"
+            style={{ backgroundColor: 'rgba(126, 64, 49, 0.3)' }}
+          ></div>
 
-        {/* Menu - Left */}
-        <div className="absolute top-0 left-4 md:left-8 -translate-y-1/2 pointer-events-auto px-2">
-          <button onClick={() => setIsMenuOpen(true)} className="flex items-center gap-2 group">
-            <span
-              className="uppercase text-xs md:text-sm tracking-[0.2em] transition-colors"
-              style={{ color: 'rgba(255, 236, 209, 0.8)' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--golden-amber)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 236, 209, 0.8)')}
+          {/* Menu - Left */}
+          <div className="absolute top-0 left-6 md:left-8 -translate-y-1/2 pointer-events-auto px-2">
+            <button onClick={() => setIsMenuOpen(true)} className="flex items-center gap-2 group">
+              <span
+                className="uppercase text-xs md:text-sm tracking-[0.2em] transition-colors"
+                style={{ color: 'rgba(255, 236, 209, 0.8)' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--golden-amber)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 236, 209, 0.8)')}
+              >
+                Menu
+              </span>
+            </button>
+          </div>
+
+          {/* Logo - Center */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto px-4 md:px-6 h-12 md:h-16 flex items-center justify-center">
+            <Link
+              to="/"
+              className="flex items-center transition-transform hover:scale-110 duration-300"
             >
-              Menu
-            </span>
-          </button>
-        </div>
+              <img src={owlLogo} alt="HackJKLU Owl" className="h-12 md:h-16 w-auto object-contain" />
+            </Link>
+          </div>
 
-        {/* Logo - Center */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto px-4 md:px-6 h-12 md:h-16 flex items-center justify-center">
-          <Link
-            to="/"
-            className="flex items-center transition-transform hover:scale-110 duration-300"
-          >
-            <img src={owlLogo} alt="HackJKLU Owl" className="h-12 md:h-16 w-auto object-contain" />
-          </Link>
-        </div>
-
-        {/* Sound Button - Right */}
-        <div className="absolute top-0 right-4 md:right-8 -translate-y-1/2 pointer-events-auto px-2">
-          <button
-            onClick={() => setIsMuted(!isMuted)}
-            className="opacity-80 hover:opacity-100 transition-opacity"
-            style={{ color: 'var(--ivory-cream)' }}
-          >
-            {isMuted ? (
-              <VolumeX className="w-6 h-6 md:w-7 md:h-7" />
-            ) : (
-              <Volume2 className="w-6 h-6 md:w-7 md:h-7" />
-            )}
-          </button>
+          {/* Sound Button - Right */}
+          <div className="absolute top-0 right-6 md:right-8 -translate-y-1/2 pointer-events-auto px-2">
+            <button
+              onClick={() => setIsMuted(!isMuted)}
+              className="opacity-80 hover:opacity-100 transition-opacity"
+              style={{ color: 'var(--ivory-cream)' }}
+            >
+              {isMuted ? (
+                <VolumeX className="w-6 h-6 md:w-7 md:h-7" />
+              ) : (
+                <Volume2 className="w-6 h-6 md:w-7 md:h-7" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -109,12 +111,12 @@ export function Layout({ children }: LayoutProps) {
 
             {/* Sidebar Menu */}
             <motion.div
-              initial={{ x: -400 }}
+              initial={{ x: 400 }}
               animate={{ x: 0 }}
-              exit={{ x: -400 }}
+              exit={{ x: 400 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="fixed left-0 top-0 bottom-0 z-60 w-80 flex flex-col"
-              style={{ backgroundColor: 'var(--void-black)' }}
+              className="fixed right-0 top-0 bottom-0 z-60 w-80 flex flex-col shadow-2xl sidebar-menu"
+              style={{ backgroundColor: 'black' }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
@@ -149,7 +151,7 @@ export function Layout({ children }: LayoutProps) {
                         key={item.path}
                         to={item.path}
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center gap-4 group transition-all"
+                        className="flex items-center gap-4 group transition-all active:scale-95 touch-manipulation"
                         style={{
                           color: isActive ? 'var(--gold-shimmer)' : 'var(--ivory-cream)',
                           fontStyle: 'italic',
@@ -222,4 +224,4 @@ export function Layout({ children }: LayoutProps) {
       </AnimatePresence>
     </div>
   );
-}
+};

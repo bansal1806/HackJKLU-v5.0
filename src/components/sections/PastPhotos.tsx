@@ -133,7 +133,7 @@ export function PastPhotos() {
       {/* --- SCROLLABLE CONTENT --- */}
       <div
         ref={scrollRef}
-        className="h-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] py-24 px-4 sm:px-8"
+        className="h-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pt-32 pb-40 lg:py-24 px-4 sm:px-8"
       >
         {/* --- HEADER --- */}
         <div className="relative z-10 text-center mb-16 md:mb-24">

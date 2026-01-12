@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SEOHead } from '../components/ui/SEOHead';
 
 // Assets
 import bgThemes from '../assets/themes/bg-themes.webp';
@@ -167,6 +168,12 @@ export function Themes() {
 
   return (
     <div className="h-screen w-full relative overflow-hidden font-cinzel text-[#e8dab2] flex flex-col">
+      <SEOHead
+        title="Hackathon Themes - HACKJKLU 5.0"
+        description="Explore the diverse themes of HACKJKLU 5.0: EdTech, HealthTech, Smart Cities, AgriTech, Environment, Women Safety, and FinTech. Choose your challenge and innovate!"
+        keywords="hackathon themes, EdTech, HealthTech, Smart Cities, AgriTech, Environment, Women Safety, FinTech, innovation challenges"
+        canonicalUrl="/themes"
+      />
       {/* Animated Background */}
       <motion.div
         initial={{ scale: 1.1, opacity: 0 }}
@@ -246,24 +253,24 @@ export function Themes() {
               onClick={handlePrev}
               whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
               whileTap={{ scale: 0.95 }}
-              className="absolute z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none left-[25%] bottom-[-60px] md:left-20 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
+              className="absolute z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none left-[20%] bottom-[-80px] md:left-12 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
               style={{
                 filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))',
               }}
             >
-              <img src={arrowLeft} alt="Prev" className="w-10 sm:w-16 md:w-24" />
+              <img src={arrowLeft} alt="Prev" className="w-14 sm:w-20 md:w-24 lg:w-32" />
             </motion.button>
 
             <motion.button
               onClick={handleNext}
               whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
               whileTap={{ scale: 0.95 }}
-              className="absolute z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none right-[25%] bottom-[-60px] md:right-20 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
+              className="absolute z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none right-[20%] bottom-[-80px] md:right-12 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
               style={{
                 filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))',
               }}
             >
-              <img src={arrowRight} alt="Next" className="w-10 sm:w-16 md:w-24" />
+              <img src={arrowRight} alt="Next" className="w-14 sm:w-20 md:w-24 lg:w-32" />
             </motion.button>
 
             {/* Scroll Items with Enhanced Effects */}
@@ -490,7 +497,7 @@ export function Themes() {
                                             initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: 1 + idx * 0.1 }}
-                                            className="text-xs md:text-sm text-[#3e2715] flex items-center hover:text-[#5c3a21] transition-colors duration-200 font-medium"
+                                            className="text-sm md:text-base text-[#3e2715] flex items-center hover:text-[#5c3a21] transition-colors duration-200 font-medium"
                                             style={{
                                               textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)',
                                             }}

@@ -8,7 +8,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(), 
+    react(),
     tailwindcss(),
     glsl(), // Enable GLSL shader imports
     viteCompression({ // Gzip compression for production
@@ -16,8 +16,12 @@ export default defineConfig({
       ext: '.gz',
     }),
   ],
-    server: {
+  server: {
     allowedHosts: ['aayan.dophera.xyz'],
+  },
+  preview: {
+    port: 4173,
+    strictPort: false,
   },
   resolve: {
     alias: {

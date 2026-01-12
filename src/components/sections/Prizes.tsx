@@ -349,11 +349,10 @@ export default function Prizes() {
           <button
             key={section.id}
             onClick={() => switchSection(section.id)}
-            className={`w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full border-2 transition-all duration-300 touch-manipulation ${
-              currentSection === section.id
-                ? 'bg-[#d4af37] border-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.6)] scale-110'
-                : 'bg-transparent border-neutral-500 hover:border-[#d4af37]/60 active:border-[#d4af37]/80'
-            }`}
+            className={`w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full border-2 transition-all duration-300 touch-manipulation ${currentSection === section.id
+              ? 'bg-[#d4af37] border-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.6)] scale-110'
+              : 'bg-transparent border-neutral-500 hover:border-[#d4af37]/60 active:border-[#d4af37]/80'
+              }`}
             aria-label={`Go to ${section.label}`}
           />
         ))}
@@ -367,7 +366,7 @@ export default function Prizes() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.5 }}
-            className="fixed bottom-0 xs:bottom-0.5 sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-3 2xl:bottom-4 left-1/2 -translate-x-1/2 z-[60] text-center pointer-events-none px-2 xs:px-3 sm:px-4"
+            className="fixed bottom-24 md:bottom-2 left-1/2 -translate-x-1/2 z-[60] text-center pointer-events-none px-2 xs:px-3 sm:px-4"
           >
             {/* Background blur for better visibility */}
             <div className="absolute inset-0 -mx-2 xs:-mx-3 sm:-mx-4 bg-black/40 backdrop-blur-sm rounded-lg -z-10" />
@@ -621,7 +620,7 @@ export default function Prizes() {
                 <img
                   src={arrowLeft}
                   alt=""
-                  className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
+                  className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20 2xl:w-24 2xl:h-24 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
                   loading="eager"
                   decoding="async"
                 />
@@ -634,7 +633,7 @@ export default function Prizes() {
                 <img
                   src={arrowRight}
                   alt=""
-                  className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
+                  className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-18 lg:h-18 xl:w-20 xl:h-20 2xl:w-24 2xl:h-24 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
                   loading="eager"
                   decoding="async"
                 />
@@ -781,11 +780,10 @@ export default function Prizes() {
                     <button
                       key={`main-indicator-${index}`}
                       onClick={() => goToSlide(index)}
-                      className={`w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 rounded-full transition-all duration-300 touch-manipulation p-1.5 ${
-                        index === activeIndex
-                          ? 'bg-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.8)] scale-125'
-                          : 'bg-neutral-600/70 hover:bg-neutral-500 active:bg-neutral-400 active:scale-95'
-                      }`}
+                      className={`w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 rounded-full transition-all duration-300 touch-manipulation p-1.5 ${index === activeIndex
+                        ? 'bg-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.8)] scale-125'
+                        : 'bg-neutral-600/70 hover:bg-neutral-500 active:bg-neutral-400 active:scale-95'
+                        }`}
                       aria-label={`Go to ${mainPrizes[index].god} prize`}
                     />
                   ))}
@@ -799,11 +797,10 @@ export default function Prizes() {
                 <button
                   key={`desktop-indicator-${index}`}
                   onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === activeIndex
-                      ? 'bg-[#d4af37] shadow-[0_0_10px_rgba(212,175,55,0.6)] scale-110'
-                      : 'bg-neutral-600 hover:bg-neutral-500'
-                  }`}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === activeIndex
+                    ? 'bg-[#d4af37] shadow-[0_0_10px_rgba(212,175,55,0.6)] scale-110'
+                    : 'bg-neutral-600 hover:bg-neutral-500'
+                    }`}
                   aria-label={`Go to ${mainPrizes[index].god} prize`}
                 />
               ))}

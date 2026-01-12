@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CloudTransition } from '../../ui/CloudTransition';
 import { CountdownTimer } from '../../ui/CountdownTimer';
 import { HeroStaticLayers } from './HeroStaticLayers';
 import { PageNavigation } from '../../navigation/PageNavigation';
+import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 export function Hero() {
   // Transition State
@@ -26,9 +28,52 @@ export function Hero() {
     }, 2800); // Wait for the slow cloud cover
   };
 
+  // Gestures for Swipe/Scroll Navigation
+  useEffect(() => {
+    let touchStartY = 0;
+    const swipeThreshold = 50; // pixels
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      // Mobile Only Security: Check width
+      if (window.innerWidth >= 1024) return;
+
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+
+      // Swipe UP (Scroll Down) -> Go Next
+      if (deltaY > swipeThreshold) {
+        handleTransition();
+      }
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      // Mobile Only Security: Check width
+      if (window.innerWidth >= 1024) return;
+
+      // Scroll Down -> Go Next
+      if (e.deltaY > 0) {
+        handleTransition();
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('wheel', handleWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, [isZooming]);
+
   return (
     <section
-      className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-void-black"
+      className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-void-black touch-none"
       // onClick={handleTransition}
       style={{
         background: 'radial-gradient(circle at 50% 30%, #1a202c 0%, #000000 70%)',
@@ -63,8 +108,8 @@ export function Hero() {
         >
           {/* Title and Date Container */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center w-full z-20 pointer-events-none"
-            style={{ top: '5%' }} // Moved up to clear rings
+            className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center w-full pointer-events-none"
+            style={{ top: '5%', zIndex: 30 }} // Increased z-index to appear above rings
           >
             {/* Title Image */}
             <img
@@ -91,7 +136,6 @@ export function Hero() {
                 letterSpacing: 'clamp(2px, 1vw, 6px)',
                 textShadow: '0 2px 4px rgba(0,0,0,0.7)',
                 opacity: 0.9,
-                marginLeft: 'clamp(20px, 4vw, 50px)',
               }}
             >
               13 MARCH - 15 MARCH
@@ -117,8 +161,28 @@ export function Hero() {
               — Where Innovation Meets Code —
             </p>
           </div>
+
+          {/* Swipe To Explore - Mobile Only Hint */}
+          <div className="absolute w-full flex flex-col items-center gap-1 md:hidden" style={{ bottom: '20%', zIndex: 15 }}>
+            <motion.div
+              animate={{
+                y: [0, 10, 0],
+                opacity: [0.3, 0.8, 0.3]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="flex flex-col items-center"
+            >
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4af37] font-cinzel">Scroll Down to Explore</span>
+              <ChevronDown className="w-4 h-4 text-[#d4af37]" />
+            </motion.div>
+          </div>
         </div>
       </div>
+
 
       {/* CSS Animations (Global styles for reused animations) */}
       <style>{`
@@ -157,6 +221,6 @@ export function Hero() {
                 }
             `}</style>
       <PageNavigation onNext={handleTransition} />
-    </section>
+    </section >
   );
 }

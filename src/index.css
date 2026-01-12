@@ -227,3 +227,43 @@ textarea,
   background: linear-gradient(180deg, #6d4528 0%, #a06b35 50%, #6d4528 100%);
   box-shadow: 0 0 6px rgba(62, 39, 21, 0.4);
 }
+
+@layer utilities {
+  .nav-page-name {
+    display: none !important;
+  }
+
+  @media (min-width: 768px) {
+    .nav-page-name {
+      display: block !important;
+    }
+  }
+
+  .sidebar-menu {
+    background-color: #000000 !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+  }
+
+  @keyframes gold-pulse {
+
+    0%,
+    100% {
+      border-color: rgba(212, 175, 55, 0.4);
+      box-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+    }
+
+    50% {
+      border-color: rgba(255, 215, 0, 0.8);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    }
+  }
+
+  .animate-gold-pulse {
+    animation: gold-pulse 2s infinite ease-in-out;
+  }
+
+  .mythic-glow {
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
+  }
+}

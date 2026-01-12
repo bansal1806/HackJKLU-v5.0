@@ -252,15 +252,15 @@ export function FAQ() {
   // Filter questions based on search
   const filteredHalls = searchQuery
     ? halls
-        .map((hall) => ({
-          ...hall,
-          questions: hall.questions.filter(
-            (q) =>
-              q.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              q.a.toLowerCase().includes(searchQuery.toLowerCase()),
-          ),
-        }))
-        .filter((h) => h.questions.length > 0)
+      .map((hall) => ({
+        ...hall,
+        questions: hall.questions.filter(
+          (q) =>
+            q.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            q.a.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+      }))
+      .filter((h) => h.questions.length > 0)
     : [activeHall];
 
   const handleHallChange = (id: string) => {
@@ -316,7 +316,7 @@ export function FAQ() {
         />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-24 pb-20 md:pt-28 md:pb-24">
+      <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-24 pb-56 md:pt-28 md:pb-24">
         {/* Page Header */}
         <header className="text-center mb-8 shrink-0">
           <motion.div
@@ -384,13 +384,13 @@ export function FAQ() {
                             style={{ color: isActive ? hall.colors.primary : '#9CA3AF' }}
                           />
                         </div>
-                        <div className="hidden sm:block">
+                        <div className="flex flex-col">
                           <h3
-                            className={`font-bold text-sm tracking-wide ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}
+                            className={`font-bold text-xs tracking-wide ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}
                           >
-                            {hall.name}
+                            {hall.name.replace('Hall of ', '')}
                           </h3>
-                          <p className="text-[10px] text-gray-500 uppercase tracking-widest font-sans">
+                          <p className="hidden md:block text-[10px] text-gray-500 uppercase tracking-widest font-sans">
                             {hall.questions.length} Questions
                           </p>
                         </div>

@@ -218,12 +218,7 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
       >
         <style>{`
                     .rings-container {
-                        transform: translate(calc(-50% + 33px), calc(-50% + 33px));
-                    }
-                    @media (max-width: 768px) {
-                        .rings-container {
-                            transform: translate(-50%, -50%);
-                        }
+                        transform: translate(-50%, -50%);
                     }
                 `}</style>
         {/* Outer Runic Ring */}

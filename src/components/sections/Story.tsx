@@ -26,10 +26,11 @@ export function Story() {
 
   return (
     <section
-      className="relative z-10 text-white min-h-screen flex items-center justify-center py-20 overflow-hidden"
+      className="relative z-10 text-white min-h-screen pt-40 pb-40 lg:flex lg:items-center lg:justify-center lg:py-20"
       style={{
-        paddingLeft: 'clamp(20px, 5vw, 96px)',
-        paddingRight: 'clamp(20px, 5vw, 96px)',
+        paddingLeft: 'clamp(24px, 8vw, 96px)',
+        paddingRight: 'clamp(24px, 8vw, 96px)',
+        lineHeight: '1.7',
       }}
     >
       {/* Cloud Uncover Transition */}
