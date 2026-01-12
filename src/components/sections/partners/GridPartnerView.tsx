@@ -52,6 +52,13 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
         <div className="absolute inset-0 bg-neutral-950/60 z-10" />
       </div>
 
+      {/* Header: Fixed Top */}
+      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-28 md:pt-32 pointer-events-none px-4 text-center transition-all duration-300">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
+          PARTNERS
+        </h1>
+      </div>
+
       {/* Grid Content: Stacks on mobile, Split on desktop */}
       <div
         className={`absolute inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-24 pb-12 hide-scrollbar' : ''}`}
@@ -59,20 +66,19 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
         {data.groups.map((group, groupIndex) => (
           <div
             key={groupIndex}
-            className={`flex flex-col items-center w-full ${
-              isMobile
-                ? 'relative py-6 border-b border-white/5 last:border-none'
-                : 'absolute left-0 right-0'
-            }`}
+            className={`flex flex-col items-center w-full ${isMobile
+              ? 'relative py-6 border-b border-white/5 last:border-none'
+              : 'absolute left-0 right-0'
+              }`}
             style={
               !isMobile
                 ? {
-                    top: groupIndex === 0 ? '0%' : '50%',
-                    height: '50%',
-                    justifyContent: 'center',
-                    paddingTop: groupIndex === 0 ? '80px' : '0px',
-                    paddingBottom: groupIndex === 0 ? '0px' : '40px',
-                  }
+                  top: groupIndex === 0 ? '0%' : '50%',
+                  height: '50%',
+                  justifyContent: 'center',
+                  paddingTop: groupIndex === 0 ? '160px' : '0px',
+                  paddingBottom: groupIndex === 0 ? '0px' : '40px',
+                }
                 : {}
             }
           >
@@ -105,7 +111,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                         src={group.ring}
                         alt="Ring"
                         className="w-full h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
-                        loading="lazy"
+                        loading="eager"
                       />
                     </motion.div>
                     <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8">
@@ -114,7 +120,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                           src={partner.logo}
                           alt={partner.name}
                           className="max-w-[65%] max-h-[65%] object-contain filter group-hover:brightness-125 transition-all duration-300 drop-shadow-md"
-                          loading="lazy"
+                          loading="eager"
                         />
                       </div>
                     </div>

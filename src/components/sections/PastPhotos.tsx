@@ -142,7 +142,7 @@ export function PastPhotos() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-[Cinzel] text-transparent bg-clip-text bg-gradient-to-b from-amber-100 to-amber-700 drop-shadow-[0_5px_15px_rgba(212,175,55,0.2)] tracking-widest mb-4 px-2">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-[Cinzel] text-transparent bg-clip-text bg-gradient-to-b from-amber-100 to-amber-700 drop-shadow-[0_5px_15px_rgba(212,175,55,0.2)] tracking-widest mb-4 px-2">
               HALL OF MEMORIES
             </h2>
             <div className="flex items-center justify-center gap-4 mb-6">
@@ -269,7 +269,7 @@ function GalleryItem({ item, index, onClick }: GalleryItemProps) {
           src={item.src}
           alt={item.caption}
           className="w-full h-auto transform transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
+          loading="eager"
           decoding="async"
         />
 

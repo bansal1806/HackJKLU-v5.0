@@ -205,7 +205,7 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
       <div
         className="absolute rings-container" // Keep class for hover effects if any
         style={{
-          top: '50%',
+          top: '54%',
           left: '50%',
           width: 'clamp(600px, 120vmin, 1500px)',
           height: 'clamp(600px, 120vmin, 1500px)',

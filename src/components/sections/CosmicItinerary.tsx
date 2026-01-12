@@ -406,7 +406,7 @@ export function CosmicItinerary() {
   };
 
   return (
-    <section className="relative min-h-screen bg-[#0B0C10] overflow-hidden">
+    <section className="relative min-h-screen bg-[#0B0C10] overflow-hidden pt-28 md:pt-32">
       {/* Film grain overlay */}
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none z-30"
@@ -425,6 +425,16 @@ export function CosmicItinerary() {
         <FastForward className="w-4 h-4" />
         Skip Animation
       </button>
+
+      {/* Page Title */}
+      <div className="relative z-40 text-center mb-4 md:mb-8 pointer-events-none">
+        <h1
+          className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold tracking-[0.2em] text-white uppercase drop-shadow-[0_4px_10px_rgba(255,255,255,0.3)]"
+          style={{ textShadow: '0 0 30px rgba(255, 255, 255, 0.4)' }}
+        >
+          ITINERARY
+        </h1>
+      </div>
 
       {/* Shooting Star Navbar */}
       <nav
@@ -455,11 +465,10 @@ export function CosmicItinerary() {
           <button
             key={day}
             onClick={() => handleDayChange(day)}
-            className={`relative px-6 py-2 font-[Cinzel] text-sm tracking-wider transition-all ${
-              activeDay === day
+            className={`relative px-6 py-2 font-[Cinzel] text-sm tracking-wider transition-all ${activeDay === day
                 ? 'text-white border-b-2 border-white'
                 : 'text-white/50 hover:text-white/80'
-            }`}
+              }`}
           >
             {day === 'day1' ? 'Day 1' : day === 'day2' ? 'Day 2' : 'Day 3'}
           </button>

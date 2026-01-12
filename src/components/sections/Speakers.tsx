@@ -136,7 +136,7 @@ export function Speakers() {
       </div>
 
       {/* Title */}
-      <div className="absolute top-12 md:top-20 left-0 right-0 z-20 text-center pointer-events-none px-4">
+      <div className="absolute top-28 md:top-36 left-0 right-0 z-20 text-center pointer-events-none px-4">
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}

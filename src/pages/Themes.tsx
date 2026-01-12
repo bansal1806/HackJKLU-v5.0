@@ -123,21 +123,39 @@ const themesData = [
 export function Themes() {
   const [activeIndex, setActiveIndex] = useState(3); // Start in the middle
   const [scale, setScale] = useState(1);
+  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
   // Calculate scale based on viewport width - keeps desktop layout on all devices
   useEffect(() => {
     const calculateScale = () => {
-      // Use 550px as base width instead of 700px
-      // This increases the scale/zoom on mobile devices
-      const baseWidth = 550;
       const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
 
-      // On mobile, use full width (no padding) for max size
-      // On desktop, keep some breathing room
+      // Different base widths for different screen sizes
+      let baseWidth;
+      if (viewportWidth < 400) {
+        baseWidth = 380; // Very small phones
+      } else if (viewportWidth < 640) {
+        baseWidth = 450; // Small phones
+      } else if (viewportWidth < 768) {
+        baseWidth = 500; // Large phones
+      } else {
+        baseWidth = 550; // Tablets and up
+      }
+
+      // On mobile, use full width for max size
       const availableWidth = viewportWidth < 768 ? viewportWidth : viewportWidth - 40;
 
-      const newScale = Math.min(1, availableWidth / baseWidth);
+      // Height-based scaling for short screens
+      const heightScale = viewportHeight < 600 ? viewportHeight / 600 : viewportHeight < 700 ? viewportHeight / 700 : 1;
+
+      // Calculate scale with min/max bounds for extreme screen sizes
+      const minScale = viewportWidth < 350 ? 0.28 : 0.35;
+      const maxScale = 1.0;
+      const widthScale = availableWidth / baseWidth;
+      const newScale = Math.max(minScale, Math.min(maxScale, widthScale * heightScale));
       setScale(newScale);
+      setViewportWidth(viewportWidth);
     };
 
     calculateScale();
@@ -186,9 +204,9 @@ export function Themes() {
       {/* Mystical Overlay with Animated Particles */}
       <div className="absolute inset-0 bg-black/40 z-0" />
 
-      {/* Floating Mystical Particles */}
+      {/* Floating Mystical Particles - Reduced on mobile for performance */}
       <div className="absolute inset-0 z-5 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(typeof window !== 'undefined' && window.innerWidth < 640 ? 8 : 20)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-gold-400 rounded-full opacity-60"
@@ -214,13 +232,13 @@ export function Themes() {
       </div>
 
       {/* Main Content Container - Flex column to separate title and carousel */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full max-h-screen pt-20 pb-16 md:pt-24 md:pb-20 overflow-hidden">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full max-h-screen pt-16 xs:pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-8 xs:pb-10 sm:pb-12 md:pb-16 lg:pb-20 overflow-hidden">
         {/* Enhanced Header with Glow */}
         <motion.h1
           initial={{ opacity: 0, y: -50, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1.5, ease: 'easeOut' }}
-          className="text-3xl md:text-5xl mb-4 md:mb-8 text-center tracking-[0.2em] font-bold drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] shrink-0"
+          className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2 xs:mb-3 sm:mb-4 md:mb-6 lg:mb-8 text-center tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] font-bold drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] shrink-0"
           style={{
             background: 'linear-gradient(to bottom, #fff8e7 0%, #d4af37 100%)',
             WebkitBackgroundClip: 'text',
@@ -244,8 +262,8 @@ export function Themes() {
           <div
             className="relative flex items-center justify-center"
             style={{
-              width: '1200px',
-              height: '600px', // Reduced height slightly
+              width: 'min(1200px, 95vw)',
+              height: 'min(600px, 70vh)',
             }}
           >
             {/* Enhanced Navigation Arrows with Glow */}
@@ -253,24 +271,24 @@ export function Themes() {
               onClick={handlePrev}
               whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
               whileTap={{ scale: 0.95 }}
-              className="absolute z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none left-[20%] bottom-[-80px] md:left-12 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
+              className="absolute z-50 p-1 xs:p-1.5 sm:p-2 transition-all duration-300 cursor-pointer focus:outline-none left-[15%] xs:left-[18%] sm:left-[20%] bottom-[-60px] xs:bottom-[-70px] sm:bottom-[-80px] md:left-8 lg:left-12 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
               style={{
                 filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))',
               }}
             >
-              <img src={arrowLeft} alt="Prev" className="w-14 sm:w-20 md:w-24 lg:w-32" />
+              <img src={arrowLeft} alt="Prev" className="w-10 xs:w-12 sm:w-16 md:w-20 lg:w-24 xl:w-28" />
             </motion.button>
 
             <motion.button
               onClick={handleNext}
               whileHover={{ scale: 1.2, filter: 'drop-shadow(0 0 15px #d4af37)' }}
               whileTap={{ scale: 0.95 }}
-              className="absolute z-50 p-2 transition-all duration-300 cursor-pointer focus:outline-none right-[20%] bottom-[-80px] md:right-12 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
+              className="absolute z-50 p-1 xs:p-1.5 sm:p-2 transition-all duration-300 cursor-pointer focus:outline-none right-[15%] xs:right-[18%] sm:right-[20%] bottom-[-60px] xs:bottom-[-70px] sm:bottom-[-80px] md:right-8 lg:right-12 md:bottom-auto md:top-1/2 md:-translate-y-1/2"
               style={{
                 filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))',
               }}
             >
-              <img src={arrowRight} alt="Next" className="w-14 sm:w-20 md:w-24 lg:w-32" />
+              <img src={arrowRight} alt="Next" className="w-10 xs:w-12 sm:w-16 md:w-20 lg:w-24 xl:w-28" />
             </motion.button>
 
             {/* Scroll Items with Enhanced Effects */}
@@ -292,11 +310,14 @@ export function Themes() {
                 // +/- 1: Visible, Rolled, Spaced out
                 // > 1: Hidden (opacity 0) but computed for smooth transitions
 
-                // Determine xOffset with wider spacing to clear the central open scroll
-                // Open scroll is ~1000px wide (+/- 500px)
-                // We place neighbors at +/- 600px to be visible "next" buttons
-                const spacing = 600;
+                // Determine xOffset with responsive spacing
+                // Smaller screens need smaller spacing
+                const spacing = viewportWidth < 400 ? 350 : viewportWidth < 640 ? 400 : viewportWidth < 768 ? 450 : viewportWidth < 1024 ? 500 : 600;
                 const xOffset = position * spacing;
+
+                // Responsive scroll width
+                const openScrollWidth = viewportWidth < 400 ? 600 : viewportWidth < 640 ? 700 : viewportWidth < 768 ? 800 : viewportWidth < 1024 ? 900 : 1000;
+                const rolledScrollWidth = viewportWidth < 640 ? 120 : 180;
 
                 // Scale: Center 1.0, Others 0.8
                 const scale = isCenter ? 1.0 : 0.8;
@@ -319,7 +340,7 @@ export function Themes() {
                       zIndex: zIndex,
                       rotateY: rotateY,
                       opacity: opacity,
-                      width: isCenter ? 1000 : 180,
+                      width: isCenter ? openScrollWidth : rolledScrollWidth,
                       filter: isCenter
                         ? 'drop-shadow(0 0 25px rgba(212, 175, 55, 0.6))'
                         : 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.3))',
@@ -335,7 +356,7 @@ export function Themes() {
                     }}
                     className="absolute flex items-center justify-center"
                     style={{
-                      height: '600px', // Matches container
+                      height: viewportWidth < 640 ? '400px' : viewportWidth < 768 ? '450px' : viewportWidth < 1024 ? '500px' : '600px',
                       perspective: '1000px',
                       backfaceVisibility: 'hidden',
                     }}
@@ -372,8 +393,9 @@ export function Themes() {
                               left: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
                               rotateY: { duration: 0 },
                             }}
-                            className="absolute top-0 bottom-0 w-[100px] z-20 overflow-hidden"
+                            className="absolute top-0 bottom-0 z-20 overflow-hidden"
                             style={{
+                              width: viewportWidth < 640 ? '60px' : viewportWidth < 768 ? '80px' : '100px',
                               transformStyle: 'preserve-3d',
                               filter: isCenter
                                 ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))'
@@ -382,7 +404,8 @@ export function Themes() {
                           >
                             <img
                               src={scrollOpen}
-                              className="absolute top-0 left-0 w-[1000px] max-w-none h-full object-contain object-left"
+                              className="absolute top-0 left-0 max-w-none h-full object-contain object-left"
+                              style={{ width: `${openScrollWidth}px` }}
                               alt=""
                             />
                           </motion.div>
@@ -397,8 +420,9 @@ export function Themes() {
                               right: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
                               rotateY: { duration: 0 },
                             }}
-                            className="absolute top-0 bottom-0 w-[100px] z-20 overflow-hidden"
+                            className="absolute top-0 bottom-0 z-20 overflow-hidden"
                             style={{
+                              width: viewportWidth < 640 ? '60px' : viewportWidth < 768 ? '80px' : '100px',
                               transformStyle: 'preserve-3d',
                               filter: isCenter
                                 ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))'
@@ -407,7 +431,8 @@ export function Themes() {
                           >
                             <img
                               src={scrollOpen}
-                              className="absolute top-0 right-0 w-[1000px] max-w-none h-full object-contain object-right"
+                              className="absolute top-0 right-0 max-w-none h-full object-contain object-right"
+                              style={{ width: `${openScrollWidth}px` }}
                               alt=""
                             />
                           </motion.div>
@@ -415,13 +440,13 @@ export function Themes() {
                           {/* Enhanced Middle Body with Scrollable Content */}
                           <motion.div
                             animate={{
-                              width: isCenter ? 'calc(100% - 200px)' : '0px',
-                              left: isCenter ? '100px' : '50%',
+                              width: isCenter ? `calc(100% - ${viewportWidth < 640 ? '120px' : viewportWidth < 768 ? '160px' : '200px'})` : '0px',
+                              left: isCenter ? (viewportWidth < 640 ? '60px' : viewportWidth < 768 ? '80px' : '100px') : '50%',
                             }}
                             transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
                             className="absolute top-0 bottom-0 z-10 overflow-hidden"
                           >
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-full">
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 h-full" style={{ width: `${openScrollWidth}px` }}>
                               <img
                                 src={scrollOpen}
                                 className="w-full h-full object-contain"
@@ -434,12 +459,12 @@ export function Themes() {
                             <motion.div
                               animate={{ opacity: isCenter ? 1 : 0, scale: isCenter ? 1 : 0.9 }}
                               transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-                              className="absolute inset-0 flex flex-col items-center text-neutral-900 p-8 md:p-12"
-                              style={{ paddingTop: '140px' }}
+                              className="absolute inset-0 flex flex-col items-center text-neutral-900 p-3 xs:p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12"
+                              style={{ paddingTop: 'clamp(80px, 20vh, 140px)' }}
                             >
                               {/* Title positioned in upper scroll area */}
                               <motion.h3
-                                className="text-2xl md:text-3xl font-bold text-[#5c3a21] uppercase tracking-wider text-center mb-1"
+                                className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#5c3a21] uppercase tracking-wide sm:tracking-wider text-center mb-0.5 xs:mb-1"
                                 style={{
                                   textShadow:
                                     '0 0 10px rgba(92, 58, 33, 0.5), 0 2px 4px rgba(0,0,0,0.3)',
@@ -455,7 +480,7 @@ export function Themes() {
 
                               {/* Description positioned below title */}
                               <motion.p
-                                className="text-sm md:text-base font-serif text-[#3e2715] italic leading-tight text-center mb-2 max-w-lg"
+                                className="text-xs xs:text-sm sm:text-sm md:text-base font-serif text-[#3e2715] italic leading-tight text-center mb-1 xs:mb-2 max-w-[90%] sm:max-w-lg"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: isCenter ? 1 : 0 }}
                                 transition={{ delay: 0.6 }}
@@ -471,7 +496,7 @@ export function Themes() {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -20 }}
                                     transition={{ delay: 0.8, duration: 0.6 }}
-                                    className="w-full max-w-md h-48 overflow-y-auto themes-scrollbar flex-1"
+                                    className="w-full max-w-[95%] xs:max-w-[90%] sm:max-w-md h-32 xs:h-36 sm:h-40 md:h-48 overflow-y-auto themes-scrollbar flex-1"
                                     style={{
                                       background: 'transparent',
                                       border: '1px solid rgba(212, 175, 55, 0.4)',
@@ -497,7 +522,7 @@ export function Themes() {
                                             initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: 1 + idx * 0.1 }}
-                                            className="text-sm md:text-base text-[#3e2715] flex items-center hover:text-[#5c3a21] transition-colors duration-200 font-medium"
+                                            className="text-xs xs:text-sm sm:text-sm md:text-base text-[#3e2715] flex items-center hover:text-[#5c3a21] transition-colors duration-200 font-medium"
                                             style={{
                                               textShadow: '0 1px 1px rgba(255, 255, 255, 0.8)',
                                             }}

@@ -31,7 +31,7 @@ const SocialIcon = memo(({ icon }: { icon: string }) => (
       src={icon}
       alt="Social"
       className="w-full h-full object-contain brightness-125 saturate-150"
-      loading="lazy"
+      loading="eager"
     />
   </motion.a>
 ));
@@ -95,8 +95,8 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
       </div>
 
       {/* Header: Fixed Top -> Absolute (scrolls with section) */}
-      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-12 sm:pt-16 md:pt-28 lg:pt-32 pointer-events-none px-4 text-center transition-all duration-300">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
+      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-28 md:pt-32 pointer-events-none px-4 text-center transition-all duration-300">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
           PAST PARTNERS
         </h1>
         <h2

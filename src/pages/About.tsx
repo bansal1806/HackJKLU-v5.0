@@ -13,9 +13,9 @@ export function About() {
       />
       {/* Fixed Background Image */}
       <div className="fixed inset-0 z-0">
-        <img src="/About_bg.webp" alt="Background" className="w-full h-full object-cover" />
-        {/* Soft black overlay */}
-        <div className="absolute inset-0 bg-black/20" />
+        <img src="/About_bg.webp" alt="Background" className="w-full h-full object-cover object-center" />
+        {/* Soft black overlay - darker on mobile for text readability */}
+        <div className="absolute inset-0 bg-black/40 sm:bg-black/30 md:bg-black/20" />
       </div>
 
       {/* Content */}

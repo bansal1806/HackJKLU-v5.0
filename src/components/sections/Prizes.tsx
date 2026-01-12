@@ -324,7 +324,7 @@ export default function Prizes() {
   return (
     <div
       ref={containerRef}
-      className="relative bg-neutral-950 text-neutral-100 min-h-screen h-dvh overflow-hidden selection:bg-yellow-900 selection:text-white pt-16 xs:pt-18 sm:pt-20 md:pt-24 lg:pt-32 xl:pt-40 2xl:pt-48 pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24"
+      className="relative bg-neutral-950 text-neutral-100 min-h-screen h-dvh overflow-hidden selection:bg-yellow-900 selection:text-white pt-28 md:pt-32 pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24"
       style={{ touchAction: 'pan-y pan-x pinch-zoom' }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
@@ -366,25 +366,33 @@ export default function Prizes() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.5 }}
-            className="fixed bottom-24 md:bottom-2 left-1/2 -translate-x-1/2 z-[60] text-center pointer-events-none px-2 xs:px-3 sm:px-4"
+            className="fixed bottom-24 md:bottom-2 left-1/2 -translate-x-1/2 z-[60] text-center pointer-events-auto px-2 xs:px-3 sm:px-4"
           >
-            {/* Background blur for better visibility */}
-            <div className="absolute inset-0 -mx-2 xs:-mx-3 sm:-mx-4 bg-black/40 backdrop-blur-sm rounded-lg -z-10" />
+            {/* Carousel Indicators - Above scroll text */}
+            {currentSection === 0 && (
+              <div className="flex justify-center gap-2 xs:gap-2.5 sm:gap-3 md:gap-3 mb-3">
+                {mainPrizes.map((_, index) => (
+                  <button
+                    key={`scroll-indicator-${index}`}
+                    onClick={() => goToSlide(index)}
+                    className={`w-2 h-2 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full transition-all duration-300 touch-manipulation ${index === activeIndex
+                      ? 'bg-[#d4af37] shadow-[0_0_8px_rgba(212,175,55,0.8)] scale-125'
+                      : 'bg-neutral-600/70 hover:bg-neutral-500 active:bg-neutral-400 active:scale-95'
+                      }`}
+                    aria-label={`Go to ${mainPrizes[index].god} prize`}
+                  />
+                ))}
+              </div>
+            )}
 
-            {/* Keyboard Instructions */}
+            {/* Scroll Instructions */}
             <motion.p
               initial={{ opacity: 0.7 }}
               animate={{ opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="text-[9px] xs:text-[10px] sm:text-xs md:text-sm lg:text-base text-neutral-300 xs:text-neutral-200 mb-1 xs:mb-1.5 sm:mb-2 font-heading tracking-wider leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+              className="text-[9px] xs:text-[10px] sm:text-xs md:text-sm lg:text-base text-neutral-300 xs:text-neutral-200 mb-1 xs:mb-1.5 sm:mb-2 font-heading tracking-wider leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] pointer-events-none"
             >
-              {currentSection === 0
-                ? isMobile
-                  ? 'Swipe ← → for prizes, ⬆️ ⬇️ for sections'
-                  : 'Use ← → keys or scroll to explore'
-                : isMobile
-                  ? 'Swipe ⬆️ ⬇️ to navigate'
-                  : 'Scroll to explore'}
+              Scroll down to explore more
             </motion.p>
 
             {/* Mouse Indicator - Hidden on mobile */}
@@ -604,7 +612,7 @@ export default function Prizes() {
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl mb-3 xs:mb-4 sm:mb-5 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-14 text-center tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.25em] xl:tracking-[0.3em] text-[#e8dab2] drop-shadow-[0_0_15px_rgba(232,218,178,0.3)] sm:drop-shadow-[0_0_20px_rgba(232,218,178,0.4)] mt-2 xs:mt-3 sm:mt-4 md:mt-6 lg:mt-8 leading-tight"
+              className="text-4xl md:text-6xl lg:text-7xl mb-3 xs:mb-4 sm:mb-5 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-14 text-center tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.25em] xl:tracking-[0.3em] text-[#e8dab2] drop-shadow-[0_0_15px_rgba(232,218,178,0.3)] sm:drop-shadow-[0_0_20px_rgba(232,218,178,0.4)] mt-2 xs:mt-3 sm:mt-4 md:mt-6 lg:mt-8 leading-tight"
             >
               PRIZES
             </motion.h1>
@@ -773,38 +781,8 @@ export default function Prizes() {
                 >
                   {activePrize.amount}
                 </div>
-
-                {/* Carousel Indicators - Below Cards - Touch-friendly on mobile */}
-                <div className="flex justify-center gap-2.5 xs:gap-3 sm:gap-3.5 md:gap-4 mt-3 xs:mt-3.5 sm:mt-4 md:mt-5">
-                  {mainPrizes.map((_, index) => (
-                    <button
-                      key={`main-indicator-${index}`}
-                      onClick={() => goToSlide(index)}
-                      className={`w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 rounded-full transition-all duration-300 touch-manipulation p-1.5 ${index === activeIndex
-                        ? 'bg-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.8)] scale-125'
-                        : 'bg-neutral-600/70 hover:bg-neutral-500 active:bg-neutral-400 active:scale-95'
-                        }`}
-                      aria-label={`Go to ${mainPrizes[index].god} prize`}
-                    />
-                  ))}
-                </div>
               </motion.div>
             </AnimatePresence>
-
-            {/* Desktop Carousel Indicators - Below Cards (Only for desktop) */}
-            <div className="hidden xl:flex justify-center gap-3 mt-4 mb-4">
-              {mainPrizes.map((_, index) => (
-                <button
-                  key={`desktop-indicator-${index}`}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === activeIndex
-                    ? 'bg-[#d4af37] shadow-[0_0_10px_rgba(212,175,55,0.6)] scale-110'
-                    : 'bg-neutral-600 hover:bg-neutral-500'
-                    }`}
-                  aria-label={`Go to ${mainPrizes[index].god} prize`}
-                />
-              ))}
-            </div>
           </div>
         </motion.section>
       </AnimatePresence>

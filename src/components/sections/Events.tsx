@@ -10,9 +10,9 @@ export function Events() {
   return (
     <section
       id="events"
-      className="min-h-screen bg-black flex flex-col items-center justify-center py-20 px-4"
+      className="min-h-screen bg-black flex flex-col items-center pt-28 md:pt-32 pb-20 px-4"
     >
-      <h2 className="text-4xl md:text-6xl font-[Cinzel] text-white tracking-[0.2em] mb-20 text-center">
+      <h2 className="text-4xl md:text-6xl lg:text-7xl font-[Cinzel] text-white tracking-[0.2em] mb-20 text-center">
         Side Events
       </h2>
 

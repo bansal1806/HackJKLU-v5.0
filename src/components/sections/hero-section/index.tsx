@@ -109,7 +109,7 @@ export function Hero() {
           {/* Title and Date Container */}
           <div
             className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center w-full pointer-events-none"
-            style={{ top: '5%', zIndex: 30 }} // Increased z-index to appear above rings
+            style={{ top: '2%', zIndex: 30 }} // Moved up to clear rings, High Z-Index
           >
             {/* Title Image */}
             <img
@@ -124,6 +124,7 @@ export function Hero() {
                   'drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(0 5px 10px rgba(0,0,0,0.8))',
                 opacity: 0.95,
                 marginBottom: 'clamp(-60px, -6vh, -30px)',
+                transform: 'translateX(-30px)', // Fine-tuning alignment
               }}
             />
 

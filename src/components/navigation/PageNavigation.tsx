@@ -9,9 +9,9 @@ const pageOrder = [
   { path: '/prizes', name: 'Prizes' },
   { path: '/partners', name: 'Partners' },
   { path: '/speakers', name: 'Speakers' },
-  { path: '/itinerary', name: 'Itinerary' },
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },
+  { path: '/itinerary', name: 'Itinerary' },
   { path: '/events', name: 'Events' },
 ];
 
@@ -115,54 +115,41 @@ export function PageNavigation({ onNext }: { onNext?: () => void }) {
 
       {/* Mobile Mythic Navigation Bar - Unified Pill */}
       {location.pathname !== '/' && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[10000] flex items-center px-0.5 py-0.5 rounded-full bg-black/5 backdrop-blur-[2px] border border-white/5 shadow-sm"
-        >
-          {/* Previous link */}
-          {previousPage ? (
-            <Link
-              to={previousPage.path}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-gold-500/40 active:bg-gold-500/5 active:scale-95 transition-all"
+        <>
+          {/* Previous Button - Left Corner */}
+          {previousPage && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="md:hidden fixed bottom-5 left-5 z-[10000]"
             >
-              <ChevronLeft className="w-3.5 h-3.5" />
-              <span className="text-[8px] uppercase tracking-widest font-cinzel text-ivory-cream/60">Prev</span>
-            </Link>
-          ) : (
-            <div className="w-12 opacity-5 pointer-events-none flex items-center justify-center p-1.5 grayscale">
-              <ChevronLeft className="w-3.5 h-3.5" />
-            </div>
+              <Link
+                to={previousPage.path}
+                className="flex items-center gap-2 px-3 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-gold-500/80 active:bg-gold-500/10 active:scale-95 transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span className="text-[10px] uppercase tracking-widest font-cinzel text-ivory-cream">Prev</span>
+              </Link>
+            </motion.div>
           )}
 
-          {/* Divider icon */}
-          <div className="w-px h-3 bg-white/5 mx-0.5" />
-
-          {/* Next link */}
-          {nextPage ? (
-            onNext && location.pathname === '/' && nextPage.path === '/about' ? (
-              <button
-                onClick={() => onNext?.()}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-gold-500/40 active:bg-gold-500/5 active:scale-95 transition-all outline-none"
-              >
-                <span className="text-[8px] uppercase tracking-widest font-cinzel text-ivory-cream/60">Next</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </button>
-            ) : (
+          {/* Next Button - Right Corner */}
+          {nextPage && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="md:hidden fixed bottom-5 right-5 z-[10000]"
+            >
               <Link
                 to={nextPage.path}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-gold-500/40 active:bg-gold-500/5 active:scale-95 transition-all"
+                className="flex items-center gap-2 px-3 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-gold-500/80 active:bg-gold-500/10 active:scale-95 transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]"
               >
-                <span className="text-[8px] uppercase tracking-widest font-cinzel text-ivory-cream/60">Next</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <span className="text-[10px] uppercase tracking-widest font-cinzel text-ivory-cream">Next</span>
+                <ChevronRight className="w-4 h-4" />
               </Link>
-            )
-          ) : (
-            <div className="w-12 opacity-5 pointer-events-none flex items-center justify-center p-1.5 grayscale">
-              <ChevronRight className="w-3.5 h-3.5" />
-            </div>
+            </motion.div>
           )}
-        </motion.div>
+        </>
       )}
     </>
   );
