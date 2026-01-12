@@ -51,33 +51,6 @@ const speakers = [
     bio: 'ICPC World Finalist 2023. Cracking complex problems at Google.',
     socials: { linkedin: 'https://www.linkedin.com/in/jaskaran-singh-8b8450200/' },
   },
-  {
-    id: 5,
-    name: 'Kanishak Chaurasia',
-    role: 'Founder, PolyCrypt',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F3.webp&w=1080&q=75', // Keep remote if no local text
-    tag: '@kanishak_poly',
-    bio: 'Building the future of decentralized security at PolyCrypt HQ.',
-    socials: { linkedin: 'https://www.linkedin.com/in/dappdost/' },
-  },
-  {
-    id: 6,
-    name: 'Harshvardhan Singh',
-    role: 'Tech Staff, GFG',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F1.webp&w=1080&q=75', // Keep remote
-    tag: '@harsh_dev',
-    bio: 'Mentoring the next generation of developers at GeeksforGeeks.',
-    socials: { linkedin: 'https://www.linkedin.com/in/harshvardhan-singh-43bb86242/' },
-  },
-  {
-    id: 7,
-    name: 'Vikas Thakur',
-    role: 'Tech Staff, GFG',
-    image: 'https://www.hackjklu.com/_next/image?url=%2Fjudges%2F2.webp&w=1080&q=75', // Keep remote
-    tag: '@vikas_gfg',
-    bio: 'Expert in algorithms and data structures, shaping the GFG curriculum.',
-    socials: { linkedin: '' },
-  },
 ];
 
 const judges = [
@@ -85,19 +58,10 @@ const judges = [
     id: 101,
     name: 'Pranav M',
     role: 'SDE-II at Microsoft',
-    image: '/judges/pranav.webp', // Need fallback
+    image: '/judges/pranav.webp',
     tag: '@pranav_ms',
     bio: 'SDE-II at Microsoft',
     socials: { linkedin: 'https://www.linkedin.com/in/candidatepstx-95adfsdk23/' },
-  },
-  {
-    id: 102,
-    name: 'Sudarshan Iyengar',
-    role: 'Head CSE at IIT Ropar',
-    image: '/speakers/profiyengar.jpeg',
-    tag: '@prof_iyengar',
-    bio: 'Head CSE at IIT Ropar',
-    socials: { linkedin: 'https://www.linkedin.com/in/sudarshan-iyengar-3560b8145/' },
   },
   {
     id: 103,
@@ -134,24 +98,6 @@ const judges = [
     tag: '@devendra',
     bio: 'Lead Data Scientist at KainSkep',
     socials: { linkedin: 'https://www.linkedin.com/in/devendra-parihar/' },
-  },
-  {
-    id: 107,
-    name: 'Rohit Mehta',
-    role: 'Head of QA',
-    image: '/speakers/rohit metha.webp',
-    tag: '@rohit_qa',
-    bio: 'Head of Quality and Automation Testing',
-    socials: { linkedin: 'https://www.linkedin.com/in/rohitmehta086/' },
-  },
-  {
-    id: 108,
-    name: 'Harshaditya Gaur',
-    role: 'Remote Sensing Eng.',
-    image: '/speakers/harsh aditya gaur.webp',
-    tag: '@harshaditya',
-    bio: 'Remote Sensing Engineer at BharatRohan',
-    socials: { linkedin: 'https://www.linkedin.com/in/harshadityagaur/' },
   },
   {
     id: 109,
@@ -252,12 +198,14 @@ function FloorCarousel({ data }: FloorCarouselProps) {
   const [hoveredSpeaker, setHoveredSpeaker] = useState<any>(null);
   const hoverTimeoutRef = useRef<any>(null); // For grace period
 
-  const visibleCount = 7; // UPDATED to 7
+  // Enforce ODD visible count (add 1 if even) to ensure a center item (at 270deg) exists
+  const visibleCount = data.length % 2 === 0 ? data.length + 1 : data.length;
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
@@ -276,13 +224,19 @@ function FloorCarousel({ data }: FloorCarouselProps) {
   const visibleSpeakers = [];
   for (let i = 0; i < visibleCount; i++) {
     const index = (startIndex + i) % data.length;
-    visibleSpeakers.push({ ...data[index], indexPosition: i });
+    visibleSpeakers.push({ ...data[index], indexPosition: i, originalIndex: index });
   }
 
   const xRadius = isMobile ? window.innerWidth * 0.42 : Math.min(800, window.innerWidth * 0.4);
   const yRadius = isMobile ? 120 : 250;
-  const startAngle = 180;
-  const endAngle = 360;
+
+  const centerIndex = Math.floor(visibleCount / 2);
+  const step = 50; // Fixed spacing in degrees
+
+  const handleSpeakerClick = (originalIndex: number) => {
+    const newStart = (originalIndex - centerIndex + data.length) % data.length;
+    setStartIndex(newStart);
+  };
 
   // --- HOVER HANDLERS ---
   const handleSpeakerEnter = (speaker: any) => {
@@ -315,7 +269,7 @@ function FloorCarousel({ data }: FloorCarouselProps) {
       style={{ transformStyle: 'preserve-3d' }}
     >
       {/* --- NAVIGATION CONTROLS --- */}
-      <div className="absolute z-[1000] flex justify-between w-full max-w-[95vw] md:max-w-[1400px] px-2 md:px-4 top-[35%] -translate-y-1/2 pointer-events-none">
+      <div className="absolute z-[1000] flex justify-between w-full max-w-[85vw] md:max-w-[1100px] px-4 md:px-12 top-[55%] -translate-y-1/2 pointer-events-none">
         <button
           onClick={prevSlide}
           className="pointer-events-auto p-1.5 md:p-3 rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
@@ -431,9 +385,9 @@ function FloorCarousel({ data }: FloorCarouselProps) {
       <AnimatePresence mode="popLayout">
         {visibleSpeakers.map((speaker) => {
           // Position Logic
-          const step = (endAngle - startAngle) / (visibleCount - 1);
-          // Use indexPosition (0 to 6) to determine slot
-          const degree = startAngle + speaker.indexPosition * step;
+
+          // Use indexPosition relative to centerIndex to fan out from 270 degrees
+          const degree = 270 + (speaker.indexPosition - centerIndex) * step;
           const radian = (degree * Math.PI) / 180;
 
           const x = Math.cos(radian) * xRadius;
@@ -444,8 +398,8 @@ function FloorCarousel({ data }: FloorCarouselProps) {
           let scale = 0.5 + normalizedY * 0.5;
           const zIndex = Math.floor(normalizedY * 100);
 
-          // Center is index 3 in a 7-item array (0 1 2 [3] 4 5 6)
-          const isCenter = speaker.indexPosition === 3;
+          // Center logic using dynamic centerIndex
+          const isCenter = speaker.indexPosition === centerIndex;
 
           // SCALE BOOST for center item (Responsive)
           if (isCenter) {
@@ -464,6 +418,7 @@ function FloorCarousel({ data }: FloorCarouselProps) {
               isMobile={isMobile}
               onMouseEnter={() => handleSpeakerEnter(speaker)}
               onMouseLeave={handleSpeakerLeave}
+              onClick={() => handleSpeakerClick(speaker.originalIndex)}
             />
           );
         })}
@@ -482,6 +437,7 @@ function SpeakerCard({
   isMobile,
   onMouseEnter,
   onMouseLeave,
+  onClick,
 }: any) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -554,6 +510,7 @@ function SpeakerCard({
           className={`${isMobile ? 'w-32 h-32' : 'w-56 h-56'} relative cursor-pointer`} // Increased mobile size
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
+          onClick={onClick}
           whileHover={{ scale: 1.15, y: -20 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >

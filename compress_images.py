@@ -1,10 +1,9 @@
 import os
 from PIL import Image
 
-# Correct path to the gallery folder
 gallery_path = r"c:\Users\Admin\Desktop\HackJKLU V5.0\HackJKLU-v5.0\src\assets\gallery"
 max_dimension = 1920
-quality = 85 # High quality for WebP
+quality = 85 
 
 print(f"Compressing images in {gallery_path}...")
 
@@ -17,8 +16,7 @@ for root, dirs, files in os.walk(gallery_path):
             try:
                 original_size = os.path.getsize(filepath)
                 
-                with Image.open(filepath) as img:
-                    # Calculate new size
+                with Image.open(filepath) as img:                         
                     width, height = img.size
                     if width > max_dimension or height > max_dimension:
                         if width > height:
@@ -30,11 +28,11 @@ for root, dirs, files in os.walk(gallery_path):
                         
                         img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
                     
-                    # Convert to RGB (if necessary)
-                    if img.mode in ('RGBA', 'P'): 
-                        img = img.convert('RGBA') # Keep alpha for WebP
                     
-                    # Save as WebP
+                    if img.mode in ('RGBA', 'P'): 
+                        img = img.convert('RGBA') 
+                    
+                   
                     new_filepath = os.path.splitext(filepath)[0] + '.webp'
                     img.save(new_filepath, "WEBP", quality=quality, optimize=True)
                     
@@ -44,10 +42,7 @@ for root, dirs, files in os.walk(gallery_path):
                     
                     print(f"Compressed {filename}: {original_size/1024:.2f}KB -> {new_size/1024:.2f}KB (Saved {saved/1024:.2f}KB)")
                     
-                    # If the original was not webp, remove it (optional - safer to keep for now or ask user, 
-                    # but prompt implies 'compress these', usually replacing or converting. 
-                    # Verification plan says 'compress these to high-quality WebP'.
-                    # I will replace the files. 
+             
                     if filepath != new_filepath:
                          os.remove(filepath)
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ChevronRight, ChevronDown, Zap, Shield, Hammer, Sun } from 'lucide-react';
 
@@ -199,7 +199,7 @@ const QuestionCard = ({
 
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-5 pl-8 text-left relative z-10"
+        className="w-full flex items-center justify-between p-4 md:p-5 pl-6 md:pl-8 text-left relative z-10"
       >
         <div className="flex items-center gap-4">
           <span
@@ -249,6 +249,14 @@ export function FAQ() {
 
   const activeHall = halls.find((h) => h.id === activeHallId) || halls[0];
 
+  useEffect(() => {
+    const imageUrls = [zeusBg, athenaBg, hephaestusBg, apolloBg];
+    imageUrls.forEach((url) => {
+      const img = new Image();
+      img.src = url;
+    });
+  }, []);
+
   // Filter questions based on search
   const filteredHalls = searchQuery
     ? halls
@@ -270,7 +278,7 @@ export function FAQ() {
   };
 
   return (
-    <section className="h-screen bg-[#0F172A] text-white relative overflow-hidden font-cinzel flex flex-col">
+    <section className="h-[100dvh] bg-[#0F172A] text-white relative overflow-hidden font-cinzel flex flex-col">
       {/* Background Ambience with Hall Images */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Hall Background Image */}
@@ -316,7 +324,7 @@ export function FAQ() {
         />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-24 pb-56 md:pt-28 md:pb-24">
+      <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-20 pb-20 md:pt-28 md:pb-24">
         {/* Page Header */}
         <header className="text-center mb-8 shrink-0">
           <motion.div
@@ -349,7 +357,7 @@ export function FAQ() {
             </div>
 
             {/* Hall Navigation - Scrollable if needed */}
-            <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pr-1 pb-1">
+            <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pr-1 pb-1 snap-x snap-mandatory">
               {halls.map((hall) => {
                 const isActive = activeHallId === hall.id && !searchQuery;
                 const Icon = hall.icon;
@@ -358,7 +366,7 @@ export function FAQ() {
                   <button
                     key={hall.id}
                     onClick={() => handleHallChange(hall.id)}
-                    className={`relative group shrink-0 lg:w-full text-left p-4 rounded-lg border transition-all duration-300 overflow-hidden backdrop-blur-sm ${isActive ? 'bg-black/40 border-white/20 shadow-lg' : 'bg-black/20 border-white/10 hover:bg-black/30'}`}
+                    className={`relative group shrink-0 w-[85vw] sm:w-auto lg:w-full text-left p-4 rounded-lg border transition-all duration-300 overflow-hidden backdrop-blur-sm snap-center ${isActive ? 'bg-black/40 border-white/20 shadow-lg' : 'bg-black/20 border-white/10 hover:bg-black/30'}`}
                   >
                     {/* Hover Glow Background */}
                     <div
@@ -409,7 +417,7 @@ export function FAQ() {
           </aside>
 
           {/* Main Content Area */}
-          <main className="flex-1 rounded-2xl p-6 md:p-8 relative overflow-hidden flex flex-col min-h-0">
+          <main className="flex-1 rounded-2xl p-4 md:p-8 relative overflow-hidden flex flex-col min-h-0">
             {/* Scrollable Inner Content */}
             <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pr-2">
               {/* SEARCH RESULTS VIEW */}
