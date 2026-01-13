@@ -81,12 +81,10 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
 
   return (
     <motion.div
-      className={
-        isMobile ? 'relative w-full min-h-screen overflow-hidden' : 'fixed inset-0 w-full h-full'
-      }
+      className="relative w-full min-h-screen overflow-hidden"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
       {/* Background - Optimizing with specific position */}
@@ -96,7 +94,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
           style={{
             backgroundImage: `url(${completeBg})`,
             backgroundPosition: bgPosition,
-            backgroundSize: isMobile ? 'auto 400%' : 'cover',
+            backgroundSize: '100% 400%',
             backgroundRepeat: 'no-repeat',
             filter: 'contrast(1.1) saturate(1.1)',
           }}
@@ -250,10 +248,10 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                 {/* Social Links */}
                 {data.socials && (
                   <div className="flex items-center justify-end gap-4 sm:gap-6 pb-2 sm:pb-0">
-                    {data.socialLinks?.x && <SocialIcon icon={xIcon} link={data.socialLinks.x} />}
-                    {data.socialLinks?.instagram && <SocialIcon icon={instaIcon} link={data.socialLinks.instagram} />}
-                    {data.socialLinks?.linkedin && <SocialIcon icon={linkedinIcon} link={data.socialLinks.linkedin} />}
-                    {data.socialLinks?.web && <SocialIcon icon={webIcon} link={data.socialLinks.web} />}
+                    {data.socialLinks?.x && <SocialIcon icon={xIcon} link={data.socialLinks?.x} />}
+                    {data.socialLinks?.instagram && <SocialIcon icon={instaIcon} link={data.socialLinks?.instagram} />}
+                    {data.socialLinks?.linkedin && <SocialIcon icon={linkedinIcon} link={data.socialLinks?.linkedin} />}
+                    {data.socialLinks?.web && <SocialIcon icon={webIcon} link={data.socialLinks?.web} />}
                   </div>
                 )}
               </motion.div>
