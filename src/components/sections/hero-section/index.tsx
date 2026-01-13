@@ -73,7 +73,7 @@ export function Hero() {
 
   return (
     <section
-      className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-void-black touch-none"
+      className="relative h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden bg-void-black touch-none"
       // onClick={handleTransition}
       style={{
         background: 'radial-gradient(circle at 50% 30%, #1a202c 0%, #000000 70%)',
