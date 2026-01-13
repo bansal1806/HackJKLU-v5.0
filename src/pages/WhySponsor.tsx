@@ -165,7 +165,7 @@ export function WhySponsor() {
                 >
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[clamp(4rem,10vw,8rem)] h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
                     <h3 className="text-[clamp(1.25rem,3vw,2rem)] font-bold text-amber-100 max-w-4xl mx-auto leading-snug">
-                        "HackJKLU v5.0 isn’t just an event — it’s a <span className="text-gold-400">talent</span>, <span className="text-gold-400">innovation</span>, and <span className="text-gold-400">brand engagement</span> platform."
+                        "HackJKLU v5.0 isn’t just an event it’s a <span className="text-gold-400">talent</span>, <span className="text-gold-400">innovation</span>, and <span className="text-gold-400">brand engagement</span> platform."
                     </h3>
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[clamp(4rem,10vw,8rem)] h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
                 </motion.div>
