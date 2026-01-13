@@ -12,6 +12,7 @@ const pageOrder = [
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },
   { path: '/sponsor', name: 'Why Sponsor Us ?' },
+  { path: '/problem-statements', name: 'Call for Problems' },
   { path: '/itinerary', name: 'Itinerary' },
   { path: '/events', name: 'Events' },
 ];

@@ -15,6 +15,7 @@ import { PageNavigation } from './components/navigation/PageNavigation';
 import { SpeakersPage } from './pages/Speakers';
 import { CloudTest } from './pages/CloudTest';
 import { WhySponsor } from './pages/WhySponsor';
+import { CallForProblemStatements } from './pages/CallForProblemStatements';
 
 function App() {
   const location = useLocation();
@@ -76,6 +77,7 @@ function App() {
               }
             />
             <Route path="/sponsor" element={<WhySponsor />} />
+            <Route path="/problem-statements" element={<CallForProblemStatements />} />
             <Route path="/challenges" element={<Navigate to="/" replace />} />
             <Route path="/cloud-test" element={<CloudTest />} />
           </Routes>
