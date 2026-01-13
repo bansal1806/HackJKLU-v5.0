@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+=======
+import { Routes, Route, useLocation } from 'react-router-dom';
+
+>>>>>>> ad5ba56a90073c76646f176c0e80cde1e4c452eb
 import { Layout } from './components/layout/Layout';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
@@ -21,6 +26,7 @@ function App() {
 
   return (
     <Layout>
+<<<<<<< HEAD
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
@@ -81,6 +87,57 @@ function App() {
           </Routes>
         </motion.div>
       </AnimatePresence>
+=======
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/themes" element={<Themes />} />
+        <Route path="/prizes" element={<PrizesPage />} />
+        <Route path="/partners" element={<Partners />} />
+        <Route path="/speakers" element={<SpeakersPage />} />
+        <Route
+          path="/itinerary"
+          element={
+            <>
+              <ComingSoonOverlay>
+                <Itinerary />
+              </ComingSoonOverlay>
+              <PageNavigation />
+            </>
+          }
+        />
+        <Route
+          path="/gallery"
+          element={
+            <>
+              <Gallery />
+              <PageNavigation />
+            </>
+          }
+        />
+        <Route
+          path="/faq"
+          element={
+            <>
+              <FAQPage />
+              <PageNavigation />
+            </>
+          }
+        />
+        <Route path="/events"
+          element={
+            <>
+              <ComingSoonOverlay>
+                <EventsPage />
+              </ComingSoonOverlay>
+              <PageNavigation />
+            </>
+          }
+        />
+        <Route path="/sponsor" element={<WhySponsor />} />
+        <Route path="/cloud-test" element={<CloudTest />} />
+      </Routes>
+>>>>>>> ad5ba56a90073c76646f176c0e80cde1e4c452eb
     </Layout>
   );
 }
