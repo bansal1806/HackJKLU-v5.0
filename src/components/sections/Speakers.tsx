@@ -7,6 +7,12 @@ import arrowRight from '../../assets/prizes/arrow-right.webp';
 import bgImage from '../../assets/speakers/bg-amphitheater.jpg';
 import frameImage from '../../assets/speakers/gold-frame.png';
 
+// Social Icons
+import iconWeb from '../../assets/socials/web.png';
+import iconInsta from '../../assets/socials/instagram.png';
+import iconX from '../../assets/socials/x.png';
+import iconLinkedin from '../../assets/socials/linkedin.png';
+
 
 
 // Judges Images
@@ -126,6 +132,14 @@ const judges = [
 
 export function Speakers() {
   const [activeCategory, setActiveCategory] = useState<'speakers' | 'judges'>('speakers');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const currentData = activeCategory === 'speakers' ? speakers : judges;
 
@@ -189,9 +203,13 @@ export function Speakers() {
         </div>
       </div>
 
-      {/* 3D Floor Container */}
+      {/* 3D Floor Container (Desktop) or Mobile Carousel */}
       <div className="absolute inset-0 top-0 flex items-center justify-center perspective-[1200px] overflow-hidden">
-        <FloorCarousel data={currentData} key={activeCategory} />
+        {isMobile ? (
+          <MobileCarousel data={currentData} key={`${activeCategory}-mobile`} />
+        ) : (
+          <FloorCarousel data={currentData} key={`${activeCategory}-desktop`} />
+        )}
       </div>
     </section >
   );
@@ -685,6 +703,136 @@ function SpeakerCard({
         </motion.div>
       </motion.div>
     </motion.div>
+  );
+}
+
+function SocialIcon({ icon, delay }: { icon: string; delay: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay, type: 'spring', stiffness: 400, damping: 20 }}
+      className="w-full h-full rounded-full bg-black/80 border border-[#d4af37]/50 hover:bg-[#d4af37] hover:border-white p-1.5 transition-all cursor-pointer group shadow-lg flex items-center justify-center"
+    >
+      <img
+        src={icon}
+        alt="Social"
+        className="w-full h-full object-contain invert opacity-70 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300"
+      />
+    </motion.div>
+  );
+}
+
+// --- MOBILE CAROUSEL ---
+function MobileCarousel({ data }: { data: typeof speakers }) {
+  const [idx, setIdx] = useState(0);
+
+  const next = () => setIdx((prev) => (prev + 1) % data.length);
+  const prev = () => setIdx((prev) => (prev - 1 + data.length) % data.length);
+
+  const onDragEnd = (_: any, info: any) => {
+    if (info.offset.x < -50) next();
+    else if (info.offset.x > 50) prev();
+  };
+
+  const activeItem: any = data[idx];
+
+  return (
+    <div className="relative w-full h-full flex flex-col items-center pt-32 pb-20 justify-center">
+      {/* Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#d4af37]/10 blur-[80px] rounded-full pointer-events-none" />
+
+      {/* Main Card (Ring Style) */}
+      <div className="relative w-80 h-[450px] perspective-1000 z-10 flex flex-col items-center justify-center">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.div
+            key={activeItem.id}
+            initial={{ opacity: 0, x: 100, scale: 0.8 }}
+            animate={{ opacity: 1, x: 0, scale: 1, zIndex: 10 }}
+            exit={{ opacity: 0, x: -100, scale: 0.8, zIndex: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={onDragEnd}
+            className="absolute inset-0 flex flex-col items-center cursor-grab active:cursor-grabbing"
+          >
+            {/* Circular Image Container */}
+            <div className="relative w-56 h-56 shrink-0 mb-6">
+              {/* Custom Gold Frame */}
+              <div className="absolute -inset-[18%] z-20 pointer-events-none filter drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
+                <img
+                  src={frameImage}
+                  alt="Frame"
+                  className="w-full h-full object-contain brightness-125 contrast-110"
+                />
+              </div>
+
+              {/* Image Wrapper */}
+              <div className="absolute inset-[10%] rounded-full border-[2px] border-[#d4af37] shadow-[0_0_30px_rgba(212,175,55,0.4)] bg-black z-10 overflow-hidden">
+                <img
+                  src={activeItem.image}
+                  alt={activeItem.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Outer Glow Ring (Optional - can be removed if frame is enough) */}
+              <div className="absolute -inset-4 rounded-full border border-[#d4af37]/20 border-dashed animate-[spin_10s_linear_infinite]" />
+            </div>
+
+            {/* Info Panel (Floating Below) */}
+            <div className="w-full bg-black/80 backdrop-blur-md border border-[#d4af37]/40 rounded-2xl p-6 text-center shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative">
+              {/* Decorative Top Border */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-[#d4af37]" />
+
+              <h3 className="text-[#d4af37] font-bold text-2xl font-cinzel mb-1 tracking-wide">
+                {activeItem.name}
+              </h3>
+              <p className="text-[#a89052] text-xs uppercase tracking-[0.2em] font-bold mb-4">
+                {activeItem.role}
+              </p>
+
+              <p className="text-white/80 text-sm leading-relaxed font-sans line-clamp-3 mb-4">
+                {activeItem.bio}
+              </p>
+
+              {/* Socials */}
+              <div className="flex justify-center gap-4">
+                {activeItem.socials.web && <div className="w-8 h-8"><SocialIcon icon={iconWeb} delay={0} /></div>}
+                {activeItem.socials.linkedin && <div className="w-8 h-8"><SocialIcon icon={iconLinkedin} delay={0.05} /></div>}
+                {activeItem.socials.x && <div className="w-8 h-8"><SocialIcon icon={iconX} delay={0.1} /></div>}
+                {activeItem.socials.insta && <div className="w-8 h-8"><SocialIcon icon={iconInsta} delay={0.15} /></div>}
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Navigation Buttons (Floating) */}
+      <button
+        onClick={prev}
+        className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 border border-[#d4af37]/30 text-[#d4af37] z-20 backdrop-blur-sm"
+      >
+        <img src={arrowLeft} className="w-6 h-6 drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]" />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 border border-[#d4af37]/30 text-[#d4af37] z-20 backdrop-blur-sm"
+      >
+        <img src={arrowRight} className="w-6 h-6 drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]" />
+      </button>
+
+      {/* Progress Indicators */}
+      <div className="flex gap-2 mt-8 z-10">
+        {data.map((_, i) => (
+          <div
+            key={i}
+            className={`h-1.5 rounded-full transition-all duration-300 ${i === idx ? 'bg-[#d4af37] w-8' : 'bg-[#d4af37]/20 w-1.5'}`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
