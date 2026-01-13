@@ -18,14 +18,22 @@ export interface StandardPartnerData {
   description: string[];
   socials: boolean;
   themeColor: string;
+  socialLinks?: {
+    web?: string;
+    linkedin?: string;
+    instagram?: string;
+    x?: string;
+  };
 }
 
-const SocialIcon = memo(({ icon }: { icon: string }) => (
+const SocialIcon = memo(({ icon, link }: { icon: string; link?: string }) => (
   <motion.a
-    href="#"
+    href={link || '#'}
+    target={link ? '_blank' : '_self'}
+    rel={link ? 'noopener noreferrer' : ''}
     whileHover={{ scale: 1.25, filter: 'brightness(1.5)', y: -5 }}
     whileTap={{ scale: 0.95 }}
-    className="w-8 h-8 sm:w-10 sm:h-10 transition-all cursor-pointer opacity-90 hover:opacity-100"
+    className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 transition-all ${link ? 'cursor-pointer opacity-90 hover:opacity-100' : 'cursor-default opacity-50'}`}
   >
     <img
       src={icon}
@@ -35,6 +43,8 @@ const SocialIcon = memo(({ icon }: { icon: string }) => (
     />
   </motion.a>
 ));
+
+
 
 const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -95,12 +105,14 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
       </div>
 
       {/* Header: Fixed Top -> Absolute (scrolls with section) */}
-      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-28 md:pt-32 pointer-events-none px-4 text-center transition-all duration-300">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
-          PAST PARTNERS
-        </h1>
+      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-20 sm:pt-28 md:pt-32 pointer-events-none px-2 sm:px-4 text-center transition-all duration-300">
+        {data.title === 'GOLD PARTNER' && (
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
+            PAST PARTNERS
+          </h1>
+        )}
         <h2
-          className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+          className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-4xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
           style={gradientStyle}
         >
           {data.title}
@@ -108,7 +120,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
         <motion.h3
           animate={{ opacity: isHovered && data.logo ? 0 : 1 }}
           transition={{ duration: 0.4 }}
-          className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-heading tracking-wider uppercase"
+          className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-heading tracking-wider uppercase"
           style={gradientStyle}
         >
           {data.partnerName}
@@ -117,10 +129,14 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
 
       {/* Interaction Area */}
       <div
-        className={`absolute inset-0 z-40 flex items-center justify-center ${isMobile ? 'pt-[25vh] md:pt-[30vh] landscape:pt-16' : 'pt-32 lg:pt-40'}`}
+        className={`absolute inset-0 z-40 flex items-center justify-center ${isMobile
+          ? 'pt-[18vh] xs:pt-[22vh] md:pt-[25vh] landscape:pt-[6rem]'
+          : 'pt-32 lg:pt-40'
+          }`}
       >
         <div
-          className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-2 sm:gap-4' : 'gap-8 lg:gap-16'}`}
+          className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-2xs sm:gap-4' : 'gap-8 lg:gap-16'
+            }`}
         >
           {/* Ring Group - Clickable on Mobile */}
           <motion.div
@@ -130,7 +146,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
             animate={
               isHovered && data.logo
                 ? isMobile
-                  ? { y: -50, scale: 0.8 }
+                  ? { y: 0, scale: 0.85 }
                   : { x: isCompactDesktop ? -180 : -300 }
                 : { x: 0, y: 0, scale: 1 }
             }
@@ -145,7 +161,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="absolute -bottom-12 text-[#EFE3A0]/60 text-xs font-heading tracking-widest uppercase"
+                className="absolute -bottom-8 xs:-bottom-10 text-[#EFE3A0]/60 text-[9px] xs:text-[10px] font-heading tracking-widest uppercase"
               >
                 Tap to view details
               </motion.div>
@@ -153,7 +169,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
 
             {/* Adjust Ring Size for Mobile vs Desktop */}
             {/* Added max-w constraints for intermediate screens */}
-            <div className="relative w-[70vw] h-[70vw] max-w-[280px] max-h-[280px] sm:max-w-none sm:max-h-none sm:w-[320px] sm:h-[320px] md:w-[360px] md:h-[360px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] will-change-transform object-contain">
+            <div className="relative w-[50vw] h-[50vw] max-w-[180px] max-h-[180px] xs:max-w-[240px] xs:max-h-[240px] sm:max-w-none sm:max-h-none sm:w-[320px] sm:h-[320px] md:w-[360px] md:h-[360px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] will-change-transform object-contain">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{
@@ -201,11 +217,14 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                 animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
                 exit={isMobile ? { opacity: 0, y: 30 } : { opacity: 0, x: 50 }}
                 transition={{ duration: 0.6, ease: 'easeInOut' }}
-                className={`flex flex-col gap-4 sm:gap-6 text-left ${isMobile ? 'w-[90%] max-w-2xl mx-auto -mt-6 px-4 max-h-[45vh] overflow-y-auto hide-scrollbar bg-neutral-950/40 backdrop-blur-sm rounded-xl p-4' : 'max-w-xl'}`}
+                className={`flex flex-col gap-3 sm:gap-6 text-left ${isMobile
+                  ? 'w-[90%] max-w-2xl mx-auto -mt-6 px-4 max-h-[40vh] overflow-y-auto hide-scrollbar bg-neutral-950/40 backdrop-blur-sm rounded-xl p-4'
+                  : 'max-w-xl'
+                  }`}
               >
-                <div className="space-y-3 sm:space-y-6">
+                <div className="space-y-2 sm:space-y-6">
                   <h4
-                    className="text-xl sm:text-3xl font-heading uppercase tracking-widest border-b pb-2"
+                    className="text-lg xs:text-xl sm:text-3xl font-heading uppercase tracking-widest border-b pb-2"
                     style={{ color: data.themeColor, borderColor: `${data.themeColor}33` }}
                   >
                     {data.partnerName}
@@ -214,7 +233,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                   {data.description.map((desc: string, i: number) => (
                     <p
                       key={i}
-                      className="text-[#FFEAA4] font-subheading leading-relaxed text-sm sm:text-base md:text-lg text-justify opacity-90"
+                      className="text-[#FFEAA4] font-subheading leading-relaxed text-xs xs:text-sm sm:text-base md:text-lg text-justify opacity-90"
                     >
                       {desc}
                     </p>
@@ -230,11 +249,11 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
 
                 {/* Social Links */}
                 {data.socials && (
-                  <div className="flex items-center justify-end gap-6 sm:gap-6 pb-2 sm:pb-0">
-                    <SocialIcon icon={xIcon} />
-                    <SocialIcon icon={instaIcon} />
-                    <SocialIcon icon={linkedinIcon} />
-                    <SocialIcon icon={webIcon} />
+                  <div className="flex items-center justify-end gap-4 sm:gap-6 pb-2 sm:pb-0">
+                    {data.socialLinks?.x && <SocialIcon icon={xIcon} link={data.socialLinks.x} />}
+                    {data.socialLinks?.instagram && <SocialIcon icon={instaIcon} link={data.socialLinks.instagram} />}
+                    {data.socialLinks?.linkedin && <SocialIcon icon={linkedinIcon} link={data.socialLinks.linkedin} />}
+                    {data.socialLinks?.web && <SocialIcon icon={webIcon} link={data.socialLinks.web} />}
                   </div>
                 )}
               </motion.div>

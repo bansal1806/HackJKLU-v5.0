@@ -56,6 +56,12 @@ type StandardPartnerData = {
   description: string[];
   socials: boolean;
   themeColor: string;
+  socialLinks?: {
+    web?: string;
+    linkedin?: string;
+    instagram?: string;
+    x?: string;
+  };
 };
 
 type GridPartnerData = {
@@ -95,6 +101,11 @@ const partnersData: PartnerData[] = [
     ],
     socials: true,
     themeColor: '#FFEAA4', // Gold
+    socialLinks: {
+      web: 'https://ention.in/',
+      linkedin: 'https://www.linkedin.com/company/entiontechnology/',
+      instagram: 'https://www.instagram.com/entiontech?igsh=ZHA3OGNxZDNxYXcx',
+    },
   },
   {
     id: 1,
@@ -109,6 +120,12 @@ const partnersData: PartnerData[] = [
     ],
     socials: true,
     themeColor: '#FFEAA4', // Gold
+    socialLinks: {
+      web: 'https://www.wscubetech.com/',
+      linkedin: 'https://www.linkedin.com/company/wscubetechindia/',
+      instagram: 'https://www.instagram.com/wscubetechindia?igsh=cjJid2hxa3c3MjF3',
+      x: 'https://share.google/GE3VTFtczttKcO33Z',
+    },
   },
   {
     id: 2,
@@ -229,7 +246,7 @@ export default function PartnersSections() {
                 `}</style>
 
         {partnersData.map((section) => (
-          <div key={section.id} className="relative w-full min-h-screen shrink-0">
+          <div key={section.id} className="relative w-full min-h-screen shrink-0 flex flex-col">
             <PartnerSection data={section} />
           </div>
         ))}
@@ -248,11 +265,10 @@ export default function PartnersSections() {
           <button
             key={section.id}
             onClick={() => switchSection(section.id)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full border-2 transition-all duration-300 ${
-              currentSection === section.id
-                ? 'bg-gold-500 border-gold-500 shadow-[0_0_15px_rgba(212,175,55,0.6)]'
-                : 'bg-transparent border-neutral-500 hover:border-gold-500/60'
-            }`}
+            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full border-2 transition-all duration-300 ${currentSection === section.id
+              ? 'bg-gold-500 border-gold-500 shadow-[0_0_15px_rgba(212,175,55,0.6)]'
+              : 'bg-transparent border-neutral-500 hover:border-gold-500/60'
+              }`}
             aria-label={`Go to section ${section.id + 1}`}
           />
         ))}
@@ -354,10 +370,11 @@ function PartnerSection({ data }: { data: PartnerData }) {
 
         {/* Interactive Table Area */}
         <div
-          className={`absolute inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-24' : 'pt-24'}`}
+          className={`absolute inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-24 xs:pt-28 sm:pt-32' : 'pt-24'
+            }`}
         >
           <motion.div
-            className="relative w-[90vw] h-[90vw] max-w-[340px] max-h-[340px] sm:max-w-none sm:max-h-none sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] mt-8 sm:mt-12"
+            className="relative w-[92vw] h-[92vw] max-w-[340px] max-h-[340px] xs:w-[85vw] xs:h-[85vw] sm:max-w-none sm:max-h-none sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] mt-8 xs:mt-12 sm:mt-16"
             animate={{ rotate: 360 }}
             transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
           >
@@ -404,7 +421,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
           </motion.div>
 
           {/* Footer / Hover Name Display */}
-          <div className="h-20 sm:h-24 mt-4 sm:mt-8 flex flex-col items-center justify-center text-center transition-opacity duration-300 px-4">
+          <div className="h-16 xs:h-20 sm:h-24 mt-4 sm:mt-8 flex flex-col items-center justify-center text-center transition-opacity duration-300 px-4">
             <AnimatePresence mode="wait">
               {hoveredPartner ? (
                 <motion.div
@@ -414,10 +431,10 @@ function PartnerSection({ data }: { data: PartnerData }) {
                   exit={{ opacity: 0, y: -10 }}
                   className="flex flex-col items-center gap-1"
                 >
-                  <span className="text-gold-400 font-heading tracking-widest text-xs sm:text-sm md:text-base uppercase opacity-80">
+                  <span className="text-gold-400 font-heading tracking-widest text-[10px] xs:text-xs sm:text-sm md:text-base uppercase opacity-80">
                     Community Partner
                   </span>
-                  <span className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-heading text-[#EFE3A0] uppercase tracking-wider">
+                  <span className="text-base xs:text-lg sm:text-xl md:text-3xl lg:text-4xl font-heading text-[#EFE3A0] uppercase tracking-wider">
                     {hoveredPartner.name}
                   </span>
                 </motion.div>
@@ -427,7 +444,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.5 }}
                   exit={{ opacity: 0 }}
-                  className="text-white/30 font-heading text-xs sm:text-sm md:text-base italic"
+                  className="text-white/30 font-heading text-[10px] xs:text-xs sm:text-sm md:text-base italic"
                 >
                   {isMobile ? 'Tap to reveal...' : 'Hover over the sigils...'}
                 </motion.div>

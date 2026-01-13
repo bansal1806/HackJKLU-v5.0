@@ -53,21 +53,19 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
       </div>
 
       {/* Header: Fixed Top */}
-      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-28 md:pt-32 pointer-events-none px-4 text-center transition-all duration-300">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
-          PARTNERS
-        </h1>
+      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-20 xs:pt-24 sm:pt-28 md:pt-32 pointer-events-none px-4 text-center transition-all duration-300">
       </div>
 
       {/* Grid Content: Stacks on mobile, Split on desktop */}
       <div
-        className={`absolute inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-24 pb-12 hide-scrollbar' : ''}`}
+        className={`absolute inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-16 xs:pt-20 sm:pt-24 pb-12 hide-scrollbar' : ''
+          }`}
       >
         {data.groups.map((group, groupIndex) => (
           <div
             key={groupIndex}
             className={`flex flex-col items-center w-full ${isMobile
-              ? 'relative py-6 border-b border-white/5 last:border-none'
+              ? 'relative py-4 xs:py-6 border-b border-white/5 last:border-none'
               : 'absolute left-0 right-0'
               }`}
             style={
@@ -83,7 +81,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
             }
           >
             <h2
-              className="text-xl sm:text-3xl md:text-4xl font-heading tracking-wider uppercase mb-6 sm:mb-10 text-center relative z-10"
+              className="text-lg xs:text-xl sm:text-3xl md:text-4xl font-heading tracking-wider uppercase mb-4 xs:mb-6 sm:mb-10 text-center relative z-10"
               style={{
                 background: `linear-gradient(to bottom, ${group.color} 60%, #4a4a4a 100%)`,
                 WebkitBackgroundClip: 'text',
@@ -93,10 +91,10 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
             >
               {group.title}
             </h2>
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-8 sm:gap-x-14 sm:gap-y-12 md:gap-16 lg:gap-20 px-2 w-full max-w-[98%] xl:max-w-screen-2xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-x-2 gap-y-6 xs:gap-x-4 xs:gap-y-8 sm:gap-x-14 sm:gap-y-12 md:gap-16 lg:gap-20 px-2 w-full max-w-[98%] xl:max-w-screen-2xl mx-auto">
               {group.partners.map((partner, pIndex) => (
                 <div key={pIndex} className="flex flex-col items-center gap-0 group relative">
-                  <div className="relative w-[40vw] h-[40vw] max-w-[140px] max-h-[140px] sm:max-w-none sm:max-h-none sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] lg:w-[260px] lg:h-[260px] will-change-transform">
+                  <div className="relative w-[35vw] h-[35vw] max-w-[120px] max-h-[120px] xs:w-[40vw] xs:h-[40vw] xs:max-w-[140px] xs:max-h-[140px] sm:max-w-none sm:max-h-none sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] lg:w-[260px] lg:h-[260px] will-change-transform">
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{
@@ -114,7 +112,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                         loading="eager"
                       />
                     </motion.div>
-                    <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8">
+                    <div className="absolute inset-0 flex items-center justify-center p-3 xs:p-4 sm:p-8">
                       <div className="relative w-full h-full flex items-center justify-center">
                         <img
                           src={partner.logo}
@@ -125,7 +123,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                       </div>
                     </div>
                   </div>
-                  <span className="text-xs sm:text-base md:text-lg font-heading text-[#EFE3A0]/80 tracking-wide text-center -mt-2 sm:-mt-6 transition-colors group-hover:text-[#EFE3A0]">
+                  <span className="text-[10px] xs:text-xs sm:text-base md:text-lg font-heading text-[#EFE3A0]/80 tracking-wide text-center -mt-2 sm:-mt-6 transition-colors group-hover:text-[#EFE3A0]">
                     {partner.name}
                   </span>
                 </div>

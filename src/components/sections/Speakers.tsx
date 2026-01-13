@@ -13,6 +13,15 @@ import iconInsta from '../../assets/socials/instagram.png';
 import iconX from '../../assets/socials/x.png';
 import iconLinkedin from '../../assets/socials/linkedin.png';
 
+// Judges Images
+import imgPranav from '../../assets/judges/pranav.webp';
+import imgSandhita from '../../assets/judges/sandhitaagarwal.webp';
+import imgAman from '../../assets/judges/aman.webp';
+import imgRishabh from '../../assets/judges/rishabhnag.webp';
+import imgDevendra from '../../assets/judges/devendraparihar.webp';
+import imgVineet from '../../assets/judges/vineetsharma.webp';
+import imgSparsh from '../../assets/judges/sparshagarwal.webp';
+
 // --- DATA ---
 const speakers = [
   {
@@ -58,7 +67,7 @@ const judges = [
     id: 101,
     name: 'Pranav M',
     role: 'SDE-II at Microsoft',
-    image: '/judges/pranav.webp',
+    image: imgPranav,
     tag: '@pranav_ms',
     bio: 'SDE-II at Microsoft',
     socials: { linkedin: 'https://www.linkedin.com/in/candidatepstx-95adfsdk23/' },
@@ -67,7 +76,7 @@ const judges = [
     id: 103,
     name: 'Sandhita Agarwal',
     role: 'Founder at Hygge',
-    image: '/judges/sandhitaagarwal.webp',
+    image: imgSandhita,
     tag: '@sandhita',
     bio: 'Founder at Hygge',
     socials: { linkedin: 'https://www.linkedin.com/in/sandhitaagarwal/' },
@@ -76,7 +85,7 @@ const judges = [
     id: 104,
     name: 'Aman',
     role: 'Founder at Ecovia',
-    image: '/judges/aman.webp',
+    image: imgAman,
     tag: '@aman',
     bio: 'Founder at Ecovia',
     socials: { linkedin: 'https://ecovia-pro.com/' },
@@ -85,7 +94,7 @@ const judges = [
     id: 105,
     name: 'Rishabh Nag',
     role: 'Co-Founder at Humanli AI',
-    image: '/judges/rishabhnag.webp',
+    image: imgRishabh,
     tag: '@rishabh',
     bio: 'Co-Founder at Humanli AI',
     socials: { linkedin: 'https://www.linkedin.com/in/rishabh-nag-founder03/' },
@@ -94,7 +103,7 @@ const judges = [
     id: 106,
     name: 'Devendra Parihar',
     role: 'Lead Data Scientist',
-    image: '/judges/devendraparihar.webp',
+    image: imgDevendra,
     tag: '@devendra',
     bio: 'Lead Data Scientist at KainSkep',
     socials: { linkedin: 'https://www.linkedin.com/in/devendra-parihar/' },
@@ -103,7 +112,7 @@ const judges = [
     id: 109,
     name: 'Vineet Sharma',
     role: 'Associate SWE',
-    image: '/judges/vineetsharma.webp',
+    image: imgVineet,
     tag: '@vineet',
     bio: 'Associate Software Engineer at Celebal Technologies',
     socials: { linkedin: 'https://www.linkedin.com/in/vineetsharma-24/' },
@@ -112,7 +121,7 @@ const judges = [
     id: 110,
     name: 'Sparsh Agarwal',
     role: 'Associate SWE',
-    image: '/judges/sparshagarwal.webp',
+    image: imgSparsh,
     tag: '@sparsh',
     bio: 'Associate Software Engineer at CoinDCX',
     socials: { linkedin: 'https://linkedin.com/in/akathecoder' },
