@@ -31,10 +31,10 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
 
   return (
     <motion.div
-      className={isMobile ? 'relative w-full min-h-screen' : 'fixed inset-0 w-full h-full'}
+      className="relative w-full min-h-screen"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
       {/* Background */}
@@ -44,7 +44,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
           style={{
             backgroundImage: `url(${completeBg})`,
             backgroundPosition: bgPosition,
-            backgroundSize: isMobile ? 'auto 400%' : 'cover',
+            backgroundSize: '100% 400%',
             backgroundRepeat: 'no-repeat',
             filter: 'contrast(1.1) saturate(1.1)',
           }}

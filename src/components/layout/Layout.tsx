@@ -1,4 +1,4 @@
-import { Volume2, VolumeX, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import owlLogo from '../../assets/owl-logo.png';
 
 import { useState } from 'react';
@@ -25,7 +25,7 @@ const menuItems = [
 
 export function Layout({ children }: LayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+
   const location = useLocation();
 
   return (
@@ -33,7 +33,7 @@ export function Layout({ children }: LayoutProps) {
       className="min-h-screen bg-void-black text-ivory-cream font-serif relative"
       style={{ backgroundColor: 'var(--void-black)', color: 'var(--ivory-cream)' }}
     >
-      {/* Top Line with Menu, Logo, and Sound */}
+      {/* Top Line with Menu and Logo */}
       <div className="fixed top-0 left-0 right-0 h-24 md:h-32 z-50 transition-all duration-300 bg-transparent">
         <div className="relative w-full h-full mt-10 md:mt-12">
           {/* Horizontal line - Only between Menu and Sound (not extending before/after) */}
@@ -67,19 +67,7 @@ export function Layout({ children }: LayoutProps) {
           </div>
 
           {/* Sound Button - Right */}
-          <div className="absolute top-0 right-6 md:right-8 -translate-y-1/2 pointer-events-auto px-2">
-            <button
-              onClick={() => setIsMuted(!isMuted)}
-              className="opacity-80 hover:opacity-100 transition-opacity"
-              style={{ color: 'var(--ivory-cream)' }}
-            >
-              {isMuted ? (
-                <VolumeX className="w-6 h-6 md:w-7 md:h-7" />
-              ) : (
-                <Volume2 className="w-6 h-6 md:w-7 md:h-7" />
-              )}
-            </button>
-          </div>
+
         </div>
       </div>
 
@@ -112,16 +100,16 @@ export function Layout({ children }: LayoutProps) {
 
             {/* Sidebar Menu */}
             <motion.div
-              initial={{ x: -450 }}
+              initial={{ x: '-100%' }}
               animate={{ x: 0 }}
-              exit={{ x: -450 }}
+              exit={{ x: '-100%' }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="fixed left-0 top-0 bottom-0 z-60 w-[26rem] flex flex-col shadow-2xl sidebar-menu overflow-y-auto"
+              className="fixed left-0 top-0 bottom-0 z-60 w-[85vw] sm:w-[26rem] flex flex-col shadow-2xl sidebar-menu overflow-y-auto"
               style={{ backgroundColor: 'black' }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header: Socials + Close Button */}
-              <div className="flex items-center justify-between p-6 pl-8">
+              <div className="flex items-center justify-between p-4 sm:p-6 pl-4 sm:pl-8">
                 {/* Social Icons */}
                 <div className="flex items-center gap-5">
                   {/* Instagram */}
@@ -218,7 +206,7 @@ export function Layout({ children }: LayoutProps) {
               </div>
 
               {/* Menu Items */}
-              <nav className="flex-1 px-8 py-4">
+              <nav className="flex-1 px-4 sm:px-8 py-4">
                 <div className="flex flex-col gap-6">
                   {menuItems.map((item) => {
                     const isActive = location.pathname === item.path;
@@ -262,7 +250,7 @@ export function Layout({ children }: LayoutProps) {
               </nav>
 
               {/* Campus Map Section */}
-              <div className="px-8 py-4 border-t" style={{ borderColor: 'rgba(126, 64, 49, 0.3)' }}>
+              <div className="px-4 sm:px-8 py-4 border-t" style={{ borderColor: 'rgba(126, 64, 49, 0.3)' }}>
                 <span className="font-[Cinzel] text-lg block mb-3 text-center" style={{ color: 'var(--d4af37)' }}>
                   — Campus Map —
                 </span>
@@ -298,7 +286,7 @@ export function Layout({ children }: LayoutProps) {
 
 
 
-              <div className="px-8 py-6 border-t" style={{ borderColor: 'rgba(126, 64, 49, 0.3)' }}>
+              <div className="px-4 sm:px-8 py-6 border-t" style={{ borderColor: 'rgba(126, 64, 49, 0.3)' }}>
                 <span
                   className="font-[Cinzel] text-sm transition-colors block text-center opacity-80"
                   style={{ color: 'var(--stone-gray)' }}

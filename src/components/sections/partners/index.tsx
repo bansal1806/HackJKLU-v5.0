@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 // Assets
 import completeBg from '../../../assets/partners/complete-bg.webp';
@@ -179,104 +179,13 @@ const partnersData: PartnerData[] = [
 ];
 
 export default function PartnersSections() {
-  const [currentSection, setCurrentSection] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const switchSection = useCallback(
-    (nextSection: number) => {
-      if (isAnimating || nextSection === currentSection) return;
-      setIsAnimating(true);
-      setCurrentSection(nextSection);
-      setTimeout(() => setIsAnimating(false), 1000);
-    },
-    [isAnimating, currentSection],
-  );
-
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      if (isAnimating) return;
-      if (e.deltaY > 0 && currentSection < partnersData.length - 1) {
-        switchSection(currentSection + 1);
-      } else if (e.deltaY < 0 && currentSection > 0) {
-        switchSection(currentSection - 1);
-      }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isAnimating) return;
-      if (e.key === 'ArrowDown' && currentSection < partnersData.length - 1) {
-        switchSection(currentSection + 1);
-      } else if (e.key === 'ArrowUp' && currentSection > 0) {
-        switchSection(currentSection - 1);
-      }
-    };
-
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('wheel', handleWheel, { passive: false });
-    }
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      if (container) {
-        container.removeEventListener('wheel', handleWheel);
-      }
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [currentSection, isAnimating, switchSection]);
-
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // --- MOBILE/TABLET VIEW (Scrollable Stack) ---
-  if (isMobile) {
-    return (
-      <div className="bg-neutral-950 text-neutral-100 min-h-screen font-heading overflow-y-auto overflow-x-hidden">
-        <style>{`
-                    ::-webkit-scrollbar { width: 4px; }
-                    ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
-                `}</style>
-
-        {partnersData.map((section) => (
-          <div key={section.id} className="relative w-full min-h-screen shrink-0 flex flex-col">
-            <PartnerSection data={section} />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
-    <div
-      ref={containerRef}
-      className="relative bg-neutral-950 text-neutral-100 min-h-screen overflow-hidden font-heading"
-    >
-      {/* Section Navigation Indicators */}
-      <div className="fixed right-2 sm:right-6 md:right-8 lg:right-12 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 sm:gap-4 pointer-events-auto">
-        {partnersData.map((section) => (
-          <button
-            key={section.id}
-            onClick={() => switchSection(section.id)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full border-2 transition-all duration-300 ${currentSection === section.id
-              ? 'bg-gold-500 border-gold-500 shadow-[0_0_15px_rgba(212,175,55,0.6)]'
-              : 'bg-transparent border-neutral-500 hover:border-gold-500/60'
-              }`}
-            aria-label={`Go to section ${section.id + 1}`}
-          />
-        ))}
-      </div>
-
-      <AnimatePresence mode="wait">
-        <PartnerSection key={partnersData[currentSection].id} data={partnersData[currentSection]} />
-      </AnimatePresence>
+    <div className="bg-neutral-950 text-neutral-100 h-screen font-heading overflow-y-auto overflow-x-hidden hide-scrollbar">
+      {partnersData.map((section) => (
+        <div key={section.id} className="relative w-full min-h-screen shrink-0 flex flex-col">
+          <PartnerSection data={section} />
+        </div>
+      ))}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
@@ -327,12 +236,13 @@ function PartnerSection({ data }: { data: PartnerData }) {
       { top: '52%', left: '4%', transform: 'translate(0, -50%)' }, // 9:00 (Left)
       { top: '20%', left: '11%', transform: 'translate(0, 0)' }, // 10:30
     ];
+    // Changed fixed inset-0 to relative w-full min-h-screen for consistent scrolling
     return (
       <motion.div
-        className={isMobile ? 'relative w-full min-h-screen' : 'fixed inset-0 w-full h-full'}
+        className="relative w-full min-h-screen"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
         {/* Background (Same as Standard to preserve BG) */}
@@ -342,7 +252,8 @@ function PartnerSection({ data }: { data: PartnerData }) {
             style={{
               backgroundImage: `url(${data.bgImage || completeBg})`,
               backgroundPosition: bgPosition,
-              backgroundSize: isMobile ? 'auto 400%' : 'cover',
+              // Unified background size for consistency
+              backgroundSize: '100% 400%',
               backgroundRepeat: 'no-repeat',
               filter: 'contrast(1.1) saturate(1.1)',
             }}
@@ -393,8 +304,8 @@ function PartnerSection({ data }: { data: PartnerData }) {
                   key={index}
                   className="absolute w-[14%] h-[14%] sm:w-[70px] sm:h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] rounded-full flex items-center justify-center cursor-pointer z-50 group"
                   style={pos}
-                  onMouseEnter={() => partner && setHoveredPartner(partner)}
-                  onMouseLeave={() => setHoveredPartner(null)}
+                  onMouseEnter={() => partner && !isMobile && setHoveredPartner(partner)}
+                  onMouseLeave={() => !isMobile && setHoveredPartner(null)}
                   // Mobile Tap Support
                   onClick={() =>
                     partner && setHoveredPartner(partner === hoveredPartner ? null : partner)
