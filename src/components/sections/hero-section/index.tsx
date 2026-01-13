@@ -129,7 +129,7 @@ export function Hero() {
 
             {/* Date Subtitle */}
             <p
-              className="font-cinzel text-center px-4 translate-x-0 md:-translate-x-[30px]"
+              className="font-cinzel text-center px-4 translate-x-0 md:translate-x-[-3px]"
               style={{
                 fontSize: 'clamp(14px, 3vw, 24px)',
                 color: '#d4af37',
