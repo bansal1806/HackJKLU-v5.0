@@ -15,7 +15,7 @@ interface SEOHeadProps {
 export function SEOHead({
     title = 'HackJKLU v5.0 - Greek Mythology Themed Hackathon',
     description = 'Join HackJKLU v5.0, an immersive hackathon experience inspired by Greek mythology. Compete in exciting challenges, win amazing prizes, and connect with innovators.',
-    keywords = 'hackathon, HackJKLU v5.0, coding competition, tech event, innovation, Greek mythology, JKLU, programming contest',
+    keywords = 'HackJKLU v5.0, hackathon 2025, JKLU hackathon, coding competition, student developers, tech innovation, Jaipur',
     ogImage = '/logo.png',
     ogType = 'website',
     twitterCard = 'summary_large_image',

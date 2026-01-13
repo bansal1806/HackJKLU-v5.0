@@ -140,12 +140,12 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
           <motion.div
             className="flex items-center justify-center cursor-pointer relative"
             // Animation: Mobile = Shift UP, Desktop = Shift LEFT
-            // Dynamic shift amount: less for compact desktop
+            // Using percentages relative to viewport width for fluid shifting
             animate={
               isHovered && data.logo
                 ? isMobile
                   ? { y: 0, scale: 0.85 }
-                  : { x: isCompactDesktop ? -180 : -300 }
+                  : { x: '-15vw' } // Fluid shift left
                 : { x: 0, y: 0, scale: 1 }
             }
             transition={{ duration: 0.8, ease: 'easeInOut' }}
@@ -166,8 +166,16 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
             )}
 
             {/* Adjust Ring Size for Mobile vs Desktop */}
-            {/* Added max-w constraints for intermediate screens */}
-            <div className="relative w-[50vw] h-[50vw] max-w-[180px] max-h-[180px] xs:max-w-[240px] xs:max-h-[240px] sm:max-w-none sm:max-h-none sm:w-[320px] sm:h-[320px] md:w-[360px] md:h-[360px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] will-change-transform object-contain">
+            {/* FLUID RESPONSIVENESS: Using vmin to scale with the smallest viewport dimension */}
+            <div
+              className="relative will-change-transform object-contain"
+              style={{
+                width: isMobile ? '60vmin' : '45vmin',
+                height: isMobile ? '60vmin' : '45vmin',
+                maxWidth: '600px', // Upper bound
+                minWidth: '280px', // Lower bound
+              }}
+            >
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{

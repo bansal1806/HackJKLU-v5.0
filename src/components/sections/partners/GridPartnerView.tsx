@@ -74,14 +74,14 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                   top: groupIndex === 0 ? '0%' : '50%',
                   height: '50%',
                   justifyContent: 'center',
-                  paddingTop: groupIndex === 0 ? '160px' : '0px',
-                  paddingBottom: groupIndex === 0 ? '0px' : '40px',
+                  paddingTop: groupIndex === 0 ? '15vh' : '0px', // Fluid vertical padding
+                  paddingBottom: groupIndex === 0 ? '0px' : '5vh',
                 }
                 : {}
             }
           >
             <h2
-              className="text-lg xs:text-xl sm:text-3xl md:text-4xl font-heading tracking-wider uppercase mb-4 xs:mb-6 sm:mb-10 text-center relative z-10"
+              className="text-lg xs:text-xl sm:text-3xl md:text-4xl font-heading tracking-wider uppercase mb-4 xs:mb-6 sm:mb-8 text-center relative z-10"
               style={{
                 background: `linear-gradient(to bottom, ${group.color} 60%, #4a4a4a 100%)`,
                 WebkitBackgroundClip: 'text',
@@ -91,10 +91,20 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
             >
               {group.title}
             </h2>
-            <div className="flex flex-wrap justify-center gap-x-2 gap-y-6 xs:gap-x-4 xs:gap-y-8 sm:gap-x-14 sm:gap-y-12 md:gap-16 lg:gap-20 px-2 w-full max-w-[98%] xl:max-w-screen-2xl mx-auto">
+            {/* Fluid Gaps using vh/vw */}
+            <div className="flex flex-wrap justify-center gap-x-[2vw] gap-y-[3vh] px-2 w-full max-w-[98%] xl:max-w-screen-2xl mx-auto">
               {group.partners.map((partner, pIndex) => (
                 <div key={pIndex} className="flex flex-col items-center gap-0 group relative">
-                  <div className="relative w-[35vw] h-[35vw] max-w-[120px] max-h-[120px] xs:w-[40vw] xs:h-[40vw] xs:max-w-[140px] xs:max-h-[140px] sm:max-w-none sm:max-h-none sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] lg:w-[260px] lg:h-[260px] will-change-transform">
+                  {/* Fluid Ring Sizing using vmin */}
+                  <div
+                    className="relative will-change-transform"
+                    style={{
+                      width: isMobile ? '35vw' : '18vmin',
+                      height: isMobile ? '35vw' : '18vmin',
+                      maxWidth: '260px',
+                      minWidth: '100px'
+                    }}
+                  >
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{

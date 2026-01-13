@@ -95,23 +95,23 @@ export function WhySponsor() {
             </div>
 
             {/* Main Content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-32 flex flex-col items-center">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-[clamp(1rem,5vw,4rem)] pt-[clamp(6rem,15vh,10rem)] pb-[clamp(4rem,10vh,8rem)] flex flex-col items-center">
 
                 {/* Header Section */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
-                    className="text-center mb-12 sm:mb-16 max-w-4xl"
+                    className="text-center mb-[clamp(3rem,8vh,6rem)] max-w-4xl"
                 >
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-b from-orange-100 via-amber-200 to-amber-500 tracking-wider drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
+                    <h1 className="text-[clamp(1.75rem,5vw,3.75rem)] font-bold mb-[clamp(1rem,2vw,1.5rem)] text-transparent bg-clip-text bg-gradient-to-b from-orange-100 via-amber-200 to-amber-500 tracking-wider drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)] leading-tight">
                         WHY SPONSOR HACKJKLU v5.0?
                     </h1>
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5, duration: 1 }}
-                        className="text-base sm:text-lg md:text-xl text-amber-100/90 font-serif italic leading-relaxed max-w-3xl mx-auto"
+                        className="text-[clamp(1rem,2vw,1.25rem)] text-amber-100/90 font-serif italic leading-relaxed max-w-3xl mx-auto px-4"
                     >
                         HackJKLU v5.0 is a national-level hackathon & developer festival bringing together <span className="text-gold-400 font-bold">500+ top student developers</span> selected from 1500+ nationwide registrations, representing 100+ colleges across India.
                     </motion.p>
@@ -122,10 +122,10 @@ export function WhySponsor() {
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mb-16"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[clamp(1rem,2vw,2rem)] w-full mb-[clamp(4rem,10vh,6rem)]"
                 >
                     <motion.div className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center mb-4">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-amber-400 tracking-widest border-b-2 border-amber-500/30 pb-2">
+                        <h2 className="text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-amber-400 tracking-widest border-b-2 border-amber-500/30 pb-2 text-center">
                             WHAT SPONSORS GET
                         </h2>
                     </motion.div>
@@ -135,20 +135,20 @@ export function WhySponsor() {
                             key={index}
                             variants={itemVariants}
                             whileHover={{ scale: 1.03, translateY: -5 }}
-                            className={`relative overflow-hidden group rounded-xl border border-amber-900/40 bg-black/40 backdrop-blur-sm p-6 sm:p-8 flex flex-col items-center text-center transition-all duration-300 hover:border-amber-500/60 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] ${index >= 3 ? 'lg:col-span-1.5' : ''}`}
+                            className={`relative overflow-hidden group rounded-xl border border-amber-900/40 bg-black/40 backdrop-blur-sm p-[clamp(1.5rem,3vw,2.5rem)] flex flex-col items-center text-center transition-all duration-300 hover:border-amber-500/60 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] ${index >= 3 ? 'lg:col-span-1.5' : ''}`}
                         >
                             {/* Card Glow Effect */}
                             <div className="absolute -inset-1 bg-gradient-to-r from-amber-900/0 via-amber-600/10 to-amber-900/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
 
-                            <div className="text-4xl sm:text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300 filter drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
+                            <div className="text-[clamp(2.5rem,5vw,3.5rem)] mb-4 transform group-hover:scale-110 transition-transform duration-300 filter drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
                                 {benefit.icon}
                             </div>
 
-                            <h3 className="text-xl sm:text-2xl font-bold text-amber-200 mb-3 tracking-wide group-hover:text-amber-100 transition-colors">
+                            <h3 className="text-[clamp(1.1rem,2vw,1.5rem)] font-bold text-amber-200 mb-3 tracking-wide group-hover:text-amber-100 transition-colors">
                                 {benefit.title}
                             </h3>
 
-                            <p className="text-sm sm:text-base font-serif text-amber-100/80 leading-relaxed group-hover:text-amber-50 transition-colors">
+                            <p className="text-[clamp(0.875rem,1.5vw,1rem)] font-serif text-amber-100/80 leading-relaxed group-hover:text-amber-50 transition-colors">
                                 {benefit.description}
                             </p>
                         </motion.div>
@@ -161,13 +161,13 @@ export function WhySponsor() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="text-center mb-16 px-4 py-8 relative"
+                    className="text-center mb-[clamp(4rem,10vh,8rem)] px-4 py-8 relative w-full"
                 >
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-amber-100 max-w-4xl mx-auto leading-snug">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[clamp(4rem,10vw,8rem)] h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
+                    <h3 className="text-[clamp(1.25rem,3vw,2rem)] font-bold text-amber-100 max-w-4xl mx-auto leading-snug">
                         "HackJKLU v5.0 isn’t just an event — it’s a <span className="text-gold-400">talent</span>, <span className="text-gold-400">innovation</span>, and <span className="text-gold-400">brand engagement</span> platform."
                     </h3>
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[clamp(4rem,10vw,8rem)] h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
                 </motion.div>
 
                 {/* Contact Section */}
@@ -176,35 +176,35 @@ export function WhySponsor() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="w-full max-w-2xl"
+                    className="w-full max-w-3xl px-4"
                 >
                     <div className="relative rounded-2xl overflow-hidden border border-amber-600/30 bg-gradient-to-b from-amber-900/20 to-black/60 p-1">
                         <div className="absolute inset-0 bg-[url('/assets/noise.png')] opacity-10" />
 
-                        <div className="bg-black/40 backdrop-blur-md rounded-xl p-8 sm:p-12 text-center relative z-10">
-                            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 mb-8 uppercase tracking-widest">
+                        <div className="bg-black/40 backdrop-blur-md rounded-xl p-[clamp(2rem,5vw,4rem)] text-center relative z-10">
+                            <h2 className="text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 mb-[clamp(1.5rem,3vw,2rem)] uppercase tracking-widest">
                                 Partner With Us
                             </h2>
 
                             <div className="flex flex-col items-center space-y-4">
                                 <div className="mb-2">
-                                    <h3 className="text-2xl sm:text-3xl font-bold text-amber-100">Devam Gupta</h3>
-                                    <p className="text-amber-300/80 font-serif italic text-lg">Core Team – Sponsorships</p>
+                                    <h3 className="text-[clamp(1.25rem,3vw,2rem)] font-bold text-amber-100">Devam Gupta</h3>
+                                    <p className="text-amber-300/80 font-serif italic text-[clamp(1rem,2vw,1.25rem)]">Core Team – Sponsorships</p>
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 mt-6">
-                                    <a href="tel:+917340015201" className="group flex items-center gap-3 text-lg hover:text-amber-400 transition-colors">
-                                        <span className="w-10 h-10 rounded-full bg-amber-900/30 flex items-center justify-center border border-amber-600/30 group-hover:border-amber-400/60 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all">
+                                <div className="flex flex-col md:flex-row gap-6 md:gap-12 mt-6 w-full justify-center">
+                                    <a href="tel:+917340015201" className="group flex items-center justify-center gap-3 text-lg hover:text-amber-400 transition-colors">
+                                        <span className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-amber-900/30 flex items-center justify-center border border-amber-600/30 group-hover:border-amber-400/60 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all text-xl md:text-2xl">
                                             📞
                                         </span>
-                                        <span className="font-mono text-amber-100 md:text-xl">+91 73400 15201</span>
+                                        <span className="font-mono text-amber-100 text-[clamp(1rem,2vw,1.25rem)]">+91 73400 15201</span>
                                     </a>
 
-                                    <a href="mailto:devamgupta@jklu.edu.in" className="group flex items-center gap-3 text-lg hover:text-amber-400 transition-colors">
-                                        <span className="w-10 h-10 rounded-full bg-amber-900/30 flex items-center justify-center border border-amber-600/30 group-hover:border-amber-400/60 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all">
+                                    <a href="mailto:devamgupta@jklu.edu.in" className="group flex items-center justify-center gap-3 text-lg hover:text-amber-400 transition-colors">
+                                        <span className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-amber-900/30 flex items-center justify-center border border-amber-600/30 group-hover:border-amber-400/60 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all text-xl md:text-2xl">
                                             📧
                                         </span>
-                                        <span className="font-mono text-amber-100 md:text-xl">devamgupta@jklu.edu.in</span>
+                                        <span className="font-mono text-amber-100 text-[clamp(1rem,2vw,1.25rem)] break-all sm:break-normal">devamgupta@jklu.edu.in</span>
                                     </a>
                                 </div>
                             </div>

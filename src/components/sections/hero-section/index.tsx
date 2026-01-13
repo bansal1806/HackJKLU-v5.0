@@ -115,7 +115,7 @@ export function Hero() {
             <img
               src="/Title.webp"
               alt="HackJKLU v5.0"
-              className="object-contain"
+              className="object-contain translate-x-0 md:-translate-x-[30px]"
               style={{
                 height: 'clamp(120px, 18vh, 280px)',
                 width: 'auto',
@@ -124,13 +124,12 @@ export function Hero() {
                   'drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(0 5px 10px rgba(0,0,0,0.8))',
                 opacity: 0.95,
                 marginBottom: 'clamp(-60px, -6vh, -30px)',
-                transform: 'translateX(-30px)', // Fine-tuning alignment
               }}
             />
 
             {/* Date Subtitle */}
             <p
-              className="font-cinzel text-center px-4"
+              className="font-cinzel text-center px-4 translate-x-0 md:-translate-x-[30px]"
               style={{
                 fontSize: 'clamp(14px, 3vw, 24px)',
                 color: '#d4af37',
