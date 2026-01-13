@@ -55,8 +55,8 @@ export function WhySponsor() {
     return (
         <div className="min-h-screen w-full relative font-cinzel text-[#e8dab2] bg-[#0c0a09] overflow-x-hidden">
             <SEOHead
-                title="Why Sponsor Us - HACKJKLU 5.0"
-                description="Partner with HACKJKLU 5.0 to engage with 500+ top student developers, gain high brand visibility, and hire top talent."
+                title="Why Sponsor Us - HackJKLU v5.0"
+                description="Partner with HackJKLU v5.0 to engage with 500+ top student developers, gain high brand visibility, and hire top talent."
                 keywords="sponsor hackathon, hackjklu sponsorship, tech talent hiring, developer brand engagement"
                 canonicalUrl="/sponsor"
             />
@@ -105,7 +105,7 @@ export function WhySponsor() {
                     className="text-center mb-12 sm:mb-16 max-w-4xl"
                 >
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-b from-orange-100 via-amber-200 to-amber-500 tracking-wider drop-shadow-[0_2px_10px_rgba(212,175,55,0.3)]">
-                        WHY SPONSOR HACKJKLU 5.0?
+                        WHY SPONSOR HACKJKLU v5.0?
                     </h1>
                     <motion.p
                         initial={{ opacity: 0 }}
@@ -113,7 +113,7 @@ export function WhySponsor() {
                         transition={{ delay: 0.5, duration: 1 }}
                         className="text-base sm:text-lg md:text-xl text-amber-100/90 font-serif italic leading-relaxed max-w-3xl mx-auto"
                     >
-                        HACKJKLU 5.0 is a national-level hackathon & developer festival bringing together <span className="text-gold-400 font-bold">500+ top student developers</span> selected from 1500+ nationwide registrations, representing 100+ colleges across India.
+                        HackJKLU v5.0 is a national-level hackathon & developer festival bringing together <span className="text-gold-400 font-bold">500+ top student developers</span> selected from 1500+ nationwide registrations, representing 100+ colleges across India.
                     </motion.p>
                 </motion.div>
 
@@ -165,7 +165,7 @@ export function WhySponsor() {
                 >
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-amber-100 max-w-4xl mx-auto leading-snug">
-                        "HACKJKLU isn’t just an event — it’s a <span className="text-gold-400">talent</span>, <span className="text-gold-400">innovation</span>, and <span className="text-gold-400">brand engagement</span> platform."
+                        "HackJKLU v5.0 isn’t just an event — it’s a <span className="text-gold-400">talent</span>, <span className="text-gold-400">innovation</span>, and <span className="text-gold-400">brand engagement</span> platform."
                     </h3>
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
                 </motion.div>

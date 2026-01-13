@@ -114,7 +114,7 @@ export function Hero() {
             {/* Title Image */}
             <img
               src="/Title.webp"
-              alt="HACKJKLU 5.0"
+              alt="HackJKLU v5.0"
               className="object-contain"
               style={{
                 height: 'clamp(120px, 18vh, 280px)',

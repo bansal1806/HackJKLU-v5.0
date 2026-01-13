@@ -199,7 +199,7 @@ export function Team() {
           The Order
         </h2>
         <p className="text-stone-500 font-serif italic mt-4 text-xl tracking-wide">
-          Guardians of the HackJKLU Legacy
+          Guardians of the HackJKLU v5.0 Legacy
         </p>
       </div>
 

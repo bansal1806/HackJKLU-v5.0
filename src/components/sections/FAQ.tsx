@@ -155,7 +155,7 @@ const halls: Hall[] = [
       {
         id: 'ap2',
         q: 'Is there a registration fee?',
-        a: 'No tribute is required. HACKJKLU 5.0 is completely free for all participants.',
+        a: 'No tribute is required. HackJKLU v5.0 is completely free for all participants.',
       },
       {
         id: 'ap3',

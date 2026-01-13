@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Layout } from './components/layout/Layout';
 import { Home } from './pages/Home';
@@ -76,6 +76,7 @@ function App() {
               }
             />
             <Route path="/sponsor" element={<WhySponsor />} />
+            <Route path="/challenges" element={<Navigate to="/" replace />} />
             <Route path="/cloud-test" element={<CloudTest />} />
           </Routes>
         </motion.div>

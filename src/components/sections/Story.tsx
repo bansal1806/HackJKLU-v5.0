@@ -5,12 +5,12 @@ import { CloudTransition } from '../ui/CloudTransition';
 
 // Static About Content
 const aboutText = {
-  title: 'HackJKLU 5.0',
+  title: 'HackJKLU v5.0',
   paragraphs: [
-    'HackJKLU 5.0 is more than just a hackathon. It’s a place where ideas are turned into action. This year, the focus is majorly on creativity, teamwork, and solutions that actually matter. Participants come together to think freely, experiment boldly, and learn by actually doing the tasks.',
-    'Organized at JK Lakshmipat University by the Council of Technical Affairs (JKLU), HackJKLU 5.0 brings talented students from across the country onto a single platform. With different skill sets and perspectives all teams work on real world problems that are related to technology, society, and the upcoming future.',
+    'HackJKLU v5.0 is more than just a hackathon. It’s a place where ideas are turned into action. This year, the focus is majorly on creativity, teamwork, and solutions that actually matter. Participants come together to think freely, experiment boldly, and learn by actually doing the tasks.',
+    'Organized at JK Lakshmipat University by the Council of Technical Affairs (JKLU), HackJKLU v5.0 brings talented students from across the country onto a single platform. With different skill sets and perspectives all teams work on real world problems that are related to technology, society, and the upcoming future.',
     'Throughout the event the participating students will be brainstorming, building, and improving their ideas through the help of mentors and experts present then and there. It’s not just about being perfect but it’s about learning, collaborating, and creating something meaningful.',
-    'HackJKLU 5.0 is all about energy, innovation, and growth. Come with an idea, leave with an ultimate experience, confidence, and inspiration.',
+    'HackJKLU v5.0 is all about energy, innovation, and growth. Come with an idea, leave with an ultimate experience, confidence, and inspiration.',
   ],
 };
 

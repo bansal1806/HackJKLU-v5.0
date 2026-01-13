@@ -6,9 +6,9 @@ export function FAQPage() {
   return (
     <>
       <SEOHead
-        title="FAQ - HACKJKLU 5.0"
-        description="Find answers to frequently asked questions about HACKJKLU 5.0. Get information about registration, rules, prizes, and more."
-        keywords="hackathon FAQ, HACKJKLU questions, event information, registration help"
+        title="FAQ - HackJKLU v5.0"
+        description="Find answers to frequently asked questions about HackJKLU v5.0. Get information about registration, rules, prizes, and more."
+        keywords="hackathon FAQ, HackJKLU v5.0 questions, event information, registration help"
         canonicalUrl="/faq"
         ogType="article"
       />

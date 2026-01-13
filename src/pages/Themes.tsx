@@ -179,9 +179,9 @@ export function Themes() {
   return (
     <div className="h-screen w-full relative overflow-hidden font-cinzel text-[#e8dab2] flex flex-col">
       <SEOHead
-        title="Themes - HACKJKLU 5.0"
-        description="Explore the diverse themes of HACKJKLU 5.0 including EdTech, HealthTech, Smart Cities, AgriTech, Environment, Women Safety, and FinTech."
-        keywords="hackathon themes, EdTech, HealthTech, Smart Cities, AgriTech, Environment, Women Safety, FinTech, HACKJKLU"
+        title="Themes - HackJKLU v5.0"
+        description="Explore the diverse themes of HackJKLU v5.0 including EdTech, HealthTech, Smart Cities, AgriTech, Environment, Women Safety, and FinTech."
+        keywords="hackathon themes, EdTech, HealthTech, Smart Cities, AgriTech, Environment, Women Safety, FinTech, HackJKLU v5.0"
         canonicalUrl="/themes"
       />
       {/* Animated Background */}

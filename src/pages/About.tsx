@@ -6,9 +6,9 @@ export function About() {
   return (
     <div className="relative min-h-screen">
       <SEOHead
-        title="About HACKJKLU 5.0 - The Story Behind the Hackathon"
-        description="Discover the epic story behind HACKJKLU 5.0, a hackathon inspired by Greek mythology. Learn about our mission to bring together innovators and create groundbreaking solutions."
-        keywords="about HACKJKLU, hackathon story, Greek mythology theme, innovation event, tech community"
+        title="About HackJKLU v5.0 - The Story Behind the Hackathon"
+        description="Discover the epic story behind HackJKLU v5.0, a hackathon inspired by Greek mythology. Learn about our mission to bring together innovators and create groundbreaking solutions."
+        keywords="about HackJKLU v5.0, hackathon story, Greek mythology theme, innovation event, tech community"
         canonicalUrl="/about"
       />
       {/* Fixed Background Image */}

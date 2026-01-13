@@ -13,9 +13,9 @@ interface SEOHeadProps {
 }
 
 export function SEOHead({
-    title = 'HACKJKLU 5.0 - Greek Mythology Themed Hackathon',
-    description = 'Join HACKJKLU 5.0, an immersive hackathon experience inspired by Greek mythology. Compete in exciting challenges, win amazing prizes, and connect with innovators.',
-    keywords = 'hackathon, HACKJKLU, coding competition, tech event, innovation, Greek mythology, JKLU, programming contest',
+    title = 'HackJKLU v5.0 - Greek Mythology Themed Hackathon',
+    description = 'Join HackJKLU v5.0, an immersive hackathon experience inspired by Greek mythology. Compete in exciting challenges, win amazing prizes, and connect with innovators.',
+    keywords = 'hackathon, HackJKLU v5.0, coding competition, tech event, innovation, Greek mythology, JKLU, programming contest',
     ogImage = '/logo.png',
     ogType = 'website',
     twitterCard = 'summary_large_image',
@@ -43,7 +43,7 @@ export function SEOHead({
                 <meta property="og:title" content={title} />
                 <meta property="og:description" content={description} />
                 <meta property="og:image" content={fullOgImage} />
-                <meta property="og:site_name" content="HACKJKLU 5.0" />
+                <meta property="og:site_name" content="HackJKLU v5.0" />
 
                 {/* Twitter */}
                 <meta property="twitter:card" content={twitterCard} />

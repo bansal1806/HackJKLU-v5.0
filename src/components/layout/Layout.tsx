@@ -291,7 +291,7 @@ export function Layout({ children }: LayoutProps) {
                   className="font-[Cinzel] text-sm transition-colors block text-center opacity-80"
                   style={{ color: 'var(--stone-gray)' }}
                 >
-                  © 2026 HackJKLU 5.0, All rights reserved
+                  © 2026 HackJKLU v5.0, All rights reserved
                 </span>
               </div>
             </motion.div>
