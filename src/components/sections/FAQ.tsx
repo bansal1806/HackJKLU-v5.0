@@ -199,17 +199,17 @@ const QuestionCard = ({
 
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-5 pl-8 text-left relative z-10"
+        className="w-full flex items-center justify-between p-4 md:p-5 pl-6 md:pl-8 text-left relative z-10"
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 pr-4">
           <span
-            className="text-lg font-medium transition-colors duration-300"
+            className="text-base md:text-lg font-medium transition-colors duration-300 line-clamp-2 md:line-clamp-none"
             style={{ color: isOpen ? hallColors.primary : '#E6E6E6' }}
           >
             {question.q}
           </span>
         </div>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }} className="shrink-0">
           <ChevronDown
             className={`w-5 h-5 transition-colors duration-300`}
             style={{ color: isOpen ? hallColors.primary : '#6B7280' }}
@@ -225,10 +225,10 @@ const QuestionCard = ({
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="px-5 pl-8 pb-6 relative z-10">
+            <div className="px-4 md:px-5 pl-6 md:pl-8 pb-5 md:pb-6 relative z-10">
               {/* Divider */}
               <div
-                className="h-px w-full mb-4 opacity-30"
+                className="h-px w-full mb-3 md:mb-4 opacity-30"
                 style={{ backgroundColor: hallColors.primary }}
               />
               <p className="text-gray-200 leading-relaxed font-sans text-sm md:text-base drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -278,7 +278,7 @@ export function FAQ() {
   };
 
   return (
-    <section className="h-screen bg-[#0F172A] text-white relative overflow-hidden font-cinzel flex flex-col">
+    <section className="h-[100dvh] min-h-[500px] w-full bg-[#0F172A] text-white relative overflow-hidden font-cinzel flex flex-col">
       {/* Background Ambience with Hall Images */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Hall Background Image */}
@@ -319,45 +319,45 @@ export function FAQ() {
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`,
           }}
         />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-28 md:pt-32 pb-56 md:pb-24">
+      <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-20 md:pt-32 pb-4 md:pb-24">
         {/* Page Header */}
-        <header className="text-center mb-8 shrink-0">
+        <header className="text-center mb-4 md:mb-8 shrink-0">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-2 tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 drop-shadow-sm">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-1 md:mb-2 tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 drop-shadow-sm">
               MOUNT OLYMPUS LIBRARY
             </h1>
-            <p className="text-gray-400 font-serif italic text-base md:text-lg opacity-80 decoration-slice">
+            <p className="text-gray-400 font-serif italic text-sm md:text-base lg:text-lg opacity-80 decoration-slice">
               "Seek wisdom from the divine ones"
             </p>
           </motion.div>
         </header>
 
-        <div className="flex flex-col lg:flex-row gap-6 h-full overflow-hidden">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-6 h-full overflow-hidden">
           {/* Sidebar / Navigation */}
-          <aside className="w-full lg:w-[300px] shrink-0 lg:h-full flex flex-col gap-4">
+          <aside className="w-full lg:w-[300px] shrink-0 lg:h-full flex flex-col gap-3 md:gap-4">
             {/* Search Bar */}
             <div className="relative group shrink-0">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-white transition-colors" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 md:w-5 h-4 md:h-5 text-gray-400 group-focus-within:text-white transition-colors" />
               <input
                 type="text"
                 placeholder="Search wisdom..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-black/40 backdrop-blur-sm border border-white/20 rounded-lg py-3 pl-10 pr-4 text-sm font-sans focus:outline-none focus:border-yellow-500/50 transition-all placeholder:text-gray-500"
+                className="w-full bg-black/40 backdrop-blur-sm border border-white/20 rounded-lg py-2 md:py-3 pl-9 md:pl-10 pr-4 text-sm font-sans focus:outline-none focus:border-yellow-500/50 transition-all placeholder:text-gray-500"
               />
             </div>
 
             {/* Hall Navigation - Scrollable if needed */}
-            <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pr-1 pb-1">
+            <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-track-transparent pr-1 pb-1 min-h-[60px] lg:min-h-0">
               {halls.map((hall) => {
                 const isActive = activeHallId === hall.id && !searchQuery;
                 const Icon = hall.icon;
@@ -366,7 +366,7 @@ export function FAQ() {
                   <button
                     key={hall.id}
                     onClick={() => handleHallChange(hall.id)}
-                    className={`relative group shrink-0 lg:w-full text-left p-4 rounded-lg border transition-all duration-300 overflow-hidden backdrop-blur-sm ${isActive ? 'bg-black/40 border-white/20 shadow-lg' : 'bg-black/20 border-white/10 hover:bg-black/30'}`}
+                    className={`relative group shrink-0 lg:w-full text-left p-3 md:p-4 rounded-lg border transition-all duration-300 overflow-hidden backdrop-blur-sm ${isActive ? 'bg-black/40 border-white/20 shadow-lg' : 'bg-black/20 border-white/10 hover:bg-black/30'}`}
                   >
                     {/* Hover Glow Background */}
                     <div
@@ -377,24 +377,24 @@ export function FAQ() {
                     {/* Active Indicator */}
                     {isActive && (
                       <div
-                        className="absolute left-0 top-0 bottom-0 w-1"
+                        className="absolute left-0 bottom-0 right-0 h-1 lg:top-0 lg:bottom-0 lg:right-auto lg:w-1 lg:h-auto"
                         style={{ backgroundColor: hall.colors.primary }}
                       />
                     )}
 
-                    <div className="flex items-center justify-between relative z-10 w-full">
-                      <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-between relative z-10 w-full min-w-[140px] lg:min-w-0">
+                      <div className="flex items-center gap-2 md:gap-3">
                         <div
-                          className={`p-2 rounded-md transition-colors duration-300 backdrop-blur-sm ${isActive ? 'bg-black/50' : 'bg-black/30'}`}
+                          className={`p-1.5 md:p-2 rounded-md transition-colors duration-300 backdrop-blur-sm ${isActive ? 'bg-black/50' : 'bg-black/50'}`}
                         >
                           <Icon
-                            className="w-5 h-5"
+                            className="w-4 h-4 md:w-5 md:h-5"
                             style={{ color: isActive ? hall.colors.primary : '#9CA3AF' }}
                           />
                         </div>
                         <div className="flex flex-col">
                           <h3
-                            className={`font-bold text-xs tracking-wide ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}
+                            className={`font-bold text-xs tracking-wide whitespace-nowrap ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}
                           >
                             {hall.name.replace('Hall of ', '')}
                           </h3>
@@ -405,7 +405,7 @@ export function FAQ() {
                       </div>
 
                       {isActive && (
-                        <motion.div layoutId="active-dot" className="hidden sm:block">
+                        <motion.div layoutId="active-dot" className="hidden lg:block">
                           <ChevronRight className="w-4 h-4 text-white opacity-50" />
                         </motion.div>
                       )}
@@ -417,26 +417,26 @@ export function FAQ() {
           </aside>
 
           {/* Main Content Area */}
-          <main className="flex-1 rounded-2xl p-6 md:p-8 relative overflow-hidden flex flex-col min-h-0">
+          <main className="flex-1 rounded-2xl p-4 md:p-6 lg:p-8 relative overflow-hidden flex flex-col min-h-0 bg-black/10 border border-white/5 backdrop-blur-sm">
             {/* Scrollable Inner Content */}
-            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent pr-2">
+            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2">
               {/* SEARCH RESULTS VIEW */}
               {searchQuery ? (
-                <div className="space-y-8">
-                  <h2 className="text-xl font-bold text-gray-400 mb-6 flex items-center gap-2">
+                <div className="space-y-6 md:space-y-8">
+                  <h2 className="text-lg md:text-xl font-bold text-gray-400 mb-4 md:mb-6 flex items-center gap-2">
                     <Search className="w-5 h-5" />
                     Search Results for "{searchQuery}"
                   </h2>
                   {filteredHalls.map((hall) => (
-                    <div key={hall.id} className="mb-8">
+                    <div key={hall.id} className="mb-6 md:mb-8">
                       <h3
-                        className="text-sm uppercase tracking-widest mb-4 font-bold flex items-center gap-2"
+                        className="text-xs md:text-sm uppercase tracking-widest mb-3 md:mb-4 font-bold flex items-center gap-2"
                         style={{ color: hall.colors.primary }}
                       >
                         <hall.icon className="w-4 h-4" />
                         {hall.name}
                       </h3>
-                      <div className="space-y-4">
+                      <div className="space-y-3 md:space-y-4">
                         {hall.questions.map((q) => (
                           <QuestionCard
                             key={q.id}
@@ -453,7 +453,7 @@ export function FAQ() {
                   ))}
                   {filteredHalls.length === 0 && (
                     <div className="text-center py-20 text-gray-500">
-                      <p className="text-lg italic">
+                      <p className="text-base md:text-lg italic">
                         "The scrolls contain no wisdom matching your query..."
                       </p>
                     </div>
@@ -471,16 +471,16 @@ export function FAQ() {
                     className="flex flex-col"
                   >
                     {/* Hall Header */}
-                    <div className="mb-8 text-center md:text-left border-b border-white/20 pb-6 relative shrink-0">
+                    <div className="mb-6 md:mb-8 text-center md:text-left border-b border-white/20 pb-4 md:pb-6 relative shrink-0">
                       <div
-                        className="absolute top-0 right-0 w-32 h-32 opacity-15 blur-3xl rounded-full pointer-events-none"
+                        className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 opacity-15 blur-3xl rounded-full pointer-events-none"
                         style={{ backgroundColor: activeHall.colors.primary }}
                       />
 
-                      <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-4">
-                        <div className="p-3 rounded-xl bg-black/40 backdrop-blur-md shadow-xl border border-white/20">
+                      <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-3 md:mb-4">
+                        <div className="p-2 md:p-3 rounded-xl bg-black/40 backdrop-blur-md shadow-xl border border-white/20">
                           <activeHall.icon
-                            className="w-8 h-8 md:w-10 md:h-10"
+                            className="w-6 h-6 md:w-10 md:h-10"
                             style={{
                               color: activeHall.colors.primary,
                               filter: `drop-shadow(0 0 10px ${activeHall.colors.glow})`,
@@ -489,24 +489,24 @@ export function FAQ() {
                         </div>
                         <div>
                           <h2
-                            className="text-2xl md:text-3xl font-bold tracking-wider mb-2"
+                            className="text-xl md:text-3xl font-bold tracking-wider mb-1 md:mb-2"
                             style={{ color: activeHall.colors.primary }}
                           >
                             {activeHall.name}
                           </h2>
-                          <h3 className="text-lg text-gray-300 font-serif italic drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                          <h3 className="text-base md:text-lg text-gray-300 font-serif italic drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                             {activeHall.subtitle}
                           </h3>
                         </div>
                       </div>
 
-                      <p className="text-gray-200 font-sans leading-relaxed max-w-2xl mx-auto md:mx-0 text-sm md:text-base drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                      <p className="text-gray-200 font-sans leading-relaxed max-w-2xl mx-auto md:mx-0 text-xs md:text-base drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                         {activeHall.description}
                       </p>
                     </div>
 
                     {/* Questions List */}
-                    <div className="space-y-4">
+                    <div className="space-y-3 md:space-y-4">
                       {activeHall.questions.map((q, i) => (
                         <motion.div
                           key={q.id}

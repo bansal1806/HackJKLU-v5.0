@@ -11,6 +11,7 @@ const pageOrder = [
   { path: '/speakers', name: 'Speakers' },
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },
+  { path: '/sponsor', name: 'Why Sponsor Us ?' },
   { path: '/itinerary', name: 'Itinerary' },
   { path: '/events', name: 'Events' },
 ];

@@ -14,6 +14,7 @@ import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
 import { PageNavigation } from './components/navigation/PageNavigation';
 import { SpeakersPage } from './pages/Speakers';
 import { CloudTest } from './pages/CloudTest';
+import { WhySponsor } from './pages/WhySponsor';
 
 function App() {
   const location = useLocation();
@@ -64,8 +65,7 @@ function App() {
                 </>
               }
             />
-            <Route
-              path="/events"
+            <Route path="/events"
               element={
                 <>
                   <ComingSoonOverlay>
@@ -75,6 +75,7 @@ function App() {
                 </>
               }
             />
+            <Route path="/sponsor" element={<WhySponsor />} />
             <Route path="/cloud-test" element={<CloudTest />} />
           </Routes>
         </motion.div>

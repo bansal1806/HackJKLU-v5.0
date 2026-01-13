@@ -18,8 +18,9 @@ const menuItems = [
   { number: 'VI', name: 'Speakers', path: '/speakers' },
   { number: 'VII', name: 'Past Photos', path: '/gallery' },
   { number: 'VIII', name: 'FAQ', path: '/faq' },
-  { number: 'IX', name: 'Itinerary', path: '/itinerary' },
-  { number: 'X', name: 'Events', path: '/events' },
+  { number: 'IX', name: 'Why Sponsor Us ?', path: '/sponsor' },
+  { number: 'X', name: 'Itinerary', path: '/itinerary' },
+  { number: 'XI', name: 'Events', path: '/events' },
 ];
 
 export function Layout({ children }: LayoutProps) {
@@ -125,7 +126,7 @@ export function Layout({ children }: LayoutProps) {
                 <div className="flex items-center gap-5">
                   {/* Instagram */}
                   <a
-                    href="https://instagram.com/hackjklu"
+                    href="https://www.instagram.com/hackjklu?igsh=emlxeDluZjNueTNq"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="transition-transform transform hover:scale-110"
@@ -156,7 +157,7 @@ export function Layout({ children }: LayoutProps) {
 
                   {/* X (formerly Twitter) */}
                   <a
-                    href="https://twitter.com/hackjklu"
+                    href="https://x.com/HackJklu?s=20"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="transition-transform transform hover:scale-110"
@@ -176,7 +177,7 @@ export function Layout({ children }: LayoutProps) {
 
                   {/* Discord */}
                   <a
-                    href="https://discord.gg/hackjklu"
+                    href="https://discord.gg/TYyAmwzC38"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="transition-transform transform hover:scale-110"

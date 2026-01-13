@@ -7,11 +7,7 @@ import arrowRight from '../../assets/prizes/arrow-right.webp';
 import bgImage from '../../assets/speakers/bg-amphitheater.jpg';
 import frameImage from '../../assets/speakers/gold-frame.png';
 
-// Social Icons
-import iconWeb from '../../assets/socials/web.png';
-import iconInsta from '../../assets/socials/instagram.png';
-import iconX from '../../assets/socials/x.png';
-import iconLinkedin from '../../assets/socials/linkedin.png';
+
 
 // Judges Images
 import imgPranav from '../../assets/judges/pranav.webp';
@@ -145,25 +141,29 @@ export function Speakers() {
       </div>
 
       {/* Title */}
-      <div className="absolute top-28 md:top-36 left-0 right-0 z-20 text-center pointer-events-none px-4">
+      <div className="absolute top-20 md:top-24 left-0 right-0 z-[2000] text-center pointer-events-none px-4">
         <motion.h1
+
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-4xl md:text-6xl lg:text-7xl text-[#EFE3A0] font-bold tracking-[0.2em] uppercase drop-shadow-[0_4px_15px_rgba(239,227,160,0.4)]"
-          style={{ textShadow: '0 0 40px rgba(212, 175, 55, 0.6)' }}
+          className="text-[#EFE3A0] font-bold tracking-[0.2em] uppercase drop-shadow-[0_4px_15px_rgba(239,227,160,0.4)]"
+          style={{
+            fontSize: 'clamp(2rem, 5vw + 1rem, 5rem)',
+            textShadow: '0 0 40px rgba(212, 175, 55, 0.6)'
+          }}
         >
           The Council
         </motion.h1>
 
 
         {/* Category Toggle */}
-        <div className="mt-6 flex justify-center gap-6 pointer-events-auto">
+        <div className="mt-1 md:mt-2 flex justify-center gap-6 pointer-events-auto">
           <button
             onClick={() => setActiveCategory('speakers')}
-            className={`text-sm md:text-lg tracking-[0.2em] relative px-4 py-2 transition-all duration-300 ${activeCategory === 'speakers' ? 'text-[#d4af37] font-bold' : 'text-neutral-500 hover:text-[#d4af37]/70'}`}
+            className={`text-xs md:text-lg tracking-[0.15em] md:tracking-[0.2em] relative px-4 py-2 transition-all duration-300 ${activeCategory === 'speakers' ? 'text-[#d4af37] font-bold' : 'text-neutral-500 hover:text-[#d4af37]/70'}`}
           >
-            SPEAKERS
+            PAST SPEAKERS
             {activeCategory === 'speakers' && (
               <motion.div
                 layoutId="activeTab"
@@ -176,9 +176,9 @@ export function Speakers() {
 
           <button
             onClick={() => setActiveCategory('judges')}
-            className={`text-sm md:text-lg tracking-[0.2em] relative px-4 py-2 transition-all duration-300 ${activeCategory === 'judges' ? 'text-[#d4af37] font-bold' : 'text-neutral-500 hover:text-[#d4af37]/70'}`}
+            className={`text-xs md:text-lg tracking-[0.15em] md:tracking-[0.2em] relative px-4 py-2 transition-all duration-300 ${activeCategory === 'judges' ? 'text-[#d4af37] font-bold' : 'text-neutral-500 hover:text-[#d4af37]/70'}`}
           >
-            JUDGES
+            PAST JUDGES
             {activeCategory === 'judges' && (
               <motion.div
                 layoutId="activeTab"
@@ -193,7 +193,7 @@ export function Speakers() {
       <div className="absolute inset-0 top-0 flex items-center justify-center perspective-[1200px] overflow-hidden">
         <FloorCarousel data={currentData} key={activeCategory} />
       </div>
-    </section>
+    </section >
   );
 }
 
@@ -201,17 +201,35 @@ interface FloorCarouselProps {
   data: typeof speakers;
 }
 
+// --- RESPONSIVE HELPER FUNCTIONS ---
+// Linear interpolation: smoothly scale values between min and max based on viewport
+function lerp(min: number, max: number, t: number): number {
+  return min + (max - min) * Math.max(0, Math.min(1, t));
+}
+
+// Calculate normalized position (0-1) based on viewport dimension
+function getViewportFactor(value: number, minVp: number, maxVp: number): number {
+  return Math.max(0, Math.min(1, (value - minVp) / (maxVp - minVp)));
+}
+
 function FloorCarousel({ data }: FloorCarouselProps) {
-  const [isMobile, setIsMobile] = useState(false);
+  // Track viewport dimensions for responsive calculations
+  const [viewport, setViewport] = useState({ w: 1920, h: 1080 });
+  // Unbounded index to allow infinite scrolling with stable keys
   const [startIndex, setStartIndex] = useState(0);
   const [hoveredSpeaker, setHoveredSpeaker] = useState<any>(null);
-  const hoverTimeoutRef = useRef<any>(null); // For grace period
+  const hoverTimeoutRef = useRef<any>(null);
 
   // Enforce ODD visible count (add 1 if even) to ensure a center item (at 270deg) exists
   const visibleCount = data.length % 2 === 0 ? data.length + 1 : data.length;
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    const handleResize = () => {
+      setViewport({
+        w: window.innerWidth,
+        h: window.innerHeight,
+      });
+    };
     handleResize();
     window.addEventListener('resize', handleResize);
 
@@ -221,30 +239,68 @@ function FloorCarousel({ data }: FloorCarouselProps) {
     };
   }, []);
 
+  // --- RESPONSIVE DIMENSION CALCULATIONS ---
+  const { w, h } = viewport;
+  const isExtremelySmall = w < 320 || h < 400;
+
+  // Width factor for horizontal scaling (320px to 1920px)
+  const wFactor = getViewportFactor(w, 320, 1920);
+  // Height factor for vertical scaling (400px to 1080px)
+  const hFactor = getViewportFactor(h, 400, 1080);
+  // Combined factor using the smaller dimension for balanced scaling
+  const combinedFactor = Math.min(wFactor, hFactor);
+
+  // Carousel X Radius: 100px at minimum, 800px at maximum
+  const xRadius = lerp(100, 800, wFactor) * (isExtremelySmall ? 0.6 : 1);
+
+  // Carousel Y Radius: 50px at minimum, 250px at maximum
+  const yRadius = lerp(50, 250, hFactor) * (isExtremelySmall ? 0.5 : 1);
+
+  // Speaker Card Size: 60px at minimum, 224px at maximum
+  const cardSize = lerp(60, 224, combinedFactor);
+
+  // Navigation Arrow Size: 24px at minimum, 64px at maximum
+  const arrowSize = lerp(24, 64, combinedFactor);
+
+  // Floor Glow Size
+  const glowWidth = lerp(200, 1200, wFactor);
+  const glowHeight = lerp(100, 500, hFactor);
+
+  // Golden Ring Scale
+  const ringScale = lerp(0.5, 1, combinedFactor);
+
+  // Title translate Y
+  // Title translate Y
+  const translateY = h < 600 ? 160 : lerp(120, 220, hFactor);
+
+  // Step angle between speakers (smaller on small screens)
+  const stepAngle = lerp(30, 50, wFactor);
+
+  // Scale boost for center item
+  const centerScaleBoost = lerp(1.2, 1.6, combinedFactor);
+
+  // Detail panel width
+  const panelWidth = lerp(280, 600, wFactor);
+
+  // Detail panel bottom padding
+  const panelPaddingBottom = lerp(60, 96, hFactor);
+
   const nextSlide = () => {
-    setStartIndex((prev) => (prev + 1) % data.length);
+    setStartIndex((prev) => prev + 1);
   };
 
   const prevSlide = () => {
-    setStartIndex((prev) => (prev - 1 + data.length) % data.length);
+    setStartIndex((prev) => prev - 1);
   };
 
-  // Calculate Visible Speakers
-  const visibleSpeakers = [];
-  for (let i = 0; i < visibleCount; i++) {
-    const index = (startIndex + i) % data.length;
-    visibleSpeakers.push({ ...data[index], indexPosition: i, originalIndex: index });
-  }
-
-  const xRadius = isMobile ? window.innerWidth * 0.42 : Math.min(800, window.innerWidth * 0.4);
-  const yRadius = isMobile ? 120 : 250;
-
   const centerIndex = Math.floor(visibleCount / 2);
-  const step = 50; // Fixed spacing in degrees
 
-  const handleSpeakerClick = (originalIndex: number) => {
-    const newStart = (originalIndex - centerIndex + data.length) % data.length;
-    setStartIndex(newStart);
+  const handleSpeakerClick = (absoluteIndex: number) => {
+    // We want the clicked item to move to the center.
+    // The center item is at i = centerIndex.
+    // absoluteIndex = startIndex + i
+    // So targetStartIndex = absoluteIndex - centerIndex
+    setStartIndex(absoluteIndex - centerIndex);
   };
 
   // --- HOVER HANDLERS ---
@@ -255,7 +311,6 @@ function FloorCarousel({ data }: FloorCarouselProps) {
 
   const handleSpeakerLeave = () => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    // Add grace period to allow moving to panel
     hoverTimeoutRef.current = setTimeout(() => {
       setHoveredSpeaker(null);
     }, 300);
@@ -273,88 +328,51 @@ function FloorCarousel({ data }: FloorCarouselProps) {
   };
 
   return (
-    <div
-      className={`relative w-full h-full flex items-center justify-center ${isMobile ? 'translate-y-20' : 'translate-y-32'}`}
-      style={{ transformStyle: 'preserve-3d' }}
-    >
-      {/* --- NAVIGATION CONTROLS --- */}
-      <div className="absolute z-[1000] flex justify-between w-full max-w-[85vw] md:max-w-[1100px] px-4 md:px-12 top-[55%] -translate-y-1/2 pointer-events-none">
-        <button
-          onClick={prevSlide}
-          className="pointer-events-auto p-1.5 md:p-3 rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
-          aria-label="Previous speaker"
-        >
-          <img
-            src={arrowLeft}
-            alt="Prev"
-            className="w-10 h-10 md:w-16 md:h-16 drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
-          />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="pointer-events-auto p-1.5 md:p-3 rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
-          aria-label="Next speaker"
-        >
-          <img
-            src={arrowRight}
-            alt="Next"
-            className="w-10 h-10 md:w-16 md:h-16 drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
-          />
-        </button>
-      </div>
-
-      {/* Floor Glow */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5 }}
-        className={`absolute rounded-[100%] bg-amber-500/10 blur-[80px] pointer-events-none`}
-        style={{
-          width: isMobile ? '350px' : '1200px',
-          height: isMobile ? '180px' : '500px',
-          transform: 'rotateX(70deg)',
-        }}
-      />
-
-      {/* Golden Ring on Floor */}
-      <div
-        className="absolute border-[2px] border-[#d4af37]/30 rounded-[100%] pointer-events-none shadow-[0_0_30px_rgba(212,175,55,0.2)]"
-        style={{
-          width: xRadius * 2.2,
-          height: yRadius * 2.2,
-          transform: 'rotateX(70deg)',
-        }}
-      />
-
-      {/* DEDICATED SPEAKER DETAILS PANEL */}
+    <div className="relative w-full h-full">
+      {/* DEDICATED SPEAKER DETAILS PANEL - MOVED OUTSIDE TRANSFORM */}
       <AnimatePresence mode="wait">
         {hoveredSpeaker && (
-          <div className="absolute inset-0 z-[200] pointer-events-none flex items-end justify-center pb-32 md:pb-24">
+          <div
+            className="absolute inset-0 z-[2000] pointer-events-none flex items-end justify-center"
+            style={{ paddingBottom: panelPaddingBottom }}
+          >
             <motion.div
               key="detail-panel"
               initial={{ opacity: 0, y: 50, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 50, scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              className="pointer-events-auto max-w-[90vw] w-[350px] md:w-[600px] max-h-[70vh] overflow-y-auto bg-black/80 backdrop-blur-xl border border-[#d4af37]/40 rounded-xl p-5 md:p-8 flex flex-col md:flex-row gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative group"
+              className="pointer-events-auto max-w-[90vw] max-h-[70vh] overflow-y-auto bg-black/80 backdrop-blur-xl border border-[#d4af37]/40 rounded-xl flex flex-col md:flex-row gap-4 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative group"
+              style={{
+                width: panelWidth,
+                padding: `${lerp(12, 32, combinedFactor)}px`,
+              }}
               onMouseEnter={handlePanelEnter}
               onMouseLeave={handlePanelLeave}
             >
               {/* Animated Border Glow */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#d4af37]/20 to-transparent pointer-events-none animate-pulse" />
 
-              {/* Profile Image (Small Circle) */}
-              <div className="hidden md:block w-24 h-24 rounded-full border-2 border-[#d4af37] overflow-hidden shrink-0 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-                <motion.img
-                  key={hoveredSpeaker.image}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  src={hoveredSpeaker.image}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              {/* Profile Image (Small Circle) - hide on very small screens */}
+              {w >= 640 && (
+                <div
+                  className="rounded-full border-2 border-[#d4af37] overflow-hidden shrink-0 shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+                  style={{
+                    width: lerp(48, 96, combinedFactor),
+                    height: lerp(48, 96, combinedFactor),
+                  }}
+                >
+                  <motion.img
+                    key={hoveredSpeaker.image}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    src={hoveredSpeaker.image}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
 
               {/* Content */}
               <div className="flex-1 text-center md:text-left z-10">
@@ -364,74 +382,149 @@ function FloorCarousel({ data }: FloorCarouselProps) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h2 className="text-2xl md:text-3xl text-[#d4af37] font-bold font-cinzel tracking-wide mb-1 drop-shadow-md">
+                  <h2
+                    className="text-[#d4af37] font-bold font-cinzel tracking-wide mb-1 drop-shadow-md"
+                    style={{ fontSize: `${lerp(1, 1.875, combinedFactor)}rem` }}
+                  >
                     {hoveredSpeaker.name}
                   </h2>
-                  <p className="text-[#a89052] text-xs md:text-sm uppercase tracking-widest font-semibold mb-3">
+                  <p
+                    className="text-[#a89052] uppercase tracking-widest font-semibold mb-2"
+                    style={{ fontSize: `${lerp(0.625, 0.875, combinedFactor)}rem` }}
+                  >
                     {hoveredSpeaker.role}
                   </p>
-                  <div className="h-px w-full md:w-3/4 bg-gradient-to-r from-[#d4af37]/50 to-transparent mx-auto md:mx-0 mb-4" />
-                  <p className="text-white/80 text-xs md:text-sm leading-relaxed mb-6 font-light font-sans tracking-wide">
+                  <div className="h-px w-full md:w-3/4 bg-gradient-to-r from-[#d4af37]/50 to-transparent mx-auto md:mx-0 mb-3" />
+                  <p
+                    className="text-white/80 leading-relaxed mb-4 font-light font-sans tracking-wide"
+                    style={{ fontSize: `${lerp(0.625, 0.875, combinedFactor)}rem` }}
+                  >
                     {hoveredSpeaker.bio}
                   </p>
                 </motion.div>
-
-                {/* Socials */}
-                <div className="flex gap-4 justify-center md:justify-start">
-                  {hoveredSpeaker.socials.web && <SocialIcon icon={iconWeb} delay={0} />}
-                  {hoveredSpeaker.socials.linkedin && (
-                    <SocialIcon icon={iconLinkedin} delay={0.1} />
-                  )}
-                  {hoveredSpeaker.socials.x && <SocialIcon icon={iconX} delay={0.2} />}
-                  {hoveredSpeaker.socials.insta && <SocialIcon icon={iconInsta} delay={0.3} />}
-                </div>
               </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
 
-      <AnimatePresence mode="popLayout">
-        {visibleSpeakers.map((speaker) => {
-          // Position Logic
-
-          // Use indexPosition relative to centerIndex to fan out from 270 degrees
-          const degree = 270 + (speaker.indexPosition - centerIndex) * step;
-          const radian = (degree * Math.PI) / 180;
-
-          const x = Math.cos(radian) * xRadius;
-          const y = Math.sin(radian) * yRadius;
-
-          // Perspective Scale
-          const normalizedY = (y + yRadius) / (yRadius * 2);
-          let scale = 0.5 + normalizedY * 0.5;
-          const zIndex = Math.floor(normalizedY * 100);
-
-          // Center logic using dynamic centerIndex
-          const isCenter = speaker.indexPosition === centerIndex;
-
-          // SCALE BOOST for center item (Responsive)
-          if (isCenter) {
-            scale *= isMobile ? 1.3 : 1.6; // 30% boost on mobile, 60% on desktop
-          }
-
-          return (
-            <SpeakerCard
-              key={speaker.id} // Stable key for smooth transition
-              speaker={speaker}
-              x={x}
-              y={y}
-              scale={scale}
-              zIndex={zIndex}
-              isCenter={isCenter}
-              isMobile={isMobile}
-              onMouseEnter={() => handleSpeakerEnter(speaker)}
-              onMouseLeave={handleSpeakerLeave}
-              onClick={() => handleSpeakerClick(speaker.originalIndex)}
+      <div
+        className="absolute inset-0 w-full h-full flex items-center justify-center"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: `translateY(${translateY}px)`,
+        }}
+      >
+        {/* --- NAVIGATION CONTROLS --- */}
+        <div
+          className="absolute z-[1000] flex justify-between pointer-events-none"
+          style={{
+            width: `min(85vw, ${lerp(300, 1100, wFactor)}px)`,
+            padding: `0 ${lerp(8, 48, wFactor)}px`,
+            top: '55%',
+            transform: 'translateY(-50%)',
+          }}
+        >
+          <button
+            onClick={prevSlide}
+            className="pointer-events-auto rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+            style={{ padding: `${lerp(4, 12, combinedFactor)}px` }}
+            aria-label="Previous speaker"
+          >
+            <img
+              src={arrowLeft}
+              alt="Prev"
+              style={{ width: arrowSize, height: arrowSize }}
+              className="drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
             />
-          );
-        })}
-      </AnimatePresence>
+          </button>
+          <button
+            onClick={nextSlide}
+            className="pointer-events-auto rounded-full bg-black/40 border border-[#d4af37]/30 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all group backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+            style={{ padding: `${lerp(4, 12, combinedFactor)}px` }}
+            aria-label="Next speaker"
+          >
+            <img
+              src={arrowRight}
+              alt="Next"
+              style={{ width: arrowSize, height: arrowSize }}
+              className="drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
+            />
+          </button>
+        </div>
+
+        {/* Floor Glow */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5 }}
+          className="absolute rounded-[100%] bg-amber-500/10 pointer-events-none"
+          style={{
+            width: glowWidth,
+            height: glowHeight,
+            filter: `blur(${lerp(40, 80, combinedFactor)}px)`,
+            transform: 'rotateX(70deg)',
+          }}
+        />
+
+        {/* Golden Ring on Floor */}
+        <div
+          className="absolute border-[2px] border-[#d4af37]/30 rounded-[100%] pointer-events-none shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+          style={{
+            width: xRadius * 2.2 * ringScale,
+            height: yRadius * 2.2 * ringScale,
+            transform: 'rotateX(70deg)',
+          }}
+        />
+
+        <AnimatePresence mode="popLayout">
+          {Array.from({ length: visibleCount }).map((_, i) => {
+            // Calculate absolute index (unbounded) and data index (wrapped)
+            const absoluteIndex = startIndex + i;
+            // Handle negative wrapping correctly
+            const dataIndex = ((absoluteIndex % data.length) + data.length) % data.length;
+            const speaker = data[dataIndex];
+
+            // Position Logic
+            // i varies from 0 to visibleCount-1
+            const degree = 270 + (i - centerIndex) * stepAngle;
+            const radian = (degree * Math.PI) / 180;
+
+            const x = Math.cos(radian) * xRadius;
+            const y = Math.sin(radian) * yRadius;
+
+            // Perspective Scale
+            const normalizedY = (y + yRadius) / (yRadius * 2);
+            let scale = 0.5 + normalizedY * 0.5;
+            const zIndex = Math.floor(normalizedY * 100);
+
+            // Center logic
+            const isCenter = i === centerIndex;
+
+            // SCALE BOOST for center item (Responsive)
+            if (isCenter) {
+              scale *= centerScaleBoost;
+            }
+
+            return (
+              <SpeakerCard
+                key={absoluteIndex} // UNIQUE KEY based on absolute position index
+                speaker={speaker}
+                x={x}
+                y={y}
+                scale={scale}
+                zIndex={zIndex}
+                isCenter={isCenter}
+                cardSize={cardSize}
+                viewport={viewport}
+                onMouseEnter={() => handleSpeakerEnter(speaker)}
+                onMouseLeave={handleSpeakerLeave}
+                onClick={() => handleSpeakerClick(absoluteIndex)}
+              />
+            );
+          })}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -443,7 +536,7 @@ function SpeakerCard({
   scale,
   zIndex,
   isCenter,
-  isMobile,
+  cardSize,
   onMouseEnter,
   onMouseLeave,
   onClick,
@@ -516,7 +609,8 @@ function SpeakerCard({
 
         {/* CARD CONTAINER */}
         <motion.div
-          className={`${isMobile ? 'w-32 h-32' : 'w-56 h-56'} relative cursor-pointer`} // Increased mobile size
+          className="relative cursor-pointer"
+          style={{ width: cardSize, height: cardSize }}
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
           onClick={onClick}
@@ -559,7 +653,8 @@ function SpeakerCard({
 
           {/* Default Name Tag (Visible when NOT hovered) */}
           <motion.div
-            className={`absolute ${isMobile ? '-bottom-20' : '-bottom-24'} left-1/2 -translate-x-1/2 w-max text-center pointer-events-none`}
+            className="absolute left-1/2 -translate-x-1/2 w-max text-center pointer-events-none"
+            style={{ bottom: -cardSize * 0.45 }}
             animate={{ opacity: isHovered ? 0 : 1 }}
             transition={{ duration: 0.2 }}
           >
@@ -571,10 +666,16 @@ function SpeakerCard({
                   exit={{ opacity: 0, y: -10 }}
                   className="flex flex-col items-center"
                 >
-                  <h3 className="text-[#F4E3A3] font-bold text-xl md:text-2xl tracking-wider drop-shadow-[0_0_10px_rgba(244,227,163,0.6)] font-cinzel">
+                  <h3
+                    className="text-[#F4E3A3] font-bold tracking-wider drop-shadow-[0_0_10px_rgba(244,227,163,0.6)] font-cinzel"
+                    style={{ fontSize: Math.max(16, cardSize * 0.12) }}
+                  >
                     {speaker.name}
                   </h3>
-                  <p className="text-[#a89052] text-xs md:text-sm uppercase tracking-[0.2em] mt-1 font-semibold">
+                  <p
+                    className="text-[#a89052] uppercase tracking-[0.2em] mt-1 font-semibold"
+                    style={{ fontSize: Math.max(10, cardSize * 0.06) }}
+                  >
                     {speaker.role}
                   </p>
                 </motion.div>
@@ -587,19 +688,4 @@ function SpeakerCard({
   );
 }
 
-function SocialIcon({ icon, delay }: { icon: string; delay: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay, type: 'spring', stiffness: 400, damping: 20 }}
-      className="w-8 h-8 rounded-full bg-black/80 border border-[#d4af37]/50 hover:bg-[#d4af37] hover:border-white p-2 transition-all cursor-pointer group shadow-lg"
-    >
-      <img
-        src={icon}
-        alt="Social"
-        className="w-full h-full object-contain invert opacity-70 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300"
-      />
-    </motion.div>
-  );
-}
+

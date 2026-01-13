@@ -56,21 +56,41 @@ export default function Prizes() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1920);
+  const [viewportHeight, setViewportHeight] = useState(typeof window !== 'undefined' ? window.innerHeight : 1080);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
   const touchEndY = useRef<number | null>(null);
 
-  // Responsive check for mobile devices
+  // Responsive check for mobile devices and viewport dimensions
   useEffect(() => {
-    const checkMobile = () => {
+    const updateDimensions = () => {
       setIsMobile(window.innerWidth < 768);
+      setViewportWidth(window.innerWidth);
+      setViewportHeight(window.innerHeight);
     };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
   }, []);
+
+  // Combined scale factor based on BOTH width and height
+  // Base: 320×480 = 0, 1920×1080 = 1 (normalized for device range)
+  const widthScale = Math.max(0, Math.min(1, (viewportWidth - 280) / (1920 - 280)));
+  const heightScale = Math.max(0, Math.min(1, (viewportHeight - 400) / (1080 - 400)));
+  const scaleFactor = Math.min(widthScale, heightScale);
+
+  // Responsive dimension helpers - optimized for devices from 280×400 to 1920×1080
+  const getCarouselHeight = () => Math.round(140 + 540 * scaleFactor); // 140-680px
+  const getCardWidth = () => Math.round(100 + 300 * scaleFactor); // 100-400px
+  const getCardHeight = () => Math.round(getCardWidth() * 1.5);
+  const getDomainCardWidth = () => Math.round(100 + 240 * scaleFactor); // 100-340px
+  const getDomainCardHeight = () => Math.round(getDomainCardWidth() * 1.5);
+  const getTitleFontSize = () => Math.round(14 + 66 * scaleFactor); // 14-80px
+  const getGap = () => Math.round(6 + 26 * scaleFactor); // 6-32px
+  const getMobileTextScale = () => scaleFactor;
 
   const prevIndex = (activeIndex - 1 + mainPrizes.length) % mainPrizes.length;
   const nextIndex = (activeIndex + 1) % mainPrizes.length;
@@ -612,13 +632,21 @@ export default function Prizes() {
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-4xl md:text-6xl lg:text-7xl mb-3 xs:mb-4 sm:mb-5 md:mb-8 lg:mb-10 xl:mb-12 2xl:mb-14 text-center tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.25em] xl:tracking-[0.3em] text-[#e8dab2] drop-shadow-[0_0_15px_rgba(232,218,178,0.3)] sm:drop-shadow-[0_0_20px_rgba(232,218,178,0.4)] mt-2 xs:mt-3 sm:mt-4 md:mt-6 lg:mt-8 leading-tight"
+              className="text-center tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] lg:tracking-[0.25em] xl:tracking-[0.3em] text-[#e8dab2] drop-shadow-[0_0_15px_rgba(232,218,178,0.3)] sm:drop-shadow-[0_0_20px_rgba(232,218,178,0.4)] leading-tight"
+              style={{
+                fontSize: `${getTitleFontSize()}px`,
+                marginTop: `${Math.round(8 + 24 * scaleFactor)}px`,
+                marginBottom: `${Math.round(12 + 40 * scaleFactor)}px`,
+              }}
             >
               PRIZES
             </motion.h1>
 
             {/* MAIN PRIZES CAROUSEL */}
-            <div className="relative w-full max-w-7xl h-[280px] xs:h-[320px] sm:h-[400px] md:h-[480px] lg:h-[550px] xl:h-[600px] 2xl:h-[650px] flex items-center justify-center">
+            <div
+              className="relative w-full max-w-7xl flex items-center justify-center"
+              style={{ height: `${getCarouselHeight()}px` }}
+            >
               {/* Navigation Buttons - Responsive positioning */}
               <button
                 onClick={handlePrev}
@@ -685,8 +713,10 @@ export default function Prizes() {
                     onMouseLeave={() => !isMobile && setIsPaused(false)}
                   >
                     <div
-                      className="w-[180px] h-[270px] xs:w-[200px] xs:h-[300px] sm:w-[240px] sm:h-[360px] md:w-[260px] md:h-[390px] lg:w-[300px] lg:h-[450px] xl:w-[340px] xl:h-[510px] 2xl:w-[380px] 2xl:h-[570px] rounded-lg md:rounded-xl overflow-hidden bg-cover bg-center border-2 md:border-[3px] transition-all duration-500 group-hover:brightness-110"
+                      className="rounded-lg md:rounded-xl overflow-hidden bg-cover bg-center border-2 md:border-[3px] transition-all duration-500 group-hover:brightness-110"
                       style={{
+                        width: `${getCardWidth()}px`,
+                        height: `${getCardHeight()}px`,
                         backgroundImage: `url(${activePrize.image})`,
                         boxShadow: `0 0 30px ${activePrize.color}40, 0 15px 40px rgba(0,0,0,0.4)`,
                         borderColor: activePrize.color,
@@ -758,23 +788,45 @@ export default function Prizes() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="xl:hidden text-center mt-4 xs:mt-5 sm:mt-6 md:mt-8 lg:mt-10 flex flex-col items-center px-3 xs:px-4 sm:px-6 mb-3 sm:mb-4 md:mb-6"
+                className="xl:hidden text-center flex flex-col items-center px-2 xs:px-3 sm:px-4 md:px-6"
+                style={{
+                  marginTop: `${Math.round(8 + 24 * getMobileTextScale())}px`,
+                  marginBottom: `${Math.round(6 + 18 * getMobileTextScale())}px`,
+                }}
               >
                 <h2
-                  className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-widest mb-1 xs:mb-1.5 sm:mb-2 font-bold font-heading leading-tight"
-                  style={{ color: activePrize.color }}
+                  className="tracking-widest font-bold font-heading leading-tight"
+                  style={{
+                    color: activePrize.color,
+                    fontSize: `${Math.round(18 + 30 * getMobileTextScale())}px`,
+                    marginBottom: `${Math.round(2 + 6 * getMobileTextScale())}px`,
+                  }}
                 >
                   {activePrize.title}
                 </h2>
-                <h3 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-subheading font-bold italic text-[#DEC169] mb-1 xs:mb-1.5 sm:mb-2 leading-tight drop-shadow-md">
+                <h3
+                  className="font-subheading font-bold italic text-[#DEC169] leading-tight drop-shadow-md"
+                  style={{
+                    fontSize: `${Math.round(16 + 24 * getMobileTextScale())}px`,
+                    marginBottom: `${Math.round(2 + 6 * getMobileTextScale())}px`,
+                  }}
+                >
                   {activePrize.god}
                 </h3>
-                <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl italic text-neutral-400 font-subheading mb-2 xs:mb-2.5 sm:mb-3 md:mb-4 leading-snug px-2">
+                <p
+                  className="italic text-neutral-400 font-subheading leading-snug px-1"
+                  style={{
+                    fontSize: `${Math.round(10 + 10 * getMobileTextScale())}px`,
+                    marginBottom: `${Math.round(4 + 12 * getMobileTextScale())}px`,
+                  }}
+                >
                   {activePrize.role}
                 </p>
                 <div
-                  className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal font-heading tracking-tighter mb-3 xs:mb-4 sm:mb-5 md:mb-6 leading-none"
+                  className="font-normal font-heading tracking-tighter leading-none"
                   style={{
+                    fontSize: `${Math.round(28 + 44 * getMobileTextScale())}px`,
+                    marginBottom: `${Math.round(6 + 18 * getMobileTextScale())}px`,
                     color: activePrize.color,
                     textShadow: `0 0 20px ${activePrize.color}40, 0 0 40px ${activePrize.color}20`,
                   }}
@@ -809,7 +861,10 @@ export default function Prizes() {
           </motion.h2>
 
           {/* DOMAIN PRIZES GRID - Fully Responsive */}
-          <div className="w-full max-w-[1400px] flex flex-wrap justify-center items-center content-center gap-3 xs:gap-4 sm:gap-5 md:gap-6 lg:gap-7 xl:gap-8 perspective-1000 px-2 xs:px-3 sm:px-4">
+          <div
+            className="w-full max-w-[1400px] flex flex-wrap justify-center items-center content-center perspective-1000 px-2 xs:px-3 sm:px-4"
+            style={{ gap: `${getGap()}px` }}
+          >
             {domainPrizes.map((prize, index) => (
               <motion.div
                 key={`domain-card-${index}`}
@@ -817,9 +872,13 @@ export default function Prizes() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative group w-[140px] h-[210px] xs:w-[160px] xs:h-[240px] sm:w-[180px] sm:h-[270px] md:w-[200px] md:h-[300px] lg:w-[220px] lg:h-[330px] xl:w-[260px] xl:h-[390px] 2xl:w-[300px] 2xl:h-[450px] rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border border-[#d4af37]/40 hover:border-[#d4af37] transition-all duration-500 bg-[#0a0a0a] will-change-transform"
+                className="relative group rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border border-[#d4af37]/40 hover:border-[#d4af37] transition-all duration-500 bg-[#0a0a0a] will-change-transform"
+                style={{
+                  width: `${getDomainCardWidth()}px`,
+                  height: `${getDomainCardHeight()}px`,
+                  transform: 'translateZ(0)'
+                }}
                 whileHover={!isMobile ? { scale: 1.05, zIndex: 10 } : {}}
-                style={{ transform: 'translateZ(0)' }}
               >
                 {/* Background Image - Blurs on Hover */}
                 <div
@@ -848,9 +907,15 @@ export default function Prizes() {
                 </div>
 
                 {/* Default View Title (Visible only when NOT hovering) */}
-                <div className="absolute bottom-2 xs:bottom-3 sm:bottom-4 left-0 w-full text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-4 z-20">
-                  <div className="bg-black/60 backdrop-blur-sm border-y border-[#d4af37]/30 py-1 xs:py-1.5 sm:py-2 mx-1.5 xs:mx-2 sm:mx-3 md:mx-4">
-                    <h3 className="text-xs xs:text-sm sm:text-base md:text-lg font-bold text-[#e8dab2] tracking-widest font-cinzel leading-tight px-1">
+                <div className="absolute bottom-1 xs:bottom-2 sm:bottom-3 left-0 w-full text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-4 z-20">
+                  <div className="bg-black/60 backdrop-blur-sm border-y border-[#d4af37]/30 py-0.5 xs:py-1 sm:py-1.5 mx-1 xs:mx-1.5 sm:mx-2">
+                    <h3
+                      className="font-bold text-[#e8dab2] tracking-wider font-cinzel leading-tight truncate"
+                      style={{
+                        fontSize: `${Math.round(9 + 9 * scaleFactor)}px`,
+                        padding: '0 2px',
+                      }}
+                    >
                       {prize.title}
                     </h3>
                   </div>
