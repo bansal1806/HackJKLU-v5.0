@@ -31,14 +31,14 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
 
   return (
     <motion.div
-      className="relative w-full min-h-screen"
+      className="relative w-full min-h-screen flex flex-col"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
       {/* Background */}
-      <div className="absolute inset-0 w-full h-full z-0">
+      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
         <div
           className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
           style={{
@@ -52,36 +52,19 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
         <div className="absolute inset-0 bg-neutral-950/60 z-10" />
       </div>
 
-      {/* Header: Fixed Top */}
-      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-20 xs:pt-24 sm:pt-28 md:pt-32 pointer-events-none px-4 text-center transition-all duration-300">
-      </div>
-
-      {/* Grid Content: Stacks on mobile, Split on desktop */}
-      <div
-        className={`absolute inset-0 z-40 ${isMobile ? 'overflow-y-auto pt-16 xs:pt-20 sm:pt-24 pb-12 hide-scrollbar' : ''
-          }`}
-      >
+      {/* Grid Content: Flex Column Flow (No Absolutes) */}
+      <div className={`relative z-40 w-full flex-grow flex flex-col ${isMobile ? 'pt-16 pb-12 overflow-y-auto hide-scrollbar' : 'h-full justify-center'
+        }`}>
         {data.groups.map((group, groupIndex) => (
           <div
             key={groupIndex}
-            className={`flex flex-col items-center w-full ${isMobile
-              ? 'relative py-4 xs:py-6 border-b border-white/5 last:border-none'
-              : 'absolute left-0 right-0'
+            className={`w-full flex flex-col items-center justify-center ${isMobile
+              ? 'py-8 border-b border-white/5 last:border-none last:pb-24'
+              : 'flex-1 py-4 lg:py-8'
               }`}
-            style={
-              !isMobile
-                ? {
-                  top: groupIndex === 0 ? '0%' : '50%',
-                  height: '50%',
-                  justifyContent: 'center',
-                  paddingTop: groupIndex === 0 ? '15vh' : '0px', // Fluid vertical padding
-                  paddingBottom: groupIndex === 0 ? '0px' : '5vh',
-                }
-                : {}
-            }
           >
             <h2
-              className="text-lg xs:text-xl sm:text-3xl md:text-4xl font-heading tracking-wider uppercase mb-4 xs:mb-6 sm:mb-8 text-center relative z-10"
+              className="text-lg xs:text-xl sm:text-3xl md:text-5xl font-heading tracking-wider uppercase mb-8 xs:mb-10 sm:mb-12 text-center relative z-10"
               style={{
                 background: `linear-gradient(to bottom, ${group.color} 60%, #4a4a4a 100%)`,
                 WebkitBackgroundClip: 'text',
@@ -91,18 +74,20 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
             >
               {group.title}
             </h2>
+
             {/* Fluid Gaps using vh/vw */}
-            <div className="flex flex-wrap justify-center gap-x-[2vw] gap-y-[3vh] px-2 w-full max-w-[98%] xl:max-w-screen-2xl mx-auto">
+            <div className={`flex flex-wrap justify-center w-full max-w-[98%] xl:max-w-screen-2xl mx-auto px-4 ${isMobile ? 'gap-x-6 gap-y-10' : 'gap-x-[5vw] gap-y-[5vh]'
+              }`}>
               {group.partners.map((partner, pIndex) => (
-                <div key={pIndex} className="flex flex-col items-center gap-0 group relative">
+                <div key={pIndex} className="flex flex-col items-center gap-4 group relative">
                   {/* Fluid Ring Sizing using vmin */}
                   <div
                     className="relative will-change-transform"
                     style={{
-                      width: isMobile ? '35vw' : '18vmin',
-                      height: isMobile ? '35vw' : '18vmin',
-                      maxWidth: '260px',
-                      minWidth: '100px'
+                      width: isMobile ? '35vw' : '20vmin', // Increased from 15vmin for better desktop presence
+                      height: isMobile ? '35vw' : '20vmin',
+                      maxWidth: '300px', // Increased max-width
+                      minWidth: '120px'
                     }}
                   >
                     <motion.div
@@ -118,7 +103,8 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                       <img
                         src={group.ring}
                         alt="Ring"
-                        className="w-full h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
+                        className={`w-full h-full object-contain transition-opacity ${isMobile ? 'opacity-100' : 'opacity-90 group-hover:opacity-100'
+                          }`}
                         loading="eager"
                       />
                     </motion.div>
@@ -127,13 +113,19 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                         <img
                           src={partner.logo}
                           alt={partner.name}
-                          className="max-w-[65%] max-h-[65%] object-contain filter group-hover:brightness-125 transition-all duration-300 drop-shadow-md"
+                          className={`max-w-[65%] max-h-[65%] object-contain transition-all duration-300 drop-shadow-md ${isMobile
+                            ? 'brightness-125'
+                            : 'filter group-hover:brightness-125'
+                            }`}
                           loading="eager"
                         />
                       </div>
                     </div>
                   </div>
-                  <span className="text-[10px] xs:text-xs sm:text-base md:text-lg font-heading text-[#EFE3A0]/80 tracking-wide text-center -mt-2 sm:-mt-6 transition-colors group-hover:text-[#EFE3A0]">
+                  <span className={`text-[10px] xs:text-xs sm:text-base md:text-lg font-heading tracking-wide text-center transition-colors ${isMobile
+                    ? 'text-[#EFE3A0]'
+                    : 'text-[#EFE3A0]/80 group-hover:text-[#EFE3A0]'
+                    }`}>
                     {partner.name}
                   </span>
                 </div>

@@ -78,14 +78,14 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
 
   return (
     <motion.div
-      className="relative w-full min-h-screen overflow-hidden"
+      className="relative w-full min-h-screen overflow-hidden flex flex-col"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
-      {/* Background - Optimizing with specific position */}
-      <div className="absolute inset-0 w-full h-full z-0">
+      {/* Background */}
+      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
         <div
           className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
           style={{
@@ -99,171 +99,165 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
         <div className="absolute inset-0 bg-neutral-950/60 z-10" />
       </div>
 
-      {/* Header: Fixed Top -> Absolute (scrolls with section) */}
-      <div className="absolute top-0 left-0 right-0 z-50 flex flex-col items-center pt-20 sm:pt-28 md:pt-32 pointer-events-none px-2 sm:px-4 text-center transition-all duration-300">
-        {data.title === 'GOLD PARTNER' && (
-          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
-            PAST PARTNERS
-          </h1>
-        )}
-        <h2
-          className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-4xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
-          style={gradientStyle}
-        >
-          {data.title}
-        </h2>
-        <motion.h3
-          animate={{ opacity: isHovered && data.logo ? 0 : 1 }}
-          transition={{ duration: 0.4 }}
-          className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-5xl font-heading tracking-wider uppercase"
-          style={gradientStyle}
-        >
-          {data.partnerName}
-        </motion.h3>
-      </div>
+      {/* Content Container - Flex Column to ensure stacking order */}
+      <div className="relative z-40 w-full h-full flex flex-col items-center flex-grow">
 
-      {/* Interaction Area */}
-      <div
-        className={`absolute inset-0 z-40 flex items-center justify-center ${isMobile
-          ? 'pt-[18vh] xs:pt-[22vh] md:pt-[25vh] landscape:pt-[6rem]'
-          : 'pt-32 lg:pt-40'
-          }`}
-      >
+        {/* Header Section */}
+        <div className={`w-full flex flex-col items-center px-4 text-center transition-all duration-300 shrink-0 ${isMobile ? 'pt-20 pb-4' : 'pt-24 lg:pt-28 xl:pt-32 pb-8'
+          }`}>
+          {data.title === 'GOLD PARTNER' && (
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-5xl xl:text-7xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
+              PAST PARTNERS
+            </h1>
+          )}
+          <h2
+            className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-2xl xl:text-4xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+            style={gradientStyle}
+          >
+            {data.title}
+          </h2>
+          <motion.h3
+            animate={{ opacity: isHovered && data.logo ? 0 : 1 }}
+            transition={{ duration: 0.4 }}
+            className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-heading tracking-wider uppercase"
+            style={gradientStyle}
+          >
+            {data.partnerName}
+          </motion.h3>
+        </div>
+
+        {/* Interaction Area (Ring + Text) */}
         <div
-          className={`relative w-full max-w-7xl flex items-center justify-center ${isMobile ? 'flex-col gap-2xs sm:gap-4' : 'gap-8 lg:gap-16'
+          className={`w-full flex items-center justify-center flex-grow relative ${isMobile ? 'flex-col justify-start pb-12 gap-8' : 'flex-row gap-8 lg:gap-16'
             }`}
         >
-          {/* Ring Group - Clickable on Mobile */}
-          <motion.div
-            className="flex items-center justify-center cursor-pointer relative"
-            // Animation: Mobile = Shift UP, Desktop = Shift LEFT
-            // Using percentages relative to viewport width for fluid shifting
-            animate={
-              isHovered && data.logo
-                ? isMobile
-                  ? { y: 0, scale: 0.85 }
-                  : { x: '-15vw' } // Fluid shift left
-                : { x: 0, y: 0, scale: 1 }
-            }
-            transition={{ duration: 0.8, ease: 'easeInOut' }}
-            onMouseEnter={() => {
-              if (!isMobile && data.logo) setIsHovered(true);
-            }}
-            onClick={toggleView}
+          <div
+            className={`relative flex items-center justify-center transition-all duration-500 ${isMobile ? 'w-full' : 'max-w-7xl w-full'
+              }`}
           >
-            {/* Mobile Hint */}
-            {isMobile && !isHovered && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="absolute -bottom-8 xs:-bottom-10 text-[#EFE3A0]/60 text-[9px] xs:text-[10px] font-heading tracking-widest uppercase"
-              >
-                Tap to view details
-              </motion.div>
-            )}
+            <div className={`relative flex items-center justify-center w-full ${isMobile ? 'flex-col gap-6' : 'gap-12'}`}>
 
-            {/* Adjust Ring Size for Mobile vs Desktop */}
-            {/* FLUID RESPONSIVENESS: Using vmin to scale with the smallest viewport dimension */}
-            <div
-              className="relative will-change-transform object-contain"
-              style={{
-                width: isMobile ? '60vmin' : '45vmin',
-                height: isMobile ? '60vmin' : '45vmin',
-                maxWidth: '600px', // Upper bound
-                minWidth: '280px', // Lower bound
-              }}
-            >
+              {/* Ring Group */}
               <motion.div
-                animate={{ rotate: 360 }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 30,
-                  ease: 'linear',
+                className={`flex items-center justify-center relative ${!isMobile && 'cursor-pointer'}`}
+                animate={
+                  isMobile
+                    ? { y: 0, scale: 0.85 }
+                    : isHovered && data.logo
+                      ? { scale: 1 }
+                      : { scale: 1 }
+                }
+                transition={{ duration: 0.8, ease: 'easeInOut' }}
+                onMouseEnter={() => {
+                  if (!isMobile && data.logo) setIsHovered(true);
                 }}
-                className="absolute inset-0 w-full h-full"
-                style={{ transformOrigin: '50% 50%' }}
+                onClick={!isMobile ? toggleView : undefined}
               >
-                <img
-                  src={data.ring}
-                  alt="Ring"
-                  className="w-full h-full object-contain"
-                  loading="eager"
-                  decoding="async"
-                />
-              </motion.div>
-
-              {/* Logo */}
-              {data.logo && (
+                {/* Ring Size */}
                 <div
-                  className="absolute left-1/2 top-1/2 w-[50%] h-[50%] flex items-center justify-center"
-                  style={{ transform: 'translate(-50%, -50%)' }}
+                  className="relative will-change-transform object-contain"
+                  style={{
+                    width: isMobile ? '60vmin' : '40vmin',
+                    height: isMobile ? '60vmin' : '40vmin',
+                    maxWidth: '600px',
+                    minWidth: '280px',
+                  }}
                 >
-                  <div className="relative w-full h-full flex items-center justify-center p-2">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 30,
+                      ease: 'linear',
+                    }}
+                    className="absolute inset-0 w-full h-full"
+                    style={{ transformOrigin: '50% 50%' }}
+                  >
                     <img
-                      src={data.logo}
-                      alt="Logo"
+                      src={data.ring}
+                      alt="Ring"
                       className="w-full h-full object-contain"
                       loading="eager"
+                      decoding="async"
                     />
-                  </div>
-                </div>
-              )}
-            </div>
-          </motion.div>
+                  </motion.div>
 
-          {/* Content Details (Visible on Hover/Click) */}
-          <AnimatePresence>
-            {isHovered && data.logo && (
-              <motion.div
-                // Animation: Mobile = Fade In Bottom, Desktop = Fade In Right
-                initial={isMobile ? { opacity: 0, y: 30 } : { opacity: 0, x: 50 }}
-                animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
-                exit={isMobile ? { opacity: 0, y: 30 } : { opacity: 0, x: 50 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-                className={`flex flex-col gap-3 sm:gap-6 text-left ${isMobile
-                  ? 'w-[90%] max-w-2xl mx-auto -mt-6 px-4 max-h-[40vh] overflow-y-auto hide-scrollbar bg-neutral-950/40 backdrop-blur-sm rounded-xl p-4'
-                  : 'max-w-xl'
-                  }`}
-              >
-                <div className="space-y-2 sm:space-y-6">
-                  <h4
-                    className="text-lg xs:text-xl sm:text-3xl font-heading uppercase tracking-widest border-b pb-2"
-                    style={{ color: data.themeColor, borderColor: `${data.themeColor}33` }}
-                  >
-                    {data.partnerName}
-                  </h4>
-
-                  {data.description.map((desc: string, i: number) => (
-                    <p
-                      key={i}
-                      className="text-[#FFEAA4] font-subheading leading-relaxed text-xs xs:text-sm sm:text-base md:text-lg text-justify opacity-90"
+                  {/* Logo */}
+                  {data.logo && (
+                    <div
+                      className="absolute left-1/2 top-1/2 w-[50%] h-[50%] flex items-center justify-center"
+                      style={{ transform: 'translate(-50%, -50%)' }}
                     >
-                      {desc}
-                    </p>
-                  ))}
+                      <div className="relative w-full h-full flex items-center justify-center p-2">
+                        <img
+                          src={data.logo}
+                          alt="Logo"
+                          className="w-full h-full object-contain"
+                          loading="eager"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-
-                <div
-                  className="w-full h-px my-2"
-                  style={{
-                    background: `linear-gradient(to right, ${data.themeColor}80, ${data.themeColor}33, transparent)`,
-                  }}
-                />
-
-                {/* Social Links */}
-                {data.socials && (
-                  <div className="flex items-center justify-end gap-4 sm:gap-6 pb-2 sm:pb-0">
-                    {data.socialLinks?.x && <SocialIcon icon={xIcon} link={data.socialLinks?.x} />}
-                    {data.socialLinks?.instagram && <SocialIcon icon={instaIcon} link={data.socialLinks?.instagram} />}
-                    {data.socialLinks?.linkedin && <SocialIcon icon={linkedinIcon} link={data.socialLinks?.linkedin} />}
-                    {data.socialLinks?.web && <SocialIcon icon={webIcon} link={data.socialLinks?.web} />}
-                  </div>
-                )}
               </motion.div>
-            )}
-          </AnimatePresence>
+
+              {/* Content Details */}
+              <AnimatePresence>
+                {(isMobile || (isHovered && data.logo)) && (
+                  <motion.div
+                    initial={isMobile ? { opacity: 0, y: 30 } : { opacity: 0, x: 50 }}
+                    animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
+                    exit={isMobile ? { opacity: 0, y: 30 } : { opacity: 0, x: 50 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                    className={`flex flex-col gap-3 sm:gap-6 text-left ${isMobile
+                      ? 'w-[90%] max-w-2xl mx-auto px-4 pb-8 bg-neutral-950/40 backdrop-blur-sm rounded-xl'
+                      : 'max-w-xl'
+                      }`}
+                  >
+                    <div className="space-y-1 sm:space-y-6">
+                      <h4
+                        className="text-lg xs:text-xl sm:text-3xl font-heading uppercase tracking-widest border-b pb-1 sm:pb-2"
+                        style={{ color: data.themeColor, borderColor: `${data.themeColor}33` }}
+                      >
+                        {data.partnerName}
+                      </h4>
+
+                      {data.description.map((desc: string, i: number) => (
+                        <p
+                          key={i}
+                          className="text-[#FFEAA4] font-subheading leading-relaxed text-xs xs:text-sm sm:text-base md:text-lg text-justify opacity-90"
+                        >
+                          {desc}
+                        </p>
+                      ))}
+                    </div>
+
+                    <div
+                      className="w-full h-px my-2"
+                      style={{
+                        background: `linear-gradient(to right, ${data.themeColor}80, ${data.themeColor}33, transparent)`,
+                      }}
+                    />
+
+                    {/* Social Links */}
+                    {data.socials && (
+                      <div className="flex items-center justify-end gap-4 sm:gap-6 pb-2 sm:pb-0">
+                        {data.socialLinks?.x && <SocialIcon icon={xIcon} link={data.socialLinks?.x} />}
+                        {data.socialLinks?.instagram && <SocialIcon icon={instaIcon} link={data.socialLinks?.instagram} />}
+                        {data.socialLinks?.linkedin && <SocialIcon icon={linkedinIcon} link={data.socialLinks?.linkedin} />}
+                        {data.socialLinks?.web && <SocialIcon icon={webIcon} link={data.socialLinks?.web} />}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+            </div>
+          </div>
         </div>
+
       </div>
+
       {/* Styles for scrollbar hiding if needed */}
       <style>{`
                 .hide-scrollbar::-webkit-scrollbar {

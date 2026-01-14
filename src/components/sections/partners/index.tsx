@@ -281,17 +281,11 @@ function PartnerSection({ data }: { data: PartnerData }) {
 
         {/* Interactive Table Area */}
         <div
-          className={`absolute inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-24 xs:pt-28 sm:pt-32' : 'pt-20 lg:pt-24'
+          className={`absolute inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-24 xs:pt-28 sm:pt-32' : 'pt-24'
             }`}
         >
           <motion.div
-            className="relative mt-8 xs:mt-12 sm:mt-16"
-            style={{
-              width: isMobile ? '85vw' : '55vmin',
-              height: isMobile ? '85vw' : '55vmin',
-              maxWidth: '800px',
-              minWidth: '300px'
-            }}
+            className="relative w-[92vw] h-[92vw] max-w-[340px] max-h-[340px] xs:w-[85vw] xs:h-[85vw] sm:max-w-none sm:max-h-none sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] mt-8 xs:mt-12 sm:mt-16"
             animate={{ rotate: 360 }}
             transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
           >
