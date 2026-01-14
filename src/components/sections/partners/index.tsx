@@ -237,16 +237,17 @@ function PartnerSection({ data }: { data: PartnerData }) {
       { top: '20%', left: '11%', transform: 'translate(0, 0)' }, // 10:30
     ];
     // Changed fixed inset-0 to relative w-full min-h-screen for consistent scrolling
+    // Changed fixed inset-0 to relative w-full min-h-screen for consistent scrolling
     return (
       <motion.div
-        className="relative w-full min-h-screen"
+        className="relative w-full min-h-screen flex flex-col"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        {/* Background (Same as Standard to preserve BG) */}
-        <div className="absolute inset-0 w-full h-full z-0">
+        {/* Background */}
+        <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
           <div
             className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
             style={{
@@ -262,105 +263,108 @@ function PartnerSection({ data }: { data: PartnerData }) {
           <div className="absolute inset-0 bg-neutral-950/60 z-10" />
         </div>
 
-        {/* Header */}
-        <div
-          className={`absolute top-0 left-0 right-0 z-50 flex flex-col items-center pointer-events-none px-4 text-center ${isMobile ? 'pt-20' : 'pt-8 sm:pt-12 md:pt-16 lg:pt-24'}`}
-        >
-          <h1
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
-            style={{
-              background: `linear-gradient(to bottom, ${data.themeColor || '#CD7F32'} 60%, #6E561C 100%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
+        {/* Content Container - Flex Column to ensure stacking order */}
+        <div className="relative z-40 w-full flex-grow flex flex-col items-center justify-center">
+
+          {/* Header */}
+          <div
+            className={`w-full flex flex-col items-center pointer-events-none px-4 text-center shrink-0 ${isMobile ? 'pt-20' : 'pt-24 lg:pt-32'}`}
           >
-            {data.title}
-          </h1>
-        </div>
+            <h1
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+              style={{
+                background: `linear-gradient(to bottom, ${data.themeColor || '#CD7F32'} 60%, #6E561C 100%)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              {data.title}
+            </h1>
+          </div>
 
-        {/* Interactive Table Area */}
-        <div
-          className={`absolute inset-0 z-40 flex flex-col items-center justify-center ${isMobile ? 'pt-24 xs:pt-28 sm:pt-32' : 'pt-24'
-            }`}
-        >
-          <motion.div
-            className="relative w-[92vw] h-[92vw] max-w-[340px] max-h-[340px] xs:w-[85vw] xs:h-[85vw] sm:max-w-none sm:max-h-none sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] mt-8 xs:mt-12 sm:mt-16"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+          {/* Interactive Table Area */}
+          <div
+            className={`w-full flex flex-col items-center justify-center flex-grow py-8 ${isMobile ? 'pb-24' : ''}`}
           >
-            {/* Main Table Image */}
-            <img
-              src={data.ring} // Using 'ring' field for the table image
-              alt="Community Table"
-              className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(205,127,50,0.3)]"
-            />
+            <motion.div
+              className="relative w-[92vw] h-[92vw] max-w-[340px] max-h-[340px] xs:w-[85vw] xs:h-[85vw] sm:max-w-none sm:max-h-none sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px]"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+            >
+              {/* Main Table Image */}
+              <img
+                src={data.ring} // Using 'ring' field for the table image
+                alt="Community Table"
+                className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(205,127,50,0.3)]"
+              />
 
-            {/* Logo Slots */}
-            {logoSlots.map((pos, index) => {
-              const partner = data.partners && data.partners[index];
-              return (
-                <div
-                  key={index}
-                  className="absolute w-[14%] h-[14%] sm:w-[70px] sm:h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] rounded-full flex items-center justify-center cursor-pointer z-50 group"
-                  style={pos}
-                  onMouseEnter={() => partner && !isMobile && setHoveredPartner(partner)}
-                  onMouseLeave={() => !isMobile && setHoveredPartner(null)}
-                  // Mobile Tap Support
-                  onClick={() =>
-                    partner && setHoveredPartner(partner === hoveredPartner ? null : partner)
-                  }
-                >
-                  {partner ? (
-                    <motion.div
-                      className="w-full h-full flex items-center justify-center"
-                      animate={{ rotate: -360 }}
-                      transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-                    >
-                      <img
-                        src={partner.logo}
-                        alt={partner.name}
-                        className={`w-[60%] h-[60%] object-contain drop-shadow-md transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(239,227,160,0.8)] group-hover:brightness-125 ${partner.name === 'IIIT Delhi' ? 'scale-110 group-hover:scale-125' : partner.name === 'IIT Delhi' ? 'scale-125 group-hover:scale-140 object-cover' : 'group-hover:scale-125'}`}
-                      />
-                    </motion.div>
-                  ) : (
-                    <div className="w-full h-full rounded-full bg-black/20" />
-                  )}
-                </div>
-              );
-            })}
-          </motion.div>
+              {/* Logo Slots */}
+              {logoSlots.map((pos, index) => {
+                const partner = data.partners && data.partners[index];
+                return (
+                  <div
+                    key={index}
+                    className="absolute w-[14%] h-[14%] sm:w-[70px] sm:h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] rounded-full flex items-center justify-center cursor-pointer z-50 group"
+                    style={pos}
+                    onMouseEnter={() => partner && !isMobile && setHoveredPartner(partner)}
+                    onMouseLeave={() => !isMobile && setHoveredPartner(null)}
+                    // Mobile Tap Support
+                    onClick={() =>
+                      partner && setHoveredPartner(partner === hoveredPartner ? null : partner)
+                    }
+                  >
+                    {partner ? (
+                      <motion.div
+                        className="w-full h-full flex items-center justify-center"
+                        animate={{ rotate: -360 }}
+                        transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+                      >
+                        <img
+                          src={partner.logo}
+                          alt={partner.name}
+                          className={`w-[60%] h-[60%] object-contain drop-shadow-md transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(239,227,160,0.8)] group-hover:brightness-125 ${partner.name === 'IIIT Delhi' ? 'scale-110 group-hover:scale-125' : partner.name === 'IIT Delhi' ? 'scale-125 group-hover:scale-140 object-cover' : 'group-hover:scale-125'}`}
+                        />
+                      </motion.div>
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-black/20" />
+                    )}
+                  </div>
+                );
+              })}
+            </motion.div>
 
-          {/* Footer / Hover Name Display */}
-          <div className="h-16 xs:h-20 sm:h-24 mt-4 sm:mt-8 flex flex-col items-center justify-center text-center transition-opacity duration-300 px-4">
-            <AnimatePresence mode="wait">
-              {hoveredPartner ? (
-                <motion.div
-                  key={hoveredPartner.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="flex flex-col items-center gap-1"
-                >
-                  <span className="text-gold-400 font-heading tracking-widest text-[10px] xs:text-xs sm:text-sm md:text-base uppercase opacity-80">
-                    Community Partner
-                  </span>
-                  <span className="text-base xs:text-lg sm:text-xl md:text-3xl lg:text-4xl font-heading text-[#EFE3A0] uppercase tracking-wider">
-                    {hoveredPartner.name}
-                  </span>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="placeholder"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.5 }}
-                  exit={{ opacity: 0 }}
-                  className="text-white/30 font-heading text-[10px] xs:text-xs sm:text-sm md:text-base italic"
-                >
-                  {isMobile ? 'Tap to reveal...' : 'Hover over the sigils...'}
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* Footer / Hover Name Display */}
+            <div className="h-16 xs:h-20 sm:h-24 mt-4 sm:mt-8 flex flex-col items-center justify-center text-center transition-opacity duration-300 px-4">
+              <AnimatePresence mode="wait">
+                {hoveredPartner ? (
+                  <motion.div
+                    key={hoveredPartner.name}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="flex flex-col items-center gap-1"
+                  >
+                    <span className="text-gold-400 font-heading tracking-widest text-[10px] xs:text-xs sm:text-sm md:text-base uppercase opacity-80">
+                      Community Partner
+                    </span>
+                    <span className="text-base xs:text-lg sm:text-xl md:text-3xl lg:text-4xl font-heading text-[#EFE3A0] uppercase tracking-wider">
+                      {hoveredPartner.name}
+                    </span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="placeholder"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.5 }}
+                    exit={{ opacity: 0 }}
+                    className="text-white/30 font-heading text-[10px] xs:text-xs sm:text-sm md:text-base italic"
+                  >
+                    {isMobile ? 'Tap to reveal...' : 'Hover over the sigils...'}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </motion.div>
