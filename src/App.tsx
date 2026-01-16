@@ -16,7 +16,6 @@ import { SpeakersPage } from './pages/Speakers';
 import { CloudTest } from './pages/CloudTest';
 import { WhySponsor } from './pages/WhySponsor';
 import { CallForProblemStatements } from './pages/CallForProblemStatements';
-import { TeamPage } from './pages/Team';
 
 function App() {
   const location = useLocation();
@@ -81,7 +80,6 @@ function App() {
             <Route path="/problem-statements" element={<CallForProblemStatements />} />
             <Route path="/challenges" element={<Navigate to="/" replace />} />
             <Route path="/cloud-test" element={<CloudTest />} />
-            <Route path="/team" element={<TeamPage />} />
           </Routes>
         </motion.div>
       </AnimatePresence>
