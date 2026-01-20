@@ -249,13 +249,7 @@ export function FAQ() {
 
   const activeHall = halls.find((h) => h.id === activeHallId) || halls[0];
 
-  // Preload images
-  useState(() => {
-    halls.forEach((hall) => {
-      const img = new Image();
-      img.src = hall.backgroundImage;
-    });
-  });
+  // Preload images removed for lazy loading performance
 
   // Filter questions based on search
   const filteredHalls = searchQuery
@@ -282,7 +276,7 @@ export function FAQ() {
       {/* Background Ambience with Hall Images */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Hall Background Image */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           <motion.div
             key={activeHall.id}
             initial={{ opacity: 0 }}
@@ -290,14 +284,18 @@ export function FAQ() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
             className="absolute inset-0"
+            style={{ backgroundColor: activeHall.colors.secondary }} // Placeholder color
           >
             <img
               src={activeHall.backgroundImage}
               alt={`${activeHall.name} background`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-opacity duration-700"
+              loading="lazy"
+              onLoad={(e) => (e.currentTarget.style.opacity = '1')}
               style={{
                 filter: 'brightness(0.4) contrast(1.1)',
                 transform: 'scale(1.05)',
+                opacity: 0, // Start invisible, fade in on load
               }}
             />
             {/* Very subtle overlay for minimal text readability */}
