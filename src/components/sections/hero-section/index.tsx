@@ -13,6 +13,18 @@ export function Hero() {
   const [isZooming, setIsZooming] = useState(false);
   const [isCovering, setIsCovering] = useState(false);
 
+  // Load Devfolio SDK
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://apply.devfolio.co/v2/sdk.js';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   const handleTransition = () => {
     if (isZooming) return; // Prevent double clicks
 
@@ -140,6 +152,18 @@ export function Hero() {
             >
               13 MARCH - 15 MARCH
             </p>
+          </div>
+
+          {/* Apply with Devfolio Button - Positioned separately for better control */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto top-[22%] md:top-[18%]"
+          >
+            <div
+              className="apply-button"
+              data-hackathon-slug="hackjklu-v5"
+              data-button-theme="dark"
+              style={{ height: '44px', width: '312px' }}
+            />
           </div>
 
           {/* 3. Countdown Timer (Isolated State) */}

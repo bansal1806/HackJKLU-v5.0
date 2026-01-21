@@ -64,7 +64,7 @@ const halls: Hall[] = [
       {
         id: 'z3',
         q: 'What are the eligibility criteria?',
-        a: 'You must be a verified student. Teams can have 1-5 members. Inter-college teams are allowed.',
+        a: 'You must be a verified student. Teams can have 2-5 members. Inter-college teams are allowed.',
       },
     ],
   },
@@ -86,12 +86,12 @@ const halls: Hall[] = [
       {
         id: 'a1',
         q: 'What is the team size?',
-        a: 'You can form an alliance of 1 to 5 members. Choose your companions wisely.',
+        a: 'You can form an alliance of 2 to 5 members. Choose your companions wisely.',
       },
       {
         id: 'a2',
         q: 'Will accommodation be provided?',
-        a: 'Yes, for our offline champions. Food and shelter will be provided within the campus grounds during the event.',
+        a: 'Yes, for our offline champions. Food and shelter will be available within the campus grounds during the event.',
       },
       {
         id: 'a3',

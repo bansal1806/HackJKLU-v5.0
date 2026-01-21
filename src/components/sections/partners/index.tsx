@@ -16,7 +16,7 @@ import wsCubeLogo from '../../../assets/partners/ws.cubetech-logo.webp';
 
 // Silver Partners
 import gfgLogo from '../../../assets/partners/geeksforgeeks-logo.webp';
-import devfolioLogo from '../../../assets/partners/devfolio-logo.webp';
+import devfolioLogo from '../../../assets/partners/devfolio-logo.png';
 import ethIndiaLogo from '../../../assets/partners/ethindia-logo.webp';
 
 // Bronze Partners
