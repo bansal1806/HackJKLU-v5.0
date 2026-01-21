@@ -112,7 +112,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                       <div className="relative w-full h-full flex items-center justify-center">
                         <img
                           src={partner.logo}
-                          alt={partner.name}
+                          alt={`${partner.name.toUpperCase()} LOGO`}
                           className={`max-w-[65%] max-h-[65%] object-contain transition-all duration-300 drop-shadow-md ${isMobile
                             ? 'brightness-125'
                             : 'filter group-hover:brightness-125'
