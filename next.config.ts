@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
     // Enable static export for hosting on platforms like Vercel
     output: 'export',
 
+    // Add trailing slashes for proper static routing
+    trailingSlash: true,
+
     // Ignore TypeScript errors during build (StaticImageData type issues)
     typescript: {
         ignoreBuildErrors: true,
