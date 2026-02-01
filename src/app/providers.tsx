@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { Layout } from '@/components/layout/Layout';
 
+import { LoadingProvider } from '@/context/LoadingContext';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 
 interface ProvidersProps {
@@ -15,7 +16,7 @@ export function Providers({ children }: ProvidersProps) {
     const pathname = usePathname();
 
     return (
-        <>
+        <LoadingProvider>
             <LoadingScreen />
             <Layout>
                 <AnimatePresence mode="wait">
@@ -30,6 +31,6 @@ export function Providers({ children }: ProvidersProps) {
                     </motion.div>
                 </AnimatePresence>
             </Layout>
-        </>
+        </LoadingProvider>
     );
 }

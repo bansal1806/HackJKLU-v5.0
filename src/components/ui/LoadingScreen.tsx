@@ -3,6 +3,8 @@
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
+import { useLoading } from '@/context/LoadingContext';
+
 interface LoadingScreenProps {
     onComplete?: () => void;
     duration?: number;
@@ -12,6 +14,7 @@ export default function LoadingScreen({
     onComplete,
     duration = 13000,
 }: LoadingScreenProps) {
+    const { finishLoading } = useLoading();
     // Start visible by default - will hide if already shown
     const [isVisible, setIsVisible] = useState(true);
     const [shouldRender, setShouldRender] = useState(true);
@@ -19,10 +22,15 @@ export default function LoadingScreen({
     useEffect(() => {
         // Check if loading screen has already been shown this session
         const alreadyShown = sessionStorage.getItem('loadingScreenShown');
+
+        // DEV: Uncomment to force loader every time for testing
+        // const alreadyShown = null; 
+
         if (alreadyShown) {
             // Already shown - hide immediately
             setIsVisible(false);
             setShouldRender(false);
+            finishLoading();
             return;
         }
 
@@ -32,11 +40,12 @@ export default function LoadingScreen({
             setIsVisible(false);
             setTimeout(() => {
                 setShouldRender(false);
+                finishLoading();
                 onComplete?.();
             }, 500);
         }, duration);
         return () => clearTimeout(timer);
-    }, [duration, onComplete]);
+    }, [duration, onComplete, finishLoading]);
 
     if (!shouldRender) return null;
 
