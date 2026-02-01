@@ -5,6 +5,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 @font-face {
+  font-family: 'tech Origin';
+  src: url('./assets/fonts/OriginTech personal use.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mamoru';
+  src: url('./assets/fonts/MAMORU.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Allrounder Monument Test';
   src: url('./assets/fonts/AllrounderMonumentTest-Regular.otf') format('opentype');
   font-weight: 400;

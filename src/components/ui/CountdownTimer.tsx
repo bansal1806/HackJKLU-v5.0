@@ -81,7 +81,7 @@ const TimeUnit = ({ value, label }: { value: number; label: string }) => (
   <div style={{ textAlign: 'center' }}>
     <div
       style={{
-        fontFamily: 'GodOfThunder',
+        fontFamily: 'Mamoru',
         fontSize: 'clamp(2rem, 6vw, 3.5rem)',
         fontWeight: '400',
         background: `
