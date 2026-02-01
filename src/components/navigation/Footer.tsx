@@ -8,7 +8,6 @@ const footerLinks = [
     { name: 'Themes', path: '/themes' },
     { name: 'Prizes', path: '/prizes' },
     { name: 'Partners', path: '/partners' },
-    { name: 'Speakers', path: '/speakers' },
     { name: 'Gallery', path: '/gallery' },
     { name: 'FAQ', path: '/faq' },
     { name: 'Sponsor', path: '/sponsor' },
