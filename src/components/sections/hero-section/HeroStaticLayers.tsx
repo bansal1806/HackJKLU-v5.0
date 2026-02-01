@@ -1,10 +1,16 @@
-import { memo, useMemo } from 'react';
+'use client';
+
+import { memo, useState, useEffect } from 'react';
 
 export const HeroStaticLayers = memo(function HeroStaticLayers() {
   // Generate static random particles ONCE
   // OPTIMIZATION: Reduced from 150 to 50 for better mobile performance
-  const particles = useMemo(
-    () =>
+  // Generate static random particles on client side only to avoid hydration mismatch
+  const [particles, setParticles] = useState<{ id: number; top: string; left: string; size: string; delay: string; duration: string }[]>([]);
+  const [floatingEmbers, setFloatingEmbers] = useState<{ id: number; left: string; top: string; size: string; delay: string; duration: string }[]>([]);
+
+  useEffect(() => {
+    setParticles(
       Array.from({ length: 50 }).map((_, i) => ({
         id: i,
         top: Math.random() * 100 + '%',
@@ -12,12 +18,10 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
         size: Math.random() * 4 + 1 + 'px',
         delay: Math.random() * 5 + 's',
         duration: Math.random() * 4 + 3 + 's',
-      })),
-    [],
-  );
+      }))
+    );
 
-  const floatingEmbers = useMemo(
-    () =>
+    setFloatingEmbers(
       Array.from({ length: 20 }).map((_, i) => ({
         id: i,
         left: 10 + Math.random() * 80 + '%',
@@ -25,9 +29,9 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
         size: 2 + Math.random() * 2 + 'px',
         delay: Math.random() * 8 + 's',
         duration: 12 + Math.random() * 10 + 's',
-      })),
-    [],
-  );
+      }))
+    );
+  }, []);
 
   return (
     <>

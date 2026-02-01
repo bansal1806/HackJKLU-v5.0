@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState, memo } from 'react';
 
 // Memoize to strictly prevent re-renders from parent unless props change

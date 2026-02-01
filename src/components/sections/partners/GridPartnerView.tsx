@@ -1,12 +1,15 @@
+'use client';
+
 import { motion } from 'framer-motion';
 import { useState, useEffect, memo } from 'react';
+import type { StaticImageData } from 'next/image';
 import completeBg from '../../../assets/partners/complete-bg.webp';
 
 export interface PartnerGroup {
   title: string;
-  ring: string;
+  ring: string | StaticImageData;
   color: string;
-  partners: { name: string; logo: string }[];
+  partners: { name: string; logo: string | StaticImageData }[];
 }
 
 export interface GridPartnerData {
@@ -42,7 +45,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
         <div
           className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
           style={{
-            backgroundImage: `url(${completeBg})`,
+            backgroundImage: `url(${completeBg.src})`,
             backgroundPosition: bgPosition,
             backgroundSize: '100% 400%',
             backgroundRepeat: 'no-repeat',
@@ -101,7 +104,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                       style={{ transformOrigin: '50% 50%' }}
                     >
                       <img
-                        src={group.ring}
+                        src={typeof group.ring === 'string' ? group.ring : group.ring.src}
                         alt="Ring"
                         className={`w-full h-full object-contain transition-opacity ${isMobile ? 'opacity-100' : 'opacity-90 group-hover:opacity-100'
                           }`}
@@ -111,7 +114,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                     <div className="absolute inset-0 flex items-center justify-center p-3 xs:p-4 sm:p-8">
                       <div className="relative w-full h-full flex items-center justify-center">
                         <img
-                          src={partner.logo}
+                          src={typeof partner.logo === 'string' ? partner.logo : partner.logo.src}
                           alt={`${partner.name.toUpperCase()} LOGO`}
                           className={`max-w-[65%] max-h-[65%] object-contain transition-all duration-300 drop-shadow-md ${isMobile
                             ? 'brightness-125'

@@ -7,7 +7,7 @@ export function PerformanceMonitor() {
 
   // Only show on development or with query param
   const showMonitor =
-    import.meta.env.DEV || new URLSearchParams(window.location.search).has('perf');
+    process.env.NODE_ENV === 'development' || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('perf'));
 
   if (!showMonitor) return null;
 

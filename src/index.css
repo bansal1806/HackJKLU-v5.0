@@ -267,3 +267,38 @@ textarea,
     filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
   }
 }
+
+/* Loading Screen Styles */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: var(--void-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logo-svg-full {
+  width: 80%;
+  max-width: 1200px;
+  height: auto;
+  overflow: visible;
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--gold-shimmer);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--gold-shimmer);
+}

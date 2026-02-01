@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import arrowLeft from '../../assets/prizes/arrow-left.webp';
@@ -7,12 +9,11 @@ import arrowRight from '../../assets/prizes/arrow-right.webp';
 import bgImage from '../../assets/speakers/bg-amphitheater.jpg';
 import frameImage from '../../assets/speakers/gold-frame.png';
 
-// Social Icons
 import iconWeb from '../../assets/socials/web.png';
 import iconInsta from '../../assets/socials/instagram.png';
 import iconX from '../../assets/socials/x.png';
 import iconLinkedin from '../../assets/socials/linkedin.png';
-
+import type { StaticImageData } from 'next/image';
 
 
 // Judges Images
@@ -141,13 +142,13 @@ export function Speakers() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const currentData = activeCategory === 'speakers' ? speakers : judges;
+  const currentData: SpeakerOrJudge[] = activeCategory === 'speakers' ? speakers : judges;
 
   return (
     <section className="relative w-full h-screen overflow-hidden bg-black font-cinzel">
       {/* Background & Overlay */}
       <div className="absolute inset-0 z-0">
-        <img src={bgImage} alt="Amphitheater" className="w-full h-full object-cover opacity-50" />
+        <img src={bgImage.src} alt="Amphitheater" className="w-full h-full object-cover opacity-50" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-black/90" />
 
         {/* Ambient Particles/Overlay */}
@@ -215,8 +216,23 @@ export function Speakers() {
   );
 }
 
+type SpeakerOrJudge = {
+  id: number;
+  name: string;
+  role: string;
+  image: string | StaticImageData;
+  tag: string;
+  bio: string;
+  socials: {
+    linkedin?: string;
+    web?: string;
+    x?: string;
+    insta?: string;
+  };
+};
+
 interface FloorCarouselProps {
-  data: typeof speakers;
+  data: SpeakerOrJudge[];
 }
 
 // --- RESPONSIVE HELPER FUNCTIONS ---
@@ -450,7 +466,7 @@ function FloorCarousel({ data }: FloorCarouselProps) {
             aria-label="Previous speaker"
           >
             <img
-              src={arrowLeft}
+              src={arrowLeft.src}
               alt="Prev"
               style={{ width: arrowSize, height: arrowSize }}
               className="drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
@@ -463,7 +479,7 @@ function FloorCarousel({ data }: FloorCarouselProps) {
             aria-label="Next speaker"
           >
             <img
-              src={arrowRight}
+              src={arrowRight.src}
               alt="Next"
               style={{ width: arrowSize, height: arrowSize }}
               className="drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
@@ -638,7 +654,7 @@ function SpeakerCard({
           {/* CUSTOM GOLD FRAME */}
           <div className="absolute -inset-[18%] z-20 pointer-events-none filter drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
             <img
-              src={frameImage}
+              src={frameImage.src}
               alt="Frame"
               className="w-full h-full object-contain brightness-125 contrast-110"
             />
@@ -724,7 +740,7 @@ function SocialIcon({ icon, delay }: { icon: string; delay: number }) {
 }
 
 // --- MOBILE CAROUSEL ---
-function MobileCarousel({ data }: { data: typeof speakers }) {
+function MobileCarousel({ data }: { data: SpeakerOrJudge[] }) {
   const [idx, setIdx] = useState(0);
 
   const next = () => setIdx((prev) => (prev + 1) % data.length);
@@ -762,7 +778,7 @@ function MobileCarousel({ data }: { data: typeof speakers }) {
               {/* Custom Gold Frame */}
               <div className="absolute -inset-[18%] z-20 pointer-events-none filter drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
                 <img
-                  src={frameImage}
+                  src={frameImage.src}
                   alt="Frame"
                   className="w-full h-full object-contain brightness-125 contrast-110"
                 />
@@ -799,10 +815,10 @@ function MobileCarousel({ data }: { data: typeof speakers }) {
 
               {/* Socials */}
               <div className="flex justify-center gap-4">
-                {activeItem.socials.web && <div className="w-8 h-8"><SocialIcon icon={iconWeb} delay={0} /></div>}
-                {activeItem.socials.linkedin && <div className="w-8 h-8"><SocialIcon icon={iconLinkedin} delay={0.05} /></div>}
-                {activeItem.socials.x && <div className="w-8 h-8"><SocialIcon icon={iconX} delay={0.1} /></div>}
-                {activeItem.socials.insta && <div className="w-8 h-8"><SocialIcon icon={iconInsta} delay={0.15} /></div>}
+                {activeItem.socials.web && <div className="w-8 h-8"><SocialIcon icon={typeof iconWeb === 'string' ? iconWeb : iconWeb.src} delay={0} /></div>}
+                {activeItem.socials.linkedin && <div className="w-8 h-8"><SocialIcon icon={typeof iconLinkedin === 'string' ? iconLinkedin : iconLinkedin.src} delay={0.05} /></div>}
+                {activeItem.socials.x && <div className="w-8 h-8"><SocialIcon icon={typeof iconX === 'string' ? iconX : iconX.src} delay={0.1} /></div>}
+                {activeItem.socials.insta && <div className="w-8 h-8"><SocialIcon icon={typeof iconInsta === 'string' ? iconInsta : iconInsta.src} delay={0.15} /></div>}
               </div>
             </div>
           </motion.div>
@@ -814,13 +830,13 @@ function MobileCarousel({ data }: { data: typeof speakers }) {
         onClick={prev}
         className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 border border-[#d4af37]/30 text-[#d4af37] z-20 backdrop-blur-sm"
       >
-        <img src={arrowLeft} className="w-6 h-6 drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]" />
+        <img src={arrowLeft.src} className="w-6 h-6 drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]" />
       </button>
       <button
         onClick={next}
         className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/40 border border-[#d4af37]/30 text-[#d4af37] z-20 backdrop-blur-sm"
       >
-        <img src={arrowRight} className="w-6 h-6 drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]" />
+        <img src={arrowRight.src} className="w-6 h-6 drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]" />
       </button>
 
       {/* Progress Indicators */}

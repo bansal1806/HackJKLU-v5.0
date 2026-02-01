@@ -1,9 +1,15 @@
+'use client';
+
 import { X } from 'lucide-react';
-import owlLogo from '../../assets/owl-logo.png';
+import owlLogo from '@/assets/owl-logo.png';
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+
+import { Footer } from '@/components/navigation/Footer';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,7 +17,7 @@ interface LayoutProps {
 
 const menuItems = [
   { number: 'I', name: 'Home', path: '/' },
-  { number: 'II', name: 'About Us', path: '/about' },
+  { number: 'II', name: 'About', path: '/about' },
   { number: 'III', name: 'Themes', path: '/themes' },
   { number: 'IV', name: 'Prizes', path: '/prizes' },
   { number: 'V', name: 'Partners', path: '/partners' },
@@ -26,8 +32,7 @@ const menuItems = [
 
 export function Layout({ children }: LayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const location = useLocation();
+  const pathname = usePathname();
 
   return (
     <div
@@ -60,10 +65,10 @@ export function Layout({ children }: LayoutProps) {
           {/* Logo - Center */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto px-4 md:px-6 h-12 md:h-16 flex items-center justify-center">
             <Link
-              to="/"
+              href="/"
               className="flex items-center transition-transform hover:scale-110 duration-300"
             >
-              <img src={owlLogo} alt="HackJKLU Owl" className="h-12 md:h-16 w-auto object-contain" />
+              <Image src={owlLogo} alt="HackJKLU Owl" className="h-12 md:h-16 w-auto object-contain" />
             </Link>
           </div>
 
@@ -83,6 +88,9 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Main Content */}
       <main className="relative z-10">{children}</main>
+
+      {/* Footer */}
+      <Footer />
 
       {/* Left Sidebar Menu */}
       <AnimatePresence>
@@ -176,7 +184,7 @@ export function Layout({ children }: LayoutProps) {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 127.14 96.36"
-                      className="w-7 h-7" // Slightly larger to match visual weight
+                      className="w-7 h-7"
                     >
                       <path
                         fill="#5865F2"
@@ -210,11 +218,11 @@ export function Layout({ children }: LayoutProps) {
               <nav className="flex-1 px-4 sm:px-8 py-4">
                 <div className="flex flex-col gap-6">
                   {menuItems.map((item) => {
-                    const isActive = location.pathname === item.path;
+                    const isActive = pathname === item.path;
                     return (
                       <Link
                         key={item.path}
-                        to={item.path}
+                        href={item.path}
                         onClick={() => setIsMenuOpen(false)}
                         className="flex items-center gap-4 group transition-all active:scale-95 touch-manipulation"
                         style={{
@@ -301,4 +309,4 @@ export function Layout({ children }: LayoutProps) {
       </AnimatePresence>
     </div>
   );
-};
+}

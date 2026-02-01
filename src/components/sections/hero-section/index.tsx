@@ -1,15 +1,19 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { CloudTransition } from '../../ui/CloudTransition';
 import { CountdownTimer } from '../../ui/CountdownTimer';
 import { HeroStaticLayers } from './HeroStaticLayers';
 import { PageNavigation } from '../../navigation/PageNavigation';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import devfolioLogo from '@/assets/partners/devfolio-logo.png';
+import Image from 'next/image';
 
 export function Hero() {
   // Transition State
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isZooming, setIsZooming] = useState(false);
   const [isCovering, setIsCovering] = useState(false);
 
@@ -36,7 +40,7 @@ export function Hero() {
 
     // 3. Navigate after zoom/cover is mostly done
     setTimeout(() => {
-      navigate('/about', { state: { transition: true } });
+      router.push('/about');
     }, 2800); // Wait for the slow cloud cover
   };
 
@@ -118,45 +122,96 @@ export function Hero() {
           className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-500 will-change-opacity"
           style={{ opacity: isZooming ? 0 : 1 }}
         >
-          {/* Title and Date Container */}
+          {/* Title and Silver Partner Container */}
           <div
             className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center w-full pointer-events-none"
-            style={{ top: '2%', zIndex: 30 }} // Moved up to clear rings, High Z-Index
+            style={{ top: '2%', zIndex: 30 }}
           >
             {/* Title Image */}
             <img
               src="/Title.webp"
               alt="HackJKLU v5.0"
-              className="object-contain translate-x-0 md:-translate-x-[30px]"
+              className="object-contain translate-x-0 md:-translate-x-[30px] mt-2 md:mt-6"
               style={{
-                height: 'clamp(120px, 18vh, 280px)',
+                height: 'clamp(80px, 12vh, 200px)',
                 width: 'auto',
                 maxWidth: '90vw',
                 filter:
                   'drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(0 5px 10px rgba(0,0,0,0.8))',
                 opacity: 0.95,
-                marginBottom: 'clamp(-60px, -6vh, -30px)',
               }}
             />
 
-            {/* Date Subtitle */}
+            {/* Silver Partner + Devfolio Logo - Same Line */}
+            <div className="flex items-center gap-2 md:gap-3 -mt-4 md:-mt-10">
+              <span
+                className="font-cinzel uppercase tracking-widest"
+                style={{
+                  fontSize: 'clamp(10px, 1.8vw, 20px)',
+                  color: '#C0C0C0',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                }}
+              >
+                Silver Partner
+              </span>
+              <Image
+                src={devfolioLogo}
+                alt="DEVFOLIO LOGO"
+                className="object-contain"
+                style={{
+                  height: 'clamp(20px, 3.5vh, 45px)',
+                  width: 'auto',
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.6))',
+                }}
+              />
+            </div>
+
+            {/* Mobile Only: Date below Silver Partner */}
             <p
-              className="font-cinzel text-center px-4 translate-x-0 md:translate-x-[-3px]"
+              className="font-cinzel text-center mt-1 md:hidden"
               style={{
-                fontSize: 'clamp(14px, 3vw, 24px)',
+                fontSize: 'clamp(10px, 2.5vw, 16px)',
                 color: '#d4af37',
-                letterSpacing: 'clamp(2px, 1vw, 6px)',
+                letterSpacing: 'clamp(1px, 0.5vw, 3px)',
                 textShadow: '0 2px 4px rgba(0,0,0,0.7)',
                 opacity: 0.9,
               }}
             >
               13 MARCH - 15 MARCH
             </p>
+
+            {/* Mobile Only: Apply with Devfolio Button */}
+            <div className="md:hidden mt-2 pointer-events-auto">
+              <div
+                className="apply-button"
+                data-hackathon-slug="hackjklu-v5"
+                data-button-theme="dark"
+                style={{ height: '40px', width: '280px' }}
+              />
+            </div>
           </div>
 
-          {/* Apply with Devfolio Button - Positioned separately for better control */}
+          {/* Desktop Only: Date - Left side of rings */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 z-30 pointer-events-auto top-[22%] md:top-[18%]"
+            className="absolute left-[3%] md:left-[5%] lg:left-[8%] top-1/2 -translate-y-1/2 z-30 pointer-events-none hidden md:block"
+          >
+            <p
+              className="font-cinzel text-center"
+              style={{
+                fontSize: 'clamp(12px, 2vw, 20px)',
+                color: '#d4af37',
+                letterSpacing: 'clamp(2px, 0.5vw, 4px)',
+                textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.4)',
+                opacity: 0.95,
+              }}
+            >
+              13 MARCH - 15 MARCH
+            </p>
+          </div>
+
+          {/* Desktop Only: Apply with Devfolio Button - Right side of rings */}
+          <div
+            className="absolute right-[3%] md:right-[5%] lg:right-[8%] top-1/2 -translate-y-1/2 z-30 pointer-events-auto hidden md:block"
           >
             <div
               className="apply-button"

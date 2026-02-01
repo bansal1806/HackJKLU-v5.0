@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -466,8 +468,8 @@ export function CosmicItinerary() {
             key={day}
             onClick={() => handleDayChange(day)}
             className={`relative px-6 py-2 font-[Cinzel] text-sm tracking-wider transition-all ${activeDay === day
-                ? 'text-white border-b-2 border-white'
-                : 'text-white/50 hover:text-white/80'
+              ? 'text-white border-b-2 border-white'
+              : 'text-white/50 hover:text-white/80'
               }`}
           >
             {day === 'day1' ? 'Day 1' : day === 'day2' ? 'Day 2' : 'Day 3'}

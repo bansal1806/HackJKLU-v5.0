@@ -1,5 +1,8 @@
+'use client';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import type { StaticImageData } from 'next/image';
 
 // Assets
 import completeBg from '../../../assets/partners/complete-bg.webp';
@@ -36,12 +39,12 @@ import iitPatnaLogo from '../../../assets/partners/iit_patna.webp';
 
 type Partner = {
   name: string;
-  logo: string;
+  logo: string | StaticImageData;
 };
 
 type PartnerGroup = {
   title: string;
-  ring: string;
+  ring: string | StaticImageData;
   color: string;
   partners: Partner[];
 };
@@ -51,8 +54,8 @@ type StandardPartnerData = {
   type: 'standard';
   title: string;
   partnerName: string;
-  ring: string;
-  logo: string | null;
+  ring: string | StaticImageData;
+  logo: string | StaticImageData | null;
   description: string[];
   socials: boolean;
   themeColor: string;
@@ -76,9 +79,9 @@ type CommunityPartnerData = {
   type: 'community';
   title: string;
   partnerName: string; // Used for "COMMUNITY PARTNERS" title or similar
-  ring: string; // Will hold the table image path
-  bgImage: string; // NEW field for the background image
-  partners: { name: string; logo: string }[]; // List of partners for the slots
+  ring: string | StaticImageData; // Will hold the table image path
+  bgImage: string | StaticImageData; // NEW field for the background image
+  partners: { name: string; logo: string | StaticImageData }[]; // List of partners for the slots
   logo: null;
   description: string[];
   socials: boolean;
@@ -180,7 +183,7 @@ const partnersData: PartnerData[] = [
 
 export default function PartnersSections() {
   return (
-    <div className="bg-neutral-950 text-neutral-100 h-screen font-heading overflow-y-auto overflow-x-hidden hide-scrollbar">
+    <div className="bg-neutral-950 text-neutral-100 font-heading">
       {partnersData.map((section) => (
         <div key={section.id} className="relative w-full min-h-screen shrink-0 flex flex-col">
           <PartnerSection data={section} />
@@ -189,15 +192,6 @@ export default function PartnersSections() {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
-        
-        /* Custom scrollbar hiding */
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
       `}</style>
     </div>
   );
@@ -205,7 +199,7 @@ export default function PartnersSections() {
 
 function PartnerSection({ data }: { data: PartnerData }) {
   const [isMobile, setIsMobile] = useState(false);
-  const [hoveredPartner, setHoveredPartner] = useState<{ name: string; logo: string } | null>(null);
+  const [hoveredPartner, setHoveredPartner] = useState<{ name: string; logo: string | StaticImageData } | null>(null);
 
   // Check for mobile/tablet screen size
   useEffect(() => {
@@ -251,7 +245,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
           <div
             className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
             style={{
-              backgroundImage: `url(${data.bgImage || completeBg})`,
+              backgroundImage: `url(${typeof data.bgImage === 'string' ? data.bgImage : data.bgImage?.src || completeBg.src})`,
               backgroundPosition: bgPosition,
               // Unified background size for consistency
               backgroundSize: '100% 400%',
@@ -294,7 +288,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
             >
               {/* Main Table Image */}
               <img
-                src={data.ring} // Using 'ring' field for the table image
+                src={typeof data.ring === 'string' ? data.ring : data.ring.src} // Using 'ring' field for the table image
                 alt="Community Table"
                 className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(205,127,50,0.3)]"
               />
@@ -321,7 +315,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
                         transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
                       >
                         <img
-                          src={partner.logo}
+                          src={typeof partner.logo === 'string' ? partner.logo : partner.logo.src}
                           alt={partner.name}
                           className={`w-[60%] h-[60%] object-contain drop-shadow-md transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(239,227,160,0.8)] group-hover:brightness-125 ${partner.name === 'IIIT Delhi' ? 'scale-110 group-hover:scale-125' : partner.name === 'IIT Delhi' ? 'scale-125 group-hover:scale-140 object-cover' : 'group-hover:scale-125'}`}
                         />

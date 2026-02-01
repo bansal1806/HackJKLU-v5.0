@@ -1,3 +1,5 @@
+'use client';
+
 import { useThree, useFrame } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';

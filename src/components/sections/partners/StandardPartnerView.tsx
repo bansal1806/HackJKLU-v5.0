@@ -1,5 +1,8 @@
+'use client';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, memo } from 'react';
+import type { StaticImageData } from 'next/image';
 import completeBg from '../../../assets/partners/complete-bg.webp';
 
 // Social Icons
@@ -13,8 +16,8 @@ export interface StandardPartnerData {
   type: 'standard';
   title: string;
   partnerName: string;
-  ring: string;
-  logo: string | null;
+  ring: string | StaticImageData;
+  logo: string | StaticImageData | null;
   description: string[];
   socials: boolean;
   themeColor: string;
@@ -26,7 +29,7 @@ export interface StandardPartnerData {
   };
 }
 
-const SocialIcon = memo(({ icon, link }: { icon: string; link?: string }) => (
+const SocialIcon = memo(({ icon, link }: { icon: string | { src: string }; link?: string }) => (
   <motion.a
     href={link || '#'}
     target={link ? '_blank' : '_self'}
@@ -36,7 +39,7 @@ const SocialIcon = memo(({ icon, link }: { icon: string; link?: string }) => (
     className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 transition-all ${link ? 'cursor-pointer opacity-90 hover:opacity-100' : 'cursor-default opacity-50'}`}
   >
     <img
-      src={icon}
+      src={typeof icon === 'string' ? icon : icon.src}
       alt="Social"
       className="w-full h-full object-contain brightness-125 saturate-150"
       loading="eager"
@@ -89,7 +92,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
         <div
           className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
           style={{
-            backgroundImage: `url(${completeBg})`,
+            backgroundImage: `url(${completeBg.src})`,
             backgroundPosition: bgPosition,
             backgroundSize: '100% 400%',
             backgroundRepeat: 'no-repeat',
@@ -174,7 +177,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                     style={{ transformOrigin: '50% 50%' }}
                   >
                     <img
-                      src={data.ring}
+                      src={typeof data.ring === 'string' ? data.ring : data.ring.src}
                       alt="Ring"
                       className="w-full h-full object-contain"
                       loading="eager"
@@ -190,7 +193,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                     >
                       <div className="relative w-full h-full flex items-center justify-center p-2">
                         <img
-                          src={data.logo}
+                          src={typeof data.logo === 'string' ? data.logo : data.logo.src}
                           alt="Logo"
                           className="w-full h-full object-contain"
                           loading="eager"
