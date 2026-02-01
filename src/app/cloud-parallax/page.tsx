@@ -68,7 +68,7 @@ class ImageCloudSystem {
         this.ctx = canvas.getContext('2d')!;
         this.fgCtx = fgCanvas.getContext('2d')!;
         this.loadImages();
-        
+
         // CRITICAL FIX: Render initial frame immediately to prevent black screen
         this.renderInitialFrame();
     }
@@ -77,10 +77,10 @@ class ImageCloudSystem {
         // Render initial background color immediately
         const width = this.canvas.width;
         const height = this.canvas.height;
-        
+
         this.ctx.fillStyle = this.currentBg;
         this.ctx.fillRect(0, 0, width, height);
-        
+
         this.fgCtx.clearRect(0, 0, width, height);
     }
 
@@ -257,7 +257,7 @@ class ImageCloudSystem {
             const drawH = img.height * scale * cloud.scaleBase * 0.5;
 
             // Frustum culling - skip clouds outside viewport
-            if (screenX + drawW < 0 || screenX - drawW > width || 
+            if (screenX + drawW < 0 || screenX - drawW > width ||
                 screenY + drawH < 0 || screenY - drawH > height) {
                 return;
             }
@@ -382,7 +382,7 @@ export default function CloudParallaxPage() {
     // Hide Scrollbar Effect
     useEffect(() => {
         if (!mounted) return;
-        
+
         const style = document.createElement('style');
         style.textContent = `
             ::-webkit-scrollbar { display: none !important; }
@@ -398,11 +398,11 @@ export default function CloudParallaxPage() {
     // Preload Realm Images to prevent lag on scroll
     useEffect(() => {
         if (!mounted) return;
-        
+
         const realmImages = [
-            '/home/zeusfinal.webp',
-            '/home/Poseiden.webp',
-            '/home/Hades.webp'
+            '/Home/zeusfinal.webp',
+            '/Home/Poseiden.webp',
+            '/Home/Hades.webp'
         ];
 
         realmImages.forEach(src => {
@@ -414,15 +414,15 @@ export default function CloudParallaxPage() {
     // Animation frames
     useEffect(() => {
         if (!mounted) return;
-        
+
         const script = document.createElement('script');
         script.src = 'https://apply.devfolio.co/v2/sdk.js';
         script.async = true;
         script.defer = true;
         document.body.appendChild(script);
-        return () => { 
+        return () => {
             if (document.body.contains(script)) {
-                document.body.removeChild(script); 
+                document.body.removeChild(script);
             }
         }
     }, [mounted]);
@@ -552,7 +552,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/zeusfinal.webp"
+                        src="/Home/zeusfinal.webp"
                         alt="Zeus Aura"
                         style={{
                             width: 'auto',
@@ -586,7 +586,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/zeusfinal.webp"
+                        src="/Home/zeusfinal.webp"
                         alt="Zeus Realm"
                         style={{
                             width: 'auto',
@@ -691,7 +691,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/Poseiden.webp"
+                        src="/Home/Poseiden.webp"
                         alt="Poseidon Aura"
                         style={{
                             width: 'auto',
@@ -725,7 +725,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/Poseiden.webp"
+                        src="/Home/Poseiden.webp"
                         alt="Poseidon Realm"
                         style={{
                             width: 'auto',
@@ -800,7 +800,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/Hades.webp"
+                        src="/Home/Hades.webp"
                         alt="Hades Aura"
                         style={{
                             width: 'auto',
@@ -834,7 +834,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/Hades.webp"
+                        src="/Home/Hades.webp"
                         alt="Hades Realm"
                         style={{
                             width: 'auto',

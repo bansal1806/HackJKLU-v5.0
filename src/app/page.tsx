@@ -401,9 +401,9 @@ export default function CloudParallaxPage() {
         if (!mounted) return;
 
         const realmImages = [
-            '/home/zeusfinal.webp',
-            '/home/Poseiden.webp',
-            '/home/Hades.webp'
+            '/Home/zeusfinal.webp',
+            '/Home/Poseiden.webp',
+            '/Home/Hades.webp'
         ];
 
         realmImages.forEach(src => {
@@ -559,7 +559,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/zeusfinal.webp"
+                        src="/Home/zeusfinal.webp"
                         alt="Zeus Aura"
                         style={{
                             width: 'auto',
@@ -593,7 +593,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/zeusfinal.webp"
+                        src="/Home/zeusfinal.webp"
                         alt="Zeus Realm"
                         style={{
                             width: 'auto',
@@ -675,7 +675,7 @@ export default function CloudParallaxPage() {
                         textShadow: '0 2px 10px rgba(0,0,0,0.8)',
                         textAlign: 'center'
                     }}>
-                        — From MYTH to Main Frame —
+                        — From MYTH to Mainframes —
                     </p>
                 </motion.div>
 
@@ -698,7 +698,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/Poseiden.webp"
+                        src="/Home/Poseiden.webp"
                         alt="Poseidon Aura"
                         style={{
                             width: 'auto',
@@ -732,7 +732,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/Poseiden.webp"
+                        src="/Home/Poseiden.webp"
                         alt="Poseidon Realm"
                         style={{
                             width: 'auto',
@@ -807,7 +807,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/Hades.webp"
+                        src="/Home/Hades.webp"
                         alt="Hades Aura"
                         style={{
                             width: 'auto',
@@ -841,7 +841,7 @@ export default function CloudParallaxPage() {
                     willChange: 'transform, opacity',
                 }}>
                     <motion.img
-                        src="/home/Hades.webp"
+                        src="/Home/Hades.webp"
                         alt="Hades Realm"
                         style={{
                             width: 'auto',
