@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 // Assets
 import arrowLeft from '../../assets/prizes/arrow-left.webp';
@@ -178,12 +179,13 @@ export default function Prizes() {
       {/* Gradient Background - transitions from parchment-brown to marble */}
       <div className="fixed inset-0 z-[-1]">
         <div className="absolute inset-0 bg-gradient-to-b from-[#2a2520] via-[#1a1510] to-[#0f0a05]" />
-        <img
-          src={bgImage.src}
+        <Image
+          src={bgImage}
           alt="Background"
-          className="w-full h-full object-cover opacity-40"
-          loading="eager"
-          decoding="async"
+          fill
+          className="object-cover opacity-40"
+          placeholder="blur"
+          priority
         />
         <div className="absolute inset-0 bg-black/40" />
         {/* Gold ambient glow */}
@@ -266,6 +268,27 @@ export default function Prizes() {
               transition={{ duration: particle.duration, repeat: Infinity, delay: particle.delay, ease: 'linear' }}
             />
           ))}
+          {debrisParticles.map((particle, i) => (
+            <motion.div
+              key={`debris-${i}`}
+              className="absolute rounded-full shadow-md will-change-transform"
+              style={{
+                width: particle.width, height: particle.height, left: `${particle.left}%`, borderRadius: `${particle.borderRadius}%`,
+                backgroundColor: 'rgba(100, 100, 100, 0.5)',
+              }}
+              animate={{
+                y: ['0vh', '100vh'],
+                x: [particle.x, -particle.x],
+                rotate: [0, 360],
+              }}
+              transition={{
+                duration: particle.duration,
+                repeat: Infinity,
+                delay: particle.delay,
+                ease: 'linear',
+              }}
+            />
+          ))}
         </div>
       )}
 
@@ -293,26 +316,32 @@ export default function Prizes() {
             onClick={handlePrev}
             className="absolute left-1 xs:left-2 sm:left-4 md:left-8 top-1/2 z-30 p-2 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none"
           >
-            <img src={arrowLeft.src} alt="Prev" className="w-10 xs:w-16 md:w-20 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
+            <Image src={arrowLeft} alt="Prev" className="w-10 xs:w-16 md:w-20 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
           </button>
           <button
             onClick={handleNext}
             className="absolute right-1 xs:right-2 sm:right-4 md:right-8 top-1/2 z-30 p-2 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none"
           >
-            <img src={arrowRight.src} alt="Next" className="w-10 xs:w-16 md:w-20 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
+            <Image src={arrowRight} alt="Next" className="w-10 xs:w-16 md:w-20 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
           </button>
 
           {/* Cards */}
           <div className="relative w-full h-full flex items-center justify-center px-1 xs:px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12">
             {/* Prev Card */}
             <motion.div
-              className="absolute left-[5%] blur-[1px] z-10 cursor-pointer hidden md:block"
+              className="absolute left-[5%] blur-[1px] z-10 cursor-pointer hidden md:block overflow-hidden rounded-xl border border-neutral-700/50"
               onClick={handlePrev}
               initial={{ opacity: 0 }} whileInView={{ opacity: 0.25, scale: 0.6 }}
+              style={{
+                width: isMobile ? '120px' : '200px', // Simplified width logic for wrapper
+                height: isMobile ? '180px' : '300px'
+              }}
             >
-              <div
-                className="w-[120px] h-[180px] lg:w-[160px] lg:h-[240px] xl:w-[200px] xl:h-[300px] rounded-xl bg-cover bg-center border border-neutral-700/50"
-                style={{ backgroundImage: `url(${mainPrizes[prevIndex].image.src})` }}
+              <Image
+                src={mainPrizes[prevIndex].image}
+                alt={mainPrizes[prevIndex].title}
+                fill
+                className="object-cover object-center"
               />
             </motion.div>
 
@@ -328,27 +357,40 @@ export default function Prizes() {
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 <div
-                  className="rounded-xl bg-cover bg-center border-[3px] transition-all duration-500 group-hover:scale-105"
+                  className="rounded-xl overflow-hidden border-[3px] transition-all duration-500 group-hover:scale-105 relative"
                   style={{
                     width: `${getCardWidth()}px`,
                     height: `${getCardHeight()}px`,
-                    backgroundImage: `url(${activePrize.image.src})`,
                     boxShadow: `0 0 40px ${colors.gold.primary}50, 0 0 80px ${activePrize.color}30`,
                     borderColor: activePrize.color,
                   }}
-                />
+                >
+                  <Image
+                    src={activePrize.image}
+                    alt={activePrize.title}
+                    fill
+                    className="object-cover object-center"
+                    priority
+                  />
+                </div>
               </motion.div>
             </AnimatePresence>
 
             {/* Next Card */}
             <motion.div
-              className="absolute right-[5%] blur-[1px] z-10 cursor-pointer hidden md:block"
+              className="absolute right-[5%] blur-[1px] z-10 cursor-pointer hidden md:block overflow-hidden rounded-xl border border-neutral-700/50"
               onClick={handleNext}
               initial={{ opacity: 0 }} whileInView={{ opacity: 0.25, scale: 0.6 }}
+              style={{
+                width: isMobile ? '120px' : '200px',
+                height: isMobile ? '180px' : '300px'
+              }}
             >
-              <div
-                className="w-[120px] h-[180px] lg:w-[160px] lg:h-[240px] xl:w-[200px] xl:h-[300px] rounded-xl bg-cover bg-center border border-neutral-700/50"
-                style={{ backgroundImage: `url(${mainPrizes[nextIndex].image.src})` }}
+              <Image
+                src={mainPrizes[nextIndex].image}
+                alt={mainPrizes[nextIndex].title}
+                fill
+                className="object-cover object-center"
               />
             </motion.div>
 
@@ -397,8 +439,15 @@ export default function Prizes() {
                 height: `${getDomainCardHeight()}px`,
               }}
             >
-              <div className="absolute inset-0 bg-cover bg-center transition-all duration-500 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0" style={{ backgroundImage: `url(${prize.img.src})` }} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent group-hover:bg-black/60 transition-all duration-500" />
+              <div className="absolute inset-0 transition-all duration-500 group-hover:scale-110 grayscale-[0.8] group-hover:grayscale-0">
+                <Image
+                  src={prize.img}
+                  alt={prize.title}
+                  fill
+                  className="object-cover object-center"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent group-hover:bg-black/60 transition-all duration-500 z-10" />
 
               <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <h3 className="text-xl font-bold font-medieval tracking-widest text-[#e8dab2] mb-2">{prize.title}</h3>
@@ -418,3 +467,4 @@ export default function Prizes() {
     </div>
   );
 }
+

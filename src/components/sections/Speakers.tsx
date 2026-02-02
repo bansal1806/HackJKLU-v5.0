@@ -13,7 +13,7 @@ import iconWeb from '../../assets/socials/web.png';
 import iconInsta from '../../assets/socials/instagram.png';
 import iconX from '../../assets/socials/x.png';
 import iconLinkedin from '../../assets/socials/linkedin.png';
-import type { StaticImageData } from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 
 
 // Judges Images
@@ -148,7 +148,7 @@ export function Speakers() {
     <section className="relative w-full h-screen overflow-hidden bg-black font-cinzel">
       {/* Background & Overlay */}
       <div className="absolute inset-0 z-0">
-        <img src={bgImage.src} alt="Amphitheater" className="w-full h-full object-cover opacity-50" />
+        <Image src={bgImage} alt="Amphitheater" fill className="object-cover opacity-50" placeholder="blur" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-black/90" />
 
         {/* Ambient Particles/Overlay */}
@@ -465,9 +465,11 @@ function FloorCarousel({ data }: FloorCarouselProps) {
             style={{ padding: `${lerp(4, 12, combinedFactor)}px` }}
             aria-label="Previous speaker"
           >
-            <img
-              src={arrowLeft.src}
+            <Image
+              src={arrowLeft}
               alt="Prev"
+              width={64}
+              height={64}
               style={{ width: arrowSize, height: arrowSize }}
               className="drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
             />
@@ -478,9 +480,11 @@ function FloorCarousel({ data }: FloorCarouselProps) {
             style={{ padding: `${lerp(4, 12, combinedFactor)}px` }}
             aria-label="Next speaker"
           >
-            <img
-              src={arrowRight.src}
+            <Image
+              src={arrowRight}
               alt="Next"
+              width={64}
+              height={64}
               style={{ width: arrowSize, height: arrowSize }}
               className="drop-shadow-[0_0_10px_rgba(212,175,55,0.4)] transition-transform group-hover:scale-110"
             />
@@ -630,10 +634,11 @@ function SpeakerCard({
           className="absolute top-[92%] left-0 right-0 h-[80%] opacity-40 pointer-events-none"
           style={{ transform: `scaleY(-1) skewX(${x * -0.015}deg)` }}
         >
-          <img
+          <Image
             src={speaker.image}
             alt=""
-            className="w-full h-full object-cover rounded-full blur-[8px] mask-image-gradient"
+            fill
+            className="object-cover rounded-full blur-[8px] mask-image-gradient"
             style={{
               maskImage: 'linear-gradient(to bottom, black 20%, transparent 100%)',
               WebkitMaskImage: 'linear-gradient(to bottom, black 20%, transparent 100%)',
@@ -653,10 +658,11 @@ function SpeakerCard({
         >
           {/* CUSTOM GOLD FRAME */}
           <div className="absolute -inset-[18%] z-20 pointer-events-none filter drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
-            <img
-              src={frameImage.src}
+            <Image
+              src={frameImage}
               alt="Frame"
-              className="w-full h-full object-contain brightness-125 contrast-110"
+              fill
+              className="object-contain brightness-125 contrast-110"
             />
           </div>
 
@@ -730,10 +736,11 @@ function SocialIcon({ icon, delay }: { icon: string; delay: number }) {
       transition={{ delay, type: 'spring', stiffness: 400, damping: 20 }}
       className="w-full h-full rounded-full bg-black/80 border border-[#d4af37]/50 hover:bg-[#d4af37] hover:border-white p-1.5 transition-all cursor-pointer group shadow-lg flex items-center justify-center"
     >
-      <img
+      <Image
         src={icon}
         alt="Social"
-        className="w-full h-full object-contain invert opacity-70 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300"
+        fill
+        className="object-contain invert opacity-70 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300"
       />
     </motion.div>
   );

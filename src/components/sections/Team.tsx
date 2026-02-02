@@ -15,6 +15,7 @@ import {
   BackgroundVariant,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import Image from 'next/image';
 
 // --- Custom Node Component ---
 const TeamNode = ({
@@ -57,10 +58,12 @@ const TeamNode = ({
           style={{ borderRadius: '12px' }}
         >
           <div className="w-full h-full transform -rotate-45 scale-125 overflow-hidden">
-            <img
+            <Image
               src={imgSrc}
               alt={data.label as string}
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              fill
+              className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect, memo } from 'react';
-import type { StaticImageData } from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import completeBg from '../../../assets/partners/complete-bg.webp';
 
 export interface PartnerGroup {
@@ -103,23 +103,25 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                       className="absolute inset-0 w-full h-full"
                       style={{ transformOrigin: '50% 50%' }}
                     >
-                      <img
+                      <Image
                         src={typeof group.ring === 'string' ? group.ring : group.ring.src}
                         alt="Ring"
-                        className={`w-full h-full object-contain transition-opacity ${isMobile ? 'opacity-100' : 'opacity-90 group-hover:opacity-100'
+                        fill
+                        className={`object-contain transition-opacity ${isMobile ? 'opacity-100' : 'opacity-90 group-hover:opacity-100'
                           }`}
                         loading="eager"
                       />
                     </motion.div>
                     <div className="absolute inset-0 flex items-center justify-center p-3 xs:p-4 sm:p-8">
                       <div className="relative w-full h-full flex items-center justify-center">
-                        <img
+                        <Image
                           src={typeof partner.logo === 'string' ? partner.logo : partner.logo.src}
                           alt={`${partner.name.toUpperCase()} LOGO`}
-                          className={`max-w-[65%] max-h-[65%] object-contain transition-all duration-300 drop-shadow-md ${isMobile
+                          fill
+                          className={`object-contain transition-all duration-300 drop-shadow-md ${isMobile
                             ? 'brightness-125'
                             : 'filter group-hover:brightness-125'
-                            }`}
+                            } !w-[65%] !h-[65%] !relative`} // Overriding fill styles or using relative + fill requires verify. 
                           loading="eager"
                         />
                       </div>

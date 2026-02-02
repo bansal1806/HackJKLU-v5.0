@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useMotionTemplate } from 'framer-motion';
+import Image from 'next/image';
 import { PageNavigation } from '../navigation/PageNavigation';
 
 // Partner logos - using public paths
@@ -79,8 +80,8 @@ function AnimatedInput({ name, placeholder, type = "text", pattern, required = t
             />
             <motion.label
                 className={`absolute left-5 transition-all duration-300 pointer-events-none z-20 ${isFocused || hasValue
-                        ? 'top-2 text-[10px] text-yellow-400 tracking-wider uppercase'
-                        : 'top-1/2 -translate-y-1/2 text-sm text-neutral-400'
+                    ? 'top-2 text-[10px] text-yellow-400 tracking-wider uppercase'
+                    : 'top-1/2 -translate-y-1/2 text-sm text-neutral-400'
                     }`}
             >
                 {placeholder}
@@ -801,9 +802,11 @@ export function CallForProblemStatements() {
                                     whileHover={{ scale: 1.15 }}
                                 >
                                     <div className="absolute inset-0 bg-yellow-500/30 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    <img
+                                    <Image
                                         src={partner.img}
                                         alt={partner.name}
+                                        width={200}
+                                        height={100}
                                         className="relative h-14 w-auto object-contain filter grayscale brightness-75 opacity-50 group-hover:grayscale-0 group-hover:opacity-100 group-hover:brightness-110 transition-all duration-500"
                                     />
                                 </motion.div>

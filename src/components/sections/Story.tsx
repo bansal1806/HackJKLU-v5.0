@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { CloudTransition } from '../ui/CloudTransition';
 
 // Static About Content
@@ -125,14 +126,16 @@ export function Story() {
             {/* Static CSS Glow - INTENSIFIED */}
             <div className="absolute inset-0 bg-amber-500/30 blur-[40px] sm:blur-[60px] rounded-full z-[-1] animate-pulse-slow" />
 
-            <img
+            <Image
               src="/logo2.webp"
               alt="HackJKLU Logo"
-              className="w-full h-full object-contain relative z-10"
+              fill
+              className="object-contain relative z-10"
               style={{
                 filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))',
                 animation: 'float 6s ease-in-out infinite',
               }}
+              priority
             />
           </div>
         </motion.div>

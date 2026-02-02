@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, memo } from 'react';
-import type { StaticImageData } from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import completeBg from '../../../assets/partners/complete-bg.webp';
 
 // Social Icons
@@ -38,9 +38,11 @@ const SocialIcon = memo(({ icon, link }: { icon: string | { src: string }; link?
     whileTap={{ scale: 0.95 }}
     className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 transition-all ${link ? 'cursor-pointer opacity-90 hover:opacity-100' : 'cursor-default opacity-50'}`}
   >
-    <img
+    <Image
       src={typeof icon === 'string' ? icon : icon.src}
       alt="Social"
+      width={40}
+      height={40}
       className="w-full h-full object-contain brightness-125 saturate-150"
       loading="eager"
     />
@@ -176,12 +178,12 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                     className="absolute inset-0 w-full h-full"
                     style={{ transformOrigin: '50% 50%' }}
                   >
-                    <img
+                    <Image
                       src={typeof data.ring === 'string' ? data.ring : data.ring.src}
                       alt="Ring"
-                      className="w-full h-full object-contain"
+                      fill
+                      className="object-contain"
                       loading="eager"
-                      decoding="async"
                     />
                   </motion.div>
 
@@ -192,10 +194,11 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                       style={{ transform: 'translate(-50%, -50%)' }}
                     >
                       <div className="relative w-full h-full flex items-center justify-center p-2">
-                        <img
+                        <Image
                           src={typeof data.logo === 'string' ? data.logo : data.logo.src}
                           alt="Logo"
-                          className="w-full h-full object-contain"
+                          fill
+                          className="object-contain"
                           loading="eager"
                         />
                       </div>

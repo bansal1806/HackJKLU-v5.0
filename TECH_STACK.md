@@ -63,9 +63,18 @@
 ## Visual Effects
 
 ### Shaders & Effects
-- **Custom Shaders** - GLSL shaders for unique effects
-- **@react-three/postprocessing** - Bloom, SSAO, DOF, etc.
-- **react-three-gui** - Visual tweaking (alternative to leva)
+- **Custom Shaders**: GLSL shaders for unique effects (e.g., ImageCloudSystem)
+- **@react-three/postprocessing**: Bloom, SSAO, DOF, etc.
+- **react-three-gui**: Visual tweaking (alternative to leva)
+- **Custom Particle Systems**: Efficient RealmParticles implementation
+- **Parallax Effects**: Cloud transitions and depth-based scrolling
+
+## Deep Performance Optimization
+
+### Rendering Strategies
+- **Instanced Rendering**: For high-count objects like particles and clouds
+- **Texture Compression**: WebP/AVIF with smart loading
+- **Resource Management**: explicit disposal of geometries and materials
 
 ## Build & Deployment
 

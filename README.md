@@ -4,12 +4,12 @@ A high-performance 3D website for HACKJKLU 5.0 hackathon with Greek mythology th
 
 ## 🎨 Features
 
-- **Greek Mythology Theme**: Beautiful color palette inspired by ancient Greece
-- **3D Models & Animations**: React Three Fiber integration for immersive 3D experiences
+- **Greek Mythology Theme**: Immersive aesthetic with "Storytelling Mode", "Ariadne's Thread" navigation, and "Dome Gallery"
+- **3D Models & Animations**: React Three Fiber integration with parallax cloud transitions and global floating particles
 - **Multi-Page Routing**: React Router for seamless navigation
-- **Performance Optimized**: Adaptive quality system, lazy loading, and smart caching
-- **Responsive Design**: Works beautifully on all devices
-- **Audio Integration**: Spatial audio support with Howler.js
+- **Performance Optimized**: Adaptive quality system, lazy loading, smart caching, and efficient particle rendering
+- **Responsive Design**: Works beautifully on all devices with mobile-optimized 3D views
+- **Audio Integration**: Spatial audio support with Howler.js for atmospheric soundscapes
 
 ## 🚀 Quick Start
 

@@ -648,7 +648,7 @@ export function WhySponsor() {
                                 >
                                     Devam Gupta
                                 </motion.div>
-                                <div className="text-amber-200/40 text-lg font-serif italic">Core Team – Sponsorships</div>
+                                <div className="text-amber-200/40 text-lg font-serif italic">Core – Sponsorships</div>
                             </motion.div>
 
                             <motion.div

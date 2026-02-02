@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
+import Image from 'next/image';
 import { colors } from '@/constants/colors';
 
 // Assets
@@ -221,9 +222,17 @@ export function Themes() {
                 initial={{ scale: 1.1, opacity: 0 }}
                 animate={hasAnimated ? { scale: 1, opacity: 1 } : { scale: 1.1, opacity: 0 }}
                 transition={{ duration: 2, ease: "easeOut" }}
-                className="fixed inset-0 bg-cover bg-center z-[-1] contrast-125 brightness-50"
-                style={{ backgroundImage: `url(${bgThemes.src})` }}
-            />
+                className="fixed inset-0 z-[-1] contrast-125 brightness-50"
+            >
+                <Image
+                    src={bgThemes}
+                    alt="Themes Background"
+                    fill
+                    className="object-cover"
+                    priority
+                    quality={85}
+                />
+            </motion.div>
 
             {/* Mystical Overlay with Animated Particles */}
             <div className="fixed inset-0 bg-black/40 z-[-1]" />
@@ -303,7 +312,7 @@ export function Themes() {
                                 filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
                             }}
                         >
-                            <img src={arrowLeft.src} alt="Prev" className="w-10 sm:w-16 md:w-24" />
+                            <Image src={arrowLeft} alt="Prev" className="w-10 sm:w-16 md:w-24" />
                         </motion.button>
 
                         <motion.button
@@ -315,7 +324,7 @@ export function Themes() {
                                 filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
                             }}
                         >
-                            <img src={arrowRight.src} alt="Next" className="w-10 sm:w-16 md:w-24" />
+                            <Image src={arrowRight} alt="Next" className="w-10 sm:w-16 md:w-24" />
                         </motion.button>
 
                         {/* Scroll Items with Enhanced Effects */}
@@ -377,11 +386,14 @@ export function Themes() {
                                                 filter: !isCenter ? 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.4))' : 'none'
                                             }}
                                         >
-                                            <img
-                                                src={scrollRolled.src}
-                                                alt="Rolled Scroll"
-                                                className="w-full h-full object-contain"
-                                            />
+                                            <div className="relative w-full h-full">
+                                                <Image
+                                                    src={scrollRolled}
+                                                    alt="Rolled Scroll"
+                                                    fill
+                                                    className="object-contain"
+                                                />
+                                            </div>
                                         </motion.div>
 
                                         {/* OPEN SCROLL COMPOSITION with Enhanced Effects */}
@@ -405,10 +417,12 @@ export function Themes() {
                                                             filter: isCenter ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))' : 'none'
                                                         }}
                                                     >
-                                                        <img
-                                                            src={scrollOpen.src}
+                                                        <Image
+                                                            src={scrollOpen}
                                                             className="absolute top-0 left-0 w-[1000px] max-w-none h-full object-contain object-left"
                                                             alt=""
+                                                            width={1000}
+                                                            height={600}
                                                         />
                                                     </motion.div>
 
@@ -425,10 +439,12 @@ export function Themes() {
                                                             filter: isCenter ? 'drop-shadow(0 0 15px rgba(212, 175, 55, 0.8))' : 'none'
                                                         }}
                                                     >
-                                                        <img
-                                                            src={scrollOpen.src}
+                                                        <Image
+                                                            src={scrollOpen}
                                                             className="absolute top-0 right-0 w-[1000px] max-w-none h-full object-contain object-right"
                                                             alt=""
+                                                            width={1000}
+                                                            height={600}
                                                         />
                                                     </motion.div>
 
@@ -442,10 +458,11 @@ export function Themes() {
                                                         className="absolute top-0 bottom-0 z-10 overflow-hidden"
                                                     >
                                                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-full">
-                                                            <img
-                                                                src={scrollOpen.src}
+                                                            <Image
+                                                                src={scrollOpen}
                                                                 className="w-full h-full object-contain"
                                                                 alt=""
+                                                                fill
                                                                 style={{ clipPath: 'inset(0 10% 0 10%)' }}
                                                             />
                                                         </div>
@@ -567,3 +584,5 @@ export function Themes() {
         </div>
     );
 }
+
+

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ChevronRight, ChevronDown, Zap, Shield, Hammer, Sun, ScrollText, Trophy, Flame, Coins, Scale, Gavel } from 'lucide-react';
+import NextImage from 'next/image';
 
 // Background Images for FAQ Halls
 import zeusBg from '../../assets/faq/zeus.webp';
@@ -472,7 +473,7 @@ export function FAQ() {
               className="absolute inset-0"
               style={{ backgroundColor: activeHall.colors.secondary }}
             >
-              <img src={activeHall.backgroundImage} alt="Background" className="w-full h-full object-cover opacity-60 filter brightness-50 contrast-125 scale-105" />
+              <NextImage src={activeHall.backgroundImage} alt="Background" fill className="object-cover opacity-60 filter brightness-50 contrast-125 scale-105" priority />
               {/* Glow */}
               <motion.div initial={{ opacity: 0.1 }} animate={{ opacity: 0.15 }} className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] blur-[100px]" style={{ backgroundColor: activeHall.colors.primary }} />
             </motion.div>
