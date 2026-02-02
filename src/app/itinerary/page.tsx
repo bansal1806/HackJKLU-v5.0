@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { ComingSoonOverlay } from '@/components/ui/ComingSoonOverlay';
-import { CosmicItinerary } from '@/components/sections/CosmicItinerary';
+import { ItineraryClient } from './ItineraryClient';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
+import { Footer } from '@/components/navigation/Footer';
 
 export const metadata: Metadata = {
     title: 'Event Itinerary - HackJKLU v5.0',
@@ -17,9 +17,8 @@ export const metadata: Metadata = {
 export default function ItineraryPage() {
     return (
         <>
-            <ComingSoonOverlay>
-                <CosmicItinerary />
-            </ComingSoonOverlay>
+            <ItineraryClient />
+            <Footer />
             <PageNavigation />
         </>
     );

@@ -109,6 +109,7 @@ export function CloudTransition({ type, onComplete }: CloudTransitionProps) {
               // OPTIMIZATION: Removed expensive filter (brightness/contrast) to fix transition lag
               opacity: type === 'cover' ? (active ? 1 : 0) : active ? 0 : 1,
               transition: `transform 2.5s ease-in-out ${cloud.delay}, opacity 1.5s ease-in-out ${cloud.delay}`,
+              willChange: 'transform, opacity',
             }}
           />
         );

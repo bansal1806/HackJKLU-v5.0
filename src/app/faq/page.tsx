@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { FAQ } from '@/components/sections/FAQ';
+import { FAQClient } from './FAQClient';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
+import { Footer } from '@/components/navigation/Footer';
 
 export const metadata: Metadata = {
     title: 'Frequently Asked Questions - HackJKLU v5.0',
@@ -16,7 +17,8 @@ export const metadata: Metadata = {
 export default function FAQPage() {
     return (
         <>
-            <FAQ />
+            <FAQClient />
+            <Footer />
             <PageNavigation />
         </>
     );

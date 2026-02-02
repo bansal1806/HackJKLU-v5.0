@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Themes } from '@/components/sections/Themes';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
+import { Footer } from '@/components/navigation/Footer';
+import { PageScrollbar } from '@/components/ui/PageScrollbar';
 
 export const metadata: Metadata = {
     title: 'Themes - HackJKLU v5.0',
@@ -16,7 +18,9 @@ export const metadata: Metadata = {
 export default function ThemesPage() {
     return (
         <>
+            <PageScrollbar thumbColor="rgba(139, 90, 43, 0.4)" hoverColor="rgba(139, 90, 43, 0.9)" />
             <Themes />
+            <Footer className="relative z-10" />
             <PageNavigation />
         </>
     );

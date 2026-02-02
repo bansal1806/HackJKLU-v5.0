@@ -209,9 +209,9 @@ export function Themes() {
     };
 
     return (
-        <div ref={sectionRef} className="h-screen w-full relative overflow-hidden font-[Cinzel] text-[#e8dab2] flex flex-col bg-black">
+        <div ref={sectionRef} className="h-screen w-full relative overflow-hidden font-[Cinzel] text-[#e8dab2] flex flex-col">
             {/* Temple pillars hint in background - kept dimmed for spatial consistency */}
-            <div className="absolute inset-0 z-[-1]">
+            <div className="fixed inset-0 z-[-1]">
                 <div className="absolute bottom-0 left-8 w-16 h-[60%] bg-gradient-to-t from-stone-800/30 to-transparent rounded-t-full blur-sm" />
                 <div className="absolute bottom-0 right-8 w-16 h-[60%] bg-gradient-to-t from-stone-800/30 to-transparent rounded-t-full blur-sm" />
             </div>
@@ -221,15 +221,15 @@ export function Themes() {
                 initial={{ scale: 1.1, opacity: 0 }}
                 animate={hasAnimated ? { scale: 1, opacity: 1 } : { scale: 1.1, opacity: 0 }}
                 transition={{ duration: 2, ease: "easeOut" }}
-                className="absolute inset-0 bg-cover bg-center z-0 contrast-125 brightness-50"
+                className="fixed inset-0 bg-cover bg-center z-[-1] contrast-125 brightness-50"
                 style={{ backgroundImage: `url(${bgThemes.src})` }}
             />
 
             {/* Mystical Overlay with Animated Particles */}
-            <div className="absolute inset-0 bg-black/40 z-0" />
+            <div className="fixed inset-0 bg-black/40 z-[-1]" />
 
             {/* Floating Mystical Particles */}
-            <div className="absolute inset-0 z-5 pointer-events-none">
+            <div className="fixed inset-0 z-5 pointer-events-none">
                 {particles.map((p, i) => (
                     <motion.div
                         key={i}

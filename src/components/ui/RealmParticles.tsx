@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
 import { type ISourceOptions } from '@tsparticles/engine';
@@ -9,7 +9,8 @@ interface RealmParticlesProps {
     variant: 'zeus' | 'poseidon' | 'hades';
 }
 
-export function RealmParticles({ variant }: RealmParticlesProps) {
+// Memoize to prevent re-renders unless variant changes
+export const RealmParticles = React.memo(function RealmParticles({ variant }: RealmParticlesProps) {
     const [init, setInit] = useState(false);
 
     useEffect(() => {
@@ -27,8 +28,8 @@ export function RealmParticles({ variant }: RealmParticlesProps) {
     const getOptions = (variant: 'zeus' | 'poseidon' | 'hades'): ISourceOptions => {
         const common: ISourceOptions = {
             fullScreen: { enable: false },
-            detectRetina: true,
-            fpsLimit: 120,
+            detectRetina: false, // Performance optimization: Render at standard resolution
+            fpsLimit: 60, // Cap at 60 to save battery/resources
             interactivity: {
                 events: {
                     onHover: {
@@ -55,7 +56,7 @@ export function RealmParticles({ variant }: RealmParticlesProps) {
                 ...common,
                 particles: {
                     number: {
-                        value: 120,
+                        value: 40, // OPTIMIZATION: Reduced from 60
                         density: {
                             enable: true,
                             width: 1920,
@@ -94,7 +95,7 @@ export function RealmParticles({ variant }: RealmParticlesProps) {
                     },
                     links: {
                         enable: true,
-                        distance: 150,
+                        distance: 120, // OPTIMIZATION: Reduced from 150 to reduce link checks
                         color: "#ffffff",
                         opacity: 0.4,
                         width: 1
@@ -107,7 +108,7 @@ export function RealmParticles({ variant }: RealmParticlesProps) {
                 ...common,
                 particles: {
                     number: {
-                        value: 80,
+                        value: 35, // OPTIMIZATION: Reduced from 60
                         density: {
                             enable: true,
                             width: 1920,
@@ -150,7 +151,7 @@ export function RealmParticles({ variant }: RealmParticlesProps) {
                 ...common,
                 particles: {
                     number: {
-                        value: 150,
+                        value: 50, // OPTIMIZATION: Reduced from 80
                         density: {
                             enable: true,
                             width: 1920,
@@ -211,4 +212,4 @@ export function RealmParticles({ variant }: RealmParticlesProps) {
             className="absolute inset-0 z-0 pointer-events-none"
         />
     );
-}
+});

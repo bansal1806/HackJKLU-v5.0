@@ -47,7 +47,7 @@ const halls: Hall[] = [
     colors: { primary: '#D4AF37', secondary: '#001F3F', accent: '#FFFFFF', glow: 'rgba(212, 175, 55, 0.6)' },
     backgroundImage: zeusBg.src,
     questions: [
-      { id: 'z1', q: 'Who can participate?', a: 'Any student with a valid ID card from a recognized institute can participate. Both undergraduate and postgraduate students are welcome into the arena.' },
+      { id: 'z1', q: 'Who can participate?', a: 'Any student with a valid ID card from a recognized institute can participate. Undergraduate students are welcome into the arena.' },
       { id: 'z2', q: 'Do I need prior experience?', a: 'No! The gods favor the bold. Beginners are welcome, and we have mentors to guide you through your first odyssey.' },
       { id: 'z3', q: 'What are the eligibility criteria?', a: 'You must be a verified student. Teams can have 2-5 members. Inter-college teams are allowed.' },
     ],
@@ -62,7 +62,7 @@ const halls: Hall[] = [
     backgroundImage: athenaBg.src,
     questions: [
       { id: 'a1', q: 'What is the team size?', a: 'You can form an alliance of 2 to 5 members. Choose your companions wisely.' },
-      { id: 'a2', q: 'Will accommodation be provided?', a: 'Yes, for our offline champions. Food and shelter will be available within the campus grounds during the event.' },
+      { id: 'a2', q: 'Will accommodation be provided?', a: 'Yes, for our offline champions. Shelter will be available within the campus grounds during the event.' },
       { id: 'a3', q: 'What is the event schedule?', a: 'The hackathon is a 48-hour marathon. Detailed timelines will be revealed in the Hall of Apollo closer to the date.' },
     ],
   },
@@ -91,7 +91,7 @@ const halls: Hall[] = [
     questions: [
       { id: 'ap1', q: 'When is the registration deadline?', a: 'The oracle decrees that registrations close few days before the event. Act swiftly!' },
       { id: 'ap2', q: 'Is there a registration fee?', a: 'No tribute is required. HackJKLU v5.0 is completely free for all participants.' },
-      { id: 'ap3', q: 'What is the timeline?', a: 'The event happens on 13 to 15 March 2026. Hacking begins at 02:00 PM and ends 48 hours later.' },
+      { id: 'ap3', q: 'What is the timeline?', a: 'The event happens on 13 to 15 March 2026. Hacking begins at 01:00 PM and ends 48 hours later.' },
     ],
   },
 ];

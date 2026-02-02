@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Prizes from '@/components/sections/Prizes';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
+import { Footer } from '@/components/navigation/Footer';
+import { PageScrollbar } from '@/components/ui/PageScrollbar';
 
 export const metadata: Metadata = {
     title: 'Grand Prizes & Mythic Rewards - HackJKLU v5.0',
@@ -16,7 +18,9 @@ export const metadata: Metadata = {
 export default function PrizesPage() {
     return (
         <>
+            <PageScrollbar thumbColor="rgba(212, 175, 55, 0.4)" hoverColor="rgba(212, 175, 55, 0.9)" />
             <Prizes />
+            <Footer />
             <PageNavigation />
         </>
     );

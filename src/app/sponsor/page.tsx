@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { WhySponsor } from '@/components/sections/WhySponsor';
+import { Footer } from '@/components/navigation/Footer';
+import { PageNavigation } from '@/components/navigation/PageNavigation';
 
 export const metadata: Metadata = {
     title: 'Sponsor HackJKLU v5.0 - Partnership Opportunities',
@@ -13,5 +15,11 @@ export const metadata: Metadata = {
 };
 
 export default function SponsorPage() {
-    return <WhySponsor />;
+    return (
+        <>
+            <WhySponsor />
+            <Footer />
+            <PageNavigation />
+        </>
+    );
 }

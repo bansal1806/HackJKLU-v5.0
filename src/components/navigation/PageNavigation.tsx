@@ -24,7 +24,13 @@ export function PageNavigation() {
   const router = useRouter();
 
   // Determine current index based on pathname
-  const currentIndex = pageOrder.findIndex((page) => page.path === pathname);
+  const normalizePath = (p: string) => {
+    if (p === '/') return p;
+    return p.endsWith('/') ? p.slice(0, -1) : p;
+  };
+
+  const currentPath = normalizePath(pathname);
+  const currentIndex = pageOrder.findIndex((page) => normalizePath(page.path) === currentPath);
 
   // Fallback if index not found
   const effectiveIndex = currentIndex === -1 ? 0 : currentIndex;

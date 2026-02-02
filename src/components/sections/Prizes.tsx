@@ -176,7 +176,7 @@ export default function Prizes() {
   return (
     <div className="relative text-neutral-100 min-h-screen overflow-hidden selection:bg-yellow-900 selection:text-white pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24">
       {/* Gradient Background - transitions from parchment-brown to marble */}
-      <div className="absolute inset-0 z-0">
+      <div className="fixed inset-0 z-[-1]">
         <div className="absolute inset-0 bg-gradient-to-b from-[#2a2520] via-[#1a1510] to-[#0f0a05]" />
         <img
           src={bgImage.src}

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ComingSoonOverlay } from '@/components/ui/ComingSoonOverlay';
 import { Events } from '@/components/sections/Events';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
+import { Footer } from '@/components/navigation/Footer';
 
 export const metadata: Metadata = {
     title: 'Events & Activities - HackJKLU v5.0',
@@ -20,6 +21,7 @@ export default function EventsPage() {
             <ComingSoonOverlay>
                 <Events />
             </ComingSoonOverlay>
+            <Footer />
             <PageNavigation />
         </>
     );

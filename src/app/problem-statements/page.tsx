@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
-import { CallForProblemStatements } from '@/components/sections/CallForProblemStatements';
+import { ProblemStatementsClient } from './ProblemStatementsClient';
+import { PageNavigation } from '@/components/navigation/PageNavigation';
+import { Footer } from '@/components/navigation/Footer';
 
 export const metadata: Metadata = {
     title: 'Call for Problem Statements - HackJKLU v5.0',
@@ -13,5 +15,11 @@ export const metadata: Metadata = {
 };
 
 export default function ProblemStatementsPage() {
-    return <CallForProblemStatements />;
+    return (
+        <>
+            <ProblemStatementsClient />
+            <Footer />
+            <PageNavigation />
+        </>
+    );
 }

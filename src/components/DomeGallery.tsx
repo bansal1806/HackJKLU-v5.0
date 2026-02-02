@@ -85,6 +85,51 @@ export default function DomeGallery({
     dragSensitivity = 0.22,
     friction = 0.97
 }: DomeGalleryProps) {
+    // Responsive Configuration State
+    const [config, setConfig] = useState({
+        radius: radius || 700,
+        segmentsX: segmentsX || 18,
+        segmentsY: segmentsY || 5,
+        particleCount: 40,
+        dragSensitivity: dragSensitivity || 0.22
+    });
+
+    // Detect screen size and adjust configuration
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth;
+            if (width < 640) { // Mobile
+                setConfig({
+                    radius: 340, // Much closer for mobile interactivity
+                    segmentsX: 12, // Fewer segments to prevent overlap
+                    segmentsY: 4,
+                    particleCount: 15, // Performance optimization
+                    dragSensitivity: 0.45 // Higher sensitivity for mobile touch
+                });
+            } else if (width < 1024) { // Tablet
+                setConfig({
+                    radius: 500,
+                    segmentsX: 14,
+                    segmentsY: 5,
+                    particleCount: 25,
+                    dragSensitivity: 0.3
+                });
+            } else { // Desktop
+                setConfig({
+                    radius: radius || 700,
+                    segmentsX: segmentsX || 18,
+                    segmentsY: segmentsY || 5,
+                    particleCount: 40,
+                    dragSensitivity: dragSensitivity || 0.22
+                });
+            }
+        };
+
+        handleResize(); // Initial call
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [radius, segmentsX, segmentsY, dragSensitivity]);
+
     const sphereRef = useRef<HTMLDivElement>(null);
     const rot = useRef({ x: 0, y: 0 });
     const vel = useRef({ x: 0, y: 0 });
@@ -97,7 +142,7 @@ export default function DomeGallery({
 
     useEffect(() => {
         setParticles(
-            Array.from({ length: 40 }).map((_, i) => ({
+            Array.from({ length: config.particleCount }).map((_, i) => ({
                 id: i,
                 top: Math.random() * 100,
                 left: Math.random() * 100,
@@ -107,16 +152,16 @@ export default function DomeGallery({
                 duration: Math.random() * 3 + 3,
             }))
         );
-    }, []);
+    }, [config.particleCount]);
 
-    // Pre-calculate tile positions
+    // Pre-calculate tile positions with responsive config
     const tiles = useMemo(() => {
-        const total = segmentsX * segmentsY;
+        const total = config.segmentsX * config.segmentsY;
         return Array.from({ length: total }).map((_, i) => {
-            const col = i % segmentsX;
-            const row = Math.floor(i / segmentsX);
-            const angleY = (col / segmentsX) * 360;
-            const angleX = (row - (segmentsY - 1) / 2) * 18;
+            const col = i % config.segmentsX;
+            const row = Math.floor(i / config.segmentsX);
+            const angleY = (col / config.segmentsX) * 360;
+            const angleX = (row - (config.segmentsY - 1) / 2) * 18;
             const img = images[i % images.length];
             const imgData = typeof img === 'string' ? { src: img } : img;
             return {
@@ -128,7 +173,7 @@ export default function DomeGallery({
                 rotateX: angleX
             };
         });
-    }, [images, segmentsX, segmentsY]);
+    }, [images, config.segmentsX, config.segmentsY]);
 
     useEffect(() => {
         let rafId: number;
@@ -144,21 +189,23 @@ export default function DomeGallery({
             }
             rot.current.x = Math.max(-30, Math.min(30, rot.current.x));
             if (sphereRef.current) {
-                sphereRef.current.style.transform = `translateZ(${-radius}px) rotateX(${-rot.current.x}deg) rotateY(${rot.current.y}deg)`;
+                sphereRef.current.style.transform = `translateZ(${-config.radius}px) rotateX(${-rot.current.x}deg) rotateY(${rot.current.y}deg)`;
             }
             rafId = requestAnimationFrame(update);
         };
         rafId = requestAnimationFrame(update);
         return () => cancelAnimationFrame(rafId);
-    }, [radius, friction, isAutoRotating]);
+    }, [config.radius, friction, isAutoRotating]);
 
     const bind = useGesture({
         onDrag: ({ delta: [dx, dy], down }) => {
             isDragging.current = down;
             if (down) {
                 setIsAutoRotating(false);
-                vel.current.x = dx * dragSensitivity;
-                vel.current.y = dy * dragSensitivity;
+                // Use responsive sensitivity or fallback
+                const sensitivity = (config as any).dragSensitivity || dragSensitivity;
+                vel.current.x = dx * sensitivity;
+                vel.current.y = dy * sensitivity;
                 rot.current.y += vel.current.x;
                 rot.current.x += vel.current.y;
             }
@@ -302,7 +349,7 @@ export default function DomeGallery({
                             key={tile.id}
                             className="absolute w-[160px] h-[220px] sm:w-[180px] sm:h-[250px] md:w-[200px] md:h-[280px] -left-[80px] sm:-left-[90px] md:-left-[100px] -top-[110px] sm:-top-[125px] md:-top-[140px] [transform-style:preserve-3d] [backface-visibility:hidden]"
                             style={{
-                                transform: `rotateY(${tile.rotateY}deg) rotateX(${tile.rotateX}deg) translateZ(${radius}px)`,
+                                transform: `rotateY(${tile.rotateY}deg) rotateX(${tile.rotateX}deg) translateZ(${config.radius}px)`,
                             }}
                         >
                             <div
@@ -318,6 +365,7 @@ export default function DomeGallery({
                                             src={tile.src}
                                             alt={tile.alt || tile.caption}
                                             draggable={false}
+                                            loading="lazy"
                                             className="w-full h-full object-cover opacity-50 group-hover:opacity-100 sepia-[30%] group-hover:sepia-0 scale-105 group-hover:scale-100 transition-all duration-700 ease-out"
                                         />
 
@@ -421,10 +469,24 @@ export default function DomeGallery({
             >
                 <div className="flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-amber-950/40 via-black/60 to-amber-950/40 backdrop-blur-sm rounded-full border border-amber-600/30">
                     <span className="text-amber-500 text-sm">☉</span>
-                    <span className="text-amber-100/80 font-[Cinzel] text-xs tracking-[0.15em]">Drag to Navigate • Click to Behold</span>
+                    <span className="text-amber-100/80 font-[Cinzel] text-xs tracking-[0.15em] hidden sm:inline">Drag to Navigate • Click to Behold</span>
+                    <span className="text-amber-100/80 font-[Cinzel] text-xs tracking-[0.15em] sm:hidden">Swipe to Rotate • Tap to View</span>
                     <span className="text-amber-500 text-sm">☽</span>
                 </div>
             </motion.div>
+
+            {/* Scroll Indicator - Helps user access footer despite touch-none */}
+            <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 2 }}
+                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 text-amber-500/50 hover:text-amber-500 transition-colors p-2"
+                aria-label="Scroll to Footer"
+            >
+                <span className="text-2xl">﹀</span>
+            </motion.button>
+
 
             {/* Lightbox Modal */}
             <AnimatePresence>

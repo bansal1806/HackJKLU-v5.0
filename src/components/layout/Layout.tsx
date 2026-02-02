@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 
-import { Footer } from '@/components/navigation/Footer';
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -41,10 +41,22 @@ export function Layout({ children }: LayoutProps) {
       {/* Top Line with Menu and Logo */}
       <div className="fixed top-0 left-0 right-0 h-24 md:h-32 z-50 transition-all duration-300 bg-transparent">
         <div className="relative w-full h-full mt-10 md:mt-12">
-          {/* Horizontal line - Only between Menu and Sound (not extending before/after) */}
+          {/* Horizontal line - Left side (Menu to Logo) */}
           <div
-            className="absolute top-0 left-20 right-20 md:left-26 md:right-20 h-px pointer-events-none"
-            style={{ backgroundColor: 'rgba(126, 64, 49, 0.3)' }}
+            className="absolute top-0 left-20 md:left-26 h-px pointer-events-none"
+            style={{
+              backgroundColor: 'rgba(126, 64, 49, 0.3)',
+              right: 'calc(50% + 60px)'
+            }}
+          ></div>
+
+          {/* Horizontal line - Right side (Logo to Edge) */}
+          <div
+            className="absolute top-0 right-20 h-px pointer-events-none"
+            style={{
+              backgroundColor: 'rgba(126, 64, 49, 0.3)',
+              left: 'calc(50% + 60px)'
+            }}
           ></div>
 
           {/* Menu - Left */}
@@ -82,14 +94,16 @@ export function Layout({ children }: LayoutProps) {
         style={{ backgroundColor: 'rgba(126, 64, 49, 0.3)' }}
       ></div>
 
+      {/* Top Gradient Overlay to mask scrolling content */}
+      <div className="fixed top-0 left-0 right-0 h-40 z-40 bg-gradient-to-b from-black via-black/60 to-transparent pointer-events-none" />
+
       {/* Noise Overlay */}
       <div className="fixed inset-0 pointer-events-none z-40 bg-noise opacity-30 mix-blend-overlay"></div>
 
       {/* Main Content */}
       <main className="relative z-10">{children}</main>
 
-      {/* Footer */}
-      <Footer />
+
 
       {/* Left Sidebar Menu */}
       <AnimatePresence>
@@ -257,40 +271,7 @@ export function Layout({ children }: LayoutProps) {
                 </div>
               </nav>
 
-              {/* Campus Map Section */}
-              <div className="px-4 sm:px-8 py-4 border-t" style={{ borderColor: 'rgba(126, 64, 49, 0.3)' }}>
-                <span className="font-[Cinzel] text-lg block mb-3 text-center" style={{ color: 'var(--d4af37)' }}>
-                  — Campus Map —
-                </span>
 
-                {/* Greek Map Container */}
-                <div className="w-full relative group">
-                  {/* Decorative Frame */}
-                  <div className="absolute -inset-1 border border-[#d4af37]/30 rounded-sm pointer-events-none" />
-                  <div className="absolute -inset-[3px] border border-[#d4af37]/60 rounded-sm pointer-events-none" />
-
-                  <div className="w-full rounded-sm overflow-hidden border-2 border-[#d4af37] bg-black/50 relative shadow-[0_0_20px_rgba(212,175,55,0.15)]">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.117070008914!2d75.64722912457951!3d26.836228513374916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4af4fe68f403%3A0x3bf05f95df22b8c4!2sJK%20Lakshmipat%20University!5e0!3m2!1sen!2sin!4v1695563431231!5m2!1sen!2sin"
-                      width="100%"
-                      height="250"
-                      style={{
-                        border: 0,
-                        filter: 'grayscale(100%) invert(90%) sepia(20%) contrast(0.9)',
-                        transition: 'filter 0.5s ease'
-                      }}
-                      allowFullScreen={true}
-                      loading="eager"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="JKLU Campus Map"
-                      className="w-full h-[15rem] opacity-70 group-hover:opacity-100 group-hover:filter-none transition-all duration-500"
-                    />
-
-                    {/* Inner Shadow / Vignette */}
-                    <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_30px_rgba(0,0,0,0.8)] border-4 border-double border-[#d4af37]/50" />
-                  </div>
-                </div>
-              </div>
 
 
 

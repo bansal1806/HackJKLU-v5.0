@@ -31,12 +31,48 @@ const nextConfig: NextConfig = {
         'lenis',
     ],
 
-    // Configure webpack for GLSL shaders
-    webpack: (config) => {
+    // Optimize package imports for tree-shaking
+    modularizeImports: {
+        'lucide-react': {
+            transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+        },
+    },
+
+    // Configure webpack for GLSL shaders and bundle optimization
+    webpack: (config, { isServer }) => {
+        // GLSL shader support
         config.module.rules.push({
             test: /\.(glsl|vs|fs|vert|frag)$/,
             use: ['raw-loader', 'glslify-loader'],
         });
+
+        // Optimize chunks for better caching
+        if (!isServer) {
+            config.optimization = {
+                ...config.optimization,
+                splitChunks: {
+                    ...config.optimization?.splitChunks,
+                    cacheGroups: {
+                        ...((config.optimization?.splitChunks as { cacheGroups?: Record<string, unknown> })?.cacheGroups || {}),
+                        // Separate Three.js into its own chunk
+                        three: {
+                            test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
+                            name: 'three',
+                            chunks: 'all',
+                            priority: 30,
+                        },
+                        // Separate animation libraries
+                        animations: {
+                            test: /[\\/]node_modules[\\/](framer-motion|gsap)[\\/]/,
+                            name: 'animations',
+                            chunks: 'all',
+                            priority: 20,
+                        },
+                    },
+                },
+            };
+        }
+
         return config;
     },
 };

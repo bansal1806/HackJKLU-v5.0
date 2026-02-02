@@ -134,22 +134,53 @@ textarea,
     pointer !important;
 }
 
-/* Custom Scrollbar */
+/* Scrollbar Animation */
+@keyframes scrollbar-flow {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 0% 200%;
+  }
+}
+
+:root {
+  --sb-thumb: rgba(212, 175, 55, 0.3);
+  --sb-thumb-hover: rgba(212, 175, 55, 0.8);
+  --sb-track: transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1c1917;
+  background: var(--sb-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #44403c;
-  border-radius: 5px;
+  /* Liquid Flow Effect */
+  background: linear-gradient(180deg,
+      var(--sb-thumb) 0%,
+      var(--sb-thumb-hover) 50%,
+      var(--sb-thumb) 100%);
+  background-size: 100% 200%;
+  animation: scrollbar-flow 5s linear infinite;
+
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
+  background: var(--sb-thumb-hover);
+  background-size: 100% 100%;
+  /* Stop animation visual jumping */
+  box-shadow: 0 0 15px var(--sb-thumb-hover), inset 0 0 10px rgba(255, 255, 255, 0.5);
+  animation: none;
+  /* Pause flow on hover for solid feel */
 }
 
 /* Texture overlay for mythic feel - KEY for Team page */
