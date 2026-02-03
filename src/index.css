@@ -205,8 +205,21 @@ textarea,
   }
 }
 
+@keyframes shimmer {
+  0%, 100% { 
+    background-position: 0% 50%; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+  }
+}
+
 .animate-spin-reverse {
   animation: spin-reverse linear infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
 }
 
 /* Ring container positioning */

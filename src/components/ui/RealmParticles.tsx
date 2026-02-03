@@ -30,7 +30,11 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
             fullScreen: { enable: false },
             detectRetina: false, // Performance optimization: Render at standard resolution
             fpsLimit: 60, // Cap at 60 to save battery/resources
+            particles: {
+                reduceDuplicates: true, // OPTIMIZATION: Reduce duplicate particle calculations
+            },
             interactivity: {
+                detectsOn: "window", // OPTIMIZATION: More efficient event detection
                 events: {
                     onHover: {
                         enable: true,
@@ -43,9 +47,19 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                 },
                 modes: {
                     repulse: {
-                        distance: 100,
-                        duration: 0.4
+                        distance: 80, // OPTIMIZATION: Reduced interaction distance
+                        duration: 0.3, // OPTIMIZATION: Faster interaction response
+                        factor: 3, // OPTIMIZATION: More efficient repulsion calculation
+                        speed: 1
                     }
+                }
+            },
+            // OPTIMIZATION: Disable unused features for better performance
+            motion: {
+                disable: false,
+                reduce: {
+                    factor: 4,
+                    value: true
                 }
             }
         };
@@ -56,7 +70,7 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                 ...common,
                 particles: {
                     number: {
-                        value: 40, // OPTIMIZATION: Reduced from 60
+                        value: 80, // INCREASED: More cosmic particles for richer effect
                         density: {
                             enable: true,
                             width: 1920,
@@ -73,7 +87,7 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                         value: { min: 0.1, max: 0.8 },
                         animation: {
                             enable: true,
-                            speed: 0.5,
+                            speed: 0.3, // OPTIMIZATION: Reduced animation speed to save CPU
                             sync: false
                         }
                     },
@@ -81,13 +95,13 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                         value: { min: 1, max: 3 },
                         animation: {
                             enable: true,
-                            speed: 2,
+                            speed: 1.5, // OPTIMIZATION: Reduced animation speed
                             sync: false
                         }
                     },
                     move: {
                         enable: true,
-                        speed: 0.2,
+                        speed: 0.15, // OPTIMIZATION: Slightly reduced movement speed
                         direction: "none",
                         random: true,
                         straight: false,
@@ -95,10 +109,15 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                     },
                     links: {
                         enable: true,
-                        distance: 120, // OPTIMIZATION: Reduced from 150 to reduce link checks
+                        distance: 100, // OPTIMIZATION: Further reduced to minimize link calculations
                         color: "#ffffff",
-                        opacity: 0.4,
+                        opacity: 0.3, // OPTIMIZATION: Reduced opacity for better performance
                         width: 1
+                    },
+                    // REFINED APPROACH: Reduce particle density in center instead of hard boundaries
+                    zIndex: {
+                        value: 0,
+                        opacityRate: 0.5, // Particles fade when overlapping UI areas
                     }
                 }
             };
@@ -108,7 +127,7 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                 ...common,
                 particles: {
                     number: {
-                        value: 35, // OPTIMIZATION: Reduced from 60
+                        value: 70, // INCREASED: More ocean bubbles for immersive underwater feel
                         density: {
                             enable: true,
                             width: 1920,
@@ -124,15 +143,18 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                     opacity: {
                         value: { min: 0.1, max: 0.6 },
                         animation: {
-                            enable: false
+                            enable: false // OPTIMIZATION: Disabled opacity animation to save CPU
                         }
                     },
                     size: {
-                        value: { min: 1, max: 6 }
+                        value: { min: 1, max: 5 }, // OPTIMIZATION: Slightly reduced max size
+                        animation: {
+                            enable: false // OPTIMIZATION: Disabled size animation for better performance
+                        }
                     },
                     move: {
                         enable: true,
-                        speed: { min: 0.5, max: 2 },
+                        speed: { min: 0.4, max: 1.8 }, // OPTIMIZATION: Slightly reduced speed range
                         direction: "top",
                         random: true,
                         straight: false,
@@ -140,8 +162,13 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                     },
                     wobble: {
                         enable: true,
-                        distance: 5,
-                        speed: 10
+                        distance: 4, // OPTIMIZATION: Reduced wobble distance
+                        speed: 8 // OPTIMIZATION: Reduced wobble speed
+                    },
+                    // REFINED APPROACH: Gentle opacity reduction instead of hard boundaries
+                    zIndex: {
+                        value: 0,
+                        opacityRate: 0.4, // More aggressive fade for ocean bubbles
                     }
                 }
             };
@@ -151,7 +178,7 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                 ...common,
                 particles: {
                     number: {
-                        value: 50, // OPTIMIZATION: Reduced from 80
+                        value: 90, // INCREASED: More embers for dramatic underworld effect
                         density: {
                             enable: true,
                             width: 1920,
@@ -168,7 +195,7 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                         value: { min: 0.1, max: 1 },
                         animation: {
                             enable: true,
-                            speed: 1,
+                            speed: 0.8, // OPTIMIZATION: Reduced animation speed
                             sync: false,
                             mode: "decrease",
                             startValue: "max",
@@ -176,11 +203,14 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                         }
                     },
                     size: {
-                        value: { min: 2, max: 4 }
+                        value: { min: 1.5, max: 3.5 }, // OPTIMIZATION: Slightly smaller particles
+                        animation: {
+                            enable: false // OPTIMIZATION: Disabled size animation for better performance
+                        }
                     },
                     move: {
                         enable: true,
-                        speed: { min: 0.5, max: 1.5 },
+                        speed: { min: 0.4, max: 1.2 }, // OPTIMIZATION: Reduced speed range
                         direction: "top",
                         random: true,
                         straight: false,
@@ -189,16 +219,21 @@ export const RealmParticles = React.memo(function RealmParticles({ variant }: Re
                     life: {
                         duration: {
                             sync: false,
-                            value: 3
+                            value: 4 // OPTIMIZATION: Slightly longer life to reduce respawn frequency
                         },
                         count: 0,
                         delay: {
                             random: {
                                 enable: true,
-                                minimumValue: 0.5
+                                minimumValue: 0.3 // OPTIMIZATION: Reduced minimum delay
                             },
-                            value: 1
+                            value: 0.8 // OPTIMIZATION: Reduced delay value
                         }
+                    },
+                    // REFINED APPROACH: Subtle opacity reduction for Hades embers
+                    zIndex: {
+                        value: 0,
+                        opacityRate: 0.3, // Gentle fade to maintain atmosphere
                     }
                 }
             };

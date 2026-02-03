@@ -8,6 +8,102 @@ import dynamic from 'next/dynamic';
 const RealmParticles = dynamic(() => import('@/components/ui/RealmParticles').then(mod => mod.RealmParticles), { ssr: false });
 import { ChevronDown } from 'lucide-react';
 import { useLoading } from '@/context/LoadingContext';
+import { useRouter } from 'next/navigation';
+
+// About Navigation Component with Cloud Transition
+function AboutNavigationText() {
+    const [showTransition, setShowTransition] = useState(false);
+    const router = useRouter();
+
+    const handleAboutClick = () => {
+        setShowTransition(true);
+        
+        // Hide the cloud canvas during transition for clean animation
+        const bgCanvas = document.querySelector('canvas[style*="z-index: 0"]') as HTMLCanvasElement;
+        const fgCanvas = document.querySelector('canvas[style*="z-index: 2"]') as HTMLCanvasElement;
+        
+        if (bgCanvas) {
+            bgCanvas.style.opacity = '0';
+            bgCanvas.style.transition = 'opacity 0.5s ease-out';
+        }
+        if (fgCanvas) {
+            fgCanvas.style.opacity = '0';
+            fgCanvas.style.transition = 'opacity 0.5s ease-out';
+        }
+    };
+
+    const handleTransitionComplete = () => {
+        router.push('/about');
+    };
+
+    return (
+        <>
+            {showTransition && (
+                <CloudTransition
+                    type="cover"
+                    onComplete={handleTransitionComplete}
+                />
+            )}
+            
+            <motion.button
+                onClick={handleAboutClick}
+                style={{
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    // RESPONSIVE: Adaptive padding and sizing
+                    padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    position: 'relative',
+                    zIndex: 60,
+                    // Ensure button doesn't overflow on small screens
+                    maxWidth: '90vw',
+                    minHeight: '44px' // Maintain minimum touch target
+                }}
+                whileHover={{ 
+                    scale: 1.05,
+                    textShadow: '0 0 20px rgba(212, 175, 55, 0.8)'
+                }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                    textShadow: [
+                        '0 0 10px rgba(212, 175, 55, 0.5)',
+                        '0 0 20px rgba(212, 175, 55, 0.8)',
+                        '0 0 10px rgba(212, 175, 55, 0.5)'
+                    ]
+                }}
+                transition={{
+                    textShadow: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }
+                }}
+            >
+                <span style={{
+                    fontFamily: 'Cinzel, serif',
+                    // RESPONSIVE: Adaptive font sizing for About button
+                    fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', // Scales from 1rem to 1.25rem
+                    fontWeight: '600',
+                    color: '#d4af37',
+                    letterSpacing: 'clamp(0.05em, 0.2vw, 0.1em)', // Responsive letter spacing
+                    textTransform: 'uppercase',
+                    background: 'linear-gradient(45deg, #d4af37, #ffd700, #d4af37)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundSize: '200% 200%',
+                    display: 'block', // Ensure proper text rendering
+                    whiteSpace: 'nowrap' // Prevent text wrapping
+                }}
+                className="animate-shimmer"
+                >
+                    About the Quest
+                </span>
+            </motion.button>
+        </>
+    );
+}
 
 interface CloudLayer {
     id: number;
@@ -60,6 +156,13 @@ class ImageCloudSystem {
     currentBg = '#2C3E50';
     currentOverlay = 'rgba(44, 62, 80, 0.3)';
 
+    // Performance optimization: Cache color calculations
+    private lastScrollPercent = -1;
+    private colorCache = {
+        bg: '#2C3E50',
+        overlay: 'rgba(44, 62, 80, 0.3)'
+    };
+
     worldDepth = 3000;
     fov = 800;
     loaded = false;
@@ -111,59 +214,137 @@ class ImageCloudSystem {
         this.clouds = [];
         this.seed = 12345; // Reset seed on init
 
-        const getSafeX = (range: number) => {
-            // Generate X but avoid center [-0.7, 0.7] (Wider tunnel)
-            let x = (this.seededRandom() - 0.5) * range;
-            if (x > -0.7 && x < 0.7) {
-                x = x > 0 ? x + 0.7 : x - 0.7;
+        // REFINED SAFE ZONE SYSTEM - Gradual density reduction instead of complete exclusion
+        // This maintains atmosphere while protecting UI elements
+        const getCloudDensityMultiplier = (x: number, y: number) => {
+            // Center UI protection zone - reduce density but don't eliminate
+            const centerDistance = Math.sqrt(x * x + y * y);
+            
+            // Timer area (top-center) - light reduction
+            if (Math.abs(x) < 0.25 && y > -0.7 && y < -0.3) {
+                return 0.3; // 30% normal density
             }
-            return x;
+            
+            // Button area (bottom-center) - moderate reduction  
+            if (Math.abs(x) < 0.35 && y > 0.2 && y < 0.7) {
+                return 0.4; // 40% normal density
+            }
+            
+            // Silhouette breathing room (center) - gentle reduction
+            if (Math.abs(x) < 0.4 && Math.abs(y) < 0.5) {
+                return 0.6; // 60% normal density
+            }
+            
+            // Gradual falloff from center
+            if (centerDistance < 0.8) {
+                return 0.7 + (centerDistance / 0.8) * 0.3; // 70%-100% density
+            }
+            
+            return 1.0; // Full density in outer areas
         };
 
-        // Background Filler Clouds (Far away - can be anywhere roughly)
-        for (let i = 0; i < count * 0.4; i++) {
+        const shouldPlaceCloud = (x: number, y: number) => {
+            const densityMultiplier = getCloudDensityMultiplier(x, y);
+            return this.seededRandom() < densityMultiplier;
+        };
+
+        const getSafePosition = (range: number, allowCenter = false) => {
+            let attempts = 0;
+            while (attempts < 20) {
+                const x = (this.seededRandom() - 0.5) * range;
+                const y = (this.seededRandom() - 0.5) * range * 0.8;
+                
+                if (allowCenter || shouldPlaceCloud(x, y)) {
+                    return { x, y, opacity: getCloudDensityMultiplier(x, y) };
+                }
+                attempts++;
+            }
+            
+            // Fallback: place in outer areas with full opacity
+            const side = this.seededRandom() > 0.5 ? 1 : -1;
+            return {
+                x: side * (1.2 + this.seededRandom() * 0.8),
+                y: (this.seededRandom() - 0.5) * 1.2,
+                opacity: 1.0
+            };
+        };
+
+        // Background Filler Clouds (Far away - maintain full coverage with density variation)
+        for (let i = 0; i < count * 0.5; i++) {
+            const pos = getSafePosition(6, true); // Allow center placement for background
             this.clouds.push({
                 id: i,
-                x: (this.seededRandom() - 0.5) * 6, // Background is wide
-                y: (this.seededRandom() - 0.5) * 4,
-                z: this.seededRandom() * this.worldDepth + 1000,
-                scaleBase: 3.0 + this.seededRandom() * 2.0,
+                x: pos.x,
+                y: pos.y,
+                z: this.seededRandom() * this.worldDepth + 1200,
+                scaleBase: 2.5 + this.seededRandom() * 2.0,
                 imgIndex: Math.floor(this.seededRandom() * 4),
                 rotation: this.seededRandom() * Math.PI * 2,
-                opacity: 0.2 + this.seededRandom() * 0.3
+                opacity: (0.15 + this.seededRandom() * 0.25) * pos.opacity // Reduced by density
             });
         }
 
-        // Mid-Ground and Foreground Clouds (Create Tunnel)
-        for (let i = 0; i < count * 0.6; i++) {
+        // Mid-Ground Clouds (Respect density zones)
+        for (let i = 0; i < count * 0.4; i++) {
+            const pos = getSafePosition(4.5);
             this.clouds.push({
                 id: 1000 + i,
-                x: getSafeX(4), // Apply safe zone
-                y: (this.seededRandom() - 0.5) * 2,
-                z: this.seededRandom() * this.worldDepth,
-                scaleBase: 0.5 + this.seededRandom() * 1.5,
+                x: pos.x,
+                y: pos.y,
+                z: this.seededRandom() * this.worldDepth * 0.8,
+                scaleBase: 0.8 + this.seededRandom() * 1.2,
                 imgIndex: Math.floor(this.seededRandom() * 4),
-                rotation: (this.seededRandom() - 0.5) * 0.5,
-                opacity: 0.7 + this.seededRandom() * 0.3
+                rotation: (this.seededRandom() - 0.5) * 0.4,
+                opacity: (0.5 + this.seededRandom() * 0.3) * pos.opacity
             });
         }
 
-        // Hero Clouds (Fly through - Strictly sides)
-        for (let i = 0; i < 10; i++) {
+        // Foreground Hero Clouds (Sides only, but with some center presence)
+        for (let i = 0; i < 8; i++) {
+            const side = this.seededRandom() > 0.5 ? 1 : -1;
+            const x = side * (0.6 + this.seededRandom() * 0.6);
+            const y = (this.seededRandom() - 0.5) * 0.8;
+            
             this.clouds.push({
                 id: 2000 + i,
-                x: (this.seededRandom() > 0.5 ? 1 : -1) * (0.5 + this.seededRandom() * 0.5), // Push to sides > 0.5
-                y: (this.seededRandom() - 0.5) * 1.0,
-                z: this.seededRandom() * 500,
-                scaleBase: 2.0,
+                x: x,
+                y: y,
+                z: this.seededRandom() * 600,
+                scaleBase: 1.5 + this.seededRandom() * 0.8,
                 imgIndex: Math.floor(this.seededRandom() * 4),
-                rotation: this.seededRandom() * 0.2,
-                opacity: 0.9
+                rotation: this.seededRandom() * 0.3,
+                opacity: 0.8 * getCloudDensityMultiplier(x, y)
+            });
+        }
+
+        // Fill clouds for bottom area to prevent "hole" effect
+        for (let i = 0; i < 12; i++) {
+            const x = (this.seededRandom() - 0.5) * 3;
+            const y = 0.4 + this.seededRandom() * 0.8; // Bottom area
+            
+            this.clouds.push({
+                id: 3000 + i,
+                x: x,
+                y: y,
+                z: 800 + this.seededRandom() * 1500,
+                scaleBase: 1.2 + this.seededRandom() * 1.5,
+                imgIndex: Math.floor(this.seededRandom() * 4),
+                rotation: this.seededRandom() * Math.PI,
+                opacity: 0.2 * getCloudDensityMultiplier(x, y) // Very subtle bottom clouds
             });
         }
     }
 
     updateScheme(scrollPercent: number) {
+        // Performance optimization: Skip expensive calculations if scroll hasn't changed significantly
+        if (Math.abs(scrollPercent - this.lastScrollPercent) < 0.1) {
+            this.currentBg = this.colorCache.bg;
+            this.currentOverlay = this.colorCache.overlay;
+            return;
+        }
+
+        this.lastScrollPercent = scrollPercent;
+
         // 0-20%: Sky (Hold)
         // 20-40%: Sky -> Ocean (Transition)
         // 40-60%: Ocean (Hold)
@@ -211,6 +392,10 @@ class ImageCloudSystem {
         const ovB = lerp(startScheme.overlayColor[2], endScheme.overlayColor[2], t);
         const ovA = lerp(startScheme.overlayColor[3], endScheme.overlayColor[3], t);
         this.currentOverlay = rgbaToString(ovR, ovG, ovB, ovA);
+
+        // Cache the calculated results
+        this.colorCache.bg = this.currentBg;
+        this.colorCache.overlay = this.currentOverlay;
     }
 
     render(scrollY: number) {
@@ -453,12 +638,29 @@ export default function CloudParallaxPage() {
             ctx.scale(dpr, dpr);
             fgCtx.scale(dpr, dpr);
 
-            // OPTIMIZATION: Adaptive Cloud Count
-            // Mobile: 60, Tablet: 90, Desktop: 120 (Reduced from 150)
+            // RESPONSIVE: Adaptive Cloud Count based on screen size and performance
             const width = window.innerWidth;
-            let cloudCount = 120;
-            if (width < 768) cloudCount = 60;
-            else if (width < 1024) cloudCount = 90;
+            const height = window.innerHeight;
+            const screenArea = width * height;
+            
+            let cloudCount = 120; // Default for large laptops
+            
+            // Adjust cloud count based on screen size and aspect ratio
+            if (width < 1200 || height < 700) {
+                cloudCount = 80; // Smaller laptops (13-14 inch)
+            } else if (width < 1400 || height < 900) {
+                cloudCount = 100; // Medium laptops (15 inch)
+            } else if (width >= 1600 && height >= 1000) {
+                cloudCount = 140; // Large laptops (17+ inch, high res)
+            }
+            
+            // Further adjust for ultra-wide or very tall screens
+            const aspectRatio = width / height;
+            if (aspectRatio > 2.0) {
+                cloudCount = Math.floor(cloudCount * 1.2); // More clouds for ultra-wide
+            } else if (aspectRatio < 1.3) {
+                cloudCount = Math.floor(cloudCount * 0.8); // Fewer clouds for tall screens
+            }
 
             system.initClouds(cloudCount);
         };
@@ -479,21 +681,26 @@ export default function CloudParallaxPage() {
             // Calculate equivalent scrollY from the smooth progress
             const currentScrollY = progress * (documentHeight - windowHeight);
 
+            // REALM INITIALIZATION FIX: Ensure we start with Zeus realm colors on first render
+            if (lastScrollY === -1 && currentScrollY === 0) {
+                system.updateScheme(0); // Force Zeus realm (0% scroll)
+            }
+
             // SMOOTH SCROLL PRIORITY: Render every frame for smoothness, only skip if truly identical
             // OPTIMIZATION: Only render full heavy frames if NOT LOADING (or if it's the very first frame to init)
-            if (!isLoadingRef.current || (Math.abs(currentScrollY - lastScrollY) > 0.1 || !system.loaded)) {
+            // Only render if meaningful change OR first frame
+            const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+            if (!isLoadingRef.current || scrollDelta > 0.5 || lastScrollY === -1) {
                 // Throttle calls to updateScheme as string building is expensive
                 // Only update scheme every few frames or if significant change? 
                 // For now, keep as is but aware it's a hot path.
 
                 const percent = progress * 100;
-                system.updateScheme(percent); // Optimized internally?
+                system.updateScheme(percent); // Optimized internally with caching
 
                 // Force render at least once
                 system.render(currentScrollY);
-                if (system.loaded) {
-                    lastScrollY = currentScrollY;
-                }
+                lastScrollY = currentScrollY;
             }
 
             requestRef.current = requestAnimationFrame(animate);
@@ -505,11 +712,21 @@ export default function CloudParallaxPage() {
             window.removeEventListener('resize', handleResize);
             if (requestRef.current) cancelAnimationFrame(requestRef.current);
         };
-    }, [mounted, smoothScroll]); // CRITICAL FIX: Remove smoothScroll dependency to prevent re-initialization
+    }, [mounted]); // CRITICAL FIX: Remove smoothScroll dependency to prevent re-initialization
 
     // Fix hydration by ensuring client-side only rendering
     useEffect(() => {
         setMounted(true);
+        
+        // CRITICAL FIX: Reset scroll position to ensure users always start from Zeus realm
+        // This prevents realm mismatching when browser restores scroll position on reload
+        if (typeof window !== 'undefined') {
+            window.scrollTo(0, 0);
+            // Disable scroll restoration to prevent browser from overriding our reset
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+        }
     }, []);
 
     const { isLoading } = useLoading();
@@ -517,6 +734,15 @@ export default function CloudParallaxPage() {
     // Update ref for animation loop
     useEffect(() => {
         isLoadingRef.current = isLoading;
+        
+        // ADDITIONAL FIX: Ensure scroll position is reset when loading completes
+        // This handles cases where loading screen might interfere with initial scroll reset
+        if (!isLoading && typeof window !== 'undefined') {
+            // Small delay to ensure DOM is fully ready
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 100);
+        }
     }, [isLoading]);
 
     const handleTransitionComplete = () => {
@@ -604,9 +830,13 @@ export default function CloudParallaxPage() {
                         alt="Zeus Aura"
                         style={{
                             width: 'auto',
-                            height: '85vh',
+                            // RESPONSIVE: Match main silhouette sizing
+                            height: 'clamp(60vh, 85vh, 90vh)',
+                            maxHeight: '85vh',
+                            maxWidth: '90vw',
                             pointerEvents: 'none',
                             transform: 'translateZ(0)', // Force GPU acceleration
+                            objectFit: 'contain'
                         }}
                         animate={{
                             opacity: [0.3, 0.6, 0.3],
@@ -638,11 +868,15 @@ export default function CloudParallaxPage() {
                         alt="Zeus Realm"
                         style={{
                             width: 'auto',
-                            height: '85vh',
+                            // RESPONSIVE: Adaptive height for different laptop sizes
+                            height: 'clamp(60vh, 85vh, 90vh)', // Scales from 60vh to 90vh
+                            maxHeight: '85vh', // Prevent overflow on smaller screens
+                            maxWidth: '90vw', // Prevent horizontal overflow
                             mixBlendMode: 'screen',
                             pointerEvents: 'none',
                             isolation: 'isolate',
                             transform: 'translateZ(0)', // Force GPU acceleration
+                            objectFit: 'contain' // Maintain aspect ratio
                         }}
                         // Breathing Animation
                         animate={{
@@ -668,11 +902,13 @@ export default function CloudParallaxPage() {
                     justifyContent: 'center',
                     zIndex: 20,
                     willChange: 'transform, opacity',
+                    padding: '0 1rem', // Add padding for smaller screens
                 }}>
                     <h1
                         style={{
                             fontFamily: 'tech Origin, sans-serif',
-                            fontSize: 'min(10vw, 8rem)',
+                            // RESPONSIVE: Adaptive font sizing for all laptop sizes
+                            fontSize: 'clamp(3rem, 8vw, 8rem)', // Scales from 3rem to 8rem based on viewport
                             fontWeight: 'normal',
                             // High-contrast metallic gold gradient
                             background: 'linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #634f2c 27%,#ffecb3 40%,#3a2c0f 78%)',
@@ -680,7 +916,7 @@ export default function CloudParallaxPage() {
                             WebkitTextFillColor: 'transparent',
                             // Black Outline
                             WebkitTextStroke: '0px transparent',
-                            // Clean 3D shadows
+                            // Clean 3D shadows - responsive
                             textShadow: `
                                 0px 1px 0px #917024,
                                 0px 2px 0px #6e521b,
@@ -693,8 +929,10 @@ export default function CloudParallaxPage() {
                             textAlign: 'center',
                             margin: 0,
                             lineHeight: 1.1,
-                            letterSpacing: '0.05em',
-                            position: 'relative'
+                            letterSpacing: 'clamp(0.02em, 0.5vw, 0.05em)', // Responsive letter spacing
+                            position: 'relative',
+                            maxWidth: '90vw', // Prevent overflow on small screens
+                            wordBreak: 'keep-all' // Prevent breaking of "HackJKLU 5.0"
                         }}
                     >
                         HackJKLU <span style={{ fontFamily: 'inherit' }}>5.0</span>
@@ -707,15 +945,21 @@ export default function CloudParallaxPage() {
                     opacity: quoteOpacity,
                     scale: quoteScale,
                     willChange: 'transform, opacity',
+                    padding: '0 1rem', // Add padding for smaller screens
+                    maxWidth: '90vw', // Prevent overflow
                 }}>
                     <p style={{
                         fontFamily: 'Cinzel, serif',
-                        fontSize: '2.5rem',
+                        // RESPONSIVE: Adaptive font sizing for quote
+                        fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', // Scales from 1.5rem to 2.5rem
                         color: '#d4af37',
                         textTransform: 'uppercase',
-                        letterSpacing: '0.2rem',
+                        letterSpacing: 'clamp(0.1rem, 0.3vw, 0.2rem)', // Responsive letter spacing
                         textShadow: '0 2px 10px rgba(0,0,0,0.8)',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        margin: 0,
+                        lineHeight: 1.2,
+                        wordBreak: 'keep-all' // Prevent awkward line breaks
                     }}>
                         — From MYTH to Mainframes —
                     </p>
@@ -744,9 +988,13 @@ export default function CloudParallaxPage() {
                         alt="Poseidon Aura"
                         style={{
                             width: 'auto',
-                            height: '85vh',
+                            // RESPONSIVE: Consistent sizing across realms
+                            height: 'clamp(60vh, 85vh, 90vh)',
+                            maxHeight: '85vh',
+                            maxWidth: '90vw',
                             pointerEvents: 'none',
                             transform: 'translateZ(0)', // Force GPU acceleration
+                            objectFit: 'contain'
                         }}
                         animate={{
                             opacity: [0.3, 0.6, 0.3],
@@ -778,11 +1026,15 @@ export default function CloudParallaxPage() {
                         alt="Poseidon Realm"
                         style={{
                             width: 'auto',
-                            height: '85vh',
+                            // RESPONSIVE: Match other silhouettes
+                            height: 'clamp(60vh, 85vh, 90vh)',
+                            maxHeight: '85vh',
+                            maxWidth: '90vw',
                             mixBlendMode: 'screen',
                             pointerEvents: 'none',
                             isolation: 'isolate',
                             transform: 'translateZ(0)', // Force GPU acceleration
+                            objectFit: 'contain'
                         }}
                         // Breathing Animation
                         animate={{
@@ -804,25 +1056,33 @@ export default function CloudParallaxPage() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    zIndex: 20
+                    zIndex: 20,
+                    padding: '0 1rem', // Add padding for smaller screens
                 }}>
                     <div style={{
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        maxWidth: '90vw' // Prevent overflow
                     }}>
                         <h2 style={{
                             fontFamily: 'Cinzel, serif',
-                            fontSize: '4rem',
+                            // RESPONSIVE: Adaptive font sizing for dates
+                            fontSize: 'clamp(2rem, 5vw, 4rem)', // Scales from 2rem to 4rem
                             color: '#e0f7fa',
                             textShadow: '0 0 15px rgba(0, 255, 255, 0.5)',
-                            marginBottom: '1rem'
+                            marginBottom: '1rem',
+                            margin: 0,
+                            lineHeight: 1.2
                         }}>
                             13 March - 15 March
                         </h2>
                         <p style={{
                             fontFamily: 'Cinzel, serif',
-                            fontSize: '1.5rem',
+                            // RESPONSIVE: Adaptive font sizing for location
+                            fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', // Scales from 1rem to 1.5rem
                             color: '#b3e5fc',
-                            letterSpacing: '0.1rem'
+                            letterSpacing: 'clamp(0.05rem, 0.2vw, 0.1rem)', // Responsive letter spacing
+                            margin: 0,
+                            marginTop: '0.5rem'
                         }}>
                             JK Lakshmipat University
                         </p>
@@ -852,9 +1112,13 @@ export default function CloudParallaxPage() {
                         alt="Hades Aura"
                         style={{
                             width: 'auto',
-                            height: '85vh',
+                            // RESPONSIVE: Consistent sizing with other realms
+                            height: 'clamp(60vh, 85vh, 90vh)',
+                            maxHeight: '85vh',
+                            maxWidth: '90vw',
                             pointerEvents: 'none',
                             transform: 'translateZ(0)', // Force GPU acceleration
+                            objectFit: 'contain'
                         }}
                         animate={{
                             opacity: [0.3, 0.6, 0.3],
@@ -886,11 +1150,15 @@ export default function CloudParallaxPage() {
                         alt="Hades Realm"
                         style={{
                             width: 'auto',
-                            height: '85vh',
+                            // RESPONSIVE: Match other silhouettes
+                            height: 'clamp(60vh, 85vh, 90vh)',
+                            maxHeight: '85vh',
+                            maxWidth: '90vw',
                             mixBlendMode: 'screen',
                             pointerEvents: 'none',
                             isolation: 'isolate',
                             transform: 'translateZ(0)', // Force GPU acceleration
+                            objectFit: 'contain'
                         }}
                         // Breathing Animation
                         animate={{
@@ -908,10 +1176,17 @@ export default function CloudParallaxPage() {
                     scale: underworldScale,
                     width: '100%',
                     display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    pointerEvents: 'auto' // Re-enable for this layer
+                    pointerEvents: 'auto', // Re-enable for this layer
+                    padding: '0 1rem', // Add padding for smaller screens
                 }}>
 
-                    <div style={{ position: 'relative', width: '100%', height: '200px', marginBottom: '2rem' }}>
+                    <div style={{ 
+                        position: 'relative', 
+                        width: '100%', 
+                        // RESPONSIVE: Adaptive height for countdown timer
+                        height: 'clamp(150px, 25vh, 200px)', // Scales from 150px to 200px
+                        marginBottom: 'clamp(1rem, 3vh, 2rem)' // Responsive margin
+                    }}>
                         <CountdownTimer />
                     </div>
 
@@ -919,14 +1194,24 @@ export default function CloudParallaxPage() {
                         className="apply-button"
                         data-hackathon-slug="hackjklu-v5"
                         data-button-theme="dark"
-                        style={{ height: '44px', width: '312px', zIndex: 50, position: 'relative' }}
+                        style={{ 
+                            height: '44px', 
+                            // RESPONSIVE: Adaptive button width
+                            width: 'min(312px, 90vw)', // Scales down on smaller screens
+                            zIndex: 50, 
+                            position: 'relative', 
+                            marginBottom: 'clamp(1rem, 2vh, 1.5rem)' // Responsive margin
+                        }}
                     ></div>
+
+                    {/* About Text with Cloud Transition */}
+                    <AboutNavigationText />
                 </motion.div>
 
                 {/* Scroll Indicator */}
                 <motion.div style={{
                     position: 'absolute',
-                    bottom: '2rem',
+                    bottom: 'clamp(1rem, 4vh, 2rem)', // Responsive bottom spacing
                     left: 0,
                     right: 0,
                     display: 'flex',
@@ -935,14 +1220,17 @@ export default function CloudParallaxPage() {
                     justifyContent: 'center',
                     opacity: scrollIndicatorOpacity,
                     color: '#fff',
-                    zIndex: 20
+                    zIndex: 20,
+                    padding: '0 1rem' // Add padding for smaller screens
                 }}>
                     <span style={{
                         fontFamily: 'Cinzel, serif',
                         marginBottom: '0.5rem',
-                        fontSize: '0.9rem',
-                        letterSpacing: '0.1em',
-                        textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                        // RESPONSIVE: Adaptive font size for scroll indicator
+                        fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)', // Scales from 0.7rem to 0.9rem
+                        letterSpacing: 'clamp(0.05em, 0.2vw, 0.1em)', // Responsive letter spacing
+                        textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+                        textAlign: 'center'
                     }}>
                         Scroll to Explore
                     </span>
@@ -950,7 +1238,11 @@ export default function CloudParallaxPage() {
                         animate={{ y: [0, 10, 0] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     >
-                        <ChevronDown size={24} color="#ffd700" />
+                        <ChevronDown 
+                            // RESPONSIVE: Adaptive icon size
+                            size={Math.max(20, Math.min(28, window.innerWidth * 0.02))} 
+                            color="#ffd700" 
+                        />
                     </motion.div>
                 </motion.div>
 

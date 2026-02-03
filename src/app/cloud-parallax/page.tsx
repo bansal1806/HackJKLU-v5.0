@@ -622,7 +622,7 @@ export default function CloudParallaxPage() {
                 }}>
                     <h1
                         style={{
-                            fontFamily: 'OriginTech, sans-serif',
+                            fontFamily: 'tech Origin, sans-serif',
                             fontSize: 'min(10vw, 8rem)',
                             fontWeight: 'normal',
                             // High-contrast metallic gold gradient
