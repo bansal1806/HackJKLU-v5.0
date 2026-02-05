@@ -9,10 +9,10 @@ import { CloudTransition } from '../ui/CloudTransition';
 const aboutText = {
   title: 'HackJKLU v5.0',
   paragraphs: [
-    "HackJKLU v5.0 is more than just a hackathon. It's a place where ideas are turned into action. This year, the focus is majorly on creativity, teamwork, and solutions that actually matter. Participants come together to think freely, experiment boldly, and learn by actually doing the tasks.",
-    "Organized at JK Lakshmipat University by the Council of Technical Affairs (JKLU), HackJKLU v5.0 brings talented students from across the country onto a single platform. With different skill sets and perspectives all teams work on real world problems that are related to technology, society, and the upcoming future.",
-    "Throughout the event the participating students will be brainstorming, building, and improving their ideas through the help of mentors and experts present then and there. It's not just about being perfect but it's about learning, collaborating, and creating something meaningful.",
-    "HackJKLU v5.0 is all about energy, innovation, and growth. Come with an idea, leave with an ultimate experience, confidence, and inspiration.",
+    "JKLU stands at the forefront of innovation by seamlessly blending academia with industry through its interdisciplinary programs in engineering, management, and design—preparing students to thrive in an ever-evolving professional landscape. Building on this spirit of innovation, HackJKLU v5.0 is more than just a hackathon; it is a dynamic platform where ideas are transformed into impactful action.",
+    "Organized at JK Lakshmipat University by the Council of Technical Affairs (JKLU), HackJKLU v5.0 brings together talented students from across the country onto a single stage. With diverse skill sets and perspectives, participants collaborate to tackle real-world challenges related to technology, society, and the future. This year, the hackathon places a strong emphasis on creativity, teamwork, and building solutions that truly matter.",
+    "Throughout the event, students engage in intense brainstorming, hands-on building, and continuous iteration—guided by experienced mentors and industry experts present on site. HackJKLU v5.0 is not about perfection; it is about learning by doing, experimenting boldly, collaborating effectively, and creating meaningful outcomes.",
+    "Driven by energy, innovation, and growth, HackJKLU v5.0 invites participants to come with an idea and leave with an unforgettable experience—gaining confidence, inspiration, and the skills to shape the future.",
   ],
 };
 

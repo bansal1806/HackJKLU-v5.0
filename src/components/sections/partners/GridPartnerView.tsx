@@ -40,20 +40,7 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
-      {/* Background */}
-      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-        <div
-          className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
-          style={{
-            backgroundImage: `url(${completeBg.src})`,
-            backgroundPosition: bgPosition,
-            backgroundSize: '100% 400%',
-            backgroundRepeat: 'no-repeat',
-            filter: 'contrast(1.1) saturate(1.1)',
-          }}
-        />
-        <div className="absolute inset-0 bg-neutral-950/60 z-10" />
-      </div>
+
 
       {/* Grid Content: Flex Column Flow (No Absolutes) */}
       <div className={`relative z-40 w-full flex-grow flex flex-col ${isMobile ? 'pt-16 pb-12 overflow-y-auto hide-scrollbar' : 'h-full justify-center'

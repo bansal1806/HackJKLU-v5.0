@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.hackjklu.com</loc>
+    <loc>https://www.hackjklu.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/about</loc>
+    <loc>https://www.hackjklu.com/about/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/events</loc>
+    <loc>https://www.hackjklu.com/events/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/faq</loc>
+    <loc>https://www.hackjklu.com/faq/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/gallery</loc>
+    <loc>https://www.hackjklu.com/gallery/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/itinerary</loc>
+    <loc>https://www.hackjklu.com/itinerary/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/partners</loc>
+    <loc>https://www.hackjklu.com/partners/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/prizes</loc>
+    <loc>https://www.hackjklu.com/prizes/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/problem-statements</loc>
+    <loc>https://www.hackjklu.com/problem-statements/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/sponsor</loc>
+    <loc>https://www.hackjklu.com/sponsor/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.hackjklu.com/themes</loc>
+    <loc>https://www.hackjklu.com/themes/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

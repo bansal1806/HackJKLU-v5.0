@@ -27,6 +27,7 @@ export interface StandardPartnerData {
     instagram?: string;
     x?: string;
   };
+  logoScale?: number;
 }
 
 const SocialIcon = memo(({ icon, link }: { icon: string | { src: string }; link?: string }) => (
@@ -72,7 +73,7 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
     }
   };
 
-  const bgPosition = `center ${data.id * (100 / 3)}%`;
+  const bgPosition = `center ${data.id * (100 / 5)}%`;
 
   const gradientStyle = {
     background: `linear-gradient(to bottom, ${data.themeColor} 60%, #6E561C 100%)`,
@@ -83,26 +84,13 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
 
   return (
     <motion.div
-      className="relative w-full min-h-screen overflow-hidden flex flex-col"
+      className="relative w-full min-h-full overflow-hidden flex flex-col"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
-      {/* Background */}
-      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-        <div
-          className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
-          style={{
-            backgroundImage: `url(${completeBg.src})`,
-            backgroundPosition: bgPosition,
-            backgroundSize: '100% 400%',
-            backgroundRepeat: 'no-repeat',
-            filter: 'contrast(1.1) saturate(1.1)',
-          }}
-        />
-        <div className="absolute inset-0 bg-neutral-950/60 z-10" />
-      </div>
+
 
       {/* Content Container - Flex Column to ensure stacking order */}
       <div className="relative z-40 w-full h-full flex flex-col items-center flex-grow">
@@ -110,17 +98,14 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
         {/* Header Section */}
         <div className={`w-full flex flex-col items-center px-4 text-center transition-all duration-300 shrink-0 ${isMobile ? 'pt-20 pb-4' : 'pt-24 lg:pt-28 xl:pt-32 pb-8'
           }`}>
-          {data.title === 'GOLD PARTNER' && (
-            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-5xl xl:text-7xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4 text-[#EFE3A0]">
-              PAST PARTNERS
-            </h1>
+          {data.title && (
+            <h2
+              className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-2xl xl:text-4xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
+              style={gradientStyle}
+            >
+              {data.title}
+            </h2>
           )}
-          <h2
-            className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-2xl xl:text-4xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
-            style={gradientStyle}
-          >
-            {data.title}
-          </h2>
           <motion.h3
             animate={{ opacity: isHovered && data.logo ? 0 : 1 }}
             transition={{ duration: 0.4 }}
@@ -191,7 +176,9 @@ const StandardPartnerView = ({ data }: { data: StandardPartnerData }) => {
                   {data.logo && (
                     <div
                       className="absolute left-1/2 top-1/2 w-[50%] h-[50%] flex items-center justify-center"
-                      style={{ transform: 'translate(-50%, -50%)' }}
+                      style={{
+                        transform: `translate(-50%, -50%) scale(${data.logoScale || 1})`
+                      }}
                     >
                       <div className="relative w-full h-full flex items-center justify-center p-2">
                         <Image

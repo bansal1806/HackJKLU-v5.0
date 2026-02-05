@@ -58,6 +58,9 @@ export const metadata: Metadata = {
             'max-video-preview': -1,
         },
     },
+    alternates: {
+        canonical: './',
+    },
     icons: {
         icon: '/owl-logo.png',
     },

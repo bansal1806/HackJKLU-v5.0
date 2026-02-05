@@ -16,6 +16,8 @@ import bronzeRing from '../../../assets/partners/bronze-ring.webp';
 
 import entionLogo from '../../../assets/partners/ention-logo.webp';
 import wsCubeLogo from '../../../assets/partners/ws.cubetech-logo.webp';
+import msiLogo from '../../../assets/partners/msi.webp';
+import sunriseLogo from '../../../assets/partners/sunrisecomputers.webp';
 
 // Silver Partners
 import gfgLogo from '../../../assets/partners/geeksforgeeks-logo.webp';
@@ -65,6 +67,7 @@ type StandardPartnerData = {
     instagram?: string;
     x?: string;
   };
+  logoScale?: number;
 };
 
 type GridPartnerData = {
@@ -92,7 +95,7 @@ type PartnerData = StandardPartnerData | GridPartnerData | CommunityPartnerData;
 
 const partnersData: PartnerData[] = [
   {
-    id: 0,
+    id: 1,
     type: 'standard',
     title: 'GOLD PARTNER',
     partnerName: 'ENTION',
@@ -111,7 +114,38 @@ const partnersData: PartnerData[] = [
     },
   },
   {
-    id: 1,
+    id: 0,
+    type: 'standard',
+    title: '',
+    partnerName: 'MSI',
+    ring: goldRing,
+    logo: msiLogo,
+    description: [
+      'MSI is a globally recognized brand known for its excellence in gaming, content creation, and high-performance computing. Driven by innovation and cutting-edge technology, MSI consistently empowers gamers, creators, and tech enthusiasts to push boundaries, explore new possibilities, and transform ideas into powerful digital experiences across the world.',
+    ],
+    socials: true,
+    themeColor: '#FFEAA4', // Gold
+    socialLinks: {
+      web: 'https://in.msi.com/',
+      instagram: 'https://www.instagram.com/msigaming_india/',
+    },
+    logoScale: 0.75, // Adjust to fit ring
+  },
+  {
+    id: 2,
+    type: 'standard',
+    title: '',
+    partnerName: 'SUNRISE COMPUTERS',
+    ring: goldRing,
+    logo: sunriseLogo,
+    description: [
+      'Sunrise Computers is a trusted name in delivering reliable and high-quality computing solutions. With a strong commitment to performance and customer satisfaction, Sunrise Computers supports the tech ecosystem by providing top-tier hardware and expert guidance, enabling individuals and communities to build, innovate, and grow with confidence.',
+    ],
+    socials: false,
+    themeColor: '#FFEAA4', // Gold
+  },
+  {
+    id: 3,
     type: 'standard',
     title: 'PRE-HACKATHON PARTNER',
     partnerName: 'WSCUBE TECH',
@@ -131,7 +165,7 @@ const partnersData: PartnerData[] = [
     },
   },
   {
-    id: 2,
+    id: 4,
     type: 'grid',
     title: 'SILVER & BRONZE PARTNERS',
     groups: [
@@ -158,7 +192,7 @@ const partnersData: PartnerData[] = [
     ],
   },
   {
-    id: 3,
+    id: 5,
     type: 'community',
     title: 'COMMUNITY PARTNERS',
     partnerName: '',
@@ -183,12 +217,27 @@ const partnersData: PartnerData[] = [
 
 export default function PartnersSections() {
   return (
-    <div className="bg-neutral-950 text-neutral-100 font-heading">
-      {partnersData.map((section) => (
-        <div key={section.id} className="relative w-full min-h-screen shrink-0 flex flex-col">
-          <PartnerSection data={section} />
-        </div>
-      ))}
+    <div className="text-neutral-100 font-heading">
+      <div className="w-full flex justify-center pt-24 pb-8">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-heading tracking-wider uppercase text-[#EFE3A0]">
+          PAST PARTNERS
+        </h1>
+      </div>
+      {partnersData.map((section) => {
+        const isCompact =
+          section.type === 'standard' &&
+          ['ENTION', 'MSI', 'SUNRISE COMPUTERS'].includes(section.partnerName);
+
+        return (
+          <div
+            key={section.id}
+            className={`relative w-full shrink-0 flex flex-col ${isCompact ? 'min-h-[40vh] py-8' : 'min-h-screen'
+              }`}
+          >
+            <PartnerSection data={section} />
+          </div>
+        );
+      })}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
@@ -210,7 +259,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
   }, []);
 
   // Type guard ensures 'id' exists on all union types
-  const bgPosition = `center ${data.id * (100 / 3)}%`;
+  const bgPosition = `center ${data.id * (100 / 5)}%`;
 
   // --- GRID LAYOUT (Silver & Bronze) ---
   if (data.type === 'grid') {
@@ -240,22 +289,7 @@ function PartnerSection({ data }: { data: PartnerData }) {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        {/* Background */}
-        <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-          <div
-            className="w-full h-full bg-cover transition-all duration-1000 ease-in-out"
-            style={{
-              backgroundImage: `url(${typeof data.bgImage === 'string' ? data.bgImage : data.bgImage?.src || completeBg.src})`,
-              backgroundPosition: bgPosition,
-              // Unified background size for consistency
-              backgroundSize: '100% 400%',
-              backgroundRepeat: 'no-repeat',
-              filter: 'contrast(1.1) saturate(1.1)',
-            }}
-          />
 
-          <div className="absolute inset-0 bg-neutral-950/60 z-10" />
-        </div>
 
         {/* Content Container - Flex Column to ensure stacking order */}
         <div className="relative z-40 w-full flex-grow flex flex-col items-center justify-center">

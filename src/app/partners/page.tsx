@@ -15,13 +15,25 @@ export const metadata: Metadata = {
     },
 };
 
+import Image from 'next/image';
+import bgThemes from '@/assets/themes/bg-themes.webp';
+
 export default function PartnersPage() {
     return (
-        <>
+        <div className="relative min-h-screen">
+            <div className="fixed inset-0 -z-10">
+                <Image
+                    src={bgThemes}
+                    alt="Background"
+                    fill
+                    className="object-cover"
+                    priority
+                />
+            </div>
             <PageScrollbar thumbColor="rgba(192, 192, 192, 0.4)" hoverColor="rgba(220, 220, 220, 0.9)" />
             <PartnersSections />
             <Footer />
             <PageNavigation />
-        </>
+        </div>
     );
 }

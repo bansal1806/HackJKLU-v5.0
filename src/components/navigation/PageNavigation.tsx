@@ -19,7 +19,7 @@ const pageOrder = [
   { path: '/events', name: 'Events' },
 ];
 
-export function PageNavigation() {
+export function PageNavigation({ onNext }: { onNext?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -87,6 +87,12 @@ export function PageNavigation() {
           >
             <Link
               href={nextPage.path}
+              onClick={(e) => {
+                if (onNext) {
+                  e.preventDefault();
+                  onNext();
+                }
+              }}
               className="group flex items-center gap-3 transition-colors duration-300 p-3 -m-3"
               style={{ color: 'var(--ivory-cream)' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold-shimmer)')}
@@ -139,6 +145,12 @@ export function PageNavigation() {
               >
                 <Link
                   href={nextPage.path}
+                  onClick={(e) => {
+                    if (onNext) {
+                      e.preventDefault();
+                      onNext();
+                    }
+                  }}
                   className="flex items-center gap-2 px-3 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-gold-500/80 active:bg-gold-500/10 active:scale-95 transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]"
                 >
                   <span className="text-[10px] uppercase tracking-widest font-cinzel text-ivory-cream">Next</span>

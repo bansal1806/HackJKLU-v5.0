@@ -17,11 +17,11 @@ function AboutNavigationText() {
 
     const handleAboutClick = () => {
         setShowTransition(true);
-        
+
         // Hide the cloud canvas during transition for clean animation
         const bgCanvas = document.querySelector('canvas[style*="z-index: 0"]') as HTMLCanvasElement;
         const fgCanvas = document.querySelector('canvas[style*="z-index: 2"]') as HTMLCanvasElement;
-        
+
         if (bgCanvas) {
             bgCanvas.style.opacity = '0';
             bgCanvas.style.transition = 'opacity 0.5s ease-out';
@@ -44,7 +44,7 @@ function AboutNavigationText() {
                     onComplete={handleTransitionComplete}
                 />
             )}
-            
+
             <motion.button
                 onClick={handleAboutClick}
                 style={{
@@ -61,7 +61,7 @@ function AboutNavigationText() {
                     maxWidth: '90vw',
                     minHeight: '44px' // Maintain minimum touch target
                 }}
-                whileHover={{ 
+                whileHover={{
                     scale: 1.05,
                     textShadow: '0 0 20px rgba(212, 175, 55, 0.8)'
                 }}
@@ -96,7 +96,7 @@ function AboutNavigationText() {
                     display: 'block', // Ensure proper text rendering
                     whiteSpace: 'nowrap' // Prevent text wrapping
                 }}
-                className="animate-shimmer"
+                    className="animate-shimmer"
                 >
                     About the Quest
                 </span>
@@ -219,27 +219,27 @@ class ImageCloudSystem {
         const getCloudDensityMultiplier = (x: number, y: number) => {
             // Center UI protection zone - reduce density but don't eliminate
             const centerDistance = Math.sqrt(x * x + y * y);
-            
+
             // Timer area (top-center) - light reduction
             if (Math.abs(x) < 0.25 && y > -0.7 && y < -0.3) {
                 return 0.3; // 30% normal density
             }
-            
+
             // Button area (bottom-center) - moderate reduction  
             if (Math.abs(x) < 0.35 && y > 0.2 && y < 0.7) {
                 return 0.4; // 40% normal density
             }
-            
+
             // Silhouette breathing room (center) - gentle reduction
             if (Math.abs(x) < 0.4 && Math.abs(y) < 0.5) {
                 return 0.6; // 60% normal density
             }
-            
+
             // Gradual falloff from center
             if (centerDistance < 0.8) {
                 return 0.7 + (centerDistance / 0.8) * 0.3; // 70%-100% density
             }
-            
+
             return 1.0; // Full density in outer areas
         };
 
@@ -253,13 +253,13 @@ class ImageCloudSystem {
             while (attempts < 20) {
                 const x = (this.seededRandom() - 0.5) * range;
                 const y = (this.seededRandom() - 0.5) * range * 0.8;
-                
+
                 if (allowCenter || shouldPlaceCloud(x, y)) {
                     return { x, y, opacity: getCloudDensityMultiplier(x, y) };
                 }
                 attempts++;
             }
-            
+
             // Fallback: place in outer areas with full opacity
             const side = this.seededRandom() > 0.5 ? 1 : -1;
             return {
@@ -304,7 +304,7 @@ class ImageCloudSystem {
             const side = this.seededRandom() > 0.5 ? 1 : -1;
             const x = side * (0.6 + this.seededRandom() * 0.6);
             const y = (this.seededRandom() - 0.5) * 0.8;
-            
+
             this.clouds.push({
                 id: 2000 + i,
                 x: x,
@@ -321,7 +321,7 @@ class ImageCloudSystem {
         for (let i = 0; i < 12; i++) {
             const x = (this.seededRandom() - 0.5) * 3;
             const y = 0.4 + this.seededRandom() * 0.8; // Bottom area
-            
+
             this.clouds.push({
                 id: 3000 + i,
                 x: x,
@@ -642,9 +642,9 @@ export default function CloudParallaxPage() {
             const width = window.innerWidth;
             const height = window.innerHeight;
             const screenArea = width * height;
-            
+
             let cloudCount = 120; // Default for large laptops
-            
+
             // Adjust cloud count based on screen size and aspect ratio
             if (width < 1200 || height < 700) {
                 cloudCount = 80; // Smaller laptops (13-14 inch)
@@ -653,7 +653,7 @@ export default function CloudParallaxPage() {
             } else if (width >= 1600 && height >= 1000) {
                 cloudCount = 140; // Large laptops (17+ inch, high res)
             }
-            
+
             // Further adjust for ultra-wide or very tall screens
             const aspectRatio = width / height;
             if (aspectRatio > 2.0) {
@@ -717,7 +717,7 @@ export default function CloudParallaxPage() {
     // Fix hydration by ensuring client-side only rendering
     useEffect(() => {
         setMounted(true);
-        
+
         // CRITICAL FIX: Reset scroll position to ensure users always start from Zeus realm
         // This prevents realm mismatching when browser restores scroll position on reload
         if (typeof window !== 'undefined') {
@@ -734,7 +734,7 @@ export default function CloudParallaxPage() {
     // Update ref for animation loop
     useEffect(() => {
         isLoadingRef.current = isLoading;
-        
+
         // ADDITIONAL FIX: Ensure scroll position is reset when loading completes
         // This handles cases where loading screen might interfere with initial scroll reset
         if (!isLoading && typeof window !== 'undefined') {
@@ -1180,9 +1180,9 @@ export default function CloudParallaxPage() {
                     padding: '0 1rem', // Add padding for smaller screens
                 }}>
 
-                    <div style={{ 
-                        position: 'relative', 
-                        width: '100%', 
+                    <div style={{
+                        position: 'relative',
+                        width: '100%',
                         // RESPONSIVE: Adaptive height for countdown timer
                         height: 'clamp(150px, 25vh, 200px)', // Scales from 150px to 200px
                         marginBottom: 'clamp(1rem, 3vh, 2rem)' // Responsive margin
@@ -1194,12 +1194,12 @@ export default function CloudParallaxPage() {
                         className="apply-button"
                         data-hackathon-slug="hackjklu-v5"
                         data-button-theme="dark"
-                        style={{ 
-                            height: '44px', 
+                        style={{
+                            height: '44px',
                             // RESPONSIVE: Adaptive button width
                             width: 'min(312px, 90vw)', // Scales down on smaller screens
-                            zIndex: 50, 
-                            position: 'relative', 
+                            zIndex: 50,
+                            position: 'relative',
                             marginBottom: 'clamp(1rem, 2vh, 1.5rem)' // Responsive margin
                         }}
                     ></div>
@@ -1238,10 +1238,10 @@ export default function CloudParallaxPage() {
                         animate={{ y: [0, 10, 0] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     >
-                        <ChevronDown 
+                        <ChevronDown
                             // RESPONSIVE: Adaptive icon size
-                            size={Math.max(20, Math.min(28, window.innerWidth * 0.02))} 
-                            color="#ffd700" 
+                            size={Math.max(20, Math.min(28, window.innerWidth * 0.02))}
+                            color="#ffd700"
                         />
                     </motion.div>
                 </motion.div>
