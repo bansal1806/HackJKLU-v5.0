@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ChevronRight, ChevronDown, Zap, Shield, Hammer, Sun, ScrollText, Trophy, Flame, Coins, Scale, Gavel } from 'lucide-react';
-import NextImage from 'next/image';
+import NextImage, { StaticImageData } from 'next/image';
 
 // Background Images for FAQ Halls
 import zeusBg from '../../assets/faq/zeus.webp';
@@ -34,7 +34,7 @@ type Hall = {
   description: string;
   colors: ThemeColors;
   questions: Question[];
-  backgroundImage: string;
+  backgroundImage: StaticImageData;
 };
 
 // --- Data: Oracle Questions (FAQ) ---
@@ -46,7 +46,7 @@ const halls: Hall[] = [
     icon: Zap,
     description: 'Seek guidance on the laws of the land, eligibility, and the divine rules that govern this realm.',
     colors: { primary: '#D4AF37', secondary: '#001F3F', accent: '#FFFFFF', glow: 'rgba(212, 175, 55, 0.6)' },
-    backgroundImage: zeusBg.src,
+    backgroundImage: zeusBg,
     questions: [
       { id: 'z1', q: 'Who can participate?', a: 'Any student with a valid ID card from a recognized institute can participate. Undergraduate students are welcome into the arena.' },
       { id: 'z2', q: 'Do I need prior experience?', a: 'No! The gods favor the bold. Beginners are welcome, and we have mentors to guide you through your first odyssey.' },
@@ -60,7 +60,7 @@ const halls: Hall[] = [
     icon: Shield,
     description: 'Consult the goddess of wisdom for logistics, team formation, and strategic planning.',
     colors: { primary: '#C0C0C0', secondary: '#708090', accent: '#9CAF88', glow: 'rgba(192, 192, 192, 0.6)' },
-    backgroundImage: athenaBg.src,
+    backgroundImage: athenaBg,
     questions: [
       { id: 'a1', q: 'What is the team size?', a: 'You can form an alliance of 2 to 5 members. Choose your companions wisely.' },
       { id: 'a2', q: 'Will accommodation be provided?', a: 'Yes, for our offline champions. Shelter will be available within the campus grounds during the event.' },
@@ -74,7 +74,7 @@ const halls: Hall[] = [
     icon: Hammer,
     description: 'Enter the forge to learn about technical requirements, submission guidelines, and judging criteria.',
     colors: { primary: '#CD7F32', secondary: '#36454F', accent: '#FF6B35', glow: 'rgba(205, 127, 50, 0.6)' },
-    backgroundImage: hephaestusBg.src,
+    backgroundImage: hephaestusBg,
     questions: [
       { id: 'h1', q: 'Do we need specific tech stacks?', a: 'No specific stack is mandated. You are free to forge your creation using any tools or languages you prefer.' },
       { id: 'h2', q: 'What are the judging criteria?', a: 'Innovation, Technical Complexity, Practicality, and Presentation. Impress the judges with a complete, working prototype.' },
@@ -88,7 +88,7 @@ const halls: Hall[] = [
     icon: Sun,
     description: 'The Oracle sees all times. Here you will find dates, deadlines, and financial clarifications.',
     colors: { primary: '#FFD700', secondary: '#1A1510', accent: '#FFFFFF', glow: 'rgba(255, 215, 0, 0.6)' },
-    backgroundImage: apolloBg.src,
+    backgroundImage: apolloBg,
     questions: [
       { id: 'ap1', q: 'When is the registration deadline?', a: 'The oracle decrees that registrations close few days before the event. Act swiftly!' },
       { id: 'ap2', q: 'Is there a registration fee?', a: 'No tribute is required. HackJKLU v5.0 is completely free for all participants.' },
@@ -473,7 +473,7 @@ export function FAQ() {
               className="absolute inset-0"
               style={{ backgroundColor: activeHall.colors.secondary }}
             >
-              <NextImage src={activeHall.backgroundImage} alt="Background" fill className="object-cover opacity-60 filter brightness-50 contrast-125 scale-105" priority />
+              <NextImage src={activeHall.backgroundImage} alt="Background" fill className="object-cover opacity-60 filter brightness-50 contrast-125 scale-105" placeholder="blur" priority />
               {/* Glow */}
               <motion.div initial={{ opacity: 0.1 }} animate={{ opacity: 0.15 }} className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] blur-[100px]" style={{ backgroundColor: activeHall.colors.primary }} />
             </motion.div>
