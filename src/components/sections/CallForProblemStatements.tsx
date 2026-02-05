@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useMotionTemplate } from 'framer-motion';
 import Image from 'next/image';
-import { PageNavigation } from '../navigation/PageNavigation';
+
 
 // Partner logos - using public paths
 const partners = [
@@ -877,7 +877,7 @@ export function CallForProblemStatements() {
                 }
             `}</style>
 
-            <PageNavigation />
+
         </div>
     );
 }
