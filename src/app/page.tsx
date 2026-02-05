@@ -48,25 +48,24 @@ function AboutNavigationText() {
             <motion.button
                 onClick={handleAboutClick}
                 style={{
-                    background: 'transparent',
+                    backgroundColor: 'transparent',
                     border: 'none',
                     cursor: 'pointer',
                     // RESPONSIVE: Adaptive padding and sizing
-                    padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)',
-                    borderRadius: '8px',
+                    marginTop: 'clamp(2rem, 5vh, 4rem)', // Shift downwards
+                    padding: '1rem', // Keep touch target
                     transition: 'all 0.3s ease',
                     position: 'relative',
                     zIndex: 60,
-                    // Ensure button doesn't overflow on small screens
                     maxWidth: '90vw',
-                    minHeight: '44px' // Maintain minimum touch target
                 }}
                 whileHover={{
-                    scale: 1.05,
-                    textShadow: '0 0 20px rgba(212, 175, 55, 0.8)'
+                    scale: 1.1,
+                    textShadow: '0 0 25px rgba(212, 175, 55, 1)'
                 }}
                 whileTap={{ scale: 0.95 }}
                 animate={{
+                    y: [0, -8, 0], // Floating Effect
                     textShadow: [
                         '0 0 10px rgba(212, 175, 55, 0.5)',
                         '0 0 20px rgba(212, 175, 55, 0.8)',
@@ -74,6 +73,11 @@ function AboutNavigationText() {
                     ]
                 }}
                 transition={{
+                    y: {
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    },
                     textShadow: {
                         duration: 2,
                         repeat: Infinity,
@@ -1169,44 +1173,7 @@ export default function CloudParallaxPage() {
                     />
                 </motion.div>
 
-                {/* Provide pointerEvents: 'auto' so buttons work */}
-                <motion.div style={{
-                    position: 'absolute',
-                    opacity: underworldOpacity,
-                    scale: underworldScale,
-                    width: '100%',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    pointerEvents: 'auto', // Re-enable for this layer
-                    padding: '0 1rem', // Add padding for smaller screens
-                }}>
 
-                    <div style={{
-                        position: 'relative',
-                        width: '100%',
-                        // RESPONSIVE: Adaptive height for countdown timer
-                        height: 'clamp(150px, 25vh, 200px)', // Scales from 150px to 200px
-                        marginBottom: 'clamp(1rem, 3vh, 2rem)' // Responsive margin
-                    }}>
-                        <CountdownTimer />
-                    </div>
-
-                    <div
-                        className="apply-button"
-                        data-hackathon-slug="hackjklu-v5"
-                        data-button-theme="dark"
-                        style={{
-                            height: '44px',
-                            // RESPONSIVE: Adaptive button width
-                            width: 'min(312px, 90vw)', // Scales down on smaller screens
-                            zIndex: 50,
-                            position: 'relative',
-                            marginBottom: 'clamp(1rem, 2vh, 1.5rem)' // Responsive margin
-                        }}
-                    ></div>
-
-                    {/* About Text with Cloud Transition */}
-                    <AboutNavigationText />
-                </motion.div>
 
                 {/* Scroll Indicator */}
                 <motion.div style={{
@@ -1246,6 +1213,48 @@ export default function CloudParallaxPage() {
                     </motion.div>
                 </motion.div>
 
+            </div>
+
+            {/* OVERLAY LAYER - Z-Index 50 to sit ABOVE clouds */}
+            <div style={{ position: 'fixed', inset: 0, zIndex: 50, pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {/* Hades Interactive Section - Moved here for visibility */}
+                <motion.div style={{
+                    position: 'absolute',
+                    opacity: underworldOpacity,
+                    scale: underworldScale,
+                    width: '100%',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                    pointerEvents: 'auto', // Re-enable for this layer
+                    padding: '0 1rem', // Add padding for smaller screens
+                }}>
+
+                    <div style={{
+                        position: 'relative',
+                        width: '100%',
+                        // RESPONSIVE: Adaptive height for countdown timer
+                        height: 'clamp(150px, 25vh, 200px)', // Scales from 150px to 200px
+                        marginBottom: 'clamp(1rem, 3vh, 2rem)' // Responsive margin
+                    }}>
+                        <CountdownTimer />
+                    </div>
+
+                    <div
+                        className="apply-button"
+                        data-hackathon-slug="hackjklu-v5"
+                        data-button-theme="dark"
+                        style={{
+                            height: '44px',
+                            // RESPONSIVE: Adaptive button width
+                            width: 'min(312px, 90vw)', // Scales down on smaller screens
+                            zIndex: 50,
+                            position: 'relative',
+                            marginBottom: 'clamp(1rem, 2vh, 1.5rem)' // Responsive margin
+                        }}
+                    ></div>
+
+                    {/* About Text with Cloud Transition */}
+                    <AboutNavigationText />
+                </motion.div>
             </div>
         </div>
     );
