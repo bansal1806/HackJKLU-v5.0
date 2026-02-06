@@ -113,6 +113,7 @@ const laws = [
       'The organizing committee reserves the right to modify rules or event structure at any time.'
     ],
     color: 'from-yellow-400 to-yellow-600',
+    backgroundImage: zeusBg,
   },
   {
     id: 'equipment',
@@ -126,6 +127,7 @@ const laws = [
       'Each team is allowed to submit only one project.'
     ],
     color: 'from-red-400 to-orange-600',
+    backgroundImage: hephaestusBg,
   },
   {
     id: 'judging',
@@ -139,6 +141,7 @@ const laws = [
       'Incomplete or late submissions may not be considered for evaluation.'
     ],
     color: 'from-blue-400 to-blue-600',
+    backgroundImage: athenaBg,
   },
   {
     id: 'scoring',
@@ -152,6 +155,7 @@ const laws = [
       'Awards granted only to those who uphold the laws.'
     ],
     color: 'from-green-400 to-emerald-600',
+    backgroundImage: apolloBg,
   },
   {
     id: 'safety',
@@ -164,6 +168,7 @@ const laws = [
       'Harassment of any kind will not be tolerated and may lead to immediate removal from the event.'
     ],
     color: 'from-indigo-400 to-violet-600',
+    backgroundImage: athenaBg,
   },
   {
     id: 'disqualification',
@@ -177,6 +182,7 @@ const laws = [
       'False registration details will lead to immediate removal.'
     ],
     color: 'from-purple-500 to-rose-800',
+    backgroundImage: hephaestusBg,
   },
 ];
 
@@ -218,230 +224,24 @@ const QuestionCard = ({ question, hallColors, isOpen, onToggle }: { question: Qu
   );
 };
 
-const LawCard = ({ rule, isOpen, onToggle, index }: { rule: typeof laws[0]; isOpen: boolean; onToggle: () => void; index: number }) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
-
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 30, rotateX: -10 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.6, type: "spring" }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`
-        group relative overflow-hidden rounded-2xl border-2 cursor-pointer
-        transition-all duration-500 transform perspective-1000
-        ${isOpen
-          ? 'border-amber-500/60 shadow-[0_0_50px_rgba(245,158,11,0.25)] scale-[1.02]'
-          : 'border-stone-700/40 hover:border-amber-600/50 hover:shadow-[0_10px_40px_rgba(0,0,0,0.4)]'
-        }
-      `}
-      style={{
-        background: isOpen
-          ? 'linear-gradient(135deg, rgba(30,25,20,0.98) 0%, rgba(15,10,5,0.98) 100%)'
-          : 'linear-gradient(135deg, rgba(25,20,18,0.95) 0%, rgba(10,8,6,0.95) 100%)',
-      }}
-      onClick={onToggle}
-      whileHover={{ y: -4 }}
-    >
-      {/* Mouse spotlight effect */}
-      {isHovered && (
-        <motion.div
-          className="absolute pointer-events-none z-0"
-          animate={{
-            x: mousePosition.x - 150,
-            y: mousePosition.y - 150,
-          }}
-          transition={{ type: "spring", damping: 30, stiffness: 200 }}
-          style={{
-            width: 300,
-            height: 300,
-            background: `radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%)`,
-            borderRadius: '50%',
-          }}
-        />
-      )}
-
-      {/* Animated border glow */}
-      <motion.div
-        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-        style={{
-          background: `linear-gradient(135deg, rgba(245,158,11,0.1) 0%, transparent 50%, rgba(245,158,11,0.1) 100%)`,
-        }}
-      />
-
-      {/* Top accent line */}
-      <motion.div
-        className="absolute top-0 left-0 right-0 h-[2px]"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${isOpen ? 'rgba(245,158,11,0.8)' : 'rgba(245,158,11,0.3)'}, transparent)`,
-        }}
-        animate={{ opacity: isOpen ? 1 : 0.5 }}
-      />
-
-      {/* Left accent bar */}
-      <motion.div
-        className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl"
-        style={{
-          background: `linear-gradient(to bottom, ${rule.color.includes('yellow') ? '#F59E0B' : rule.color.includes('red') ? '#EF4444' : rule.color.includes('blue') ? '#3B82F6' : rule.color.includes('green') ? '#10B981' : rule.color.includes('indigo') ? '#6366F1' : '#9333EA'}, transparent)`,
-        }}
-        animate={{ opacity: isOpen ? 1 : 0.6 }}
-      />
-
-      <div className="relative z-10 p-6 md:p-8 flex items-start gap-5 md:gap-6">
-        {/* Icon container with glow */}
-        <motion.div
-          className={`relative p-4 rounded-xl bg-gradient-to-br ${rule.color} shadow-2xl shrink-0`}
-          animate={{
-            rotate: isHovered ? [0, -5, 5, 0] : 0,
-            scale: isOpen ? 1.1 : 1,
-          }}
-          transition={{ duration: 0.5 }}
-        >
-          <rule.icon className="w-7 md:w-8 h-7 md:h-8 text-white drop-shadow-lg" />
-
-          {/* Icon glow ring */}
-          <motion.div
-            className="absolute inset-0 rounded-xl"
-            animate={{
-              boxShadow: isOpen
-                ? ['0 0 20px rgba(245,158,11,0.4)', '0 0 40px rgba(245,158,11,0.6)', '0 0 20px rgba(245,158,11,0.4)']
-                : '0 0 0px transparent'
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-
-          {/* Burst effect on open */}
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0.8, scale: 1 }}
-              animate={{ opacity: 0, scale: 2.5 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0 rounded-xl bg-white/30 blur-md"
-            />
-          )}
-        </motion.div>
-
-        <div className="flex-grow min-w-0">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <motion.h3
-                className="text-xl md:text-2xl font-bold tracking-wide font-serif transition-colors duration-300"
-                style={{ color: isOpen ? '#F59E0B' : '#FDE68A' }}
-                animate={{ textShadow: isOpen ? '0 0 20px rgba(245,158,11,0.5)' : 'none' }}
-              >
-                {rule.title}
-              </motion.h3>
-              <p className="text-stone-500 text-xs font-sans uppercase tracking-[0.25em] mt-1 font-medium">
-                {rule.subtitle}
-              </p>
-            </div>
-
-            <motion.div
-              animate={{ rotate: isOpen ? 180 : 0 }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="shrink-0"
-            >
-              <ChevronDown className={`w-6 h-6 transition-colors duration-300 ${isOpen ? 'text-amber-400' : 'text-stone-600'}`} />
-            </motion.div>
-          </div>
-
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="overflow-hidden"
-              >
-                <div className="mt-6 pt-5 border-t border-amber-500/20">
-                  <ul className="space-y-4">
-                    {rule.content.map((item, idx) => (
-                      <motion.li
-                        key={idx}
-                        initial={{ opacity: 0, x: -20, y: 10 }}
-                        animate={{ opacity: 1, x: 0, y: 0 }}
-                        transition={{ delay: 0.15 + idx * 0.08, type: "spring" }}
-                        className="flex items-start gap-4 group/item"
-                      >
-                        <motion.span
-                          className="mt-1.5 w-2 h-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-600 shrink-0"
-                          animate={{ scale: [1, 1.3, 1] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: idx * 0.2 }}
-                        />
-                        <span className="text-stone-300 font-sans text-sm md:text-base leading-relaxed group-hover/item:text-stone-200 transition-colors">
-                          {item}
-                        </span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Footer ornament */}
-                <motion.div
-                  className="flex items-center justify-center gap-3 mt-6 pt-4 border-t border-stone-800/50"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <div className="h-px w-8 bg-gradient-to-r from-transparent to-amber-500/50" />
-                  <span className="text-amber-500/60 text-lg">⚖</span>
-                  <div className="h-px w-8 bg-gradient-to-l from-transparent to-amber-500/50" />
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Bottom shine effect */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to top, rgba(245,158,11,0.03), transparent)',
-        }}
-        animate={{ opacity: isOpen ? 1 : 0 }}
-      />
-    </motion.div>
-  );
-};
 
 
 export function FAQ() {
   const [activeTab, setActiveTab] = useState<'oracle' | 'laws'>('oracle');
   const [activeHallId, setActiveHallId] = useState<string>('zeus');
+  const [activeLawId, setActiveLawId] = useState<string>('general');
   const [searchQuery, setSearchQuery] = useState('');
   const [openQuestionId, setOpenQuestionId] = useState<string | null>(null);
-  const [expandedRuleId, setExpandedRuleId] = useState<string | null>(null);
-  const lawsScrollRef = useRef<HTMLDivElement>(null);
-
-  // Forward wheel events to laws scroll container when Laws tab is active
-  useEffect(() => {
-    if (activeTab !== 'laws') return;
-
-    const handleWheel = (e: WheelEvent) => {
-      if (lawsScrollRef.current) {
-        lawsScrollRef.current.scrollTop += e.deltaY;
-      }
-    };
-
-    document.addEventListener('wheel', handleWheel, { passive: true });
-    return () => document.removeEventListener('wheel', handleWheel);
-  }, [activeTab]);
 
   const activeHall = halls.find((h) => h.id === activeHallId) || halls[0];
+  const activeLaw = laws.find((l) => l.id === activeLawId) || laws[0];
+
+  const activeLawColor = activeLaw.color.includes('yellow') ? '#F59E0B' :
+    activeLaw.color.includes('red') ? '#EF4444' :
+      activeLaw.color.includes('blue') ? '#3B82F6' :
+        activeLaw.color.includes('green') ? '#10B981' :
+          activeLaw.color.includes('indigo') ? '#6366F1' : '#A855F7';
 
   const filteredHalls = searchQuery
     ? halls.map((hall) => ({
@@ -458,6 +258,10 @@ export function FAQ() {
     setOpenQuestionId(null);
   };
 
+  const handleLawChange = (id: string) => {
+    setActiveLawId(id);
+  };
+
   return (
     <section className="h-[100dvh] min-h-[500px] w-full bg-[#0F172A] text-white relative overflow-hidden font-cinzel flex flex-col">
       {/* Background Ambience */}
@@ -465,7 +269,7 @@ export function FAQ() {
         <AnimatePresence mode="wait">
           {activeTab === 'oracle' ? (
             <motion.div
-              key={`bg-${activeHall.id}`}
+              key={`bg-hall-${activeHall.id}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -479,32 +283,43 @@ export function FAQ() {
             </motion.div>
           ) : (
             <motion.div
-              key="bg-laws"
+              key={`bg-law-${activeLaw.id}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.2 }}
-              className="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-950"
+              transition={{ duration: 0.8 }}
+              className="absolute inset-0"
+              style={{
+                backgroundColor: 'rgba(12, 12, 12, 0.95)' // Fallback dark bg
+              }}
             >
-              {/* Fallback gradient background for Laws tab */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 via-stone-900/80 to-stone-950" />
+              <NextImage
+                src={activeLaw.backgroundImage}
+                alt="Background"
+                fill
+                className="object-cover opacity-30 filter brightness-40 contrast-125 scale-105 grayscale-[30%]"
+                placeholder="blur"
+                priority
+              />
 
-              {/* Readability Overlays */}
-              <div className="absolute inset-0 bg-gradient-to-b from-stone-900/30 via-stone-900/50 to-stone-950/90 mix-blend-multiply" />
-              <div className="absolute inset-0 bg-black/20" />
+              {/* Overlay Pattern */}
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05]" />
 
-              {/* Fog & Dust for Laws */}
-              <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                {[...Array(15)].map((_, i) => (
-                  <div key={i} className="absolute bg-amber-100/20 rounded-full blur-[2px] animate-pulse" style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`, width: `${Math.random() * 4 + 2}px`, height: `${Math.random() * 4 + 2}px`, animationDuration: `${Math.random() * 5 + 3}s` }} />
-                ))}
-              </div>
-              <div className="fixed bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-stone-950/90 via-stone-900/50 to-transparent pointer-events-none" />
+              {/* Dynamic Law Color Glow */}
+              <motion.div
+                key={activeLaw.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.15 }}
+                transition={{ duration: 1 }}
+                className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-amber-500/20 to-transparent pointer-events-none"
+                style={{
+                  background: `radial-gradient(circle at top right, ${activeLawColor}40, transparent 70%)`
+                }}
+              />
             </motion.div>
           )}
         </AnimatePresence>
         <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-        <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-20 md:pt-32 pb-4 md:pb-8">
@@ -533,7 +348,6 @@ export function FAQ() {
                   : 'border-white/20 bg-black/30 hover:bg-black/40 hover:border-yellow-500/50'}
                     `}
             >
-              {/* Active Glow */}
               {activeTab === tab && (
                 <motion.div layoutId="tab-glow" className="absolute inset-0 bg-yellow-500/10 blur-sm" />
               )}
@@ -585,7 +399,7 @@ export function FAQ() {
                               <div className={`p-1.5 md:p-2 rounded-md transition-colors duration-300 backdrop-blur-sm bg-black/50`}><Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: isActive ? hall.colors.primary : '#9CA3AF' }} /></div>
                               <div className="flex flex-col"><h3 className={`font-bold text-xs tracking-wide whitespace-nowrap ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>{hall.name.replace('Hall of ', '')}</h3><p className="hidden md:block text-[10px] text-gray-500 uppercase tracking-widest font-sans">{hall.questions.length} Questions</p></div>
                             </div>
-                            {isActive && <motion.div layoutId="active-dot" className="hidden lg:block"><ChevronRight className="w-4 h-4 text-white opacity-50" /></motion.div>}
+                            {isActive && <motion.div layoutId="active-dot-hall" className="hidden lg:block"><ChevronRight className="w-4 h-4 text-white opacity-50" /></motion.div>}
                           </div>
                         </button>
                       );
@@ -625,139 +439,117 @@ export function FAQ() {
                 </main>
               </motion.div>
             ) : (
-              /* LAWS OF OLYMPUS TAB */
+              /* LAWS OF OLYMPUS TAB (Redesigned) */
               <motion.div
-                ref={lawsScrollRef}
                 key="laws-content"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.5, type: "spring" }}
-                className="w-full h-full overflow-y-auto flex justify-center scrollbar-none"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col lg:flex-row gap-4 md:gap-6 w-full h-full overflow-hidden"
               >
-                <div className="w-full max-w-4xl px-4 pb-20">
-                  {/* Enhanced Header Intro */}
-                  <motion.div
-                    className="text-center mb-14 mt-6 relative"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    {/* Background glow effects */}
-                    <motion.div
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-amber-500/10 blur-[100px] rounded-full pointer-events-none"
-                      animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-                      transition={{ duration: 6, repeat: Infinity }}
-                    />
-                    <motion.div
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-yellow-500/15 blur-[60px] rounded-full pointer-events-none"
-                      animate={{ scale: [1.2, 1, 1.2], opacity: [0.15, 0.25, 0.15] }}
-                      transition={{ duration: 4, repeat: Infinity }}
-                    />
-
-                    {/* Top decorative line */}
-                    <motion.div
-                      className="flex items-center justify-center gap-4 mb-6"
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ delay: 0.3, duration: 0.8 }}
-                    >
-                      <div className="h-px w-16 md:w-32 bg-gradient-to-r from-transparent to-amber-500/60" />
-                      <motion.span
-                        className="text-amber-500 text-2xl"
-                        animate={{ rotate: [0, 360] }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                      >
-                        ⚖
-                      </motion.span>
-                      <div className="h-px w-16 md:w-32 bg-gradient-to-l from-transparent to-amber-500/60" />
-                    </motion.div>
-
-                    <motion.h2
-                      className="text-4xl md:text-6xl font-bold uppercase tracking-[0.2em] mb-4 font-[Cinzel] relative z-10"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      <span className="text-transparent bg-clip-text bg-gradient-to-b from-amber-100 via-amber-400 to-amber-600 drop-shadow-[0_0_30px_rgba(245,158,11,0.4)]">
-                        The Sacred Code
-                      </span>
-                    </motion.h2>
-
-                    <motion.p
-                      className="text-amber-200/80 font-serif italic text-base md:text-lg max-w-lg mx-auto"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                    >
-                      &quot;By participating, you swear upon the River Styx to honor these laws.&quot;
-                    </motion.p>
-
-                    {/* Decorative symbols */}
-                    <motion.div
-                      className="flex items-center justify-center gap-6 mt-6"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.6 }}
-                    >
-                      {['Ω', '⚔', 'Δ'].map((symbol, i) => (
-                        <motion.span
-                          key={i}
-                          className="text-amber-500/40 text-lg font-serif"
-                          animate={{ y: [0, -3, 0] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-                        >
-                          {symbol}
-                        </motion.span>
-                      ))}
-                    </motion.div>
-                  </motion.div>
-
-                  {/* Laws Grid */}
-                  <div className="space-y-5">
-                    {laws.map((rule, index) => (
-                      <LawCard
-                        key={rule.id}
-                        rule={rule}
-                        isOpen={expandedRuleId === rule.id}
-                        onToggle={() => setExpandedRuleId(expandedRuleId === rule.id ? null : rule.id)}
-                        index={index}
-                      />
-                    ))}
+                {/* Sidebar - Law Categories */}
+                <aside className="w-full lg:w-[300px] shrink-0 lg:h-full flex flex-col gap-3 md:gap-4">
+                  {/* Optional: Small header for the sidebar or just the list */}
+                  <div className="p-4 rounded-lg bg-amber-900/20 border border-amber-500/20 backdrop-blur-sm mb-2 shrink-0 hidden lg:block">
+                    <h3 className="text-amber-400 font-[Cinzel] text-sm tracking-widest text-center">THE CODE AWAITS</h3>
                   </div>
 
-                  {/* Enhanced Footer */}
-                  <motion.div
-                    className="mt-20 text-center relative"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
-                  >
-                    <div className="flex items-center justify-center gap-4 mb-4">
-                      <div className="h-px w-12 bg-gradient-to-r from-transparent to-amber-500/40" />
+                  <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-track-transparent pr-1 pb-1 min-h-[60px] lg:min-h-0">
+                    {laws.map((rule) => {
+                      const isActive = activeLawId === rule.id;
+                      const Icon = rule.icon;
+
+                      // Extract color for border/active state from the Tailwind class (simplified)
+                      const activeColor = rule.color.includes('yellow') ? '#F59E0B' :
+                        rule.color.includes('red') ? '#EF4444' :
+                          rule.color.includes('blue') ? '#3B82F6' :
+                            rule.color.includes('green') ? '#10B981' :
+                              rule.color.includes('indigo') ? '#6366F1' : '#A855F7';
+
+                      return (
+                        <button key={rule.id} onClick={() => handleLawChange(rule.id)} className={`relative group shrink-0 lg:w-full text-left p-3 md:p-4 rounded-lg border transition-all duration-300 overflow-hidden backdrop-blur-sm ${isActive ? 'bg-black/40 border-white/20 shadow-lg' : 'bg-black/20 border-white/10 hover:bg-black/30'}`}>
+                          {/* Active Background Tint */}
+                          <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300" style={{ backgroundColor: activeColor }} />
+                          {isActive && <div className="absolute left-0 bottom-0 right-0 h-1 lg:top-0 lg:bottom-0 lg:right-auto lg:w-1 lg:h-auto" style={{ backgroundColor: activeColor }} />}
+
+                          <div className="flex items-center justify-between relative z-10 w-full min-w-[140px] lg:min-w-0">
+                            <div className="flex items-center gap-2 md:gap-3">
+                              <div className={`p-1.5 md:p-2 rounded-md transition-colors duration-300 backdrop-blur-sm bg-black/50`}><Icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: isActive ? activeColor : '#9CA3AF' }} /></div>
+                              <div className="flex flex-col">
+                                <h3 className={`font-bold text-xs tracking-wide whitespace-nowrap ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>{rule.title}</h3>
+                                <p className="hidden md:block text-[10px] text-gray-500 uppercase tracking-widest font-sans">{rule.subtitle}</p>
+                              </div>
+                            </div>
+                            {isActive && <motion.div layoutId="active-dot-law" className="hidden lg:block"><ChevronRight className="w-4 h-4 text-white opacity-50" /></motion.div>}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </nav>
+                </aside>
+
+                {/* Main Laws Content Area */}
+                <main className="flex-1 rounded-2xl p-4 md:p-6 lg:p-8 relative overflow-hidden flex flex-col min-h-0 bg-black/10 border border-white/5 backdrop-blur-sm">
+                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2">
+                    <AnimatePresence mode="wait">
                       <motion.div
-                        animate={{ rotate: [0, 10, -10, 0] }}
-                        transition={{ duration: 4, repeat: Infinity }}
+                        key={activeLaw.id}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.4 }}
+                        className="flex flex-col"
                       >
-                        <ScrollText className="w-8 h-8 text-amber-500/70" />
+                        {/* Header */}
+                        <div className="mb-6 md:mb-8 text-center md:text-left border-b border-white/20 pb-4 md:pb-6 relative shrink-0">
+                          {/* BG Glow */}
+                          <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 opacity-15 blur-3xl rounded-full pointer-events-none" style={{ backgroundColor: activeLawColor }} />
+
+                          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-3 md:mb-4">
+                            <div className="p-2 md:p-3 rounded-xl bg-black/40 backdrop-blur-md shadow-xl border border-white/20">
+                              <activeLaw.icon className="w-6 h-6 md:w-10 md:h-10" style={{ color: activeLawColor }} />
+                            </div>
+                            <div>
+                              <h2 className="text-xl md:text-3xl font-bold tracking-wider mb-1 md:mb-2" style={{ color: activeLawColor }}>{activeLaw.title}</h2>
+                              <h3 className="text-base md:text-lg text-gray-300 font-serif italic drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">{activeLaw.subtitle}</h3>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Content List */}
+                        <div className="space-y-4">
+                          {activeLaw.content.map((ruleText, idx) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: idx * 0.1 }}
+                              className="group relative overflow-hidden rounded-lg border border-white/10 bg-black/20 p-4 md:p-5 hover:bg-black/30 transition-colors"
+                            >
+                              <div className="flex items-start gap-4">
+                                <div className="mt-1.5 w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: activeLawColor }} />
+                                <p className="text-gray-200 leading-relaxed font-sans text-sm md:text-base">{ruleText}</p>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+
+                        {/* Footer for content */}
+                        <motion.div
+                          className="flex items-center justify-center gap-3 mt-12 pt-6 border-t border-white/10 opacity-60"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 0.6 }}
+                          transition={{ delay: 0.8 }}
+                        >
+                          <div className="h-px w-8 bg-gradient-to-r from-transparent to-white/50" style={{ backgroundImage: `linear-gradient(to right, transparent, ${activeLawColor}80)` }} />
+                          <span className="text-lg" style={{ color: activeLawColor }}>⚖</span>
+                          <div className="h-px w-8 bg-gradient-to-l from-transparent to-white/50" style={{ backgroundImage: `linear-gradient(to left, transparent, ${activeLawColor}80)` }} />
+                        </motion.div>
                       </motion.div>
-                      <div className="h-px w-12 bg-gradient-to-l from-transparent to-amber-500/40" />
-                    </div>
-                    <span className="text-xs uppercase tracking-[0.35em] text-amber-300/50 font-[Cinzel]">
-                      Decreed by the Gods of HackJKLU
-                    </span>
-                    <motion.div
-                      className="mt-4 flex justify-center gap-2"
-                      animate={{ opacity: [0.3, 0.6, 0.3] }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                    >
-                      {['⚡', '🏛️', '⚡'].map((emoji, i) => (
-                        <span key={i} className="text-sm">{emoji}</span>
-                      ))}
-                    </motion.div>
-                  </motion.div>
-                </div>
+                    </AnimatePresence>
+                  </div>
+                </main>
               </motion.div>
             )}
           </AnimatePresence>
