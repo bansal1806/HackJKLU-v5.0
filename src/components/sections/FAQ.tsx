@@ -246,6 +246,10 @@ export function FAQ() {
     );
   }, []);
 
+  useEffect(() => {
+    setSearchQuery('');
+  }, [activeTab]);
+
   const activeHall = halls.find((h) => h.id === activeHallId) || halls[0];
   const activeLaw = laws.find((l) => l.id === activeLawId) || laws[0];
 
@@ -264,6 +268,13 @@ export function FAQ() {
     })).filter((h) => h.questions.length > 0)
     : [activeHall];
 
+  const filteredLaws = searchQuery
+    ? laws.map((law) => ({
+      ...law,
+      content: law.content.filter((c) => c.toLowerCase().includes(searchQuery.toLowerCase())),
+    })).filter((l) => l.content.length > 0)
+    : [];
+
   const handleHallChange = (id: string) => {
     setActiveHallId(id);
     setSearchQuery('');
@@ -278,14 +289,14 @@ export function FAQ() {
     <section className="h-[100dvh] min-h-[500px] w-full bg-[#0F172A] text-white relative overflow-hidden font-cinzel flex flex-col">
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none transition-opacity duration-1000">
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {activeTab === 'oracle' ? (
             <motion.div
               key={`bg-hall-${activeHall.id}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.5 }}
               className="absolute inset-0"
               style={{ backgroundColor: activeHall.colors.secondary }}
             >
@@ -299,7 +310,7 @@ export function FAQ() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.5 }}
               className="absolute inset-0"
               style={{
                 backgroundColor: 'rgba(12, 12, 12, 0.95)' // Fallback dark bg
@@ -309,7 +320,7 @@ export function FAQ() {
                 src={activeLaw.backgroundImage}
                 alt="Background"
                 fill
-                className="object-cover opacity-30 filter brightness-40 contrast-125 scale-105 grayscale-[30%]"
+                className="object-cover opacity-60 filter brightness-50 contrast-125 scale-105"
                 placeholder="blur"
                 priority
               />
@@ -332,6 +343,16 @@ export function FAQ() {
           )}
         </AnimatePresence>
         <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+
+        {/* Preload inactive images (hidden) to prevent loading delay on switch */}
+        <div className="fixed inset-0 pointer-events-none opacity-0 overflow-hidden w-0 h-0">
+          {halls.filter(h => h.id !== activeHall.id).map(h => (
+            <NextImage key={h.id} src={h.backgroundImage} alt="" fill priority={false} loading="eager" />
+          ))}
+          {laws.filter(l => l.id !== activeLaw.id).map(l => (
+            <NextImage key={l.id} src={l.backgroundImage} alt="" fill priority={false} loading="eager" />
+          ))}
+        </div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10 max-w-7xl flex-1 flex flex-col min-h-0 pt-20 md:pt-32 pb-4 md:pb-8">
@@ -463,8 +484,16 @@ export function FAQ() {
                 {/* Sidebar - Law Categories */}
                 <aside className="w-full lg:w-[300px] shrink-0 lg:h-full flex flex-col gap-3 md:gap-4">
                   {/* Optional: Small header for the sidebar or just the list */}
-                  <div className="p-4 rounded-lg bg-amber-900/20 border border-amber-500/20 backdrop-blur-sm mb-2 shrink-0 hidden lg:block">
-                    <h3 className="text-amber-400 font-[Cinzel] text-sm tracking-widest text-center">THE CODE AWAITS</h3>
+                  {/* Search Input for Laws */}
+                  <div className="relative group shrink-0 mb-2 hidden lg:block">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 md:w-5 h-4 md:h-5 text-gray-400 group-focus-within:text-white transition-colors" />
+                    <input
+                      type="text"
+                      placeholder="Search laws..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full bg-black/40 backdrop-blur-sm border border-white/20 rounded-lg py-2 md:py-3 pl-9 md:pl-10 pr-4 text-sm font-sans focus:outline-none focus:border-yellow-500/50 transition-all placeholder:text-gray-500"
+                    />
                   </div>
 
                   <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-track-transparent pr-1 pb-1 min-h-[60px] lg:min-h-0">
@@ -504,86 +533,109 @@ export function FAQ() {
                 {/* Main Laws Content Area */}
                 <main className="flex-1 rounded-2xl p-4 md:p-6 lg:p-8 relative overflow-hidden flex flex-col min-h-0 bg-black/10 border border-white/5 backdrop-blur-sm">
                   <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={activeLaw.id}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.4 }}
-                        className="flex flex-col"
-                      >
-                        {/* Header */}
-                        <div className="mb-6 md:mb-8 text-center md:text-left border-b border-white/20 pb-4 md:pb-6 relative shrink-0">
-                          {/* BG Glow */}
-                          <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 opacity-15 blur-3xl rounded-full pointer-events-none" style={{ backgroundColor: activeLawColor }} />
-
-                          <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-3 md:mb-4">
-                            <div className="p-2 md:p-3 rounded-xl bg-black/40 backdrop-blur-md shadow-xl border border-white/20">
-                              <activeLaw.icon className="w-6 h-6 md:w-10 md:h-10" style={{ color: activeLawColor }} />
-                            </div>
-                            <div>
-                              <h2 className="text-xl md:text-3xl font-bold tracking-wider mb-1 md:mb-2" style={{ color: activeLawColor }}>{activeLaw.title}</h2>
-                              <h3 className="text-base md:text-lg text-gray-300 font-serif italic drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">{activeLaw.subtitle}</h3>
+                    {searchQuery ? (
+                      <div className="space-y-6 md:space-y-8">
+                        <h2 className="text-lg md:text-xl font-bold text-gray-400 mb-4 md:mb-6 flex items-center gap-2"><Search className="w-5 h-5" /> Search Results for &quot;{searchQuery}&quot;</h2>
+                        {filteredLaws.map((law) => (
+                          <div key={law.id} className="mb-6 md:mb-8">
+                            <h3 className="text-xs md:text-sm uppercase tracking-widest mb-3 md:mb-4 font-bold flex items-center gap-2" style={{ color: activeLawColor }}><law.icon className="w-4 h-4" />{law.title}</h3>
+                            <div className="space-y-3">
+                              {law.content.map((rule, idx) => (
+                                <div key={idx} className="group relative overflow-hidden rounded-lg border border-white/10 bg-black/20 p-4 md:p-5 hover:bg-black/30 transition-colors">
+                                  <div className="flex items-start gap-4">
+                                    <div className="mt-1.5 w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: activeLawColor }} />
+                                    <p className="text-gray-200 leading-relaxed font-sans text-sm md:text-base">{rule}</p>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                        </div>
-
-                        {/* Fog & Dust Particles (Client-side only to avoid hydration mismatch) */}
-                        {particles.map((p, i) => (
-                          <motion.div
-                            key={i}
-                            className="absolute w-1 h-1 bg-white rounded-full opacity-0"
-                            style={{
-                              top: `${p.top}%`,
-                              left: `${p.left}%`,
-                              boxShadow: '0 0 10px 2px rgba(255, 255, 255, 0.1)',
-                            }}
-                            animate={{
-                              y: [-20, -100],
-                              opacity: [0, 0.3, 0],
-                              scale: [0, 1.5, 0],
-                            }}
-                            transition={{
-                              duration: p.duration,
-                              repeat: Infinity,
-                              ease: "linear",
-                              delay: p.delay,
-                            }}
-                          />
                         ))}
-
-                        {/* Content List */}
-                        <div className="space-y-4">
-                          {activeLaw.content.map((ruleText, idx) => (
-                            <motion.div
-                              key={idx}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: idx * 0.1 }}
-                              className="group relative overflow-hidden rounded-lg border border-white/10 bg-black/20 p-4 md:p-5 hover:bg-black/30 transition-colors"
-                            >
-                              <div className="flex items-start gap-4">
-                                <div className="mt-1.5 w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: activeLawColor }} />
-                                <p className="text-gray-200 leading-relaxed font-sans text-sm md:text-base">{ruleText}</p>
-                              </div>
-                            </motion.div>
-                          ))}
-                        </div>
-
-                        {/* Footer for content */}
+                        {filteredLaws.length === 0 && <p className="text-gray-500 text-center py-10 font-sans italic">No laws found matching your query.</p>}
+                      </div>
+                    ) : (
+                      <AnimatePresence mode="wait">
                         <motion.div
-                          className="flex items-center justify-center gap-3 mt-12 pt-6 border-t border-white/10 opacity-60"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 0.6 }}
-                          transition={{ delay: 0.8 }}
+                          key={activeLaw.id}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.4 }}
+                          className="flex flex-col"
                         >
-                          <div className="h-px w-8 bg-gradient-to-r from-transparent to-white/50" style={{ backgroundImage: `linear-gradient(to right, transparent, ${activeLawColor}80)` }} />
-                          <span className="text-lg" style={{ color: activeLawColor }}>⚖</span>
-                          <div className="h-px w-8 bg-gradient-to-l from-transparent to-white/50" style={{ backgroundImage: `linear-gradient(to left, transparent, ${activeLawColor}80)` }} />
+                          {/* Header */}
+                          <div className="mb-6 md:mb-8 text-center md:text-left border-b border-white/20 pb-4 md:pb-6 relative shrink-0">
+                            {/* BG Glow */}
+                            <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 opacity-15 blur-3xl rounded-full pointer-events-none" style={{ backgroundColor: activeLawColor }} />
+
+                            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-3 md:mb-4">
+                              <div className="p-2 md:p-3 rounded-xl bg-black/40 backdrop-blur-md shadow-xl border border-white/20">
+                                <activeLaw.icon className="w-6 h-6 md:w-10 md:h-10" style={{ color: activeLawColor }} />
+                              </div>
+                              <div>
+                                <h2 className="text-xl md:text-3xl font-bold tracking-wider mb-1 md:mb-2" style={{ color: activeLawColor }}>{activeLaw.title}</h2>
+                                <h3 className="text-base md:text-lg text-gray-300 font-serif italic drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">{activeLaw.subtitle}</h3>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Fog & Dust Particles (Client-side only to avoid hydration mismatch) */}
+                          {particles.map((p, i) => (
+                            <motion.div
+                              key={i}
+                              className="absolute w-1 h-1 bg-white rounded-full opacity-0"
+                              style={{
+                                top: `${p.top}%`,
+                                left: `${p.left}%`,
+                                boxShadow: '0 0 10px 2px rgba(255, 255, 255, 0.1)',
+                              }}
+                              animate={{
+                                y: [-20, -100],
+                                opacity: [0, 0.3, 0],
+                                scale: [0, 1.5, 0],
+                              }}
+                              transition={{
+                                duration: p.duration,
+                                repeat: Infinity,
+                                ease: "linear",
+                                delay: p.delay,
+                              }}
+                            />
+                          ))}
+
+                          {/* Content List */}
+                          <div className="space-y-4">
+                            {activeLaw.content.map((ruleText, idx) => (
+                              <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="group relative overflow-hidden rounded-lg border border-white/10 bg-black/20 p-4 md:p-5 hover:bg-black/30 transition-colors"
+                              >
+                                <div className="flex items-start gap-4">
+                                  <div className="mt-1.5 w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: activeLawColor }} />
+                                  <p className="text-gray-200 leading-relaxed font-sans text-sm md:text-base">{ruleText}</p>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+
+                          {/* Footer for content */}
+                          <motion.div
+                            className="flex items-center justify-center gap-3 mt-12 pt-6 border-t border-white/10 opacity-60"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.6 }}
+                            transition={{ delay: 0.8 }}
+                          >
+                            <div className="h-px w-8 bg-gradient-to-r from-transparent to-white/50" style={{ backgroundImage: `linear-gradient(to right, transparent, ${activeLawColor}80)` }} />
+                            <span className="text-lg" style={{ color: activeLawColor }}>⚖</span>
+                            <div className="h-px w-8 bg-gradient-to-l from-transparent to-white/50" style={{ backgroundImage: `linear-gradient(to left, transparent, ${activeLawColor}80)` }} />
+                          </motion.div>
                         </motion.div>
-                      </motion.div>
-                    </AnimatePresence>
+
+                      </AnimatePresence>
+                    )}
                   </div>
                 </main>
               </motion.div>
