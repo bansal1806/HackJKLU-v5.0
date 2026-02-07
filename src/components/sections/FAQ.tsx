@@ -233,6 +233,18 @@ export function FAQ() {
   const [activeLawId, setActiveLawId] = useState<string>('general');
   const [searchQuery, setSearchQuery] = useState('');
   const [openQuestionId, setOpenQuestionId] = useState<string | null>(null);
+  const [particles, setParticles] = useState<{ top: number; left: number; duration: number; delay: number }[]>([]);
+
+  useEffect(() => {
+    setParticles(
+      [...Array(15)].map(() => ({
+        top: Math.random() * 100,
+        left: Math.random() * 100,
+        duration: 10 + Math.random() * 20,
+        delay: Math.random() * 5,
+      }))
+    );
+  }, []);
 
   const activeHall = halls.find((h) => h.id === activeHallId) || halls[0];
   const activeLaw = laws.find((l) => l.id === activeLawId) || laws[0];
@@ -516,6 +528,30 @@ export function FAQ() {
                             </div>
                           </div>
                         </div>
+
+                        {/* Fog & Dust Particles (Client-side only to avoid hydration mismatch) */}
+                        {particles.map((p, i) => (
+                          <motion.div
+                            key={i}
+                            className="absolute w-1 h-1 bg-white rounded-full opacity-0"
+                            style={{
+                              top: `${p.top}%`,
+                              left: `${p.left}%`,
+                              boxShadow: '0 0 10px 2px rgba(255, 255, 255, 0.1)',
+                            }}
+                            animate={{
+                              y: [-20, -100],
+                              opacity: [0, 0.3, 0],
+                              scale: [0, 1.5, 0],
+                            }}
+                            transition={{
+                              duration: p.duration,
+                              repeat: Infinity,
+                              ease: "linear",
+                              delay: p.delay,
+                            }}
+                          />
+                        ))}
 
                         {/* Content List */}
                         <div className="space-y-4">
