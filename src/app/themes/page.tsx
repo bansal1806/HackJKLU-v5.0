@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     keywords:
         'hackathon themes, EdTech, HealthTech, Smart Cities, AgriTech, Environment, Women Safety, FinTech, HackJKLU v5.0, innovation, technology',
     alternates: {
-        canonical: '/themes',
+        canonical: '/themes/',
     },
 };
 

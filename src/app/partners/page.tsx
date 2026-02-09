@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     keywords:
         'hackathon partners, sponsors, HackJKLU v5.0 sponsors, gold partner, tech partners, event sponsors, Ention, WS Cube Tech',
     alternates: {
-        canonical: '/partners',
+        canonical: '/partners/',
     },
 };
 

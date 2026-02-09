@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     keywords:
         'hackathon FAQ, HackJKLU v5.0 questions, registration, eligibility, rules, team formation',
     alternates: {
-        canonical: '/faq',
+        canonical: '/faq/',
     },
 };
 

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     keywords:
         'hackathon gallery, HackJKLU photos, past events, hackathon moments, event photography, 3D gallery',
     alternates: {
-        canonical: '/gallery',
+        canonical: '/gallery/',
     },
 };
 

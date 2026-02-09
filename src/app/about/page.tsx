@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     keywords:
         'about HackJKLU v5.0, hackathon story, Greek mythology theme, innovation event, tech community',
     alternates: {
-        canonical: '/about',
+        canonical: '/about/',
     },
 };
 

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     keywords:
         'hackathon sponsorship, sponsor HackJKLU, tech sponsorship, student developers, brand exposure',
     alternates: {
-        canonical: '/sponsor',
+        canonical: '/sponsor/',
     },
 };
 

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     keywords:
         'problem statements, hackathon challenges, HackJKLU v5.0, submit problems, innovation challenges',
     alternates: {
-        canonical: '/problem-statements',
+        canonical: '/problem-statements/',
     },
 };
 

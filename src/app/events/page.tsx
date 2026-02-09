@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     keywords:
         'hackathon events, HackJKLU v5.0 activities, workshops, networking, tech talks',
     alternates: {
-        canonical: '/events',
+        canonical: '/events/',
     },
 };
 

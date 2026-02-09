@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     keywords:
         'hackathon prizes, HackJKLU v5.0 rewards, cash prizes, tech goodies, coding competition awards, mythic rewards',
     alternates: {
-        canonical: '/prizes',
+        canonical: '/prizes/',
     },
 };
 

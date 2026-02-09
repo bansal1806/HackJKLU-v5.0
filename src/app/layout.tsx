@@ -59,7 +59,7 @@ export const metadata: Metadata = {
         },
     },
     alternates: {
-        canonical: './',
+        canonical: '/',
     },
     icons: {
         icon: '/owl-logo.png',
