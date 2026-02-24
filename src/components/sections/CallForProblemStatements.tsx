@@ -17,7 +17,7 @@ const partners = [
     { name: "Fluxor", img: "/partners/fluxor-logo.webp" },
 ];
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzP4Cslfhv506Nc-giwDLuyhJfcP7nkNd_txc-nAsuv6oKl2PwGEY6yCwFpxNSvoWlq3g/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx8L3OF8Bf_hLVGWZ5tGTMee6jnswrf3a2bh0SLdUnpQwrr_fsIVZffjqgwNanCNXOX/exec";
 
 const contactCards = [
     { name: "Pratigya Bomb", title: "Problem Statement Core", phone: "+916264667506", email: "pratigyabomb@jklu.edu.in", role: "HERALD OF CHALLENGES" },
@@ -345,19 +345,30 @@ export function CallForProblemStatements() {
         setIsSubmitDisabled(true);
         setSubmitText("The Oracle Speaks...");
 
-        fetch(API_URL, { method: "POST", body: formData, mode: "no-cors" })
-            .then(() => {
-                form.reset();
-                setFormSubmitted(true);
-                setTimeout(() => {
-                    setFormSubmitted(false);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                }, 3000);
-                setSubmitText("Submit to the Oracle");
-                setIsSubmitDisabled(false);
+        fetch(API_URL, { method: "POST", body: formData })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
             })
-            .catch(() => {
+            .then((data) => {
+                if (data.status === "success") {
+                    form.reset();
+                    setFormSubmitted(true);
+                    setTimeout(() => {
+                        setFormSubmitted(false);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                    }, 3000);
+                } else {
+                    alert("❌ Error: " + (data.message || "Submission failed"));
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
                 alert("❌ The Oracle could not receive your message. Please try again.");
+            })
+            .finally(() => {
                 setSubmitText("Submit to the Oracle");
                 setIsSubmitDisabled(false);
             });
