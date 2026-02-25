@@ -159,6 +159,7 @@ export default function TeamPage() {
     const officeRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: containerRef });
     const [selectedCommittee, setSelectedCommittee] = useState<string | null>(null);
+    const [activeTeam, setActiveTeam] = useState<'council' | 'hack'>('council');
 
     const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
@@ -180,26 +181,47 @@ export default function TeamPage() {
                 <PageNavigation />
 
                 {/* SECTION 1: THE OFFICE BEARERS (OH) DIMENSION - RE-THEMED */}
-                <section ref={officeRef} className="relative min-h-screen flex items-center justify-center text-[#ffecd1] overflow-hidden">
+                <section ref={officeRef} className="relative min-h-screen flex flex-col items-center justify-center text-[#ffecd1] overflow-hidden pt-32 pb-20">
 
-                    <div className="container mx-auto px-4 md:px-8 relative z-10 w-full h-full flex flex-col xl:flex-row items-center justify-between gap-12 py-20">
+                    {/* Team Toggles */}
+                    <div className="relative z-20 flex gap-4 sm:gap-6 mb-16 items-center justify-center -mt-10">
+                        <button
+                            onClick={() => setActiveTeam('council')}
+                            className={`flex items-center gap-2 px-6 sm:px-10 py-3 sm:py-4 rounded-full border-[2px] transition-all duration-300 backdrop-blur-md ${activeTeam === 'council' ? 'border-[#ffb800] bg-black/40 text-[#ffb800] shadow-[0_0_20px_rgba(255,184,0,0.15)]' : 'border-white/20 bg-black/20 text-[#a3a3a3] hover:border-white/40 hover:text-white'}`}
+                        >
+                            <span className="text-xl sm:text-2xl pt-1">⚆⚇</span>
+                            <span className="font-[Cinzel] font-bold text-xl sm:text-3xl tracking-wide drop-shadow-md">Council</span>
+                        </button>
+
+                        <button
+                            onClick={() => setActiveTeam('hack')}
+                            className={`flex items-center gap-2 px-6 sm:px-10 py-3 sm:py-4 rounded-full border-[2px] transition-all duration-300 backdrop-blur-md ${activeTeam === 'hack' ? 'border-[#ffb800] bg-black/40 text-[#ffb800] shadow-[0_0_20px_rgba(255,184,0,0.15)]' : 'border-white/20 bg-black/20 text-[#a3a3a3] hover:border-white/40 hover:text-white'}`}
+                        >
+                            <span className="text-lg sm:text-xl">⚖</span>
+                            <span className="font-[Cinzel] font-bold text-xl sm:text-3xl tracking-wide drop-shadow-md">Hack Team</span>
+                        </button>
+                    </div>
+
+                    <div className="container mx-auto px-4 md:px-8 relative z-10 w-full flex flex-col xl:flex-row items-center justify-between gap-12">
 
 
 
                         {/* Center: Office Bearer Portrait Cards */}
                         <div className="flex flex-col md:flex-row flex-wrap gap-8 z-10 w-full justify-center items-center">
-                            {[
-                                { id: 1, src: '/team/OH_TeamCard.jpg', alt: 'Office Bearer' },
-                                { id: 2, src: '/team/OH1_TeamCard.jpg', alt: 'Office Bearer' },
+                            {/* Toggle Data Render */}
+                            {(activeTeam === 'council' ? [
+                                { id: 1, src: '/team/OH_TeamCard.jpg', alt: 'Office Bearer 1' },
+                                { id: 2, src: '/team/OH1_TeamCard.jpg', alt: 'Office Bearer 2' },
                                 { id: 3, src: '/team/OH_PakhiDi.jpg', alt: 'Pakhi Di - Office Bearer' }
-                            ].map((oh, index) => (
+                            ] : [
+                                { id: 4, src: '/team/Tech_TeamCard_SB.jpg', alt: 'Shourya Bansal - Hack Team Lead' },
+                            ]).map((oh, index) => (
                                 <motion.div
-                                    key={oh.id}
-                                    initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
-                                    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                                    viewport={{ once: true, amount: 0.2 }}
-                                    transition={{ duration: 1.0, delay: index * 0.2, ease: [0.22, 1, 0.36, 1] }}
-                                    className="relative w-full max-w-[320px] aspect-[3/4]"
+                                    key={`${activeTeam}-${oh.id}`}
+                                    initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
+                                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                                    transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                                    className="relative w-[280px] sm:w-full sm:max-w-[320px] aspect-[3/4]"
                                 >
                                     <div className="absolute inset-0 bg-[#1a1816] border-[1px] border-[#d4af37]/50 shadow-[0_0_30px_rgba(212,175,55,0.1)]"
                                         style={{ clipPath: 'polygon(30px 0, 100% 0, 100% 100%, 0 100%, 0 30px)' }}
@@ -210,7 +232,7 @@ export default function TeamPage() {
                                                     src={oh.src}
                                                     alt={oh.alt}
                                                     fill
-                                                    className="object-contain"
+                                                    className="object-cover sm:object-contain transition-transform duration-700 hover:scale-105"
                                                     priority={index === 0}
                                                 />
                                                 <div className="absolute inset-0 bg-noise opacity-[0.05] mix-blend-overlay pointer-events-none" />
