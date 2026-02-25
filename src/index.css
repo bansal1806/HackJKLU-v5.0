@@ -360,3 +360,26 @@ textarea,
   border-radius: 50%;
   box-shadow: 0 0 10px var(--gold-shimmer);
 }
+
+/* Marquee Animations for Infinite Carousel */
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-scroll-left {
+  animation: scroll-left var(--speed, 40s) linear infinite;
+}
+
+.animate-scroll-right {
+  animation: scroll-right var(--speed, 40s) linear infinite;
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused !important;
+}

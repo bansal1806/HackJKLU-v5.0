@@ -13,6 +13,7 @@ const pageOrder = [
   { path: '/partners', name: 'Partners' },
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },
+  { path: '/team', name: 'Team' },
   { path: '/sponsor', name: 'Why Sponsor Us ?' },
   { path: '/problem-statements', name: 'Call for Problems' },
   { path: '/itinerary', name: 'Itinerary' },
