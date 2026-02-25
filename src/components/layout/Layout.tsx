@@ -23,10 +23,11 @@ const menuItems = [
   { number: 'V', name: 'Partners', path: '/partners' },
   { number: 'VI', name: 'Past Photos', path: '/gallery' },
   { number: 'VII', name: 'FAQ', path: '/faq' },
-  { number: 'VIII', name: 'Why Sponsor Us ?', path: '/sponsor' },
-  { number: 'IX', name: 'Call for Problems', path: '/problem-statements' },
-  { number: 'X', name: 'Itinerary', path: '/itinerary' },
-  { number: 'XI', name: 'Events', path: '/events' },
+  { number: 'VIII', name: 'Team', path: '/team' },
+  { number: 'IX', name: 'Why Sponsor Us ?', path: '/sponsor' },
+  { number: 'X', name: 'Call for Problems', path: '/problem-statements' },
+  { number: 'XI', name: 'Itinerary', path: '/itinerary' },
+  { number: 'XII', name: 'Events', path: '/events' },
 ];
 
 export function Layout({ children }: LayoutProps) {
