@@ -4,6 +4,7 @@ import { PageNavigation } from '@/components/navigation/PageNavigation';
 import { Footer } from '@/components/navigation/Footer';
 import Image from 'next/image';
 import { PageScrollbar } from '@/components/ui/PageScrollbar';
+import { CloudTransition } from '@/components/ui/CloudTransition';
 
 export const metadata: Metadata = {
     title: 'About HackJKLU v5.0 - The Story Behind the Hackathon',
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
     return (
         <div className="relative min-h-screen">
+            <CloudTransition type="uncover" />
             <PageScrollbar thumbColor="rgba(255, 69, 0, 0.4)" hoverColor="rgba(255, 69, 0, 0.9)" />
             {/* Fixed Background Image */}
             <div className="fixed inset-0 z-0">

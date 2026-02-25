@@ -33,7 +33,7 @@ export default function GalleryPage() {
 
                 {/* Footer Section - Re-enable pointer events for footer interaction */}
                 <div className="bg-neutral-950 border-t border-amber-900/20 pointer-events-auto">
-                    <Footer variant="default" />
+                    <Footer />
                 </div>
             </div>
 

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const pageOrder = [
   { path: '/', name: 'Home' },
-
+  { path: '/about', name: 'About' },
   { path: '/themes', name: 'Themes' },
   { path: '/prizes', name: 'Prizes' },
   { path: '/partners', name: 'Partners' },

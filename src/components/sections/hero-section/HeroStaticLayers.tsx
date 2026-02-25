@@ -205,77 +205,7 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
         ))}
       </div>
 
-      {/* Rings hover container - sized to match outer ring */}
-      <div
-        className="absolute rings-container" // Keep class for hover effects if any
-        style={{
-          top: '54%',
-          left: '50%',
-          width: 'clamp(600px, 120vmin, 1500px)',
-          height: 'clamp(600px, 120vmin, 1500px)',
-          pointerEvents: 'none', // Static layer shouldn't capture events ideally, but parent uses it.
-          // To keep original overlap logic, we might need z-indices to be handled carefully.
-          // BUT, checking Hero.tsx, rings are behind the text.
-          zIndex: 10,
-          // transform moved to CSS for responsive control
-        }}
-      >
-        <style>{`
-                    .rings-container {
-                        transform: translate(-50%, -50%);
-                    }
-                `}</style>
-        {/* Outer Runic Ring */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <img
-            src="/outer_runic_ring.webp"
-            alt="Outer Runic Ring"
-            className="ring-glow-outer animate-spin-reverse"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              opacity: 0.8,
-              animationDuration: '60s',
-              willChange: 'transform',
-            }}
-          />
-        </div>
 
-        {/* Middle Ring */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <img
-            src="/middle_ring.webp"
-            alt="Middle Ring"
-            className="ring-glow-middle animate-spin"
-            style={{
-              width: '88%',
-              height: '88%',
-              objectFit: 'contain',
-              opacity: 0.85,
-              animationDuration: '45s',
-              willChange: 'transform',
-            }}
-          />
-        </div>
-
-        {/* Inner Ring */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <img
-            src="/inner_ring.webp"
-            alt="Inner Ring"
-            className="ring-glow-inner animate-spin-reverse"
-            style={{
-              width: '44%',
-              height: '44%',
-              objectFit: 'contain',
-              opacity: 0.9,
-              animationDuration: '30s',
-              willChange: 'transform',
-            }}
-          />
-        </div>
-      </div>
 
       {/* Lightning Bolt */}
       {/* Code By IJ -- Responsive hai ab */}
@@ -288,7 +218,9 @@ export const HeroStaticLayers = memo(function HeroStaticLayers() {
           left: '50%',
           transform: 'translateX(-50%)',
           width: 'auto',
-          height: 'clamp(26vh, 60vh, 65vh)',
+          height: 'clamp(50vh, 75vh, 85vh)',
+          maxWidth: 'none', // Allow it to exceed screen width
+          minWidth: '100%', // Ensure it's wide enough
           objectFit: 'contain',
           objectPosition: 'bottom center',
           opacity: 1,

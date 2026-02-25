@@ -1,6 +1,18 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+    // Set turbopack root to this project directory to avoid lockfile detection issues
+    turbopack: {
+        root: __dirname,
+        rules: {
+            '*.glsl': { loaders: ['raw-loader'] },
+            '*.vs': { loaders: ['raw-loader'] },
+            '*.fs': { loaders: ['raw-loader'] },
+            '*.vert': { loaders: ['raw-loader'] },
+            '*.frag': { loaders: ['raw-loader'] },
+        },
+    },
+
     // Enable static export for hosting on platforms like Vercel
     output: 'export',
 
@@ -20,6 +32,7 @@ const nextConfig: NextConfig = {
     // Disable image optimization for static export
     images: {
         unoptimized: true,
+        qualities: [25, 50, 75, 85, 100],
     },
 
     // Transpile packages that need it

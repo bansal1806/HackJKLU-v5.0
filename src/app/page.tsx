@@ -10,6 +10,54 @@ import { ChevronDown } from 'lucide-react';
 import { useLoading } from '@/context/LoadingContext';
 import { useRouter } from 'next/navigation';
 
+// Performance Indicator (only shows in dev mode or with ?debug=true)
+const PerformanceIndicator = dynamic(() => import('@/components/ui/PerformanceIndicator').then(mod => ({ default: mod.PerformanceIndicator })), { ssr: false });
+
+// Mobile Home Page (HomePageClient)
+const HomePageClient = dynamic(() => import('./HomePageClient').then(mod => ({ default: mod.HomePageClient })), { ssr: false });
+
+// Device Detection Hook
+function useIsMobile() {
+    const [isMobile, setIsMobile] = useState(false);
+    const [isChecking, setIsChecking] = useState(true);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            // Check multiple factors for mobile detection
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const isSmallScreen = window.innerWidth < 1024; // Tablets and below
+            
+            // Consider it mobile if it matches mobile UA OR (is touch device AND small screen)
+            const mobile = isMobileUA || (isTouchDevice && isSmallScreen);
+            
+            setIsMobile(mobile);
+            setIsChecking(false);
+            
+            console.log('Device Detection:', {
+                isMobileUA,
+                isTouchDevice,
+                isSmallScreen,
+                screenWidth: window.innerWidth,
+                finalDecision: mobile ? 'MOBILE' : 'DESKTOP'
+            });
+        };
+
+        checkMobile();
+
+        // Re-check on resize (for responsive testing)
+        const handleResize = () => {
+            checkMobile();
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return { isMobile, isChecking };
+}
+
 // About Navigation Component with Cloud Transition
 function AboutNavigationText() {
     const [showTransition, setShowTransition] = useState(false);
@@ -85,25 +133,38 @@ function AboutNavigationText() {
                     }
                 }}
             >
-                <span style={{
-                    fontFamily: 'Cinzel, serif',
-                    // RESPONSIVE: Adaptive font sizing for About button
-                    fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', // Scales from 1rem to 1.25rem
-                    fontWeight: '600',
-                    color: '#d4af37',
-                    letterSpacing: 'clamp(0.05em, 0.2vw, 0.1em)', // Responsive letter spacing
-                    textTransform: 'uppercase',
-                    background: 'linear-gradient(45deg, #d4af37, #ffd700, #d4af37)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundSize: '200% 200%',
-                    display: 'block', // Ensure proper text rendering
-                    whiteSpace: 'nowrap' // Prevent text wrapping
-                }}
-                    className="animate-shimmer"
-                >
-                    About the Quest
-                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <span style={{
+                        fontFamily: 'GodOfThunder',
+                        // RESPONSIVE: Adaptive font sizing for About button
+                        fontSize: 'clamp(1.2rem, 3vw, 1.5rem)', // Increased size for new font
+                        fontWeight: 'normal', // GodOfThunder is heavy enough
+                        color: '#d4af37',
+                        letterSpacing: 'clamp(0.05em, 0.2vw, 0.1em)',
+                        textTransform: 'uppercase',
+                        background: 'linear-gradient(45deg, #d4af37, #ffd700, #d4af37)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundSize: '200% 200%',
+                        display: 'block',
+                        whiteSpace: 'nowrap',
+                        marginBottom: '0.2rem'
+                    }}
+                        className="animate-shimmer"
+                    >
+                        About the Quest
+                    </span>
+                    <span style={{
+                        fontFamily: 'Cinzel, serif',
+                        fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)',
+                        color: '#b38f2e', // Darker gold/bronze for subtitle
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        opacity: 0.9
+                    }}>
+                        Click to explore
+                    </span>
+                </div>
             </motion.button>
         </>
     );
@@ -502,7 +563,48 @@ class ImageCloudSystem {
     }
 }
 
-export default function CloudParallaxPage() {
+// Main Page Component with Device Detection
+export default function HomePage() {
+    const { isMobile, isChecking } = useIsMobile();
+
+    // Show loading state while checking device
+    if (isChecking) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                backgroundColor: '#000',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <div style={{
+                    width: '50px',
+                    height: '50px',
+                    border: '3px solid #d4af37',
+                    borderTop: '3px solid transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                }} />
+                <style>{`
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
+    // Render appropriate version based on device
+    if (isMobile) {
+        return <HomePageClient />;
+    }
+
+    return <CloudParallaxPage />;
+}
+
+// Desktop/Laptop Cloud Parallax Page Component
+function CloudParallaxPage() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const fgCanvasRef = useRef<HTMLCanvasElement>(null);
     const systemRef = useRef<ImageCloudSystem | null>(null);
@@ -515,19 +617,25 @@ export default function CloudParallaxPage() {
     // Scroll handling for Z-Axis Text Animations
     const { scrollYProgress } = useScroll();
 
+    // CRITICAL FIX: Reduce spring stiffness for better performance on low-end devices
     // Smooth the scroll usage for cleaner transforms
-    const smoothScroll = useSpring(scrollYProgress, { stiffness: 100, damping: 20, restDelta: 0.001 });
+    const smoothScroll = useSpring(scrollYProgress, {
+        stiffness: 50,  // Reduced from 100 for smoother performance
+        damping: 25,    // Increased from 20 for less oscillation
+        restDelta: 0.001,
+        restSpeed: 0.001 // Add rest speed to stop calculations sooner
+    });
 
     // Z-Axis Fly-Through Logic:
     // 1. Sky Realm (0 - 0.3)
     // Updated: Cap scale to prevent overflow, sync opacity with Zeus
     const skyScale = useTransform(smoothScroll, [0, 0.1, 0.25], [1, 1.2, 1.5]); // Capped at 1.5
-    const skyOpacity = useTransform(smoothScroll, [0, 0.05, 0.15, 0.25], [0, 1, 1, 0]); // Fade with Zeus
+    const skyOpacity = useTransform(smoothScroll, [0, 0.15, 0.25], [1, 1, 0]); // Fade with Zeus
     const skyBlur = useTransform(smoothScroll, [0.3, 0.4], [0, 20]); // Motion blur effect
 
     // Zeus Silhouette - Holographic Effect (appears then fades)
     // Updated: Goes to Full Visibility
-    const zeusOpacity = useTransform(smoothScroll, [0, 0.05, 0.15, 0.25], [0, 1, 1, 0]);
+    const zeusOpacity = useTransform(smoothScroll, [0, 0.15, 0.25], [1, 1, 0]);
     const zeusScale = useTransform(smoothScroll, [0.05, 0.15, 0.25], [0.8, 1.2, 3.5]); // More Intimidating Scale
 
     // 2. Quote (0.2 - 0.45)
@@ -627,6 +735,68 @@ export default function CloudParallaxPage() {
         const system = new ImageCloudSystem(canvas, fgCanvas);
         systemRef.current = system;
 
+        // CRITICAL FIX: Detect device performance capability
+        let performanceMode: 'high' | 'medium' | 'low' = 'high';
+        let targetFPS = 60;
+        let frameSkip = 1; // Render every frame by default
+
+        // Performance detection based on multiple factors
+        const detectPerformance = () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const pixelCount = width * height;
+
+            // Check for hardware acceleration
+            const canvas2d = document.createElement('canvas');
+            const ctx = canvas2d.getContext('2d', { willReadFrequently: false });
+            const isHardwareAccelerated = ctx ? true : false;
+
+            // Check device memory (if available)
+            const deviceMemory = (navigator as any).deviceMemory || 4; // Default to 4GB
+
+            // Check CPU cores
+            const cpuCores = navigator.hardwareConcurrency || 2;
+
+            // Performance scoring
+            let performanceScore = 0;
+
+            // Screen resolution impact
+            if (pixelCount > 2073600) performanceScore -= 2; // > 1920x1080
+            else if (pixelCount > 1440000) performanceScore -= 1; // > 1600x900
+
+            // Memory impact
+            if (deviceMemory >= 8) performanceScore += 2;
+            else if (deviceMemory >= 4) performanceScore += 1;
+            else performanceScore -= 1;
+
+            // CPU impact
+            if (cpuCores >= 8) performanceScore += 2;
+            else if (cpuCores >= 4) performanceScore += 1;
+            else performanceScore -= 1;
+
+            // Hardware acceleration
+            if (!isHardwareAccelerated) performanceScore -= 2;
+
+            // Determine performance mode
+            if (performanceScore >= 2) {
+                performanceMode = 'high';
+                targetFPS = 60;
+                frameSkip = 1;
+            } else if (performanceScore >= 0) {
+                performanceMode = 'medium';
+                targetFPS = 45;
+                frameSkip = 1;
+            } else {
+                performanceMode = 'low';
+                targetFPS = 30;
+                frameSkip = 2; // Render every other frame
+            }
+
+            console.log(`Performance Mode: ${performanceMode} (Score: ${performanceScore}, FPS: ${targetFPS}, Memory: ${deviceMemory}GB, Cores: ${cpuCores})`);
+        };
+
+        detectPerformance();
+
         const handleResize = () => {
             // OPTIMIZATION: Cap Pixel Ratio to 1.0 for performance on high-DPI screens
             // This prevents 4x renders on Retina/4K screens which kills FPS
@@ -637,34 +807,53 @@ export default function CloudParallaxPage() {
             fgCanvas.height = window.innerHeight * dpr;
 
             // Scale context to match
-            const ctx = canvas.getContext('2d')!;
-            const fgCtx = fgCanvas.getContext('2d')!;
+            const ctx = canvas.getContext('2d', {
+                alpha: true,
+                desynchronized: true, // CRITICAL: Allow async rendering
+                willReadFrequently: false // CRITICAL: Optimize for drawing
+            })!;
+            const fgCtx = fgCanvas.getContext('2d', {
+                alpha: true,
+                desynchronized: true,
+                willReadFrequently: false
+            })!;
             ctx.scale(dpr, dpr);
             fgCtx.scale(dpr, dpr);
 
-            // RESPONSIVE: Adaptive Cloud Count based on screen size and performance
+            // RESPONSIVE: Adaptive Cloud Count based on screen size and performance mode
             const width = window.innerWidth;
             const height = window.innerHeight;
-            const screenArea = width * height;
 
             let cloudCount = 120; // Default for large laptops
 
-            // Adjust cloud count based on screen size and aspect ratio
+            // Adjust based on performance mode FIRST
+            if (performanceMode === 'low') {
+                cloudCount = 60; // Significantly reduce for low-end devices
+            } else if (performanceMode === 'medium') {
+                cloudCount = 90; // Moderate reduction
+            }
+
+            // Then adjust cloud count based on screen size
             if (width < 1200 || height < 700) {
-                cloudCount = 80; // Smaller laptops (13-14 inch)
+                cloudCount = Math.floor(cloudCount * 0.7); // Smaller laptops
             } else if (width < 1400 || height < 900) {
-                cloudCount = 100; // Medium laptops (15 inch)
+                cloudCount = Math.floor(cloudCount * 0.85); // Medium laptops
             } else if (width >= 1600 && height >= 1000) {
-                cloudCount = 140; // Large laptops (17+ inch, high res)
+                cloudCount = Math.floor(cloudCount * 1.1); // Large laptops (but capped by performance)
             }
 
             // Further adjust for ultra-wide or very tall screens
             const aspectRatio = width / height;
             if (aspectRatio > 2.0) {
-                cloudCount = Math.floor(cloudCount * 1.2); // More clouds for ultra-wide
+                cloudCount = Math.floor(cloudCount * 1.15); // More clouds for ultra-wide
             } else if (aspectRatio < 1.3) {
-                cloudCount = Math.floor(cloudCount * 0.8); // Fewer clouds for tall screens
+                cloudCount = Math.floor(cloudCount * 0.85); // Fewer clouds for tall screens
             }
+
+            // Cap maximum clouds based on performance
+            if (performanceMode === 'low') cloudCount = Math.min(cloudCount, 60);
+            else if (performanceMode === 'medium') cloudCount = Math.min(cloudCount, 90);
+            else cloudCount = Math.min(cloudCount, 140);
 
             system.initClouds(cloudCount);
         };
@@ -672,10 +861,30 @@ export default function CloudParallaxPage() {
         window.addEventListener('resize', handleResize);
 
         let lastScrollY = -1;
+        let frameCount = 0;
+        let lastFrameTime = performance.now();
+        let fps = 60;
 
-        const animate = (_time: number) => {
+        const animate = (currentTime: number) => {
+            // FPS calculation for adaptive performance
+            const deltaTime = currentTime - lastFrameTime;
+            if (deltaTime > 0) {
+                fps = 1000 / deltaTime;
+            }
+            lastFrameTime = currentTime;
+
+            // CRITICAL FIX: Frame skipping for low-end devices
+            frameCount++;
+            if (frameCount % frameSkip !== 0) {
+                requestRef.current = requestAnimationFrame(animate);
+                return;
+            }
+
             // OPTIMIZATION: Pause animation loop if still loading
-            // We can check isLoadingRef.current to pause updates
+            if (isLoadingRef.current) {
+                requestRef.current = requestAnimationFrame(animate);
+                return;
+            }
 
             // Synchronize Canvas with Framer Motion's smoothScroll
             const progress = smoothScroll.get(); // 0 to 1
@@ -690,19 +899,16 @@ export default function CloudParallaxPage() {
                 system.updateScheme(0); // Force Zeus realm (0% scroll)
             }
 
-            // SMOOTH SCROLL PRIORITY: Render every frame for smoothness, only skip if truly identical
-            // OPTIMIZATION: Only render full heavy frames if NOT LOADING (or if it's the very first frame to init)
+            // ADAPTIVE RENDERING: Adjust threshold based on performance mode
+            let renderThreshold = 0.5;
+            if (performanceMode === 'low') renderThreshold = 2.0; // Render less frequently
+            else if (performanceMode === 'medium') renderThreshold = 1.0;
+
             // Only render if meaningful change OR first frame
             const scrollDelta = Math.abs(currentScrollY - lastScrollY);
-            if (!isLoadingRef.current || scrollDelta > 0.5 || lastScrollY === -1) {
-                // Throttle calls to updateScheme as string building is expensive
-                // Only update scheme every few frames or if significant change? 
-                // For now, keep as is but aware it's a hot path.
-
+            if (scrollDelta > renderThreshold || lastScrollY === -1) {
                 const percent = progress * 100;
                 system.updateScheme(percent); // Optimized internally with caching
-
-                // Force render at least once
                 system.render(currentScrollY);
                 lastScrollY = currentScrollY;
             }
@@ -764,6 +970,8 @@ export default function CloudParallaxPage() {
     return (
         <div style={{ minHeight: '600vh', position: 'relative', overflowX: 'hidden' }}>
 
+
+
             {showTransition && !isLoading && (
                 <CloudTransition
                     type="uncover"
@@ -781,7 +989,10 @@ export default function CloudParallaxPage() {
                     width: '100%',
                     height: '100vh',
                     pointerEvents: 'none',
-                    zIndex: 0
+                    zIndex: 0,
+                    willChange: 'contents', // CRITICAL: Hint browser for optimization
+                    transform: 'translateZ(0)', // Force GPU layer
+                    backfaceVisibility: 'hidden' // Prevent flickering
                 }}
             />
 
@@ -795,12 +1006,25 @@ export default function CloudParallaxPage() {
                     width: '100%',
                     height: '100vh',
                     pointerEvents: 'none',
-                    zIndex: 2 // Above Silhouettes (Z-1)
+                    zIndex: 2, // Above Silhouettes (Z-1)
+                    willChange: 'contents',
+                    transform: 'translateZ(0)',
+                    backfaceVisibility: 'hidden'
                 }}
             />
 
             {/* Fixed Content Container */}
-            <div style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 1,
+                pointerEvents: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                willChange: 'transform', // Optimize for animations
+                transform: 'translateZ(0)' // Force GPU layer
+            }}>
 
                 {/* 1. Sky Realm - Zeus */}
                 <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>

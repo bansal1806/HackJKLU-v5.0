@@ -3,7 +3,13 @@
 import { useEffect, useState, memo } from 'react';
 
 // Memoize to strictly prevent re-renders from parent unless props change
-export const CountdownTimer = memo(function CountdownTimer() {
+export const CountdownTimer = memo(function CountdownTimer({ 
+  style, 
+  className 
+}: { 
+  style?: React.CSSProperties;
+  className?: string;
+}) {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -38,11 +44,12 @@ export const CountdownTimer = memo(function CountdownTimer() {
 
   return (
     <div
-      className="absolute font-medieval w-full flex justify-center"
+      className={`absolute font-medieval w-full flex justify-center ${className || ''}`}
       style={{
         bottom: '6%',
         zIndex: 15,
         pointerEvents: 'none', // Ensure clicks pass through to Hero transition
+        ...style,
       }}
     >
       <div

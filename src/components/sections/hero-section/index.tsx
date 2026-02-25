@@ -55,7 +55,7 @@ export function Hero() {
 
     const handleTouchEnd = (e: TouchEvent) => {
       // Mobile Only Security: Check width
-      if (window.innerWidth >= 1024) return;
+      if (window.innerWidth >= 1280) return;
 
       const touchEndY = e.changedTouches[0].clientY;
       const deltaY = touchStartY - touchEndY;
@@ -68,7 +68,7 @@ export function Hero() {
 
     const handleWheel = (e: WheelEvent) => {
       // Mobile Only Security: Check width
-      if (window.innerWidth >= 1024) return;
+      if (window.innerWidth >= 1280) return;
 
       // Scroll Down -> Go Next
       if (e.deltaY > 0) {
@@ -125,29 +125,47 @@ export function Hero() {
           {/* Title and Silver Partner Container */}
           <div
             className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center w-full pointer-events-none"
-            style={{ top: '2%', zIndex: 30 }}
+            style={{ top: 'clamp(8%, 12vh, 15%)', zIndex: 30 }}
           >
-            {/* Title Image */}
-            <img
-              src="/Title.webp"
-              alt="HackJKLU v5.0"
-              className="object-contain translate-x-0 md:-translate-x-[30px] mt-2 md:mt-6"
+            {/* Title Text - MUCH LARGER for mobile/tablet */}
+            <h1
               style={{
-                height: 'clamp(80px, 12vh, 200px)',
-                width: 'auto',
-                maxWidth: '90vw',
-                filter:
-                  'drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(0 5px 10px rgba(0,0,0,0.8))',
-                opacity: 0.95,
+                fontFamily: 'tech Origin, sans-serif',
+                // RESPONSIVE: Much larger on mobile/tablet (main focus), smaller on desktop
+                fontSize: 'clamp(3rem, 12vw, 4rem)', // Increased from 6.5vw to 12vw for mobile/tablet
+                fontWeight: 'normal',
+                whiteSpace: 'nowrap', // Force single line
+                // High-contrast metallic gold gradient
+                background: 'linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #634f2c 27%,#ffecb3 40%,#3a2c0f 78%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                WebkitTextStroke: '0px transparent',
+                // Clean 3D shadows - scaled for larger text
+                textShadow: `
+                                0px 2px 0px #917024,
+                                0px 3px 0px #6e521b,
+                                0px 4px 0px #4c3611,
+                                0px 6px 10px rgba(0,0,0,0.6)
+                            `,
+                textAlign: 'center',
+                margin: 0,
+                marginTop: '0.5rem',
+                lineHeight: 1,
+                letterSpacing: 'clamp(0.02em, 0.5vw, 0.05em)',
+                position: 'relative',
+                maxWidth: '95vw',
+                wordBreak: 'keep-all'
               }}
-            />
+            >
+              HackJKLU <span style={{ fontFamily: 'inherit' }}>5.0</span>
+            </h1>
 
-            {/* Silver Partner + Devfolio Logo - Same Line */}
-            <div className="flex items-center gap-2 md:gap-3 -mt-4 md:-mt-10">
+            {/* Silver Partner + Devfolio Logo - Larger spacing on mobile/tablet */}
+            <div className="flex items-center gap-2 xl:gap-3 mt-3 xl:-mt-10">
               <span
                 className="font-cinzel uppercase tracking-widest"
                 style={{
-                  fontSize: 'clamp(10px, 1.8vw, 20px)',
+                  fontSize: 'clamp(11px, 2.2vw, 20px)', // Slightly larger on mobile/tablet
                   color: '#C0C0C0',
                   textShadow: '0 2px 4px rgba(0,0,0,0.8)',
                 }}
@@ -159,18 +177,18 @@ export function Hero() {
                 alt="DEVFOLIO LOGO"
                 className="object-contain"
                 style={{
-                  height: 'clamp(20px, 3.5vh, 45px)',
+                  height: 'clamp(22px, 4vh, 45px)', // Slightly larger on mobile/tablet
                   width: 'auto',
                   filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.6))',
                 }}
               />
             </div>
 
-            {/* Mobile Only: Date below Silver Partner */}
+            {/* Mobile/Tablet Only: Date below Silver Partner */}
             <p
-              className="font-cinzel text-center mt-1 md:hidden"
+              className="font-cinzel text-center mt-2 xl:hidden"
               style={{
-                fontSize: 'clamp(10px, 2.5vw, 16px)',
+                fontSize: 'clamp(11px, 2.8vw, 16px)', // Slightly larger
                 color: '#d4af37',
                 letterSpacing: 'clamp(1px, 0.5vw, 3px)',
                 textShadow: '0 2px 4px rgba(0,0,0,0.7)',
@@ -179,21 +197,11 @@ export function Hero() {
             >
               13 MARCH - 15 MARCH
             </p>
-
-            {/* Mobile Only: Apply with Devfolio Button */}
-            <div className="md:hidden mt-2 pointer-events-auto">
-              <div
-                className="apply-button"
-                data-hackathon-slug="hackjklu-v5"
-                data-button-theme="dark"
-                style={{ height: '40px', width: '280px' }}
-              />
-            </div>
           </div>
 
-          {/* Desktop Only: Date - Left side of rings */}
+          {/* Desktop Only: Date - Left side of rings (1280px+) */}
           <div
-            className="absolute left-[3%] md:left-[5%] lg:left-[8%] top-1/2 -translate-y-1/2 z-30 pointer-events-none hidden md:block"
+            className="absolute left-[3%] xl:left-[5%] 2xl:left-[8%] top-1/2 -translate-y-1/2 z-30 pointer-events-none hidden xl:block"
           >
             <p
               className="font-cinzel text-center"
@@ -209,9 +217,9 @@ export function Hero() {
             </p>
           </div>
 
-          {/* Desktop Only: Apply with Devfolio Button - Right side of rings */}
+          {/* Desktop Only: Apply with Devfolio Button - Right side of rings (1280px+) */}
           <div
-            className="absolute right-[3%] md:right-[5%] lg:right-[8%] top-1/2 -translate-y-1/2 z-30 pointer-events-auto hidden md:block"
+            className="absolute right-[3%] xl:right-[5%] 2xl:right-[8%] top-1/2 -translate-y-1/2 z-30 pointer-events-auto hidden xl:block"
           >
             <div
               className="apply-button"
@@ -221,15 +229,25 @@ export function Hero() {
             />
           </div>
 
-          {/* 3. Countdown Timer (Isolated State) */}
-          <CountdownTimer />
+          {/* 3. Countdown Timer (Isolated State) - Moved lower on mobile/tablet */}
+          <CountdownTimer className="xl:!bottom-[35%]" style={{ bottom: '28%' }} />
 
-          {/* Bottom Quote */}
-          <div className="absolute w-full flex justify-center" style={{ bottom: '4%', zIndex: 15 }}>
+          {/* Mobile/Tablet Only: Apply with Devfolio Button - Moved lower */}
+          <div className="absolute flex justify-center w-full xl:hidden pointer-events-auto" style={{ bottom: '12%', zIndex: 30 }}>
+            <div
+              className="apply-button"
+              data-hackathon-slug="hackjklu-v5"
+              data-button-theme="dark"
+              style={{ height: '44px', width: 'min(300px, 85vw)' }} // Responsive width
+            />
+          </div>
+
+          {/* Bottom Quote - Moved lower on mobile/tablet */}
+          <div className="absolute w-full flex justify-center xl:bottom-[8%]" style={{ bottom: '5%', zIndex: 15 }}>
             <p
               className="font-cinzel text-center px-4"
               style={{
-                fontSize: 'clamp(10px, 1.2vw, 13px)',
+                fontSize: 'clamp(9px, 2vw, 13px)', // Slightly larger on mobile
                 fontStyle: 'italic',
                 color: '#d4af37',
                 letterSpacing: 'clamp(1px, 0.3vw, 3px)',
@@ -237,26 +255,40 @@ export function Hero() {
                 textShadow: '0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(212, 175, 55, 0.3)',
               }}
             >
-              — Where Innovation Meets Code —
+              — From Myth to Mainframes —
             </p>
           </div>
 
-          {/* Swipe To Explore - Mobile Only Hint */}
-          <div className="absolute w-full flex flex-col items-center gap-1 md:hidden" style={{ bottom: '20%', zIndex: 15 }}>
+          {/* Swipe To Explore - Mobile/Tablet Only Hint - At very bottom - EMPHASIZED */}
+          <div className="absolute w-full flex flex-col items-center gap-1 xl:hidden" style={{ bottom: '1%', zIndex: 15 }}>
             <motion.div
               animate={{
-                y: [0, 10, 0],
-                opacity: [0.3, 0.8, 0.3]
+                y: [0, 12, 0],
+                opacity: [0.5, 1, 0.5]
               }}
               transition={{
-                duration: 2,
+                duration: 1.8,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="flex flex-col items-center"
+              className="flex flex-col items-center gap-1"
             >
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4af37] font-cinzel">Scroll Down to Explore</span>
-              <ChevronDown className="w-4 h-4 text-[#d4af37]" />
+              <span 
+                className="text-[11px] uppercase tracking-[0.3em] font-cinzel font-semibold"
+                style={{
+                  color: '#ffd700',
+                  textShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.4), 0 2px 4px rgba(0,0,0,0.8)',
+                }}
+              >
+                Scroll Down to Explore
+              </span>
+              <ChevronDown 
+                className="w-5 h-5"
+                style={{
+                  color: '#ffd700',
+                  filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 15px rgba(255, 215, 0, 0.4))',
+                }}
+              />
             </motion.div>
           </div>
         </div>
