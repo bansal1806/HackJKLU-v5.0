@@ -1,11 +1,8 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import type { StaticImageData } from 'next/image';
-
-// Assets
-import completeBg from '../../../assets/partners/complete-bg.webp';
 
 import StandardPartnerView from './StandardPartnerView';
 import GridPartnerView from './GridPartnerView';
@@ -16,28 +13,26 @@ import bronzeRing from '../../../assets/partners/bronze-ring.webp';
 
 import entionLogo from '../../../assets/partners/ention-logo.webp';
 import wsCubeLogo from '../../../assets/partners/ws.cubetech-logo.webp';
-import msiLogo from '../../../assets/partners/msi.webp';
-import sunriseLogo from '../../../assets/partners/sunrisecomputers.webp';
+import genesisLogo from '../../../../public/partners/Genesis Logo Vertical.png';
 
 // Silver Partners
-import gfgLogo from '../../../assets/partners/geeksforgeeks-logo.webp';
+import belgianWaffleLogo from '../../../../public/partners/belgian_waffle.png';
 import devfolioLogo from '../../../assets/partners/devfolio-logo.png';
-import ethIndiaLogo from '../../../assets/partners/ethindia-logo.webp';
 
 // Bronze Partners
-import balsamiqLogo from '../../../assets/partners/balsamiq-logo.webp';
-import fluxorLogo from '../../../assets/partners/fluxor-logo.webp';
-import blockPenLogo from '../../../assets/partners/blockpen-logo.webp';
+import interviewBuddyLogo from '../../../../public/partners/interview_buddy.png';
+import truScholarLogo from '../../../../public/partners/TruScholar - Credential Partner.png';
+import commudleLogo from '../../../../public/partners/Commudle - Ecosystem Partner.webp';
+import dmvCoreLogo from '../../../../public/partners/DMV Core Tech - Internship Partner.png';
+import helaLabsLogo from '../../../../public/partners/HeLa Labs - Track sponsor.png';
+import mangalamWatersLogo from '../../../../public/partners/Mangalam Waters - Hydration Partner.jpeg';
 
 // Community Partners
 import gdgLogo from '../../../assets/partners/gdg.webp';
-import codingNinjasLogo from '../../../assets/partners/coding-ninjas.webp';
-import devStationLogo from '../../../assets/partners/dev-station.webp';
-import devArmyLogo from '../../../assets/partners/devarmy.webp';
-import iiitDelhiLogo from '../../../assets/partners/iiit_delhi.webp';
-import iitDelhiLogo from '../../../assets/partners/iit_delhi.webp';
-import iitKharagpurLogo from '../../../assets/partners/iit_kharagpur.webp';
-import iitPatnaLogo from '../../../assets/partners/iit_patna.webp';
+import gfgCampusLogo from '../../../../public/partners/geeksforgeeks-Camus.png';
+import codechefLogo from '../../../../public/partners/codechef.png';
+import mlcGniotLogo from '../../../../public/partners/microsoft_learn_community.png';
+import juVerseLogo from '../../../../public/partners/ju_vers.jpeg';
 
 type Partner = {
   name: string;
@@ -77,72 +72,22 @@ type GridPartnerData = {
   groups: PartnerGroup[];
 };
 
-type CommunityPartnerData = {
-  id: number;
-  type: 'community';
-  title: string;
-  partnerName: string; // Used for "COMMUNITY PARTNERS" title or similar
-  ring: string | StaticImageData; // Will hold the table image path
-  bgImage: string | StaticImageData; // NEW field for the background image
-  partners: { name: string; logo: string | StaticImageData }[]; // List of partners for the slots
-  logo: null;
-  description: string[];
-  socials: boolean;
-  themeColor: string;
-};
-
-type PartnerData = StandardPartnerData | GridPartnerData | CommunityPartnerData;
+type PartnerData = StandardPartnerData | GridPartnerData;
 
 const partnersData: PartnerData[] = [
   {
-    id: 1,
-    type: 'standard',
-    title: 'GOLD PARTNER',
-    partnerName: 'ENTION',
-    ring: goldRing,
-    logo: entionLogo,
-    description: [
-      'Ention is a leading innovator in digital solutions, empowering businesses with cutting-edge technology and advanced automation tools to optimize operations and drive growth. It was incorporated on 28th Jan, 2022 in India to provide innovative laptop products, helping users stay connected with the latest technology trends.',
-      'Focused on delivering customer-centric computing solutions, Ention stands apart with a strong emphasis on service and support. Ention is revolutionizing the laptop experience with high-performance devices designed for creators, gamers, and professionals.',
-    ],
-    socials: true,
-    themeColor: '#FFEAA4', // Gold
-    socialLinks: {
-      web: 'https://ention.in/',
-      linkedin: 'https://www.linkedin.com/company/entiontechnology/',
-      instagram: 'https://www.instagram.com/entiontech?igsh=ZHA3OGNxZDNxYXcx',
-    },
-  },
-  {
     id: 0,
     type: 'standard',
-    title: '',
-    partnerName: 'MSI',
+    title: 'GOLD PARTNER',
+    partnerName: 'GENESIS',
     ring: goldRing,
-    logo: msiLogo,
+    logo: genesisLogo,
     description: [
-      'MSI is a globally recognized brand known for its excellence in gaming, content creation, and high-performance computing. Driven by innovation and cutting-edge technology, MSI consistently empowers gamers, creators, and tech enthusiasts to push boundaries, explore new possibilities, and transform ideas into powerful digital experiences across the world.',
-    ],
-    socials: true,
-    themeColor: '#FFEAA4', // Gold
-    socialLinks: {
-      web: 'https://in.msi.com/',
-      instagram: 'https://www.instagram.com/msigaming_india/',
-    },
-    logoScale: 0.75, // Adjust to fit ring
-  },
-  {
-    id: 2,
-    type: 'standard',
-    title: '',
-    partnerName: 'SUNRISE COMPUTERS',
-    ring: goldRing,
-    logo: sunriseLogo,
-    description: [
-      'Sunrise Computers is a trusted name in delivering reliable and high-quality computing solutions. With a strong commitment to performance and customer satisfaction, Sunrise Computers supports the tech ecosystem by providing top-tier hardware and expert guidance, enabling individuals and communities to build, innovate, and grow with confidence.',
+      'Genesis is a forward-thinking technology partner, focused on delivering state-of-the-art solutions and empowering the next generation of builders and creators.',
     ],
     socials: false,
     themeColor: '#FFEAA4', // Gold
+    logoScale: 1.5, // Adjust to fit ring
   },
   {
     id: 3,
@@ -174,9 +119,8 @@ const partnersData: PartnerData[] = [
         ring: silverRing,
         color: '#C0C0C0',
         partners: [
-          { name: 'Geeks for Geeks', logo: gfgLogo },
+          { name: 'The Belgian Waffle Co.', logo: belgianWaffleLogo },
           { name: 'Devfolio', logo: devfolioLogo },
-          { name: 'ETHIndia', logo: ethIndiaLogo },
         ],
       },
       {
@@ -184,34 +128,34 @@ const partnersData: PartnerData[] = [
         ring: bronzeRing,
         color: '#CD7F32',
         partners: [
-          { name: 'Balsamiq', logo: balsamiqLogo },
-          { name: 'Fluxor', logo: fluxorLogo },
-          { name: 'BlockPen', logo: blockPenLogo },
+          { name: 'InterviewBuddy', logo: interviewBuddyLogo },
+          { name: 'TruScholar', logo: truScholarLogo },
+          { name: 'Commudle', logo: commudleLogo },
+          { name: 'DMV Core Tech', logo: dmvCoreLogo },
+          { name: 'HeLa Labs', logo: helaLabsLogo },
+          { name: 'Mangalam Water', logo: mangalamWatersLogo },
         ],
       },
     ],
   },
   {
     id: 5,
-    type: 'community',
+    type: 'grid',
     title: 'COMMUNITY PARTNERS',
-    partnerName: '',
-    ring: '/community_table.webp',
-    bgImage: completeBg, // Explicitly pass the background
-    partners: [
-      { name: 'GDG', logo: gdgLogo },
-      { name: 'Coding Ninjas', logo: codingNinjasLogo },
-      { name: 'Dev Station', logo: devStationLogo },
-      { name: 'Dev Army', logo: devArmyLogo },
-      { name: 'IIIT Delhi', logo: iiitDelhiLogo },
-      { name: 'IIT Delhi', logo: iitDelhiLogo },
-      { name: 'IIT Kharagpur', logo: iitKharagpurLogo },
-      { name: 'IIT Patna', logo: iitPatnaLogo },
+    groups: [
+      {
+        title: 'COMMUNITY PARTNERS',
+        ring: '/partners/white_perfect_ring.webp',
+        color: '#FFFFFF',
+        partners: [
+          { name: 'Geeksforgeeks Campus Body Gcet', logo: gfgCampusLogo },
+          { name: 'Codechef ABESEC Chapter', logo: codechefLogo },
+          { name: 'Microsoft Learn Community GNIOT', logo: mlcGniotLogo },
+          { name: 'JU Verse', logo: juVerseLogo },
+          { name: 'GDG Jaipur', logo: gdgLogo },
+        ],
+      },
     ],
-    logo: null,
-    description: [],
-    socials: false,
-    themeColor: '#CD7F32',
   },
 ];
 
@@ -220,13 +164,13 @@ export default function PartnersSections() {
     <div className="text-neutral-100 font-heading">
       <div className="w-full flex justify-center pt-24 pb-8">
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-heading tracking-wider uppercase text-[#EFE3A0]">
-          PAST PARTNERS
+          PARTNERS
         </h1>
       </div>
       {partnersData.map((section) => {
         const isCompact =
           section.type === 'standard' &&
-          ['ENTION', 'MSI', 'SUNRISE COMPUTERS'].includes(section.partnerName);
+          ['GENESIS'].includes(section.partnerName);
 
         return (
           <div
@@ -248,7 +192,6 @@ export default function PartnersSections() {
 
 function PartnerSection({ data }: { data: PartnerData }) {
   const [isMobile, setIsMobile] = useState(false);
-  const [hoveredPartner, setHoveredPartner] = useState<{ name: string; logo: string | StaticImageData } | null>(null);
 
   // Check for mobile/tablet screen size
   useEffect(() => {
@@ -264,139 +207,6 @@ function PartnerSection({ data }: { data: PartnerData }) {
   // --- GRID LAYOUT (Silver & Bronze) ---
   if (data.type === 'grid') {
     return <GridPartnerView data={data} />;
-  }
-
-  // --- COMMUNITY PARTNERS LAYOUT ---
-  if (data.type === 'community') {
-    const logoSlots = [
-      // User manually positioned slots
-      { top: '5.5%', left: '50.5%', transform: 'translate(-50%, 0)' }, // 12:00 (Top)
-      { top: '20%', right: '12%', transform: 'translate(0, 0)' }, // 1:30
-      { top: '52%', right: '4.5%', transform: 'translate(0, -50%)' }, // 3:00 (Right)
-      { bottom: '17%', right: '17.5%', transform: 'translate(0, 0)' }, // 4:30
-      { bottom: '5.5%', left: '49.5%', transform: 'translate(-50%, 0)' }, // 6:00 (Bottom)
-      { bottom: '17%', left: '16.5%', transform: 'translate(0, 0)' }, // 7:30
-      { top: '52%', left: '4%', transform: 'translate(0, -50%)' }, // 9:00 (Left)
-      { top: '20%', left: '11%', transform: 'translate(0, 0)' }, // 10:30
-    ];
-    // Changed fixed inset-0 to relative w-full min-h-screen for consistent scrolling
-    // Changed fixed inset-0 to relative w-full min-h-screen for consistent scrolling
-    return (
-      <motion.div
-        className="relative w-full min-h-screen flex flex-col"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-
-
-        {/* Content Container - Flex Column to ensure stacking order */}
-        <div className="relative z-40 w-full flex-grow flex flex-col items-center justify-center">
-
-          {/* Header */}
-          <div
-            className={`w-full flex flex-col items-center pointer-events-none px-4 text-center shrink-0 ${isMobile ? 'pt-20' : 'pt-24 lg:pt-32'}`}
-          >
-            <h1
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-heading tracking-wider uppercase mb-1 sm:mb-2 md:mb-4"
-              style={{
-                background: `linear-gradient(to bottom, ${data.themeColor || '#CD7F32'} 60%, #6E561C 100%)`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              {data.title}
-            </h1>
-          </div>
-
-          {/* Interactive Table Area */}
-          <div
-            className={`w-full flex flex-col items-center justify-center flex-grow py-8 ${isMobile ? 'pb-24' : ''}`}
-          >
-            <motion.div
-              className="relative w-[92vw] h-[92vw] max-w-[340px] max-h-[340px] xs:w-[85vw] xs:h-[85vw] sm:max-w-none sm:max-h-none sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px]"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-            >
-              {/* Main Table Image */}
-              <img
-                src={typeof data.ring === 'string' ? data.ring : data.ring.src} // Using 'ring' field for the table image
-                alt="Community Table"
-                className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(205,127,50,0.3)]"
-              />
-
-              {/* Logo Slots */}
-              {logoSlots.map((pos, index) => {
-                const partner = data.partners && data.partners[index];
-                return (
-                  <div
-                    key={index}
-                    className="absolute w-[14%] h-[14%] sm:w-[70px] sm:h-[70px] md:w-[90px] md:h-[90px] lg:w-[110px] lg:h-[110px] rounded-full flex items-center justify-center cursor-pointer z-50 group"
-                    style={pos}
-                    onMouseEnter={() => partner && !isMobile && setHoveredPartner(partner)}
-                    onMouseLeave={() => !isMobile && setHoveredPartner(null)}
-                    // Mobile Tap Support
-                    onClick={() =>
-                      partner && setHoveredPartner(partner === hoveredPartner ? null : partner)
-                    }
-                  >
-                    {partner ? (
-                      <motion.div
-                        className="w-full h-full flex items-center justify-center"
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-                      >
-                        <img
-                          src={typeof partner.logo === 'string' ? partner.logo : partner.logo.src}
-                          alt={partner.name}
-                          className={`w-[60%] h-[60%] object-contain drop-shadow-md transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(239,227,160,0.8)] group-hover:brightness-125 ${partner.name === 'IIIT Delhi' ? 'scale-110 group-hover:scale-125' : partner.name === 'IIT Delhi' ? 'scale-125 group-hover:scale-140 object-cover' : 'group-hover:scale-125'}`}
-                        />
-                      </motion.div>
-                    ) : (
-                      <div className="w-full h-full rounded-full bg-black/20" />
-                    )}
-                  </div>
-                );
-              })}
-            </motion.div>
-
-            {/* Footer / Hover Name Display */}
-            <div className="h-16 xs:h-20 sm:h-24 mt-4 sm:mt-8 flex flex-col items-center justify-center text-center transition-opacity duration-300 px-4">
-              <AnimatePresence mode="wait">
-                {hoveredPartner ? (
-                  <motion.div
-                    key={hoveredPartner.name}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="flex flex-col items-center gap-1"
-                  >
-                    <span className="text-gold-400 font-heading tracking-widest text-[10px] xs:text-xs sm:text-sm md:text-base uppercase opacity-80">
-                      Community Partner
-                    </span>
-                    <span className="text-base xs:text-lg sm:text-xl md:text-3xl lg:text-4xl font-heading text-[#EFE3A0] uppercase tracking-wider">
-                      {hoveredPartner.name}
-                    </span>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="placeholder"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.5 }}
-                    exit={{ opacity: 0 }}
-                    className="text-white/30 font-heading text-[10px] xs:text-xs sm:text-sm md:text-base italic"
-                  >
-                    {isMobile ? 'Tap to reveal...' : 'Hover over the sigils...'}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
   }
 
   // --- STANDARD LAYOUT (Gold & Pre-Hackathon) ---
