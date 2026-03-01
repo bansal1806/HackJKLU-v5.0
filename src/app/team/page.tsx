@@ -5,33 +5,42 @@ import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Eye, Hexagon, Cpu, ScanLine, Share2, Globe, Github, Linkedin, Mail, Instagram, X } from 'lucide-react';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
+import { COMMITTEE_DATA } from '@/data/committeeData';
 
-// Real Data for Core Team
-const CORE_TEAM = [
-    { name: "Aayan", role: "Tech Team", image: "/team/Tech_TeamCard_Aayan.jpg" },
-    { name: "Shourya", role: "Tech Team", image: "/team/Tech_TeamCard_SB.jpg" },
-    { name: "Nikita", role: "Design Team", image: "/team/Design_TeamCard_nikita.jpg" },
-    { name: "Srishti", role: "Design Team", image: "/team/Design_TeamCard.jpg" },
-    { name: "Aditya", role: "Social Media", image: "/team/SocialMedia_TeamCard.jpg" },
-    { name: "Mohit", role: "Media & Report", image: "/team/Media&Report_TeamCard.jpg" },
-    { name: "Aman", role: "Stage & Venue", image: "/team/S&V_TeamCard.jpg" },
-    { name: "Vaishnavi", role: "Anchoring", image: "/team/Anchoring_TeamCard.jpg" },
-    { name: "Devam", role: "Sponsorships", image: "/team/Sponsor_TeamCard.jpg" },
-    { name: "Gaurav", role: "P&C", image: "/team/P&C_TeamCard_Gaurav.jpg" },
-    { name: "Jheel", role: "P&C", image: "/team/P&C_TeamCard_Jheel.jpg" },
-    { name: "Siddharth", role: "Registrations", image: "/team/Reg_TeamCard.jpg" },
-    { name: "Siddhii", role: "Decor", image: "/team/Decor_TeamCard.jpg" },
-    { name: "Swati", role: "Discipline", image: "/team/Discipline_TeamCard.jpg" },
-    { name: "Shubham", role: "Discipline", image: "/team/Discipline_TeamCard_2.jpg" },
-    { name: "Agrima", role: "Hospitality", image: "/team/Hosp_TeamCard.jpg" },
-    { name: "Tanikk", role: "Fine Arts", image: "/team/F&A_TeamCard_Tanik.jpg" },
-    { name: "Tanya", role: "Fine Arts", image: "/team/F&A_TeamCard_Tanya.jpg" },
-    { name: "Anmol", role: "IA", image: "/team/IA_TeamCard.jpg" },
-    { name: "Pratigya", role: "PS", image: "/team/PS_TeamCard.jpg" },
+// Row 1 (11 members)
+const ROW1_TEAM = [
+    { name: "Siddharth", role: "Registrations", image: "/team/Reg_TeamCard.png" },
+    { name: "Tanya", role: "Food and Accommodation", image: "/team/F_A_TeamCard_Tanya-removebg-preview.png" },
+    { name: "Siddhii", role: "Decor", image: "/team/Decor_TeamCard-removebg-preview.png" },
+    { name: "Nikita", role: "Design Team", image: "/team/Design_TeamCard_nikita-removebg-preview.png" },
+    { name: "Chestha", role: "Media & Report", image: "/team/Media_Report_TeamCard-removebg-preview.png" },
+    { name: "Agrima", role: "Hospitality", image: "/team/Hospt_TeamCard.png" },
+    { name: "Anmol", role: "IA", image: "/team/IA_TeamCard-removebg-preview.png" },
+    { name: "Jheel", role: "P&C", image: "/team/P_C_TeamCard_Jheel-removebg-preview.png" },
+    { name: "Swati", role: "Discipline", image: "/team/Discipline_TeamCard-removebg-preview.png" },
+    { name: "Aditya", role: "Social Media", image: "/team/SocialMedia_TeamCard-removebg-preview.png" },
+    { name: "Shourya", role: "Tech Team", image: "/team/Tech_TeamCard_SB.png" },
+];
+
+// Row 2 (12 members)
+const ROW2_TEAM = [
+    { name: "Tanikk", role: "Food and Accommodation", image: "/team/F_A_TeamCard_Tanik-removebg-preview.png" },
+    { name: "Srishti", role: "Design Team", image: "/team/Design_TeamCard-removebg-preview.png" },
+    { name: "Gaurav", role: "P&C", image: "/team/P_C_TeamCard_Gaurav-removebg-preview.png" },
+    { name: "Aman", role: "Stage & Venue", image: "/team/S_V_TeamCard-removebg-preview.png" },
+    { name: "Shubham", role: "Discipline", image: "/team/Discipline_TeamCard_2-removebg-preview.png" },
+    { name: "Devam", role: "Sponsorships", image: "/team/Sponsor_TeamCard.png" },
+    { name: "Mohit", role: "Social Media", image: "/team/SocialMedia_TeamCard-removebg-preview.png" },
+    { name: "Aayan", role: "Tech Team", image: "/team/Tech_TeamCard_Aayan-removebg-preview.png" },
+    { name: "Vaishnavi", role: "Anchoring", image: "/team/Anchoring_TeamCard.png" },
+    { name: "Pratigya", role: "PS", image: "/team/PS_TeamCard-removebg-preview.png" },
+    { name: "Ekansh", role: "Photography", image: "/team/Photography_TeamCard-removebg-preview.png" },
+    { name: "Arpan", role: "Treasurer", image: "/team/team_bg.png" },
 ];
 
 // Duplicate for infinite loop
-const INFINITE_CORE = [...CORE_TEAM, ...CORE_TEAM];
+const INFINITE_ROW1 = [...ROW1_TEAM, ...ROW1_TEAM];
+const INFINITE_ROW2 = [...ROW2_TEAM, ...ROW2_TEAM];
 
 function GlitchText({ text }: { text: string }) {
     return (
@@ -119,7 +128,7 @@ function MemberCard({ member, isLeft, onViewCommittee }: { member: any, isLeft: 
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            onViewCommittee(member.name);
+                            onViewCommittee(member.role);
                         }}
                         className="w-full mt-4 bg-gradient-to-r from-[#a855f7] via-[#ec4899] to-[#3b82f6] hover:opacity-90 text-white text-[12px] font-bold py-3.5 rounded-full shadow-[0_4px_15px_rgba(236,72,153,0.3)] hover:shadow-[0_6px_20px_rgba(236,72,153,0.5)] transition-all duration-300 font-sans tracking-wide">
                         View Complete Committee
@@ -130,7 +139,7 @@ function MemberCard({ member, isLeft, onViewCommittee }: { member: any, isLeft: 
     );
 }
 
-function InfiniteRow({ items, direction, speed, onViewCommittee }: { items: typeof CORE_TEAM, direction: 'left' | 'right', speed: number, onViewCommittee: (name: string) => void }) {
+function InfiniteRow({ items, direction, speed, onViewCommittee }: { items: any[], direction: 'left' | 'right', speed: number, onViewCommittee: (name: string) => void }) {
     return (
         <div className="relative flex w-full py-8 group/row overflow-visible">
             <div
@@ -210,11 +219,11 @@ export default function TeamPage() {
                         <div className="flex flex-col md:flex-row flex-wrap gap-8 z-10 w-full justify-center items-center">
                             {/* Toggle Data Render */}
                             {(activeTeam === 'council' ? [
-                                { id: 1, src: '/team/OH_TeamCard.jpg', alt: 'Office Bearer 1' },
-                                { id: 2, src: '/team/OH1_TeamCard.jpg', alt: 'Office Bearer 2' },
-                                { id: 3, src: '/team/OH_PakhiDi.jpg', alt: 'Pakhi Di - Office Bearer' }
+                                { id: 1, src: '/team/OH_TeamCard-removebg-preview.png', alt: 'Office Bearer 1' },
+                                { id: 2, src: '/team/OH1_TeamCard.png', alt: 'Office Bearer 2' },
+                                { id: 3, src: '/team/OH_PakhiDi-removebg-preview.png', alt: 'Pakhi Di - Office Bearer' }
                             ] : [
-                                { id: 4, src: '/team/Tech_TeamCard_SB.jpg', alt: 'Shourya Bansal - Hack Team Lead' },
+                                { id: 4, src: '/team/Tech_TeamCard_SB.png', alt: 'Shourya Bansal - Hack Team Lead' },
                             ]).map((oh, index) => (
                                 <motion.div
                                     key={`${activeTeam}-${oh.id}`}
@@ -293,12 +302,12 @@ export default function TeamPage() {
                     <div className="flex flex-col gap-12 relative z-10 transform -rotate-1 scale-105">
                         {/* Row A: Moving Left */}
                         <div className="w-full border-y border-[#d4af37]/10 bg-black/20 backdrop-blur-sm">
-                            <InfiniteRow items={INFINITE_CORE} direction="left" speed={60} onViewCommittee={setSelectedCommittee} />
+                            <InfiniteRow items={INFINITE_ROW1} direction="left" speed={60} onViewCommittee={setSelectedCommittee} />
                         </div>
 
                         {/* Row B: Moving Right */}
                         <div className="w-full border-y border-[#d4af37]/10 bg-black/20 backdrop-blur-sm -ml-12">
-                            <InfiniteRow items={INFINITE_CORE} direction="right" speed={50} onViewCommittee={setSelectedCommittee} />
+                            <InfiniteRow items={INFINITE_ROW2} direction="right" speed={50} onViewCommittee={setSelectedCommittee} />
                         </div>
                     </div>
 
@@ -345,50 +354,62 @@ export default function TeamPage() {
                                 {/* Header */}
                                 <div className="text-center mb-12">
                                     <h2 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#f43f5e] to-[#ec4899] mb-3">
-                                        {selectedCommittee}'s Team
+                                        {selectedCommittee}
                                     </h2>
-                                    <p className="text-[#9ca3af] text-lg">Complete Committee Members (40 members)</p>
+                                    <p className="text-[#9ca3af] text-lg">Complete Committee Members ({
+                                        ((COMMITTEE_DATA[selectedCommittee]?.core?.length || 0) +
+                                            (COMMITTEE_DATA[selectedCommittee]?.coordinators?.length || 0) +
+                                            (COMMITTEE_DATA[selectedCommittee]?.volunteers?.length || 0))
+                                    } members)</p>
                                 </div>
 
                                 {/* Core Section */}
-                                <div className="flex flex-col items-center mb-10">
-                                    <div className="bg-[#2a2b38] border border-white/10 px-8 py-2.5 rounded-full mb-6 z-10 shadow-lg">
-                                        <h3 className="text-white font-bold text-lg">Core</h3>
-                                    </div>
-                                    <div className="flex justify-center w-full">
-                                        <div className="bg-[#20232a] border border-white/5 rounded-xl p-5 text-center min-w-[200px] shadow-md hover:bg-[#2a2d36] transition-colors">
-                                            <p className="text-white font-bold text-lg">{selectedCommittee}</p>
+                                {(COMMITTEE_DATA[selectedCommittee]?.core?.length || 0) > 0 && (
+                                    <div className="flex flex-col items-center mb-10">
+                                        <div className="bg-[#2a2b38] border border-white/10 px-8 py-2.5 rounded-full mb-6 z-10 shadow-lg">
+                                            <h3 className="text-white font-bold text-lg">Core</h3>
+                                        </div>
+                                        <div className="flex justify-center flex-wrap gap-4 w-full">
+                                            {COMMITTEE_DATA[selectedCommittee].core.map((name, i) => (
+                                                <div key={i} className="bg-[#20232a] border border-white/5 rounded-xl p-5 text-center min-w-[200px] shadow-md hover:bg-[#2a2d36] transition-colors">
+                                                    <p className="text-white font-bold text-lg">{name}</p>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
-                                </div>
+                                )}
 
                                 {/* Coordinators Section */}
-                                <div className="flex flex-col items-center mb-10">
-                                    <div className="bg-[#2a2b38] border border-white/10 px-6 py-2 rounded-full mb-6 z-10 shadow-lg">
-                                        <h3 className="text-white font-bold text-base">Coordinators</h3>
+                                {(COMMITTEE_DATA[selectedCommittee]?.coordinators?.length || 0) > 0 && (
+                                    <div className="flex flex-col items-center mb-10">
+                                        <div className="bg-[#2a2b38] border border-white/10 px-6 py-2 rounded-full mb-6 z-10 shadow-lg">
+                                            <h3 className="text-white font-bold text-base">Coordinators</h3>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+                                            {COMMITTEE_DATA[selectedCommittee].coordinators.map((name, i) => (
+                                                <div key={i} className="bg-[#20232a] border border-white/5 rounded-lg p-4 shadow-sm hover:bg-[#2a2d36] transition-colors">
+                                                    <p className="text-white font-bold text-[15px]">{name}</p>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-                                        {['Adhya Mittal', 'Jheel Jain', 'Pratigya Bomb', 'Nehal Mittal', 'Mayank Soni', 'Anurika A', 'Mansi', 'Mayank Shankar Pathak', 'Madhav Garg', 'Gourang Tak', 'Pragyansh Mishra'].map((name, i) => (
-                                            <div key={i} className="bg-[#20232a] border border-white/5 rounded-lg p-4 shadow-sm hover:bg-[#2a2d36] transition-colors">
-                                                <p className="text-white font-bold text-[15px]">{name}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                                )}
 
                                 {/* Volunteers Section */}
-                                <div className="flex flex-col items-center">
-                                    <div className="bg-[#2a2b38] border border-white/10 px-6 py-2 rounded-full mb-6 z-10 shadow-lg">
-                                        <h3 className="text-white font-bold text-base">Volunteers</h3>
+                                {(COMMITTEE_DATA[selectedCommittee]?.volunteers?.length || 0) > 0 && (
+                                    <div className="flex flex-col items-center">
+                                        <div className="bg-[#2a2b38] border border-white/10 px-6 py-2 rounded-full mb-6 z-10 shadow-lg">
+                                            <h3 className="text-white font-bold text-base">Volunteers</h3>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+                                            {COMMITTEE_DATA[selectedCommittee].volunteers.map((name, i) => (
+                                                <div key={i} className="bg-[#20232a] border border-white/5 rounded-lg p-4 shadow-sm hover:bg-[#2a2d36] transition-colors">
+                                                    <p className="text-white font-bold text-[15px]">{name}</p>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-                                        {['Akshat Bisht', 'Anubha Sharma', 'Arnav Sharma', 'Chelsy Tanwar', 'Dev Gautam', 'Hardik Yadav'].map((name, i) => (
-                                            <div key={i} className="bg-[#20232a] border border-white/5 rounded-lg p-4 shadow-sm hover:bg-[#2a2d36] transition-colors">
-                                                <p className="text-white font-bold text-[15px]">{name}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                                )}
 
                             </div>
                         </motion.div>
