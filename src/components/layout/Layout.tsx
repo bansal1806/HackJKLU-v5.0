@@ -25,7 +25,7 @@ const menuItems = [
   { number: 'VII', name: 'FAQ', path: '/faq' },
   { number: 'VIII', name: 'Team', path: '/team' },
   { number: 'IX', name: 'Why Sponsor Us ?', path: '/sponsor' },
-  { number: 'X', name: 'Call for Problems', path: '/problem-statements' },
+  { number: 'X', name: 'Call for Problems', path: '/call-for-problems' },
   { number: 'XI', name: 'Itinerary', path: '/itinerary' },
   { number: 'XII', name: 'Events', path: '/events' },
 ];

@@ -1,23 +1,25 @@
 import type { Metadata } from 'next';
-import { ProblemStatementsClient } from './ProblemStatementsClient';
+import { HallOfOraclesClient } from './HallOfOraclesClient';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
 import { Footer } from '@/components/navigation/Footer';
+import { PageScrollbar } from '@/components/ui/PageScrollbar';
 
 export const metadata: Metadata = {
-    title: 'Call for Problem Statements - HackJKLU v5.0',
+    title: 'The Sacred Challenges — Hall of Oracles | HackJKLU v5.0',
     description:
-        'Submit your problem statements for HackJKLU v5.0. Share challenges from your organization or community for hackers to solve.',
+        'Behold the Sacred Labors of HackJKLU v5.0. Choose your divine challenge, claim your labor, and etch your name into the stars of Mount Olympus.',
     keywords:
-        'problem statements, hackathon challenges, HackJKLU v5.0, submit problems, innovation challenges',
+        'problem statements, hackathon challenges, HackJKLU v5.0, divine challenges, labors of Hercules, Greek mythology hackathon, innovation tracks',
     alternates: {
         canonical: '/problem-statements/',
     },
 };
 
-export default function ProblemStatementsPage() {
+export default function HallOfOraclesPage() {
     return (
         <>
-            <ProblemStatementsClient />
+            <PageScrollbar thumbColor="rgba(212, 175, 55, 0.4)" hoverColor="rgba(212, 175, 55, 0.9)" />
+            <HallOfOraclesClient />
             <Footer />
             <PageNavigation />
         </>

@@ -146,7 +146,7 @@ function StatCard({ stat, index }: { stat: { label: string; value: string; icon:
             transition={{ delay: index * 0.1, duration: 0.6 }}
             whileHover={{ scale: 1.03, y: -5 }}
             onMouseMove={handleMouseMove}
-            className="group relative bg-gradient-to-b from-neutral-800/60 to-neutral-900/80 backdrop-blur-xl border border-yellow-500/25 p-5 sm:p-6 rounded-2xl text-center overflow-hidden cursor-default"
+            className="group relative bg-gradient-to-b from-neutral-800/60 to-neutral-900/80 backdrop-blur-xl border border-yellow-500/25 p-4 sm:p-5 lg:p-6 rounded-2xl text-center overflow-hidden cursor-default flex flex-col items-center justify-center flex-1 min-w-[140px] sm:min-w-[160px]"
         >
             {/* Mouse follow glow */}
             <motion.div
@@ -175,8 +175,12 @@ function StatCard({ stat, index }: { stat: { label: string; value: string; icon:
             >
                 {stat.icon}
             </motion.span>
-            <strong className="block text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 font-bold font-[Cinzel] group-hover:from-yellow-100 group-hover:to-yellow-400 transition-all">{stat.value}</strong>
-            <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-400 mt-1 block">{stat.label}</span>
+            <strong className="block text-xl sm:text-2xl lg:text-3xl text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 font-bold font-[Cinzel] group-hover:from-yellow-100 group-hover:to-yellow-400 transition-all w-full leading-tight uppercase tracking-tight whitespace-nowrap overflow-visible">
+                {stat.value}
+            </strong>
+            <span className="text-[9px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.2em] lg:tracking-[0.25em] text-neutral-400 mt-1 block px-1 text-center w-full">
+                {stat.label}
+            </span>
         </motion.div>
     );
 }
@@ -516,7 +520,7 @@ export function CallForProblemStatements() {
                                     🌿
                                 </motion.span>
                                 <div className="px-5 py-2 rounded-full border border-yellow-500/40 bg-yellow-500/10 backdrop-blur-sm text-yellow-300 text-xs tracking-[0.25em] uppercase font-[Cinzel]">
-                                    Forge The Future
+                                    Seeking Divine Trials
                                 </div>
                                 <motion.span
                                     className="text-yellow-500/80 text-2xl"
@@ -569,16 +573,15 @@ export function CallForProblemStatements() {
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.8 }}
                             >
-                                &ldquo;A 48-hour odyssey where titans of industry and heroes of innovation unite to conquer the challenges of tomorrow.&rdquo;
+                                &ldquo;The Oracle seeks trials worthy of modern heroes. Present your most formidable challenges, and watch as the brightest minds of the realm forge legendary solutions.&rdquo;
                             </motion.p>
                         </motion.div>
 
-                        {/* Stats Strip */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.4, duration: 0.8 }}
-                            className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16"
+                            className="flex flex-wrap gap-4 mb-16 w-full"
                         >
                             {[
                                 { label: "Treasure", value: "₹2L", icon: "🏆" },
@@ -627,15 +630,15 @@ export function CallForProblemStatements() {
                                             transition={{ delay: i * 0.2 }}
                                         >
                                             <motion.div
-                                                className="w-12 h-12 rounded-full bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-yellow-500/50 flex items-center justify-center shrink-0 group-hover:border-yellow-400 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] transition-all duration-500"
+                                                className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-yellow-500/50 flex items-center justify-center shrink-0 group-hover:border-yellow-400 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] transition-all duration-500"
                                                 whileHover={{ scale: 1.1 }}
                                             >
-                                                <span className="text-yellow-400 font-[Cinzel] text-lg">{item.symbol}</span>
+                                                <span className="text-yellow-400 font-[Cinzel] text-base md:text-lg">{item.symbol}</span>
                                             </motion.div>
-                                            <div className="bg-gradient-to-b from-slate-800/50 to-slate-900/70 md:bg-transparent p-4 md:p-0 rounded-xl w-full md:text-center border border-yellow-500/20 md:border-none backdrop-blur-sm md:backdrop-blur-none">
-                                                <span className="block text-yellow-400 font-bold text-xs tracking-[0.25em] uppercase mb-1.5 font-[Cinzel]">{item.day}</span>
-                                                <p className="text-slate-100 font-[Cinzel] text-lg mb-1">{item.event}</p>
-                                                <p className="text-slate-400 text-sm">{item.desc}</p>
+                                            <div className="bg-gradient-to-b from-slate-800/50 to-slate-900/70 p-3 lg:p-4 rounded-xl w-full md:text-center border border-yellow-500/20 backdrop-blur-sm shadow-xl flex flex-col justify-center items-start md:items-center">
+                                                <span className="block text-yellow-400 font-bold text-[9px] lg:text-[10px] tracking-[0.2em] uppercase mb-1 font-[Cinzel]">{item.day}</span>
+                                                <p className="text-slate-100 font-[Cinzel] text-sm lg:text-base mb-1 truncate max-w-full">{item.event}</p>
+                                                <p className="text-slate-400 text-xs truncate max-w-full">{item.desc}</p>
                                             </div>
                                         </motion.div>
                                     ))}
@@ -701,7 +704,7 @@ export function CallForProblemStatements() {
                                 <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-b from-slate-100 to-yellow-400 text-center font-[Cinzel] tracking-wider">
                                     Inscribe Your Challenge
                                 </h3>
-                                <p className="text-center text-slate-400 text-xs mb-10 font-[Cinzel] tracking-[0.2em]">THE ORACLE AWAITS YOUR WISDOM</p>
+                                <p className="text-center text-slate-400 text-xs mb-10 font-[Cinzel] tracking-[0.2em]">DECREE YOUR CHALLENGE TO THE REALM</p>
 
                                 <AnimatePresence mode="wait">
                                     {formSubmitted ? (
@@ -728,11 +731,11 @@ export function CallForProblemStatements() {
                                             initial={{ opacity: 1 }}
                                             exit={{ opacity: 0 }}
                                         >
-                                            <AnimatedInput name="company" placeholder="Organization Name" />
-                                            <AnimatedInput name="email" placeholder="Sacred Email Address" type="email" />
-                                            <AnimatedInput name="contact_phone" placeholder="Contact Number" type="tel" pattern="[0-9]{10}" />
-                                            <AnimatedInput name="title" placeholder="Challenge Title" />
-                                            <AnimatedInput name="bounty" placeholder="Bounty Prize (Optional)" required={false} />
+                                            <AnimatedInput name="company" placeholder="Guild / Organization Name" />
+                                            <AnimatedInput name="email" placeholder="Emissary Email Address" type="email" />
+                                            <AnimatedInput name="contact_phone" placeholder="Contact Scroll (Phone)" type="tel" pattern="[0-9]{10}" />
+                                            <AnimatedInput name="title" placeholder="Title of the Labor" />
+                                            <AnimatedInput name="bounty" placeholder="Bounty Treasure (Optional)" required={false} />
 
                                             <motion.div
                                                 className="relative group"
@@ -801,8 +804,8 @@ export function CallForProblemStatements() {
                         />
                     </div>
 
-                    <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-b from-slate-100 to-yellow-500 font-[Cinzel] tracking-wider">Allied Kingdoms</h2>
-                    <p className="text-slate-400 mb-14 max-w-xl mx-auto text-sm font-[Cinzel]">Those who have joined our odyssey in previous quests</p>
+                    <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-b from-slate-100 to-yellow-500 font-[Cinzel] tracking-wider">Pioneers of Innovation</h2>
+                    <p className="text-slate-400 mb-14 max-w-xl mx-auto text-sm font-[Cinzel]">ESTEEMED GUILDS THAT HAVE FORGED LEGENDS WITH US BEFORE</p>
 
                     <div className="relative overflow-hidden w-full py-6 border-y border-yellow-500/15 bg-slate-900/30 mask-gradient-x">
                         <div className="flex gap-20 w-max animate-scroll items-center">
@@ -834,7 +837,7 @@ export function CallForProblemStatements() {
                         <div className="h-[1px] w-20 sm:w-40 bg-gradient-to-l from-transparent to-yellow-500" />
                     </div>
 
-                    <h2 className="text-3xl sm:text-4xl font-bold mb-14 text-center bg-clip-text text-transparent bg-gradient-to-b from-slate-100 to-yellow-500 font-[Cinzel] tracking-wider">Council of Elders</h2>
+                    <h2 className="text-3xl sm:text-4xl font-bold mb-14 text-center bg-clip-text text-transparent bg-gradient-to-b from-slate-100 to-yellow-500 font-[Cinzel] tracking-wider">The Oracle's Emissaries</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-7 sm:gap-9 max-w-5xl mx-auto">
                         {contactCards.map((card, i) => (
