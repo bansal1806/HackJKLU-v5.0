@@ -15,7 +15,7 @@ const pageOrder = [
   { path: '/faq', name: 'FAQ' },
   { path: '/team', name: 'Team' },
   { path: '/sponsor', name: 'Why Sponsor Us ?' },
-  { path: '/problem-statements', name: 'Call for Problems' },
+  { path: '/call-for-problems', name: 'Call for Problems' },
   { path: '/itinerary', name: 'Itinerary' },
   { path: '/events', name: 'Events' },
 ];
