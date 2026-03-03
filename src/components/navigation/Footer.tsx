@@ -59,11 +59,7 @@ export function Footer({ className = '' }: FooterProps) {
 
             {/* Greek Meander Border - Thinner and subtler */}
             <div
-                className="absolute top-0 left-0 right-0 h-3 w-full opacity-20 z-10 mix-blend-overlay"
-                style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='10' viewBox='0 0 40 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 V0 H10 V5 H5 V10 H15 V5 H20 V0 H30 V5 H25 V10 H35 V5 H40' fill='none' stroke='%23d4af37' stroke-width='1.5'/%3E%3C/svg%3E")`,
-                    backgroundSize: '40px 10px'
-                }}
+                className="absolute top-0 left-0 right-0 h-3 w-full opacity-20 z-10 mix-blend-overlay bg-greek-meander"
             />
 
             <div className="max-w-7xl mx-auto px-6 pt-12 pb-8 relative z-20">
@@ -175,7 +171,7 @@ export function Footer({ className = '' }: FooterProps) {
                     <div className="lg:col-span-4 flex flex-col gap-4">
                         <h3 className="font-[Cinzel] text-[#d4af37] text-[10px] tracking-[0.3em] uppercase border-b border-[#d4af37]/20 pb-2 flex items-center justify-between">
                             Locate
-                            <a href="https://goo.gl/maps/JKLU" target="_blank" rel="noreferrer" className="text-[9px] opacity-40 hover:opacity-100 flex items-center gap-1">
+                            <a href="https://goo.gl/maps/JKLU" target="_blank" rel="noopener noreferrer" className="text-[9px] opacity-40 hover:opacity-100 flex items-center gap-1">
                                 MAPS <ExternalLink className="w-2.5 h-2.5" />
                             </a>
                         </h3>
@@ -187,15 +183,12 @@ export function Footer({ className = '' }: FooterProps) {
 
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.117070008914!2d75.64722912457951!3d26.836228513374916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4af4fe68f403%3A0x3bf05f95df22b8c4!2sJK%20Lakshmipat%20University!5e0!3m2!1sen!2sin!4v1695563431231!5m2!1sen!2sin"
+                                title="Google Maps Location of JK Lakshmipat University"
                                 width="100%"
                                 height="100%"
-                                style={{
-                                    border: 0,
-                                    filter: 'invert(90%) hue-rotate(180deg) brightness(85%) contrast(120%) sepia(30%)'
-                                }}
                                 allowFullScreen
                                 loading="lazy"
-                                className="opacity-70 hover:opacity-100 transition-opacity duration-700"
+                                className="opacity-70 hover:opacity-100 transition-opacity duration-700 filter-[invert(90%)_hue-rotate(180deg)_brightness(85%)_contrast(120%)_sepia(30%)]"
                             />
 
                             {/* Inner Vignette */}
@@ -213,10 +206,14 @@ export function Footer({ className = '' }: FooterProps) {
                         </p>
                     </div>
 
-                    <div className="flex-1 flex justify-center items-center gap-3 text-[9px] text-[#EFE3A0]/30 tracking-widest uppercase">
+                    <div className="flex-1 flex justify-center items-center gap-3 text-[9px] text-[#EFE3A0]/40 tracking-widest uppercase flex-wrap text-center">
                         <Link href="/privacy" className="hover:text-[#d4af37] transition-colors">Privacy Policy</Link>
                         <span className="opacity-30">|</span>
-                        <Link href="/terms" className="hover:text-[#d4af37] transition-colors">Terms of Spirit</Link>
+                        <Link href="/terms" className="hover:text-[#d4af37] transition-colors">Terms & Conditions</Link>
+                        <span className="opacity-30">|</span>
+                        <Link href="/refunds" className="hover:text-[#d4af37] transition-colors">Refunds & Cancellations</Link>
+                        <span className="opacity-30">|</span>
+                        <Link href="/contact" className="hover:text-[#d4af37] transition-colors">Contact Us</Link>
                     </div>
 
                     <div className="flex-1 flex justify-center lg:justify-end">
