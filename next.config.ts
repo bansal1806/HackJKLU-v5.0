@@ -13,11 +13,8 @@ const nextConfig: NextConfig = {
         },
     },
 
-    // Enable static export for hosting on platforms like Vercel
-    output: 'export',
-
-    // Add trailing slashes for proper static routing
-    trailingSlash: true,
+    // Trailing slash for routing consistency
+    trailingSlash: false,
 
     // Ignore TypeScript errors during build (StaticImageData type issues)
     typescript: {
