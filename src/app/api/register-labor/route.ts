@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import connectToDatabase from '@/lib/mongodb';
+import { connectDB } from '@/lib/mongodb';
 import ThemeRegistration from '@/models/ThemeRegistration';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: 'teamNumber is required' }, { status: 400, headers: NO_CACHE });
     }
 
-    await connectToDatabase();
+    await connectDB();
     const existing = await ThemeRegistration.findOne(
         { teamNumber },
         { teamName: 1, domain: 1, problemTitle: 1, problemId: 1 }
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400, headers: NO_CACHE });
         }
 
-        await connectToDatabase();
+        await connectDB();
 
         // 1. Find if this team already has a registration
         const existing = await ThemeRegistration.findOne({ teamNumber }).lean() as any;

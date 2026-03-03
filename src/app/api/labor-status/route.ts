@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import connectToDatabase from '@/lib/mongodb';
+import { connectDB } from '@/lib/mongodb';
 import ThemeRegistration from '@/models/ThemeRegistration';
 
 export const dynamic = 'force-dynamic';
@@ -8,7 +8,7 @@ const NO_CACHE = { 'Cache-Control': 'no-store' };
 
 export async function GET() {
     try {
-        await connectToDatabase();
+        await connectDB();
 
         const results = await ThemeRegistration.aggregate([
             { $group: { _id: '$problemId', count: { $sum: 1 } } },

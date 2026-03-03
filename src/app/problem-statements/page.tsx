@@ -3,7 +3,7 @@ import { HallOfOraclesClient } from './HallOfOraclesClient';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
 import { Footer } from '@/components/navigation/Footer';
 import { PageScrollbar } from '@/components/ui/PageScrollbar';
-import connectToDatabase from '@/lib/mongodb';
+import { connectDB } from '@/lib/mongodb';
 import ThemeRegistration from '@/models/ThemeRegistration';
 
 export const dynamic = 'force-dynamic';
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 async function getInitialCounts(): Promise<Record<string, number>> {
     try {
-        await connectToDatabase();
+        await connectDB();
         const results = await (ThemeRegistration as any).aggregate([
             { $group: { _id: '$problemId', count: { $sum: 1 } } },
         ]);
