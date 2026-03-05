@@ -3,7 +3,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
+<<<<<<< Updated upstream
 import { Linkedin, Instagram, Github, X } from 'lucide-react';
+=======
+import { Linkedin, Instagram, X } from 'lucide-react';
+>>>>>>> Stashed changes
 import { PageNavigation } from '@/components/navigation/PageNavigation';
 import { COMMITTEE_DATA } from '@/data/committeeData';
 
@@ -39,6 +43,7 @@ const ROW2_TEAM = [
 
 // Hack Team Office Bearers (3 members)
 const HACK_TEAM_LEADS = [
+<<<<<<< Updated upstream
     { name: "Prateek", role: "Organising Head", image: '/team/OH_TeamCard-removebg-preview.png', insta: "https://www.instagram.com/prateek._.goswami", linkedin: "https://www.linkedin.com/in/prateek-goswami93" },
     { name: "Nakul", role: "Organising Head", image: '/team/OH1_TeamCard.png', insta: "https://www.instagram.com/nakulranka", linkedin: "https://www.linkedin.com/in/nakul-ranka" },
     { name: "Pakhi", role: "Organising Head", image: '/team/OH_PakhiDi-removebg-preview.png', insta: "https://www.instagram.com/pakhii_.sharma", linkedin: "https://www.linkedin.com/in/pakhi-sharma-961b3b219" },
@@ -52,24 +57,65 @@ const COUNCIL_MEMBERS = [
     { id: 4, src: '/team/shubham.jpeg', alt: 'Shubham' },
     { id: 5, src: '/team/suryansh.jpeg', alt: 'Suryansh' },
     { id: 6, src: '/team/aman.jpeg', alt: 'Aman' },
+=======
+    { id: 1, src: '/team/OH_TeamCard-removebg-preview.png', alt: 'Office Bearer 1' },
+    { id: 2, src: '/team/OH1_TeamCard.png', alt: 'Office Bearer 2' },
+    { id: 3, src: '/team/OH_PakhiDi-removebg-preview.png', alt: 'Pakhi Di - Office Bearer' },
+];
+
+// Council Members (6 placeholders with random person images)
+const COUNCIL_MEMBERS = [
+    { id: 1, src: 'https://randomuser.me/api/portraits/men/32.jpg', alt: 'Council Member 1' },
+    { id: 2, src: 'https://randomuser.me/api/portraits/women/44.jpg', alt: 'Council Member 2' },
+    { id: 3, src: 'https://randomuser.me/api/portraits/men/75.jpg', alt: 'Council Member 3' },
+    { id: 4, src: 'https://randomuser.me/api/portraits/women/68.jpg', alt: 'Council Member 4' },
+    { id: 5, src: 'https://randomuser.me/api/portraits/men/22.jpg', alt: 'Council Member 5' },
+    { id: 6, src: 'https://randomuser.me/api/portraits/women/17.jpg', alt: 'Council Member 6' },
+>>>>>>> Stashed changes
 ];
 
 // Duplicate for infinite scroll
 const INFINITE_ROW1 = [...ROW1_TEAM, ...ROW1_TEAM];
 const INFINITE_ROW2 = [...ROW2_TEAM, ...ROW2_TEAM];
 
+<<<<<<< Updated upstream
 function MemberCard({ member, onViewCommittee }: { member: any; onViewCommittee: (name: string) => void }) {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
         <motion.div
             className={`relative w-[280px] h-[360px] bg-transparent shrink-0 group perspective-1000 ${isHovered ? 'z-60' : 'z-1'}`}
+=======
+function MemberCard({ member, isLeft, onViewCommittee }: { member: any; isLeft: boolean; onViewCommittee: (name: string) => void }) {
+    const [isHovered, setIsHovered] = useState(false);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const handleMouseEnter = () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        timeoutRef.current = setTimeout(() => {
+            setIsHovered(false);
+        }, 300);
+    };
+
+    const popupWrapperClass = isLeft
+        ? "left-full pl-4"
+        : "right-full pr-4";
+
+    return (
+        <motion.div
+            className={`relative w-[280px] h-[360px] bg-transparent shrink-0 ${isHovered ? 'z-60' : 'z-1'}`}
+>>>>>>> Stashed changes
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{ perspective: "1000px" }}
         >
+<<<<<<< Updated upstream
             <div
                 className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${isHovered ? '[transform:rotateY(180deg)]' : ''}`}
             >
@@ -88,6 +134,25 @@ function MemberCard({ member, onViewCommittee }: { member: any; onViewCommittee:
                 {/* Back of card */}
                 <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#1a1723]/95 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-[0_0_40px_rgba(0,0,0,1)] flex flex-col items-center justify-center">
 
+=======
+            <div className="absolute inset-0 transition-all duration-500 rounded-xl overflow-hidden shadow-2xl">
+                <div className="w-full h-full relative">
+                    <Image
+                        src={member.image}
+                        alt={member.name}
+                        fill
+                        className="object-contain drop-shadow-2xl"
+                    />
+                </div>
+            </div>
+
+            <div
+                className={`absolute top-1/2 -translate-y-1/2 ${popupWrapperClass} w-[280px] transition-all duration-300 z-50 ${isHovered ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+            >
+                <div
+                    className={`relative bg-[#1a1723]/95 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-[0_0_40px_rgba(0,0,0,1)] flex flex-col items-center transition-transform duration-300 ${isHovered ? 'translate-x-0' : (isLeft ? '-translate-x-4' : 'translate-x-4')}`}
+                >
+>>>>>>> Stashed changes
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-linear-to-r from-[#a855f7] via-[#ec4899] to-[#3b82f6] px-5 py-1.5 rounded-full shadow-[0_4px_10px_rgba(236,72,153,0.3)] whitespace-nowrap z-10">
                         <span className="text-white font-bold text-[13px] font-sans tracking-widest">{member.name}</span>
                     </div>
@@ -123,7 +188,11 @@ function MemberCard({ member, onViewCommittee }: { member: any; onViewCommittee:
                             e.stopPropagation();
                             onViewCommittee(member.role);
                         }}
+<<<<<<< Updated upstream
                         className="w-full mt-auto bg-linear-to-r from-[#a855f7] via-[#ec4899] to-[#3b82f6] hover:opacity-90 text-white text-[12px] font-bold py-3.5 rounded-full shadow-[0_4px_15px_rgba(236,72,153,0.3)] hover:shadow-[0_6px_20px_rgba(236,72,153,0.5)] transition-all duration-300 font-sans tracking-wide cursor-pointer"
+=======
+                        className="w-full mt-4 bg-linear-to-r from-[#a855f7] via-[#ec4899] to-[#3b82f6] hover:opacity-90 text-white text-[12px] font-bold py-3.5 rounded-full shadow-[0_4px_15px_rgba(236,72,153,0.3)] hover:shadow-[0_6px_20px_rgba(236,72,153,0.5)] transition-all duration-300 font-sans tracking-wide"
+>>>>>>> Stashed changes
                     >
                         View Complete Committee
                     </button>
@@ -137,7 +206,11 @@ function InfiniteRow({ items, direction, speed, onViewCommittee }: { items: any[
     return (
         <div className="relative flex w-full py-8 group overflow-visible">
             <div
+<<<<<<< Updated upstream
                 className={`flex gap-6 shrink-0 w-max ${direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'} group-hover:[animation-play-state:paused] hover:[animation-play-state:paused]`}
+=======
+                className={`flex gap-6 shrink-0 w-max ${direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'} pause-on-hover`}
+>>>>>>> Stashed changes
                 data-speed={`${speed}s`}
             >
                 {items.map((member, idx) => (
@@ -218,7 +291,11 @@ export default function TeamPage() {
                                 className="text-center mb-16 relative z-20"
                             >
                                 <h2 className="text-5xl md:text-7xl font-[Cinzel] font-bold text-[#d4af37] tracking-wider drop-shadow-[0_4px_10px_rgba(212,175,55,0.3)]">
+<<<<<<< Updated upstream
                                     Organising Head
+=======
+                                    Hack Team
+>>>>>>> Stashed changes
                                 </h2>
                                 <div className="mt-4 mx-auto w-32 h-px bg-linear-to-r from-transparent via-[#d4af37]/60 to-transparent" />
                             </motion.div>
@@ -227,12 +304,35 @@ export default function TeamPage() {
                             <div className="flex flex-wrap gap-8 z-10 justify-center items-center mb-20 px-4">
                                 {HACK_TEAM_LEADS.map((oh, index) => (
                                     <motion.div
+<<<<<<< Updated upstream
                                         key={index}
                                         initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
                                         animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                                         transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
                                     >
                                         <MemberCard member={oh} onViewCommittee={setSelectedCommittee} />
+=======
+                                        key={oh.id}
+                                        initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
+                                        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                                        transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                                        className="relative w-[260px] sm:w-[300px] aspect-3/4"
+                                    >
+                                        <div className="absolute inset-0 bg-[#1a1816] border border-[#d4af37]/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] [clip-path:polygon(30px_0,100%_0,100%_100%,0_100%,0_30px)]">
+                                            <div className="absolute inset-2 bg-[#0c0a09] overflow-hidden border border-[#d4af37]/20">
+                                                <div className="w-full h-full relative">
+                                                    <Image
+                                                        src={oh.src}
+                                                        alt={oh.alt}
+                                                        fill
+                                                        className="object-cover sm:object-contain transition-transform duration-700 hover:scale-105"
+                                                        priority={index === 0}
+                                                    />
+                                                    <div className="absolute inset-0 bg-noise opacity-[0.05] mix-blend-overlay pointer-events-none" />
+                                                </div>
+                                            </div>
+                                        </div>
+>>>>>>> Stashed changes
                                     </motion.div>
                                 ))}
                             </div>
@@ -257,11 +357,24 @@ export default function TeamPage() {
                                     transition={{ duration: 0.8 }}
                                 >
                                     <h2 className="text-[#ffecd1] text-5xl md:text-8xl font-black tracking-tighter mb-4 leading-none font-[Cinzel]">
+<<<<<<< Updated upstream
                                         Core Members<span className="text-[#d4af37]"></span>
+=======
+                                        23 CORES <span className="text-[#d4af37]">/</span> 17 TEAMS
+>>>>>>> Stashed changes
                                     </h2>
                                 </motion.div>
                             </div>
 
+<<<<<<< Updated upstream
+=======
+                            {/* Decorative Elements */}
+                            <div className="absolute top-1/4 left-10 text-[#d4af37]/20 font-[Cinzel] text-xs hidden lg:block">
+                                <div>sys_opt: divine</div>
+                                <div>render_mode: aether</div>
+                                <div>mem_alloc: infinite</div>
+                            </div>
+>>>>>>> Stashed changes
 
                             {/* Dual Infinite Carousel */}
                             <div className="flex flex-col gap-12 relative z-10 transform -rotate-1 scale-105">
@@ -311,6 +424,7 @@ export default function TeamPage() {
                                     transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
                                     className="relative w-full aspect-3/4"
                                 >
+<<<<<<< Updated upstream
                                     <div className="relative w-full h-full rounded-xl overflow-hidden border-[1px] border-[#d4af37]/40 shadow-[0_0_30px_rgba(212,175,55,0.1)] transition-transform duration-300 hover:scale-105">
                                         <Image
                                             src={member.src}
@@ -318,6 +432,16 @@ export default function TeamPage() {
                                             fill
                                             className="object-cover"
                                         />
+=======
+                                    <div className="absolute inset-0 bg-[#1a1816]/80 border border-[#d4af37]/40 shadow-[0_0_30px_rgba(212,175,55,0.1)] rounded-lg backdrop-blur-sm flex flex-col items-center justify-center gap-4">
+                                        {/* Placeholder Silhouette */}
+                                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-[#d4af37]/30 bg-[#0c0a09]/50 flex items-center justify-center">
+                                            <svg className="w-10 h-10 sm:w-12 sm:h-12 text-[#d4af37]/40" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </svg>
+                                        </div>
+                                        <span className="text-[#d4af37]/50 text-xs sm:text-sm font-[Cinzel] tracking-widest uppercase">Coming Soon</span>
+>>>>>>> Stashed changes
                                     </div>
                                 </motion.div>
                             ))}

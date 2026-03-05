@@ -58,7 +58,7 @@ export function PolicyLayout({ title, lastUpdated, children }: PolicyLayoutProps
             {/* Ambient Background Glows */}
             <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden mix-blend-screen opacity-30">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#d4af37] blur-[150px] rounded-full opacity-10 animate-pulse-slow" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-[#8b7355] blur-[120px] rounded-full opacity-20 animate-pulse-slow" style={{ animationDelay: '2s' }} />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-[#8b7355] blur-[120px] rounded-full opacity-20 animate-pulse-slow [animation-delay:2s]" />
             </div>
 
             <div className="mt-32">

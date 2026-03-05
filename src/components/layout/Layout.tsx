@@ -36,38 +36,26 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div
-      className="min-h-screen bg-void-black text-ivory-cream font-serif relative"
-      style={{ backgroundColor: 'var(--void-black)', color: 'var(--ivory-cream)' }}
+      className="min-h-screen font-serif relative bg-(--void-black) text-(--ivory-cream)"
     >
       {/* Top Line with Menu and Logo */}
       <div className="fixed top-0 left-0 right-0 h-24 md:h-32 z-50 transition-all duration-300 bg-transparent">
         <div className="relative w-full h-full mt-10 md:mt-12">
           {/* Horizontal line - Left side (Menu to Logo) */}
           <div
-            className="absolute top-0 left-20 md:left-26 h-px pointer-events-none"
-            style={{
-              backgroundColor: 'rgba(126, 64, 49, 0.3)',
-              right: 'calc(50% + 60px)'
-            }}
+            className="absolute top-0 left-20 md:left-26 h-px pointer-events-none bg-[rgba(126,64,49,0.3)] right-[calc(50%+60px)]"
           ></div>
 
           {/* Horizontal line - Right side (Logo to Edge) */}
           <div
-            className="absolute top-0 right-20 h-px pointer-events-none"
-            style={{
-              backgroundColor: 'rgba(126, 64, 49, 0.3)',
-              left: 'calc(50% + 60px)'
-            }}
+            className="absolute top-0 right-20 h-px pointer-events-none bg-[rgba(126,64,49,0.3)] left-[calc(50%+60px)]"
           ></div>
 
           {/* Menu - Left */}
           <div className="absolute top-0 left-6 md:left-8 -translate-y-1/2 pointer-events-auto px-2">
             <button onClick={() => setIsMenuOpen(true)} className="flex items-center gap-2 group">
               <span
-                className="uppercase text-xs md:text-sm tracking-[0.2em] transition-colors"
-                style={{ color: 'rgba(255, 236, 209, 0.8)' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--golden-amber)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 236, 209, 0.8)')}
+                className="uppercase text-xs md:text-sm tracking-[0.2em] transition-colors text-[rgba(255,236,209,0.8)] hover:text-(--golden-amber)"
               >
                 Menu
               </span>
@@ -91,12 +79,11 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Bottom Line - Only between navigation buttons */}
       <div
-        className="fixed bottom-4 md:bottom-8 left-10 right-10 md:left-40 md:right-40 h-px pointer-events-none z-50 transition-all duration-300"
-        style={{ backgroundColor: 'rgba(126, 64, 49, 0.3)' }}
+        className="fixed bottom-4 md:bottom-8 left-10 right-10 md:left-40 md:right-40 h-px pointer-events-none z-50 transition-all duration-300 bg-[rgba(126,64,49,0.3)]"
       ></div>
 
       {/* Top Gradient Overlay to mask scrolling content */}
-      <div className="fixed top-0 left-0 right-0 h-40 z-40 bg-gradient-to-b from-black via-black/60 to-transparent pointer-events-none" />
+      <div className="fixed top-0 left-0 right-0 h-40 z-40 bg-linear-to-b from-black via-black/60 to-transparent pointer-events-none" />
 
       {/* Noise Overlay */}
       <div className="fixed inset-0 pointer-events-none z-40 bg-noise opacity-30 mix-blend-overlay"></div>
@@ -127,8 +114,7 @@ export function Layout({ children }: LayoutProps) {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="fixed left-0 top-0 bottom-0 z-60 w-[85vw] sm:w-[26rem] flex flex-col shadow-2xl sidebar-menu overflow-y-auto"
-              style={{ backgroundColor: 'black' }}
+              className="fixed left-0 top-0 bottom-0 z-60 w-[85vw] sm:w-104 flex flex-col shadow-2xl sidebar-menu overflow-y-auto bg-black"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header: Socials + Close Button */}
@@ -171,10 +157,7 @@ export function Layout({ children }: LayoutProps) {
                     href="https://x.com/HackJklu?s=20"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="transition-transform transform hover:scale-110"
-                    style={{ color: 'var(--ivory-cream)' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold-shimmer)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--ivory-cream)')}
+                    className="transition-transform transform hover:scale-110 text-(--ivory-cream) hover:text-(--gold-shimmer)"
                     title="X (Twitter)"
                   >
                     <svg
@@ -210,19 +193,8 @@ export function Layout({ children }: LayoutProps) {
 
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    color: 'var(--ivory-cream)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 215, 0, 0.2)';
-                    e.currentTarget.style.color = 'var(--gold-shimmer)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                    e.currentTarget.style.color = 'var(--ivory-cream)';
-                  }}
+                  aria-label="Close menu"
+                  className="w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-white/10 text-(--ivory-cream) hover:bg-[rgba(255,215,0,0.2)] hover:text-(--gold-shimmer)"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -238,30 +210,14 @@ export function Layout({ children }: LayoutProps) {
                         key={item.path}
                         href={item.path}
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center gap-4 group transition-all active:scale-95 touch-manipulation"
-                        style={{
-                          color: isActive ? 'var(--gold-shimmer)' : 'var(--ivory-cream)',
-                          fontStyle: 'italic',
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isActive) {
-                            e.currentTarget.style.color = 'var(--gold-shimmer)';
-                            e.currentTarget.style.textShadow = '0 0 8px rgba(255, 215, 0, 0.6)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isActive) {
-                            e.currentTarget.style.color = 'var(--ivory-cream)';
-                            e.currentTarget.style.textShadow = 'none';
-                          }
-                        }}
+                        className={`flex items-center gap-4 group transition-all active:scale-95 touch-manipulation italic ${isActive
+                          ? 'text-(--gold-shimmer)'
+                          : 'text-(--ivory-cream) hover:text-(--gold-shimmer) hover:[text-shadow:0_0_8px_rgba(255,215,0,0.6)]'
+                          }`}
                       >
                         <span
-                          className="font-[Cinzel] text-xl tracking-wider"
-                          style={{
-                            color: isActive ? 'var(--gold-shimmer)' : 'var(--stone-gray)',
-                            minWidth: '2.5rem',
-                          }}
+                          className={`font-[Cinzel] text-xl tracking-wider min-w-10 ${isActive ? 'text-(--gold-shimmer)' : 'text-(--stone-gray)'
+                            }`}
                         >
                           {item.number}.
                         </span>
@@ -276,10 +232,9 @@ export function Layout({ children }: LayoutProps) {
 
 
 
-              <div className="px-4 sm:px-8 py-6 border-t" style={{ borderColor: 'rgba(126, 64, 49, 0.3)' }}>
+              <div className="px-4 sm:px-8 py-6 border-t border-[rgba(126,64,49,0.3)]">
                 <span
-                  className="font-[Cinzel] text-sm transition-colors block text-center opacity-80"
-                  style={{ color: 'var(--stone-gray)' }}
+                  className="font-[Cinzel] text-sm transition-colors block text-center opacity-80 text-(--stone-gray)"
                 >
                   © 2026 HackJKLU v5.0, All rights reserved
                 </span>
