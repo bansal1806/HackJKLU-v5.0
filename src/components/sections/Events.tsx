@@ -353,25 +353,23 @@ export function Events() {
       </div>
 
       {/* Staggered Temple Pillar Grid */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="relative z-10 flex flex-wrap justify-center gap-y-24 gap-x-12 max-w-7xl mx-auto w-full px-4"
-      >
+      <div className="relative z-10 flex flex-wrap justify-center gap-y-24 gap-x-12 max-w-7xl mx-auto w-full px-4">
         <AnimatePresence mode="popLayout">
           {filteredEvents.map((evt, idx) => (
-            <div
+            <motion.div
               key={evt.id}
-              className={`w-full sm:w-[calc(50%-24px)] lg:w-[calc(33.33%-32px)] xl:w-[calc(25%-36px)] ${idx % 2 === 1 ? 'md:mt-24' : ''
-                }`}
+              layout
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.9, transition: { duration: 0.2 } }}
+              transition={{ duration: 0.4, ease: "easeOut", delay: idx * 0.04 }}
+              className={`w-full sm:w-[calc(50%-24px)] lg:w-[calc(33.33%-32px)] xl:w-[calc(25%-36px)] ${idx % 2 === 1 ? 'md:mt-24' : ''}`}
             >
               <EventCard evt={evt} onClick={() => setSelectedEvent(evt)} />
-            </div>
+            </motion.div>
           ))}
         </AnimatePresence>
-      </motion.div>
+      </div>
 
       {/* No Results Placeholder */}
       {filteredEvents.length === 0 && (

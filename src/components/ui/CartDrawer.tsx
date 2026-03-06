@@ -2,7 +2,8 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, X, Minus, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useCart } from '@/context/CartContext';
 import { CheckoutModal } from './CheckoutModal';
 
@@ -10,18 +11,22 @@ export function CartDrawer() {
     const { items, removeItem, updateQuantity, total, count } = useCart();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [checkoutOpen, setCheckoutOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
-    return (
+    // Wait until we're in the browser before using createPortal
+    useEffect(() => { setMounted(true); }, []);
+
+    const drawerContent = (
         <>
-            {/* Floating Cart Button */}
+            {/* Floating Cart Button — hide when drawer is open to avoid click interception */}
             <AnimatePresence>
-                {count > 0 && (
+                {count > 0 && !drawerOpen && (
                     <motion.button
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         onClick={() => setDrawerOpen(true)}
-                        className="fixed bottom-8 right-8 z-50 flex items-center gap-3 bg-[#d4af37] text-black font-[Cinzel] font-black px-5 py-4 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:bg-white transition-all"
+                        className="fixed bottom-8 right-8 z-55 flex items-center gap-3 bg-[#d4af37] text-black font-[Cinzel] font-black px-5 py-4 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:bg-white transition-all"
                         aria-label="Open cart"
                     >
                         <ShoppingCart size={20} />
@@ -33,25 +38,27 @@ export function CartDrawer() {
                 )}
             </AnimatePresence>
 
-            {/* Drawer Backdrop */}
+            {/* Drawer Backdrop + Panel */}
             <AnimatePresence>
                 {drawerOpen && (
                     <>
+                        {/* Backdrop — closes drawer on click */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setDrawerOpen(false)}
-                            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+                            className="fixed inset-0 z-58 bg-black/60 backdrop-blur-sm"
                         />
 
-                        {/* Drawer Panel */}
+                        {/* Drawer Panel — rendered via portal so fixed positioning works correctly */}
                         <motion.div
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 28, stiffness: 250 }}
-                            className="fixed right-0 top-0 h-full w-full max-w-md z-50 bg-[#0B0C10] border-l border-[#d4af37]/20 flex flex-col shadow-2xl"
+                            className="fixed right-0 top-0 h-full w-full max-w-md z-60 bg-[#0B0C10] border-l border-[#d4af37]/20 flex flex-col shadow-2xl"
+                            onClick={(e) => e.stopPropagation()}
                         >
                             {/* Header */}
                             <div className="flex items-center justify-between p-6 border-b border-[#d4af37]/10">
@@ -60,6 +67,7 @@ export function CartDrawer() {
                                     <p className="text-stone-500 text-sm">{count} event{count !== 1 ? 's' : ''} selected</p>
                                 </div>
                                 <button
+                                    type="button"
                                     onClick={() => setDrawerOpen(false)}
                                     className="w-10 h-10 rounded-full border border-[#d4af37]/20 flex items-center justify-center text-stone-400 hover:text-white hover:border-[#d4af37] transition-all"
                                     aria-label="Close cart"
@@ -77,41 +85,42 @@ export function CartDrawer() {
                                     </div>
                                 ) : (
                                     items.map(item => (
-                                        <div key={item.eventId} className="bg-[#1A1C23] rounded-2xl p-4 flex items-center gap-4">
+                                        <div key={item.eventId} className="bg-[#1A1C23] rounded-2xl p-4 flex items-center gap-3">
                                             <div className="flex-1 min-w-0">
                                                 <p className="text-white font-[Cinzel] font-bold text-sm truncate">{item.eventTitle}</p>
                                                 <p className="text-[#d4af37] font-black mt-1">₹{item.pricePerUnit} / person</p>
                                             </div>
 
                                             {/* Qty controls */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-1">
                                                 <button
-                                                    onClick={() => updateQuantity(item.eventId, item.quantity - 1)}
-                                                    className="w-7 h-7 rounded-lg border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all"
+                                                    type="button"
+                                                    onClick={(e) => { e.stopPropagation(); updateQuantity(item.eventId, item.quantity - 1); }}
+                                                    className="min-w-[36px] min-h-[36px] rounded-lg border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all"
                                                     aria-label="Decrease quantity"
                                                 >
-                                                    <Minus size={12} />
+                                                    <Minus size={14} />
                                                 </button>
-                                                <span className="text-white font-black w-5 text-center text-sm">{item.quantity}</span>
+                                                <span className="text-white font-black w-6 text-center text-sm select-none">{item.quantity}</span>
                                                 <button
-                                                    onClick={() => updateQuantity(item.eventId, item.quantity + 1)}
-                                                    className="w-7 h-7 rounded-lg border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all"
+                                                    type="button"
+                                                    onClick={(e) => { e.stopPropagation(); updateQuantity(item.eventId, item.quantity + 1); }}
+                                                    className="min-w-[36px] min-h-[36px] rounded-lg border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all"
                                                     aria-label="Increase quantity"
                                                 >
-                                                    <Plus size={12} />
+                                                    <Plus size={14} />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => { e.stopPropagation(); removeItem(item.eventId); }}
+                                                    className="min-w-[36px] min-h-[36px] flex items-center justify-center text-red-500/60 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
+                                                    aria-label={`Remove ${item.eventTitle}`}
+                                                >
+                                                    <Trash2 size={16} />
                                                 </button>
                                             </div>
 
-                                            <div className="text-right">
-                                                <p className="text-white font-black text-sm">₹{item.pricePerUnit * item.quantity}</p>
-                                                <button
-                                                    onClick={() => removeItem(item.eventId)}
-                                                    className="text-red-500/50 hover:text-red-400 transition-colors mt-1"
-                                                    aria-label={`Remove ${item.eventTitle}`}
-                                                >
-                                                    <Trash2 size={14} />
-                                                </button>
-                                            </div>
+                                            <p className="text-white font-black text-sm text-right min-w-[40px]">₹{item.pricePerUnit * item.quantity}</p>
                                         </div>
                                     ))
                                 )}
@@ -125,6 +134,7 @@ export function CartDrawer() {
                                         <span className="text-[#d4af37] font-black text-2xl">₹{total}</span>
                                     </div>
                                     <button
+                                        type="button"
                                         onClick={() => { setDrawerOpen(false); setCheckoutOpen(true); }}
                                         className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 rounded-2xl hover:bg-white transition-all text-lg tracking-[0.15em] uppercase"
                                     >
@@ -141,4 +151,9 @@ export function CartDrawer() {
             <CheckoutModal open={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
         </>
     );
+
+    // Render into document.body to escape the Framer Motion page-transition wrapper
+    // (which applies CSS transforms that break fixed positioning on children)
+    if (!mounted) return null;
+    return createPortal(drawerContent, document.body);
 }
