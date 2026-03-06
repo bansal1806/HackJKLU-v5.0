@@ -47,8 +47,8 @@ const HACK_TEAM_LEADS = [
 // Council Members
 const COUNCIL_MEMBERS = [
     { id: 1, src: '/team/VC.png', alt: 'VC' },
-    { id: 2, src: '/team/Deepak_Sogani.webp', alt: 'Deepak Sogani' },
-    { id: 3, src: '/team/Anushka_Pathak.webp', alt: 'Anushka Pathak' },
+    { id: 2, src: '/team/Deepak_Sogani.jpg', alt: 'Deepak Sogani' },
+    { id: 3, src: '/team/Anushka_Pathak.jpg', alt: 'Anushka Pathak' },
     { id: 4, src: '/team/shubham.jpeg', alt: 'Shubham' },
     { id: 5, src: '/team/suryansh.jpeg', alt: 'Suryansh' },
     { id: 6, src: '/team/aman.jpeg', alt: 'Aman' },
