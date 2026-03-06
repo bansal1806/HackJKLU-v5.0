@@ -26,7 +26,7 @@ export function CartDrawer() {
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         onClick={() => setDrawerOpen(true)}
-                        className="fixed bottom-8 right-8 z-55 flex items-center gap-3 bg-[#d4af37] text-black font-[Cinzel] font-black px-5 py-4 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:bg-white transition-all"
+                        className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-55 flex items-center gap-2 sm:gap-3 bg-[#d4af37] text-black font-[Cinzel] font-black px-3 sm:px-5 py-3 sm:py-4 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:bg-white transition-all text-sm sm:text-base"
                         aria-label="Open cart"
                     >
                         <ShoppingCart size={20} />
@@ -53,11 +53,11 @@ export function CartDrawer() {
 
                         {/* Drawer Panel — rendered via portal so fixed positioning works correctly */}
                         <motion.div
-                            initial={{ x: '100%' }}
-                            animate={{ x: 0 }}
-                            exit={{ x: '100%' }}
+                            initial={{ y: '100%' }}
+                            animate={{ y: 0 }}
+                            exit={{ y: '100%' }}
                             transition={{ type: 'spring', damping: 28, stiffness: 250 }}
-                            className="fixed right-0 top-0 h-full w-full max-w-md z-60 bg-[#0B0C10] border-l border-[#d4af37]/20 flex flex-col shadow-2xl"
+                            className="fixed bottom-0 sm:bottom-auto sm:right-0 sm:top-0 left-0 sm:left-auto w-full sm:w-auto sm:max-w-md h-[85vh] sm:h-full z-60 bg-[#0B0C10] border-t sm:border-t-0 sm:border-l border-[#d4af37]/20 flex flex-col shadow-2xl rounded-t-3xl sm:rounded-none"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Header */}

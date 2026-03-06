@@ -108,7 +108,7 @@ export function CheckoutModal({ open, onClose }: Props) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-100 flex items-center justify-center p-4"
+                    className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center"
                 >
                     {/* Backdrop */}
                     <motion.div
@@ -121,27 +121,27 @@ export function CheckoutModal({ open, onClose }: Props) {
 
                     {/* Modal */}
                     <motion.div
-                        initial={{ scale: 0.9, y: 40, opacity: 0 }}
+                        initial={{ scale: 0.95, y: 40, opacity: 0 }}
                         animate={{ scale: 1, y: 0, opacity: 1 }}
-                        exit={{ scale: 0.9, y: 40, opacity: 0 }}
+                        exit={{ scale: 0.95, y: 40, opacity: 0 }}
                         transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-                        className="relative z-10 w-full max-w-lg bg-[#0B0C10] border border-[#d4af37]/25 rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(212,175,55,0.1)]"
+                        className="relative z-10 w-full sm:max-w-lg bg-[#0B0C10] border border-[#d4af37]/25 rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(212,175,55,0.1)] max-h-[90vh] flex flex-col"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-[#d4af37]/10">
+                        <div className="flex items-center justify-between px-5 sm:px-8 pt-5 sm:pt-8 pb-4 sm:pb-6 border-b border-[#d4af37]/10">
                             <div>
-                                <h2 className="text-2xl font-[Cinzel] font-black text-[#d4af37]">Secure Your Quests</h2>
-                                <p className="text-stone-500 text-sm mt-1">₹{total} total for {items.length} event{items.length !== 1 ? 's' : ''}</p>
+                                <h2 className="text-lg sm:text-2xl font-[Cinzel] font-black text-[#d4af37]">Secure Your Quests</h2>
+                                <p className="text-stone-500 text-xs sm:text-sm mt-1">₹{total} total for {items.length} event{items.length !== 1 ? 's' : ''}</p>
                             </div>
-                            <button onClick={onClose} className="w-10 h-10 rounded-full border border-[#d4af37]/20 flex items-center justify-center text-stone-400 hover:text-white transition-all" aria-label="Close checkout">
-                                <X size={18} />
+                            <button onClick={onClose} className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#d4af37]/20 flex items-center justify-center text-stone-400 hover:text-white transition-all" aria-label="Close checkout">
+                                <X size={16} />
                             </button>
                         </div>
 
                         {/* Order Summary */}
-                        <div className="px-8 py-4 bg-[#1A1C23]/40 border-b border-[#d4af37]/10 space-y-2 max-h-36 overflow-y-auto">
+                        <div className="px-5 sm:px-8 py-3 sm:py-4 bg-[#1A1C23]/40 border-b border-[#d4af37]/10 space-y-2 max-h-28 overflow-y-auto">
                             {items.map(item => (
-                                <div key={item.eventId} className="flex justify-between text-sm">
+                                <div key={item.eventId} className="flex justify-between text-xs sm:text-sm">
                                     <span className="text-stone-400 font-[Cinzel]">{item.eventTitle} × {item.quantity}</span>
                                     <span className="text-white font-bold">₹{item.pricePerUnit * item.quantity}</span>
                                 </div>
@@ -149,7 +149,7 @@ export function CheckoutModal({ open, onClose }: Props) {
                         </div>
 
                         {/* Form */}
-                        <form onSubmit={handleSubmit} className="px-8 py-6 space-y-4">
+                        <form onSubmit={handleSubmit} className="px-5 sm:px-8 py-4 sm:py-6 space-y-3 sm:space-y-4 overflow-y-auto">
                             {[
                                 { id: 'name', label: 'Full Name', type: 'text', placeholder: 'Heracles of Athens' },
                                 { id: 'email', label: 'Email', type: 'email', placeholder: 'hero@olympus.com' },

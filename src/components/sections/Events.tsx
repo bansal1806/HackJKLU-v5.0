@@ -232,7 +232,7 @@ export function Events() {
   return (
     <section
       id="events"
-      className="relative min-h-screen bg-[#020205] flex flex-col items-center pt-28 md:pt-40 pb-20 px-4 overflow-hidden"
+      className="relative min-h-screen bg-[#020205] flex flex-col items-center pt-20 sm:pt-28 md:pt-40 pb-12 sm:pb-20 px-3 sm:px-4 overflow-hidden"
     >
       {/* 4-Layer Deep Parallax Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -244,7 +244,7 @@ export function Events() {
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="text-[20rem] font-serif select-none"
+              className="text-[8rem] sm:text-[14rem] md:text-[20rem] font-serif select-none"
               animate={{
                 y: [0, -40, 0],
                 rotate: [0, 5, 0],
@@ -279,10 +279,10 @@ export function Events() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="relative z-10 w-full flex flex-col items-center mb-24"
+        className="relative z-10 w-full flex flex-col items-center mb-12 sm:mb-16 md:mb-24"
       >
         <div className="relative">
-          <h2 className="text-7xl md:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] text-transparent stroke-1 stroke-[#d4af37]/30 absolute inset-0 select-none">
+          <h2 className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] text-transparent stroke-1 stroke-[#d4af37]/30 absolute inset-0 select-none">
             EVENTS
           </h2>
           <motion.h2
@@ -290,24 +290,24 @@ export function Events() {
               textShadow: ["0 0 20px rgba(212,175,55,0.2)", "0 0 40px rgba(212,175,55,0.4)", "0 0 20px rgba(212,175,55,0.2)"]
             }}
             transition={{ duration: 4, repeat: Infinity }}
-            className="text-7xl md:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] bg-linear-to-b from-[#fff8e7] via-[#d4af37] to-[#8a6d3b] bg-clip-text text-transparent relative z-10"
+            className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] bg-linear-to-b from-[#fff8e7] via-[#d4af37] to-[#8a6d3b] bg-clip-text text-transparent relative z-10"
           >
             EVENTS
           </motion.h2>
         </div>
         <motion.div
           initial={{ width: 0 }}
-          whileInView={{ width: "300px" }}
+          whileInView={{ width: "min(300px, 80vw)" }}
           transition={{ delay: 0.5, duration: 1 }}
-          className="h-px bg-linear-to-r from-transparent via-[#d4af37] to-transparent mt-4"
+          className="h-px bg-linear-to-r from-transparent via-[#d4af37] to-transparent mt-3 sm:mt-4"
         />
-        <p className="mt-6 text-[#d4af37] font-[Cinzel] italic text-xl tracking-[0.4em] uppercase text-center opacity-80">
+        <p className="mt-4 sm:mt-6 text-[#d4af37] font-[Cinzel] italic text-sm sm:text-base md:text-xl tracking-[0.25em] sm:tracking-[0.4em] uppercase text-center opacity-80 px-4">
           - The XII Labours -
         </p>
       </motion.div>
 
       {/* Oracle Sigils: Search & Filter */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col md:flex-row gap-6 mb-24 px-4 italic">
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-6 mb-10 sm:mb-16 md:mb-24 px-0 sm:px-4 italic">
         {/* Divine Search */}
         <div className="relative flex-1 group">
           <div className="absolute -inset-0.5 bg-linear-to-r from-[#d4af37]/0 via-[#d4af37]/20 to-[#d4af37]/0 rounded-2xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
@@ -316,13 +316,13 @@ export function Events() {
             placeholder="Search events..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#1A1C23]/40 border border-[#d4af37]/20 rounded-2xl py-5 pl-14 pr-6 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] transition-all backdrop-blur-xl relative z-10 text-lg font-[Cinzel]"
+            className="w-full bg-[#1A1C23]/40 border border-[#d4af37]/20 rounded-2xl py-4 sm:py-5 pl-12 sm:pl-14 pr-4 sm:pr-6 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] transition-all backdrop-blur-xl relative z-10 text-base sm:text-lg font-[Cinzel]"
           />
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-500 group-focus-within:text-[#d4af37] transition-colors z-20" size={24} />
+          <Search className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-stone-500 group-focus-within:text-[#d4af37] transition-colors z-20" size={20} />
         </div>
 
         {/* Oracle Sigils */}
-        <div className="flex gap-4 justify-center md:justify-end">
+        <div className="flex gap-2 sm:gap-4 justify-center sm:justify-end">
           {[
             { id: 'all', icon: SlidersHorizontal, label: 'All' },
             { id: 'popular', icon: Sparkles, label: 'Epic' },
@@ -335,11 +335,11 @@ export function Events() {
                 key={type.id}
                 onClick={() => setFilterType(type.id as FilterId)}
                 aria-label={`Filter by ${type.label}`}
-                className={`relative flex flex-col items-center justify-center w-20 h-20 rounded-2xl border transition-all duration-500 group ${isActive ? 'bg-[#d4af37] border-[#d4af37] text-black scale-110 shadow-[0_0_30px_rgba(212,175,55,0.3)]' : 'bg-white/5 border-white/10 text-white hover:border-[#d4af37]/50'
+                className={`relative flex flex-col items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border transition-all duration-500 group ${isActive ? 'bg-[#d4af37] border-[#d4af37] text-black scale-110 shadow-[0_0_30px_rgba(212,175,55,0.3)]' : 'bg-white/5 border-white/10 text-white hover:border-[#d4af37]/50'
                   }`}
               >
-                <Icon size={24} className={`mb-1 transition-transform duration-300 ${!isActive && 'group-hover:scale-125'}`} />
-                <span className="text-[10px] font-black uppercase tracking-tighter">{type.label}</span>
+                <Icon size={20} className={`mb-0.5 sm:mb-1 transition-transform duration-300 ${!isActive && 'group-hover:scale-125'}`} />
+                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-tighter">{type.label}</span>
                 {isActive && (
                   <motion.div
                     layoutId="active-sigil"
@@ -353,7 +353,7 @@ export function Events() {
       </div>
 
       {/* Staggered Temple Pillar Grid */}
-      <div className="relative z-10 flex flex-wrap justify-center gap-y-24 gap-x-12 max-w-7xl mx-auto w-full px-4">
+      <div className="relative z-10 flex flex-wrap justify-center gap-y-10 sm:gap-y-16 md:gap-y-24 gap-x-6 sm:gap-x-8 md:gap-x-12 max-w-7xl mx-auto w-full px-0 sm:px-2 md:px-4">
         <AnimatePresence mode="popLayout">
           {filteredEvents.map((evt, idx) => (
             <motion.div
@@ -363,7 +363,7 @@ export function Events() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.9, transition: { duration: 0.2 } }}
               transition={{ duration: 0.4, ease: "easeOut", delay: idx * 0.04 }}
-              className={`w-full sm:w-[calc(50%-24px)] lg:w-[calc(33.33%-32px)] xl:w-[calc(25%-36px)] ${idx % 2 === 1 ? 'md:mt-24' : ''}`}
+              className={`w-[calc(50%-12px)] sm:w-[calc(50%-16px)] md:w-[calc(50%-24px)] lg:w-[calc(33.33%-32px)] xl:w-[calc(25%-36px)] ${idx % 2 === 1 ? 'sm:mt-16 md:mt-24' : ''}`}
             >
               <EventCard evt={evt} onClick={() => setSelectedEvent(evt)} />
             </motion.div>
@@ -390,7 +390,7 @@ export function Events() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-8"
+            className="fixed inset-0 z-100 flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-8"
           >
             <motion.div
               initial={{ opacity: 0 }}
@@ -401,49 +401,49 @@ export function Events() {
             />
 
             <motion.div
-              initial={{ scale: 0.8, y: 100, opacity: 0, rotateX: 20 }}
-              animate={{ scale: 1, y: 0, opacity: 1, rotateX: 0 }}
-              exit={{ scale: 0.8, y: 100, opacity: 0, rotateX: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative z-10 w-full max-w-6xl max-h-[90vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-4xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold mask-relic"
+              initial={{ scale: 0.95, y: 60, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.95, y: 60, opacity: 0 }}
+              transition={{ type: "spring", damping: 28, stiffness: 220 }}
+              className="relative z-10 w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl h-[95vh] sm:max-h-[90vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-t-3xl sm:rounded-3xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold"
             >
               <button
                 onClick={() => setSelectedEvent(null)}
-                className="absolute top-6 right-6 z-30 w-12 h-12 flex items-center justify-center bg-black/50 text-white rounded-full hover:scale-110 transition-transform backdrop-blur-md border border-[#d4af37]/30 hover:bg-[#d4af37] hover:text-black"
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-black/50 text-white rounded-full hover:scale-110 transition-transform backdrop-blur-md border border-[#d4af37]/30 hover:bg-[#d4af37] hover:text-black"
                 aria-label="Close event details"
               >
-                <X size={24} />
+                <X size={20} />
               </button>
 
               {/* Poster Side: The Artifact */}
-              <div className="w-full md:w-1/2 relative min-h-[40vh] md:min-h-0 bg-black overflow-hidden group">
+              <div className="w-full md:w-5/12 relative min-h-[30vh] sm:min-h-[35vh] md:min-h-0 bg-black overflow-hidden flex-shrink-0">
                 <motion.img
                   initial={{ scale: 1.2 }}
                   animate={{ scale: 1 }}
                   src={selectedEvent.poster}
                   alt={selectedEvent.title}
-                  className="w-full h-full object-cover transition-transform duration-10000 linear"
+                  className="w-full h-full object-cover"
                 />
 
                 {/* Decorative Elements */}
                 <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-transparent to-black/30" />
-                <div className="absolute top-10 left-10 p-6 border-l-2 border-t-2 border-[#d4af37]/50 w-24 h-24 pointer-events-none" />
-                <div className="absolute bottom-10 right-10 p-6 border-r-2 border-b-2 border-[#d4af37]/50 w-24 h-24 pointer-events-none" />
+                <div className="absolute top-6 left-6 sm:top-10 sm:left-10 p-4 sm:p-6 border-l-2 border-t-2 border-[#d4af37]/50 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none" />
+                <div className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 p-4 sm:p-6 border-r-2 border-b-2 border-[#d4af37]/50 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none" />
 
-                <div className="absolute bottom-12 left-12 right-12">
+                <div className="absolute bottom-6 sm:bottom-12 left-6 sm:left-12 right-6 sm:right-12">
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 }}
-                    className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-8 bg-[#1A1C23] border border-[#d4af37]/30 shadow-[0_0_30px_rgba(var(--evt-rgb),0.3)] event-color-${selectedEvent.id}`}
+                    className={`w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-3 sm:mb-6 bg-[#1A1C23] border border-[#d4af37]/30 event-color-${selectedEvent.id}`}
                   >
-                    <selectedEvent.icon className="w-10 h-10 text-(--evt-color)" />
+                    <selectedEvent.icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-(--evt-color)" />
                   </motion.div>
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-5xl md:text-7xl font-[Cinzel] font-black text-white leading-none uppercase"
+                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-[Cinzel] font-black text-white leading-none uppercase"
                   >
                     {selectedEvent.title}
                   </motion.h3>
@@ -451,15 +451,15 @@ export function Events() {
               </div>
 
               {/* Details Side: The Legend */}
-              <div className="w-full md:w-1/2 p-8 md:p-16 overflow-y-auto italic bg-[#1A1C23]/30 backdrop-blur-sm custom-scrollbar">
-                <div className="mb-12 flex flex-wrap gap-4">
-                  <div className="flex items-center gap-3 bg-white/5 px-5 py-3 rounded-xl border border-[#d4af37]/10">
-                    <Clock className="text-[#d4af37]" size={20} />
-                    <span className="text-white text-base font-bold tracking-widest uppercase">{selectedEvent.time}</span>
+              <div className="flex-1 p-5 sm:p-8 md:p-10 lg:p-14 overflow-y-auto italic bg-[#1A1C23]/30 backdrop-blur-sm custom-scrollbar">
+                <div className="mb-6 sm:mb-10 flex flex-wrap gap-2 sm:gap-4">
+                  <div className="flex items-center gap-2 sm:gap-3 bg-white/5 px-3 sm:px-5 py-2 sm:py-3 rounded-xl border border-[#d4af37]/10">
+                    <Clock className="text-[#d4af37] shrink-0" size={16} />
+                    <span className="text-white text-xs sm:text-sm md:text-base font-bold tracking-wider sm:tracking-widest uppercase">{selectedEvent.time}</span>
                   </div>
-                  <div className="flex items-center gap-3 bg-white/5 px-5 py-3 rounded-xl border border-[#d4af37]/10">
-                    <MapPin className="text-[#d4af37]" size={20} />
-                    <span className="text-white text-base font-bold tracking-widest uppercase">{selectedEvent.location}</span>
+                  <div className="flex items-center gap-2 sm:gap-3 bg-white/5 px-3 sm:px-5 py-2 sm:py-3 rounded-xl border border-[#d4af37]/10">
+                    <MapPin className="text-[#d4af37] shrink-0" size={16} />
+                    <span className="text-white text-xs sm:text-sm md:text-base font-bold tracking-wider sm:tracking-widest uppercase">{selectedEvent.location}</span>
                   </div>
                 </div>
 
@@ -467,30 +467,30 @@ export function Events() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
-                  className="prose prose-invert max-w-none mb-16"
+                  className="prose prose-invert max-w-none mb-8 sm:mb-12"
                 >
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="h-0.5 w-12 bg-[#d4af37]/30" />
-                    <span className="text-[#d4af37] font-[Cinzel] text-sm font-black tracking-widest uppercase">About the Event</span>
+                  <div className="flex items-center gap-4 mb-4 sm:mb-6">
+                    <div className="h-0.5 w-8 sm:w-12 bg-[#d4af37]/30" />
+                    <span className="text-[#d4af37] font-[Cinzel] text-xs sm:text-sm font-black tracking-widest uppercase">About the Event</span>
                   </div>
-                  <p className="text-stone-300 text-xl leading-relaxed italic font-serif">
+                  <p className="text-stone-300 text-base sm:text-lg md:text-xl leading-relaxed italic font-serif">
                     {selectedEvent.details}
                   </p>
                 </motion.div>
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3 sm:gap-4">
                   {selectedEvent.requiresBooking ? (
                     <>
-                      <div className="flex items-center justify-between bg-[#1A1C23] rounded-xl px-5 py-3 border border-[#d4af37]/20">
+                      <div className="flex items-center justify-between bg-[#1A1C23] rounded-xl px-4 sm:px-5 py-3 border border-[#d4af37]/20">
                         <span className="text-stone-400 font-[Cinzel] text-sm">Entry Fee</span>
-                        <span className="text-[#d4af37] font-[Cinzel] font-black text-lg">
+                        <span className="text-[#d4af37] font-[Cinzel] font-black text-base sm:text-lg">
                           {selectedEvent.entryFee === 0 ? 'Free' : `₹${selectedEvent.entryFee}`}
                         </span>
                       </div>
                       {items.some(i => i.eventId === selectedEvent.id) ? (
-                        <div className="flex items-center justify-center gap-3 bg-green-900/20 border border-green-500/30 rounded-2xl py-5">
-                          <CheckCircle size={20} className="text-green-400" />
-                          <span className="text-green-400 font-[Cinzel] font-black uppercase tracking-wider">Added to Cart</span>
+                        <div className="flex items-center justify-center gap-3 bg-green-900/20 border border-green-500/30 rounded-2xl py-4 sm:py-5">
+                          <CheckCircle size={18} className="text-green-400" />
+                          <span className="text-green-400 font-[Cinzel] font-black uppercase tracking-wider text-sm sm:text-base">Added to Cart</span>
                         </div>
                       ) : (
                         <div className="relative group/btn">
@@ -500,9 +500,9 @@ export function Events() {
                               addItem({ eventId: selectedEvent.id, eventTitle: selectedEvent.title, quantity: 1, pricePerUnit: selectedEvent.entryFee });
                             }}
                             aria-label={`Add ${selectedEvent.title} to cart`}
-                            className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-5 rounded-2xl hover:bg-white transition-all transform hover:-translate-y-1 active:scale-95 text-lg tracking-[0.2em] uppercase relative z-10 flex items-center justify-center gap-3"
+                            className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 sm:py-5 rounded-2xl hover:bg-white transition-all active:scale-95 text-sm sm:text-base md:text-lg tracking-[0.15em] sm:tracking-[0.2em] uppercase relative z-10 flex items-center justify-center gap-2 sm:gap-3"
                           >
-                            <ShoppingCart size={20} />
+                            <ShoppingCart size={18} />
                             {selectedEvent.entryFee === 0 ? 'Register Free' : `Add to Cart - ₹${selectedEvent.entryFee}`}
                           </button>
                         </div>
@@ -514,7 +514,7 @@ export function Events() {
                       <button
                         onClick={() => setSelectedEvent(null)}
                         aria-label={`Join ${selectedEvent.title}`}
-                        className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-6 rounded-2xl hover:bg-white transition-all transform hover:-translate-y-1 active:scale-95 text-xl tracking-[0.2em] uppercase relative z-10"
+                        className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 sm:py-5 rounded-2xl hover:bg-white transition-all active:scale-95 text-base sm:text-lg md:text-xl tracking-[0.2em] uppercase relative z-10"
                       >
                         Join Event
                       </button>
@@ -558,59 +558,60 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
       variants={itemVariants}
       onMouseMove={handleMouseMove}
       onClick={onClick}
-      className={`group cursor-pointer flex flex-col w-full h-full relative mythic-border-gold mask-relic p-4 bg-[#1A1C23] event-color-${evt.id}`}
+      className={`group cursor-pointer flex flex-col w-full h-full relative mythic-border-gold mask-relic p-3 sm:p-4 bg-[#1A1C23] event-color-${evt.id}`}
     >
       {/* Glow Follow Effect */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 relic-glow-follow pointer-events-none" />
 
       {/* Background Labour Number */}
-      <div className="absolute top-4 left-6 text-7xl font-[Cinzel] font-black text-white/5 select-none pointer-events-none group-hover:text-[#d4af37]/10 transition-colors duration-500">
+      <div className="absolute top-3 left-4 sm:top-4 sm:left-6 text-5xl sm:text-7xl font-[Cinzel] font-black text-white/5 select-none pointer-events-none group-hover:text-[#d4af37]/10 transition-colors duration-500">
         {romanNumerals[evt.id - 1]}
       </div>
 
       {/* Image Container */}
-      <div className="relative aspect-3/4 w-full overflow-hidden mb-6 bg-black mask-relic">
+      <div className="relative aspect-3/4 w-full overflow-hidden mb-3 sm:mb-6 bg-black mask-relic">
         <img
           src={evt.poster}
           alt={evt.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
+          loading="lazy"
         />
 
         {/* Overlay Gradients */}
         <div className="absolute inset-0 bg-linear-to-t from-[#1A1C23] via-transparent to-black/20" />
 
         {/* Divine Category Icon */}
-        <div className="absolute bottom-4 right-4 p-3 rounded-full bg-black/60 backdrop-blur-md border border-[#d4af37]/30 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-          <evt.icon className="w-5 h-5 text-(--evt-color)" />
+        <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-2 sm:p-3 rounded-full bg-black/60 backdrop-blur-md border border-[#d4af37]/30 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+          <evt.icon className="w-4 h-4 sm:w-5 sm:h-5 text-(--evt-color)" />
         </div>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex-1 flex flex-col italic px-2">
-        <div className="flex items-center gap-2 mb-3">
+      <div className="relative z-10 flex-1 flex flex-col italic px-1 sm:px-2">
+        <div className="flex items-center gap-2 mb-2 sm:mb-3">
           <div className="h-px flex-1 bg-linear-to-r from-transparent via-[#d4af37]/30 to-transparent" />
-          <span className="text-[#d4af37] font-[Cinzel] text-[10px] font-black tracking-[0.2em] uppercase">
+          <span className="text-[#d4af37] font-[Cinzel] text-[9px] sm:text-[10px] font-black tracking-[0.15em] sm:tracking-[0.2em] uppercase">
             Day {evt.time.split(',')[0]}
           </span>
           <div className="h-px flex-1 bg-linear-to-r from-transparent via-[#d4af37]/30 to-transparent" />
         </div>
 
-        <h3 className="text-2xl font-[Cinzel] font-black text-white mb-2 tracking-tight group-hover:text-[#d4af37] transition-all duration-300 uppercase line-clamp-1">
+        <h3 className="text-base sm:text-xl lg:text-2xl font-[Cinzel] font-black text-white mb-1 sm:mb-2 tracking-tight group-hover:text-[#d4af37] transition-all duration-300 uppercase line-clamp-1">
           {evt.title}
         </h3>
 
-        <p className="text-stone-500 text-xs mb-6 line-clamp-2 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
+        <p className="text-stone-500 text-[10px] sm:text-xs mb-3 sm:mb-6 line-clamp-2 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
           {evt.desc}
         </p>
 
-        <div className="mt-auto flex items-center justify-between py-3 border-t border-[#d4af37]/10">
-          <div className="flex items-center gap-1.5 text-stone-500">
-            <MapPin size={12} className="text-[#d4af37]/70" />
-            <span className="text-[10px] uppercase font-bold tracking-wider">{evt.location}</span>
+        <div className="mt-auto flex items-center justify-between py-2 sm:py-3 border-t border-[#d4af37]/10">
+          <div className="flex items-center gap-1 sm:gap-1.5 text-stone-500 min-w-0">
+            <MapPin size={10} className="text-[#d4af37]/70 shrink-0" />
+            <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider truncate">{evt.location}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[#d4af37] font-black">₹{evt.entryFee}</span>
-            <span className="text-white text-[10px] font-black tracking-widest uppercase ml-1">Select</span>
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-1">
+            <span className="text-[#d4af37] font-black text-sm sm:text-base">₹{evt.entryFee}</span>
+            <span className="text-white text-[9px] sm:text-[10px] font-black tracking-widest uppercase">Select</span>
           </div>
         </div>
       </div>
