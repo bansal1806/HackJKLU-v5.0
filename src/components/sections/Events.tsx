@@ -197,7 +197,7 @@ const EMBER_PARTICLES = [
 
 // Build a CSS string from the ember data - avoids inline style props on DOM elements
 const EMBER_CSS = [
-  `.ember-particle { position: absolute; width: 4px; height: 4px; background: #d4af37; border-radius: 50%; filter: blur(1px); }`,
+  `.ember-particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, #d4af37 40%, transparent 100%); will-change: transform, opacity; }`,
   ...EMBER_PARTICLES.map((p, i) =>
     `.ember-${i} { left: ${p.left}%; top: ${p.top}%; animation: ember-rise ${p.dur}s infinite linear; animation-delay: ${p.delay}s; opacity: ${p.opacity}; }`
   ),
@@ -234,17 +234,17 @@ export function Events() {
       id="events"
       className="relative min-h-screen bg-[#020205] flex flex-col items-center pt-20 sm:pt-28 md:pt-40 pb-12 sm:pb-20 px-3 sm:px-4 overflow-hidden"
     >
-      {/* 4-Layer Deep Parallax Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      {/* 4-Layer Deep Parallax Background - Using fixed wrapper instead of bg-fixed to prevent severe mobile scroll lag */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         {/* Layer 1: Base Etching - CSS class handles filter to avoid inline style warning */}
-        <div className="absolute inset-x-0 top-0 h-full opacity-20 bg-[url('/events/bg.png')] bg-fixed bg-cover bg-etch" />
+        <div className="absolute inset-x-0 top-0 h-full opacity-20 bg-[url('/events/bg.png')] bg-cover bg-center bg-etch will-change-transform" />
 
         {/* Layer 2: Floating Sigils (Slow) */}
         <div className="absolute inset-0 flex items-center justify-around opacity-10 blur-sm overflow-hidden">
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="text-[8rem] sm:text-[14rem] md:text-[20rem] font-serif select-none"
+              className="text-[8rem] sm:text-[14rem] md:text-[20rem] font-serif select-none will-change-transform"
               animate={{
                 y: [0, -40, 0],
                 rotate: [0, 5, 0],
@@ -285,15 +285,18 @@ export function Events() {
           <h2 className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] text-transparent stroke-1 stroke-[#d4af37]/30 absolute inset-0 select-none">
             EVENTS
           </h2>
+          {/* Animated Glow Layer - cheaper than animating textShadow */}
           <motion.h2
-            animate={{
-              textShadow: ["0 0 20px rgba(212,175,55,0.2)", "0 0 40px rgba(212,175,55,0.4)", "0 0 20px rgba(212,175,55,0.2)"]
-            }}
-            transition={{ duration: 4, repeat: Infinity }}
-            className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] bg-linear-to-b from-[#fff8e7] via-[#d4af37] to-[#8a6d3b] bg-clip-text text-transparent relative z-10"
+            animate={{ opacity: [0.2, 0.6, 0.2] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] text-[#d4af37] absolute inset-0 blur-xl z-0 will-change-opacity select-none"
           >
             EVENTS
           </motion.h2>
+          {/* Foreground Text */}
+          <h2 className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] bg-linear-to-b from-[#fff8e7] via-[#d4af37] to-[#8a6d3b] bg-clip-text text-transparent relative z-10 select-none">
+            EVENTS
+          </h2>
         </div>
         <motion.div
           initial={{ width: 0 }}
@@ -554,7 +557,7 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
   return (
     <motion.div
       ref={cardRef}
-      layout
+      layout="position"
       variants={itemVariants}
       onMouseMove={handleMouseMove}
       onClick={onClick}
