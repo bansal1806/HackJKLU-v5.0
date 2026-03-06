@@ -9,7 +9,7 @@ export interface PartnerGroup {
   title: string;
   ring: string | StaticImageData;
   color: string;
-  partners: { name: string; logo: string | StaticImageData }[];
+  partners: { name: string; logo: string | StaticImageData; logoScale?: number }[];
 }
 
 export interface GridPartnerData {
@@ -90,10 +90,10 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                     <div
                       className="relative will-change-transform"
                       style={{
-                        width: isMobile ? '35vw' : '20vmin', // Increased from 15vmin for better desktop presence
-                        height: isMobile ? '35vw' : '20vmin',
-                        maxWidth: '300px', // Increased max-width
-                        minWidth: '120px'
+                        width: isMobile ? '40vw' : '28vmin',
+                        height: isMobile ? '40vw' : '28vmin',
+                        maxWidth: '400px',
+                        minWidth: '180px'
                       }}
                     >
                       <motion.div
@@ -124,7 +124,8 @@ const GridPartnerView = ({ data }: { data: GridPartnerData }) => {
                             className={`object-contain transition-all duration-300 drop-shadow-md rounded-full aspect-square ${isMobile
                               ? 'brightness-125'
                               : 'filter group-hover:brightness-125'
-                              } !w-[65%] !h-[65%] !relative`} // Overriding fill styles or using relative + fill requires verify. 
+                              } w-[75%]! h-[75%]! relative!`}
+                            style={partner.logoScale ? { transform: `scale(${partner.logoScale})` } : undefined}
                             loading="eager"
                           />
                         </div>

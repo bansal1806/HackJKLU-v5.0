@@ -48,10 +48,10 @@ const mainPrizes = [
 ];
 
 const domainPrizes = [
-  { title: 'AI & ML', desc: 'Best AI Innovation', img: domainSpartan },
+  { title: 'AI/ML & Data Science', desc: 'Best AI/Data Innovation', img: domainSpartan },
   { title: 'Cyber Security', desc: 'Best Security Hack', img: domainSpartan },
   { title: 'Blockchain', desc: 'Best Web3 DApp', img: domainSpartan },
-  { title: 'Data Science', desc: 'Best Data Solution', img: domainSpartan },
+  { title: 'Fintech', desc: 'Best Fintech Solution', img: domainSpartan },
 ];
 
 export default function Prizes() {
@@ -178,7 +178,7 @@ export default function Prizes() {
     <div className="relative text-neutral-100 min-h-screen overflow-hidden selection:bg-yellow-900 selection:text-white pb-12 xs:pb-14 sm:pb-16 md:pb-20 lg:pb-24">
       {/* Gradient Background - transitions from parchment-brown to marble */}
       <div className="fixed inset-0 z-[-1]">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#2a2520] via-[#1a1510] to-[#0f0a05]" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#2a2520] via-[#1a1510] to-[#0f0a05]" />
         <Image
           src={bgImage}
           alt="Background"
@@ -190,8 +190,7 @@ export default function Prizes() {
         <div className="absolute inset-0 bg-black/40" />
         {/* Gold ambient glow */}
         <div
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] blur-[150px] opacity-20"
-          style={{ background: `radial-gradient(ellipse, ${colors.gold.primary}, transparent)` }}
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] blur-[150px] opacity-20 bg-[radial-gradient(ellipse,var(--gold-primary),transparent)]"
         />
       </div>
 
@@ -209,8 +208,7 @@ export default function Prizes() {
       {/* COMBINED PARTICLES - Absolute to container */}
       {isMounted && (
         <div
-          className="absolute inset-0 pointer-events-none z-[1] overflow-hidden"
-          style={{ contain: 'layout style paint' }}
+          className="absolute inset-0 pointer-events-none z-1 overflow-hidden contain-[layout_style_paint]"
         >
           {/* Particles maps... (Same as before) */}
           {flameParticles.map((particle, i) => (
@@ -314,12 +312,14 @@ export default function Prizes() {
           {/* Same Carousel Logic as before */}
           <button
             onClick={handlePrev}
+            aria-label="Previous prize"
             className="absolute left-1 xs:left-2 sm:left-4 md:left-8 top-1/2 z-30 p-2 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none"
           >
             <Image src={arrowLeft} alt="Prev" className="w-10 xs:w-16 md:w-20 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
           </button>
           <button
             onClick={handleNext}
+            aria-label="Next prize"
             className="absolute right-1 xs:right-2 sm:right-4 md:right-8 top-1/2 z-30 p-2 hover:scale-110 active:scale-95 transition-transform -translate-y-1/2 focus:outline-none"
           >
             <Image src={arrowRight} alt="Next" className="w-10 xs:w-16 md:w-20 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
@@ -353,8 +353,7 @@ export default function Prizes() {
                 animate={{ scale: 1, opacity: 1, x: 0, rotateY: 0 }}
                 exit={{ scale: 0.85, opacity: 0, rotateY: 15 }}
                 transition={{ duration: 0.6 }}
-                className="z-20 relative group cursor-pointer"
-                style={{ transformStyle: 'preserve-3d' }}
+                className="z-20 relative group cursor-pointer transform-3d"
               >
                 <div
                   className="rounded-xl overflow-hidden border-[3px] transition-all duration-500 group-hover:scale-105 relative"
@@ -447,7 +446,7 @@ export default function Prizes() {
                   className="object-cover object-center"
                 />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent group-hover:bg-black/60 transition-all duration-500 z-10" />
+              <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent group-hover:bg-black/60 transition-all duration-500 z-10" />
 
               <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <h3 className="text-xl font-bold font-medieval tracking-widest text-[#e8dab2] mb-2">{prize.title}</h3>

@@ -114,7 +114,7 @@ export const partnersData: PartnerData[] = [
                 color: '#C0C0C0',
                 partners: [
                     { name: 'The Belgian Waffle Co.', logo: belgianWaffleLogo, logoScale: 0.9 },
-                    { name: 'Devfolio', logo: devfolioLogo, logoScale: 0.8 },
+                    { name: 'Devfolio', logo: devfolioLogo, logoScale: 0.45 },
                 ],
             },
             {
@@ -122,11 +122,11 @@ export const partnersData: PartnerData[] = [
                 ring: bronzeRing,
                 color: '#CD7F32',
                 partners: [
-                    { name: 'InterviewBuddy', logo: interviewBuddyLogo, logoScale: 0.7 },
+                    { name: 'InterviewBuddy', logo: interviewBuddyLogo, logoScale: 0.4 },
                     { name: 'TruScholar', logo: truScholarLogo, logoScale: 0.8 },
                     { name: 'Commudle', logo: commudleLogo, logoScale: 0.8 },
                     { name: 'DMV Core Tech', logo: dmvCoreLogo, logoScale: 0.85 },
-                    { name: 'HeLa Labs', logo: helaLabsLogo, logoScale: 0.8 },
+                    { name: 'HeLa Labs', logo: helaLabsLogo, logoScale: 0.45 },
                     { name: 'Mangalam Water', logo: mangalamWatersLogo, logoScale: 0.9 },
                 ],
             },
