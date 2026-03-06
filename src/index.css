@@ -544,6 +544,10 @@ textarea,
   animation: scroll-right var(--speed, 40s) linear infinite;
 }
 
+.pause-on-hover:hover>div {
+  animation-play-state: paused;
+}
+
 .pause-on-hover:hover {
   animation-play-state: paused !important;
 }

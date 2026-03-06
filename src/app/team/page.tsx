@@ -44,14 +44,14 @@ const HACK_TEAM_LEADS = [
     { name: "Pakhi", role: "Organising Head", image: '/team/OH_PakhiDi-removebg-preview.png', insta: "https://www.instagram.com/pakhii_.sharma", linkedin: "https://www.linkedin.com/in/pakhi-sharma-961b3b219" },
 ];
 
-// Council Members
+// Data structure for the Council Members (Static Images)
 const COUNCIL_MEMBERS = [
-    { id: 1, src: '/team/VC.png', alt: 'VC' },
-    { id: 2, src: '/team/Deepak_Sogani.jpg', alt: 'Deepak Sogani' },
-    { id: 3, src: '/team/Anushka_Pathak.jpg', alt: 'Anushka Pathak' },
-    { id: 4, src: '/team/shubham.jpeg', alt: 'Shubham' },
-    { id: 5, src: '/team/suryansh.jpeg', alt: 'Suryansh' },
-    { id: 6, src: '/team/aman.jpeg', alt: 'Aman' },
+    { src: '/team/VC.png', name: 'Dr. Vijaysekhar Chellaboina', designation: 'Vice Chancellor, JKLU' },
+    { src: '/team/Deepak_Sogani.jpg', name: 'Mr. Deepak Sogani', designation: 'Incharge - Student Affairs, JKLU' },
+    { src: '/team/Anushka_Pathak.jpg', name: 'Ms. Anushka Pathak', designation: 'Executive - Student Affairs, JKLU' },
+    { src: '/team/shubham.jpeg', name: 'Shubham', designation: 'President - Student Affairs' },
+    { src: '/team/suryansh.jpeg', name: 'Suryansh', designation: 'Secretary - Technical Affairs' },
+    { src: '/team/aman.jpeg', name: 'Aman', designation: 'General Secretary - Technical Affairs' }
 ];
 
 // Duplicate for infinite scroll
@@ -63,7 +63,7 @@ function MemberCard({ member, onViewCommittee }: { member: any; onViewCommittee:
 
     return (
         <motion.div
-            className={`relative w-[280px] h-[360px] bg-transparent shrink-0 group perspective-1000 ${isHovered ? 'z-60' : 'z-1'}`}
+            className={`relative w-[280px] h-[360px] bg-transparent shrink-0 group perspective-1000 ${isHovered ? 'z-[60]' : 'z-10'}`}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
             onMouseEnter={() => setIsHovered(true)}
@@ -135,18 +135,17 @@ function MemberCard({ member, onViewCommittee }: { member: any; onViewCommittee:
 
 function InfiniteRow({ items, direction, speed, onViewCommittee }: { items: any[]; direction: 'left' | 'right'; speed: number; onViewCommittee: (name: string) => void }) {
     return (
-        <div className="relative flex w-full py-8 group overflow-visible">
+        <div className="relative flex w-full py-8 group overflow-visible pause-on-hover">
             <div
-                className={`flex gap-6 shrink-0 w-max ${direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'} group-hover:[animation-play-state:paused] hover:[animation-play-state:paused]`}
-                data-speed={`${speed}s`}
+                className={`flex gap-6 shrink-0 w-max ${direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'}`}
+                style={{ animationDuration: `${speed}s` }}
             >
                 {items.map((member, idx) => (
-                    <div key={idx} className="hover:[animation-play-state:paused]">
-                        <MemberCard
-                            member={member}
-                            onViewCommittee={onViewCommittee}
-                        />
-                    </div>
+                    <MemberCard
+                        key={idx}
+                        member={member}
+                        onViewCommittee={onViewCommittee}
+                    />
                 ))}
             </div>
         </div>
@@ -301,23 +300,43 @@ export default function TeamPage() {
                             <div className="mt-4 mx-auto w-32 h-px bg-linear-to-r from-transparent via-[#d4af37]/60 to-transparent" />
                         </motion.div>
 
-                        {/* Council Cards - 3x2 Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 px-4 relative z-10 max-w-4xl mx-auto w-full">
-                            {COUNCIL_MEMBERS.map((member, index) => (
+                        {/* Council Cards - Grid */}
+                        <div className="flex flex-wrap justify-center gap-12 lg:gap-16 max-w-[1400px] mx-auto pb-10">
+                            {COUNCIL_MEMBERS.map((member, idx) => (
                                 <motion.div
-                                    key={member.id}
-                                    initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-                                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                                    transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                                    className="relative w-full aspect-3/4"
+                                    key={idx}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-100px" }}
+                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                    className="relative w-[340px] h-[450px] lg:w-[380px] lg:h-[500px] rounded-2xl overflow-hidden shadow-[0_15px_40px_-10px_rgba(0,0,0,0.8)] group border border-white/5"
                                 >
-                                    <div className="relative w-full h-full rounded-xl overflow-hidden border-[1px] border-[#d4af37]/40 shadow-[0_0_30px_rgba(212,175,55,0.1)] transition-transform duration-300 hover:scale-105">
-                                        <Image
-                                            src={member.src}
-                                            alt={member.alt}
-                                            fill
-                                            className="object-cover"
-                                        />
+                                    <Image
+                                        src={member.src}
+                                        alt={member.name}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                        sizes="(max-width: 1024px) 340px, 380px"
+                                    />
+                                    {/* Bottom Gradient Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none" />
+
+                                    {/* Name and Designation */}
+                                    <div className="absolute bottom-8 left-0 right-0 px-4 flex flex-col items-center">
+                                        <h3 className="text-white font-bold text-xl lg:text-2xl text-center leading-tight mb-3 drop-shadow-md">
+                                            {member.name.split(' ').map((part, i, arr) => (
+                                                <span key={i}>
+                                                    {part}
+                                                    {i === 0 && arr.length > 2 ? <br /> : ' '}
+                                                </span>
+                                            ))}
+                                        </h3>
+                                        <div className="bg-black/60 backdrop-blur-sm border border-white/10 px-4 py-2 rounded-md flex items-center gap-2">
+                                            <span className="text-[#d4af37] text-sm leading-none pt-0.5">★</span>
+                                            <span className="text-gray-200 text-sm font-medium whitespace-nowrap">
+                                                {member.designation}
+                                            </span>
+                                        </div>
                                     </div>
                                 </motion.div>
                             ))}
@@ -329,7 +348,7 @@ export default function TeamPage() {
             {/* Complete Committee Modal (preserved from original) */}
             <AnimatePresence>
                 {selectedCommittee && (
-                    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6 font-sans">
+                    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 font-sans">
                         {/* Backdrop */}
                         <div
                             className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer z-0"
@@ -341,10 +360,10 @@ export default function TeamPage() {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative w-full max-w-4xl max-h-[90vh] bg-[#13161c] rounded-2xl border border-white/10 shadow-2xl overflow-y-auto overflow-x-hidden custom-scrollbar z-10"
+                            className="relative w-full max-w-4xl max-h-[90vh] bg-[#13161c]/30 backdrop-blur-3xl rounded-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-y-auto overflow-x-hidden custom-scrollbar z-10"
                         >
                             {/* Close Button */}
-                            <div className="absolute top-4 right-4 z-100">
+                            <div className="absolute top-4 right-4 z-[99999]">
                                 <button
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -377,12 +396,12 @@ export default function TeamPage() {
                                 {/* Core Section */}
                                 {(COMMITTEE_DATA[selectedCommittee]?.core?.length || 0) > 0 && (
                                     <div className="flex flex-col items-center mb-10">
-                                        <div className="bg-[#2a2b38] border border-white/10 px-8 py-2.5 rounded-full mb-6 z-10 shadow-lg">
+                                        <div className="bg-[#2a2b38]/30 backdrop-blur-lg border border-white/10 px-8 py-2.5 rounded-full mb-6 z-10 shadow-lg">
                                             <h3 className="text-white font-bold text-lg">Core</h3>
                                         </div>
                                         <div className="flex justify-center flex-wrap gap-4 w-full">
                                             {COMMITTEE_DATA[selectedCommittee].core.map((name: string, i: number) => (
-                                                <div key={i} className="bg-[#20232a] border border-white/5 rounded-xl p-5 text-center min-w-[200px] shadow-md hover:bg-[#2a2d36] transition-colors">
+                                                <div key={i} className="bg-[#20232a]/30 backdrop-blur-lg border border-white/10 rounded-xl p-5 text-center min-w-[200px] shadow-md hover:bg-[#2a2d36]/60 transition-colors">
                                                     <p className="text-white font-bold text-lg">{name}</p>
                                                 </div>
                                             ))}
@@ -393,12 +412,12 @@ export default function TeamPage() {
                                 {/* Coordinators Section */}
                                 {(COMMITTEE_DATA[selectedCommittee]?.coordinators?.length || 0) > 0 && (
                                     <div className="flex flex-col items-center mb-10">
-                                        <div className="bg-[#2a2b38] border border-white/10 px-6 py-2 rounded-full mb-6 z-10 shadow-lg">
+                                        <div className="bg-[#2a2b38]/30 backdrop-blur-lg border border-white/10 px-6 py-2 rounded-full mb-6 z-10 shadow-lg">
                                             <h3 className="text-white font-bold text-base">Coordinators</h3>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
                                             {COMMITTEE_DATA[selectedCommittee].coordinators.map((name: string, i: number) => (
-                                                <div key={i} className="bg-[#20232a] border border-white/5 rounded-lg p-4 shadow-sm hover:bg-[#2a2d36] transition-colors">
+                                                <div key={i} className="bg-[#20232a]/30 backdrop-blur-lg border border-white/10 rounded-lg p-4 shadow-sm hover:bg-[#2a2d36]/60 transition-colors">
                                                     <p className="text-white font-bold text-[15px]">{name}</p>
                                                 </div>
                                             ))}
@@ -409,12 +428,12 @@ export default function TeamPage() {
                                 {/* Volunteers Section */}
                                 {(COMMITTEE_DATA[selectedCommittee]?.volunteers?.length || 0) > 0 && (
                                     <div className="flex flex-col items-center">
-                                        <div className="bg-[#2a2b38] border border-white/10 px-6 py-2 rounded-full mb-6 z-10 shadow-lg">
+                                        <div className="bg-[#2a2b38]/30 backdrop-blur-lg border border-white/10 px-6 py-2 rounded-full mb-6 z-10 shadow-lg">
                                             <h3 className="text-white font-bold text-base">Volunteers</h3>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
                                             {COMMITTEE_DATA[selectedCommittee].volunteers.map((name: string, i: number) => (
-                                                <div key={i} className="bg-[#20232a] border border-white/5 rounded-lg p-4 shadow-sm hover:bg-[#2a2d36] transition-colors">
+                                                <div key={i} className="bg-[#20232a]/30 backdrop-blur-lg border border-white/10 rounded-lg p-4 shadow-sm hover:bg-[#2a2d36]/60 transition-colors">
                                                     <p className="text-white font-bold text-[15px]">{name}</p>
                                                 </div>
                                             ))}

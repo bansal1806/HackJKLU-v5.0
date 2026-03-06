@@ -39,7 +39,7 @@ export function Layout({ children }: LayoutProps) {
       className="min-h-screen font-serif relative bg-(--void-black) text-(--ivory-cream)"
     >
       {/* Top Line with Menu and Logo */}
-      <div className="fixed top-0 left-0 right-0 h-24 md:h-32 z-50 transition-all duration-300 bg-transparent">
+      <div className="fixed top-0 left-0 right-0 h-24 md:h-32 z-50 transition-all duration-300 bg-transparent pointer-events-none">
         <div className="relative w-full h-full mt-10 md:mt-12">
           {/* Horizontal line - Left side (Menu to Logo) */}
           <div
