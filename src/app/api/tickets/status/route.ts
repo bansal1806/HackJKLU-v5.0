@@ -125,9 +125,11 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
 
     try {
         const info = await transporter.sendMail({
-            from: `"HackJKLU" <${process.env.EMAIL_USER}>`,
+            from: `"HackJKLU v5.0" <${process.env.EMAIL_USER}>`,
             to: order.customerEmail,
+            replyTo: process.env.EMAIL_USER,
             subject: '✅ Booking Confirmed — HackJKLU v5.0',
+            text: `Hi ${order.customerName}, your booking is confirmed! Total Paid: ₹${order.totalAmount / 100}. Please check your email for QR codes.`,
             html: `<!DOCTYPE html><html><body style="background:#0c0a09;color:#ffecd1;font-family:Georgia,serif;padding:32px">
       <div style="max-width:580px;margin:0 auto">
         <h1 style="color:#d4af37">HackJKLU v5.0</h1>
