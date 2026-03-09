@@ -37,6 +37,8 @@ export async function POST(req: NextRequest) {
         });
 
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            console.log('[register-free] Attempting to send email to:', newTicket.attendeeEmail);
+            console.log('[register-free] Using EMAIL_USER:', process.env.EMAIL_USER);
             try {
                 const nodemailer = await import('nodemailer');
                 const transporter = nodemailer.createTransport({
@@ -49,7 +51,7 @@ export async function POST(req: NextRequest) {
                     },
                 });
 
-                await transporter.sendMail({
+                const info = await transporter.sendMail({
                     from: `"HackJKLU" <${process.env.EMAIL_USER}>`,
                     to: newTicket.attendeeEmail,
                     subject: `✅ RSVP Confirmed: ${newTicket.eventTitle} — HackJKLU v5.0`,
@@ -69,9 +71,13 @@ export async function POST(req: NextRequest) {
                 <p style="text-align:center;color:#8b8680;font-size:12px">— Team HackJKLU</p>
             </div></body></html>`,
                 });
-            } catch (emailError) {
-                console.error('[register-free] Email failed to send:', emailError);
+                console.log('[register-free] Email sent successfully:', info.messageId);
+            } catch (emailError: any) {
+                console.error('[register-free] Email failed to send:', emailError.message);
+                console.error('[register-free] Error details:', emailError);
             }
+        } else {
+            console.warn('[register-free] Email credentials missing. EMAIL_USER:', !!process.env.EMAIL_USER, 'EMAIL_PASS:', !!process.env.EMAIL_PASS);
         }
 
         return NextResponse.json({ success: true, ticketId: newTicket.ticketId });

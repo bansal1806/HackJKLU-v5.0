@@ -99,6 +99,9 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
             pass: process.env.EMAIL_PASS,
         },
     });
+
+    console.log('[status API] Attempting to send paid confirmation email to:', order.customerEmail);
+    console.log('[status API] Using EMAIL_USER:', process.env.EMAIL_USER);
     const items = order.items as CartItem[];
 
     const itemRows = items
@@ -121,7 +124,7 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
     `).join('');
 
     try {
-        await transporter.sendMail({
+        const info = await transporter.sendMail({
             from: `"HackJKLU" <${process.env.EMAIL_USER}>`,
             to: order.customerEmail,
             subject: '✅ Booking Confirmed — HackJKLU v5.0',
@@ -154,9 +157,10 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
         <p style="text-align:center;color:#8b8680;font-size:12px">— Team HackJKLU</p>
       </div></body></html>`,
         });
-        console.log(`[NodeMailer] Successfully sent confirmation email to ${order.customerEmail}`);
-    } catch (e) {
-        console.error('[NodeMailer Error] Failed to dispatch email:', e);
+        console.log(`[NodeMailer] Successfully sent confirmation email to ${order.customerEmail}. MessageId: ${info.messageId}`);
+    } catch (e: any) {
+        console.error('[NodeMailer Error] Failed to dispatch email:', e.message);
+        console.error('[NodeMailer Error] Details:', e);
         throw e;
     }
 }

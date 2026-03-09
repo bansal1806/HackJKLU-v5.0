@@ -84,18 +84,24 @@ export function ScannerClient() {
 
             setScanResult(data);
 
-            // Clear result after 3 seconds to be ready for next scan
-            setTimeout(() => {
-                setScanResult(null);
-                setLastScannedId(null);
-            }, 3500);
+            // Pause the scanner to prevent toggling/re-scanning the same code
+            if (scannerRef.current) {
+                scannerRef.current.pause();
+            }
 
         } catch (err) {
             console.error(err);
             setScanResult({ valid: false, message: 'Network error verifying ticket.' });
-            setTimeout(() => setLastScannedId(null), 3000);
         } finally {
             setIsVerifying(false);
+        }
+    };
+
+    const resetScanner = () => {
+        setScanResult(null);
+        setLastScannedId(null);
+        if (scannerRef.current) {
+            scannerRef.current.resume();
         }
     };
 
@@ -156,26 +162,33 @@ export function ScannerClient() {
 
                 {/* Scan Result Overlay */}
                 {scanResult && (
-                    <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center p-6 backdrop-blur-xl transition-all ${scanResult.valid ? 'bg-green-950/90' : 'bg-red-950/90'}`}>
+                    <div className={`p-6 rounded-2xl border flex flex-col items-center text-center gap-4 animate-in fade-in zoom-in duration-300 ${scanResult.valid ? 'bg-green-500/10 border-green-500/50' : 'bg-red-500/10 border-red-500/50'}`}>
                         {scanResult.valid ? (
-                            <ShieldCheck size={80} className="text-green-400 mb-4 animate-bounce" />
+                            <ShieldCheck size={64} className="text-green-500" />
                         ) : (
-                            <ShieldAlert size={80} className="text-red-400 mb-4 animate-pulse" />
+                            <XCircle size={64} className="text-red-500" />
                         )}
-
-                        <h2 className={`text-3xl font-[Cinzel] font-black tracking-widest uppercase mb-2 ${scanResult.valid ? 'text-green-400' : 'text-red-400'}`}>
-                            {scanResult.valid ? 'VALID PASS' : 'DENIED'}
-                        </h2>
-
-                        <p className="text-white text-center text-lg">{scanResult.message}</p>
+                        <div>
+                            <h3 className={`text-2xl font-[Cinzel] font-black uppercase ${scanResult.valid ? 'text-green-500' : 'text-red-500'}`}>
+                                {scanResult.valid ? 'Verified' : 'Access Denied'}
+                            </h3>
+                            <p className="text-white mt-1 font-bold">{scanResult.message}</p>
+                        </div>
 
                         {scanResult.attendeeName && (
-                            <div className="mt-6 text-center border-t border-white/20 pt-4 w-full">
-                                <p className="text-stone-300 text-sm mb-1 uppercase tracking-widest">Attendee</p>
-                                <p className="text-xl font-bold text-white">{scanResult.attendeeName}</p>
-                                {scanResult.college && <p className="text-[#d4af37] text-sm mt-1">{scanResult.college}</p>}
+                            <div className="bg-black/40 p-4 rounded-xl w-full border border-white/5">
+                                <p className="text-stone-400 text-xs uppercase tracking-widest font-black font-[Cinzel]">Attendee</p>
+                                <p className="text-white text-lg font-bold">{scanResult.attendeeName}</p>
+                                {scanResult.college && <p className="text-[#d4af37] text-sm">{scanResult.college}</p>}
                             </div>
                         )}
+
+                        <button
+                            onClick={resetScanner}
+                            className="w-full mt-2 bg-white text-black font-[Cinzel] font-black py-4 rounded-xl hover:bg-[#d4af37] transition-all text-base tracking-widest uppercase"
+                        >
+                            Scan Next Ticket
+                        </button>
                     </div>
                 )}
             </div>
