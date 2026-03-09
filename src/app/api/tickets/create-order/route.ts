@@ -7,10 +7,10 @@ import type { CreateOrderPayload } from '@/types/tickets';
 export async function POST(req: NextRequest) {
     try {
         const body = (await req.json()) as CreateOrderPayload;
-        const { name, email, phone, items } = body;
+        const { name, email, phone, college, items } = body as { name: string, email: string, phone: string, college: string, items: any[] };
 
         // Validation
-        if (!name?.trim() || !email?.trim() || !phone?.trim() || !items?.length) {
+        if (!name?.trim() || !email?.trim() || !phone?.trim() || !college?.trim() || !items?.length) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
             customerName: name.trim(),
             customerEmail: email.toLowerCase().trim(),
             customerPhone: phone.trim(),
+            customerCollege: college.trim(),
             totalAmount: Math.round(totalINR * 100), // paise
             items,
             status: 'PENDING',

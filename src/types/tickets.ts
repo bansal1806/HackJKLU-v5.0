@@ -22,4 +22,5 @@ export interface OrderStatusResponse {
     items: CartItem[];
     totalAmount: number; // paise
     createdAt: string;
+    tickets?: any[];
 }

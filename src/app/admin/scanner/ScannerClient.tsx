@@ -1,0 +1,191 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import { Html5QrcodeScanner, Html5QrcodeScanType } from 'html5-qrcode';
+import { ShieldAlert, ShieldCheck, Camera, Loader2, XCircle } from 'lucide-react';
+
+export function ScannerClient() {
+    const [pin, setPin] = useState('');
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    const [scanResult, setScanResult] = useState<{
+        valid: boolean;
+        message: string;
+        attendeeName?: string;
+        college?: string;
+        eventTitle?: string;
+    } | null>(null);
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [lastScannedId, setLastScannedId] = useState<string | null>(null);
+    const [selectedEventId, setSelectedEventId] = useState<string>('4');
+
+    const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+
+    // Simple client-side PIN for basic protection. In production, use a secure backend session.
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Placeholder PIN: 1234
+        if (pin === '1234') {
+            setIsAuthorized(true);
+        } else {
+            alert('Invalid PIN');
+            setPin('');
+        }
+    };
+
+    useEffect(() => {
+        if (isAuthorized) {
+            scannerRef.current = new Html5QrcodeScanner(
+                "reader",
+                { fps: 10, qrbox: { width: 250, height: 250 }, supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA] },
+                /* verbose= */ false
+            );
+
+            scannerRef.current.render(onScanSuccess, onScanFailure);
+        }
+
+        return () => {
+            if (scannerRef.current) {
+                scannerRef.current.clear().catch(error => {
+                    console.error("Failed to clear html5QrcodeScanner. ", error);
+                });
+            }
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthorized, selectedEventId]);
+
+    const onScanSuccess = async (decodedText: string) => {
+        // Prevent rapid repeated scans of the same ticket
+        if (isVerifying || decodedText === lastScannedId) return;
+
+        setIsVerifying(true);
+        setLastScannedId(decodedText);
+        setScanResult(null);
+
+        try {
+            const res = await fetch('/api/verify-ticket', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ticketId: decodedText,
+                    scannerEventId: selectedEventId
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.valid) {
+                // Check them in immediately
+                await fetch('/api/check-in', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ticketId: decodedText })
+                });
+            }
+
+            setScanResult(data);
+
+            // Clear result after 3 seconds to be ready for next scan
+            setTimeout(() => {
+                setScanResult(null);
+                setLastScannedId(null);
+            }, 3500);
+
+        } catch (err) {
+            console.error(err);
+            setScanResult({ valid: false, message: 'Network error verifying ticket.' });
+            setTimeout(() => setLastScannedId(null), 3000);
+        } finally {
+            setIsVerifying(false);
+        }
+    };
+
+    const onScanFailure = (error: any) => {
+        // handle scan failure, usually better to ignore and keep scanning
+        // console.warn(`Code scan error = ${error}`);
+    };
+
+    if (!isAuthorized) {
+        return (
+            <form onSubmit={handleLogin} className="bg-[#1A1C23] p-6 rounded-2xl border border-[#d4af37]/20 flex flex-col gap-4">
+                <div>
+                    <label htmlFor="admin-pin-input" className="block text-stone-400 text-xs font-black uppercase tracking-widest mb-2 font-[Cinzel]">Enter Admin PIN</label>
+                    <input
+                        id="admin-pin-input"
+                        type="password"
+                        value={pin}
+                        onChange={(e) => setPin(e.target.value)}
+                        className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#d4af37] font-mono text-center text-xl tracking-widest"
+                        autoFocus
+                    />
+                </div>
+                <button type="submit" className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 rounded-xl hover:bg-white transition-all text-base tracking-widest uppercase mt-2">
+                    Authenticate
+                </button>
+            </form>
+        );
+    }
+
+    return (
+        <div className="flex flex-col gap-6">
+            <div className="bg-[#1A1C23] p-4 rounded-2xl border border-[#d4af37]/20">
+                <label htmlFor="scanner-location-select" className="block text-stone-400 text-xs font-black uppercase tracking-widest mb-2 font-[Cinzel]">Select Scanner Location</label>
+                <select
+                    id="scanner-location-select"
+                    value={selectedEventId}
+                    onChange={(e) => setSelectedEventId(e.target.value)}
+                    className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-[#d4af37] focus:outline-none focus:border-[#d4af37] font-[Cinzel]"
+                >
+                    <option value="4">BGMI Tournament</option>
+                    <option value="12">Dance Battle</option>
+                    <option value="13">Valorant Tournament</option>
+                    <option value="999">Maan Pannu Live Performance</option>
+                </select>
+            </div>
+
+            <div className="relative bg-black rounded-3xl overflow-hidden border-2 border-[#d4af37]/30">
+                <div id="reader" className="w-full min-h-[300px] bg-black"></div>
+
+                {/* Overlay Scanning UI constraints */}
+                <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10 pointer-events-none">
+                    <div className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
+                        <Camera size={14} className="text-[#d4af37]" />
+                        <span className="text-xs font-mono text-stone-300 tracking-wider">SCANNER ACTIVE</span>
+                    </div>
+                    {isVerifying && <Loader2 size={20} className="text-[#d4af37] animate-spin" />}
+                </div>
+
+                {/* Scan Result Overlay */}
+                {scanResult && (
+                    <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center p-6 backdrop-blur-xl transition-all ${scanResult.valid ? 'bg-green-950/90' : 'bg-red-950/90'}`}>
+                        {scanResult.valid ? (
+                            <ShieldCheck size={80} className="text-green-400 mb-4 animate-bounce" />
+                        ) : (
+                            <ShieldAlert size={80} className="text-red-400 mb-4 animate-pulse" />
+                        )}
+
+                        <h2 className={`text-3xl font-[Cinzel] font-black tracking-widest uppercase mb-2 ${scanResult.valid ? 'text-green-400' : 'text-red-400'}`}>
+                            {scanResult.valid ? 'VALID PASS' : 'DENIED'}
+                        </h2>
+
+                        <p className="text-white text-center text-lg">{scanResult.message}</p>
+
+                        {scanResult.attendeeName && (
+                            <div className="mt-6 text-center border-t border-white/20 pt-4 w-full">
+                                <p className="text-stone-300 text-sm mb-1 uppercase tracking-widest">Attendee</p>
+                                <p className="text-xl font-bold text-white">{scanResult.attendeeName}</p>
+                                {scanResult.college && <p className="text-[#d4af37] text-sm mt-1">{scanResult.college}</p>}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            <button
+                onClick={() => setIsAuthorized(false)}
+                className="flex items-center justify-center gap-2 text-stone-500 hover:text-white transition-colors text-sm font-[Cinzel] tracking-widest uppercase mt-4"
+            >
+                <XCircle size={16} /> Logout Scanner
+            </button>
+        </div>
+    );
+}
