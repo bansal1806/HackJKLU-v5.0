@@ -24,7 +24,6 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
 }) => {
     const shortId = ticketId.slice(0, 6) + '...' + ticketId.slice(-4);
 
-    // Check if it's the Maan Panu event for special text rendering
     const isMaanPanu = eventTitle.toLowerCase().includes('maan panu');
 
     const mainTitle = eventTitle.toUpperCase().includes('LIVE')
@@ -41,328 +40,397 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
     const datePart = timeParts[0]?.trim() || time;
     const timePart = timeParts[1]?.trim() || '';
 
-    // MAAN PANU ABSOLUTE IMAGE OVERLAY OVERRIDE
-    if (isMaanPanu) {
-        return (
+    // CSS keyframes for sparkle animation
+    const sparkleKeyframes = `
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    `;
+
+    return (
+        <div className="w-full flex justify-center" style={{ containerType: 'inline-size' }}>
+            <style dangerouslySetInnerHTML={{ __html: sparkleKeyframes }} />
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative w-full max-w-[1200px] mx-auto overflow-hidden select-none bg-black shadow-[0_20px_50px_rgba(0,0,0,0.8)] border-[2px] sm:border-[4px] border-[#2a1b0a] rounded-[16px] xl:rounded-[24px]"
-                // Set the aspect ratio precisely to the image bounds (3486x1394)
-                style={{ aspectRatio: '3486 / 1394', containerType: 'inline-size' }}
+                className="relative w-full max-w-[800px] overflow-hidden bg-[#0c0702] group select-none"
+                style={{
+                    aspectRatio: '2.5 / 1',
+                    borderRadius: '1.2cqw',
+                    WebkitMaskImage:
+                        'radial-gradient(circle at 0px 50%, transparent 1.6cqw, black 1.7cqw), radial-gradient(circle at 100% 50%, transparent 1.6cqw, black 1.7cqw), linear-gradient(black, black)',
+                    WebkitMaskSize: '3.2cqw 3.2cqw, 3.2cqw 3.2cqw, calc(100% - 3.2cqw) 100%',
+                    WebkitMaskPosition: '-1.6cqw center, calc(100% + 1.6cqw) center, center',
+                    WebkitMaskRepeat: 'repeat-y, repeat-y, no-repeat',
+                }}
             >
-                {/* 100% PRE-RENDERED BACKGROUND IMAGE */}
-                <img
-                    src="/events/maan_panu_ticket.webp"
-                    alt="Maan Panu Ticket"
-                    className="absolute inset-0 w-full h-full object-cover z-[0]"
-                />
-
-                {/* OVERLAYS TO COVER AND REPLACE BAKED-IN STATIC DATA FROM THE IMAGE */}
-
-                {/* --- LEFT SIDE: QR CODE & ID PATCHES --- */}
-                {/* QR Code Container covers the original QR */}
-                {/* Repositioned left and resized to fit within ~20-25% layout block */}
-                <div className="absolute top-[28%] left-[8%] w-[16.5%] aspect-square bg-[#ffffff] rounded-[0.8cqw] z-[10] flex items-center justify-center p-[0.8cqw] shadow-[inset_0_0_15px_rgba(0,0,0,0.3)]">
-                    <QRCodeSVG
-                        value={ticketId}
-                        size={512}
-                        level="H"
-                        className="w-[96%] h-[96%]"
-                        bgColor="#ffffff"
-                        fgColor="#1a0f05" // Dark thematic color
-                    />
-                </div>
-
-                {/* FT... ID Patch */}
-                <div className="absolute top-[70%] left-[8%] w-[17%] h-[4.5%] bg-[#ebd7b1] z-[10] flex items-center justify-center rounded-sm">
-                    <p className="text-[#856133] font-mono text-[1.2cqw] tracking-[0.2em] font-medium uppercase mt-[0.2cqw]">
-                        FT...{shortId}
-                    </p>
-                </div>
-
-                {/* MT-2026-XQ Patch */}
-                <div className="absolute top-[86%] left-[8%] w-[17%] h-[5%] bg-[#ebd7b1] z-[10] flex items-center justify-center rounded-sm">
-                    <p className="text-[#3b2512] font-black font-mono text-[1.5cqw] tracking-[0.2em] uppercase mt-[0.2cqw]">
-                        MT-2026-XQ
-                    </p>
-                </div>
-
-                {/* --- RIGHT SIDE: INFO PANEL TEXT PATCHES --- */}
-                {/* Grouped entirely inside the right 20% box constraint */}
-
-                <div className="absolute top-[37%] right-[4%] w-[20%] h-[50%] z-[10] flex flex-col items-start gap-[5.5cqw]">
-                    {/* Attendee Name Patch */}
-                    <div className="w-full flex items-center bg-[#0f0701] shadow-[0_0_10px_2px_#0f0701] pl-[3cqw]">
-                        <p className="text-[#e2c78d] font-bold text-[1.6cqw] uppercase font-[Cinzel] tracking-widest leading-none drop-shadow-md truncate w-full pt-[0.2cqw]">
-                            {attendee}
-                        </p>
-                    </div>
-
-                    {/* Venue Box Patch */}
-                    <div className="w-full flex items-center bg-[#0f0701] shadow-[0_0_10px_2px_#0f0701] pl-[3.5cqw]">
-                        <p className="text-white font-bold text-[1.6cqw] font-[Cinzel] tracking-widest leading-none drop-shadow-md truncate w-full pt-[0.2cqw]">
-                            {venue}
-                        </p>
-                    </div>
-
-                    {/* Schedule Day Box Patch */}
-                    <div className="w-full flex items-center bg-[#0f0701] shadow-[0_0_10px_2px_#0f0701] pl-[3cqw]">
-                        <p className="text-white font-bold text-[1.5cqw] font-[Cinzel] tracking-widest leading-none drop-shadow-md truncate w-full pt-[0.2cqw]">
-                            {datePart}
-                        </p>
-                    </div>
-                </div>
-
-                {/* Sub-Schedule Time Box Patch */}
-                <div className="absolute top-[70%] right-[4%] w-[20%] z-[10] flex items-center bg-[#0f0701] shadow-[0_0_10px_2px_#0f0701] pl-[2.8cqw]">
-                    <p className="text-[#a89b7d] text-[1.4cqw] italic font-medium leading-none drop-shadow-md truncate w-full pt-[0.2cqw]">
-                        {timePart ? `• ${timePart}` : '• 07:00 PM onwards'}
-                    </p>
-                </div>
-
-                {/* Bottom MT ID Box Patch */}
-                <div className="absolute top-[78.8%] right-[11.5%] w-[8.5%] h-[4.5%] bg-[#0f0701] z-[10] flex items-center justify-start pl-[0.2cqw] shadow-[0_0_10px_2px_#0f0701]">
-                    <p className="text-[#8c7a5f] font-mono font-bold text-[1.2cqw] tracking-[0.1em] uppercase bg-[#0f0701] w-full pt-[0.2cqw]">
-                        MT-2026-XQ
-                    </p>
-                </div>
-            </motion.div>
-        );
-    }
-
-    // DEFAULT RETURN FOR NON-MAAN PANU EVENTS
-    return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative w-full max-w-[1000px] mx-auto overflow-hidden rounded-[16px] bg-black shadow-[0_40px_80px_rgba(0,0,0,0.9)] group select-none flex flex-col sm:flex-row items-center justify-between border-[2px] sm:border-[4px] border-[#2a1b0a]"
-            style={{
-                aspectRatio: '2.5 / 1', // standard wide ticket
-                WebkitMaskImage:
-                    'radial-gradient(circle at 0px 50%, transparent 12px, black 13px), radial-gradient(circle at 100% 50%, transparent 12px, black 13px), linear-gradient(black, black)',
-                WebkitMaskSize: '24px 24px, 24px 24px, calc(100% - 48px) 100%',
-                WebkitMaskPosition: '-12px center, calc(100% + 12px) center, center',
-                WebkitMaskRepeat: 'repeat-y, repeat-y, no-repeat',
-                maskImage:
-                    'radial-gradient(circle at 0px 16px, transparent 8px, black 8.5px), radial-gradient(circle at 100% 16px, transparent 8px, black 8.5px), linear-gradient(black, black)',
-                maskSize: '16px 32px, 16px 32px, calc(100% - 32px) 100%',
-                maskPosition: '-8px 0, calc(100% + 8px) 0, center',
-                maskRepeat: 'repeat-y, repeat-y, no-repeat',
-            }}
-        >
-            {/* BACKGROUND POSTER */}
-            <div className="absolute inset-0 z-[0] overflow-hidden">
-                <img
-                    src={poster}
-                    alt={eventTitle}
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                />
-            </div>
-
-            {/* Glowing red artist text behind the overlays */}
-            <div className="absolute top-[10%] left-0 w-full flex justify-center z-[5] pointer-events-none">
-                <h1
-                    className="text-[60px] sm:text-[90px] md:text-[120px] font-black tracking-[0.05em] uppercase font-[Cinzel] whitespace-nowrap opacity-80 text-transparent bg-clip-text"
+                {/* ========== GOLDEN GLITTER BORDER ========== */}
+                <div className="absolute inset-0 z-[1] pointer-events-none"
                     style={{
-                        backgroundImage: 'linear-gradient(to bottom, #ff3333, #800000)',
-                        WebkitTextStroke: '2px rgba(255,100,100,0.2)',
-                        textShadow: '0 0 50px rgba(255,0,0,0.6)',
-                        filter: 'drop-shadow(0px 10px 20px rgba(0,0,0,1))',
+                        background: 'linear-gradient(135deg, #b8860b, #daa520, #ffd700, #daa520, #b8860b, #8b6914, #daa520, #ffd700)',
+                        backgroundSize: '300% 300%',
+                        animation: 'shimmer 4s linear infinite',
+                    }}
+                />
+                {/* Golden sparkle dots along border */}
+                {Array.from({ length: 40 }).map((_, i) => {
+                    const side = i % 4;
+                    const pos = ((i / 4) * 25 + Math.random() * 10) % 100;
+                    const style: React.CSSProperties = {
+                        position: 'absolute',
+                        width: `${0.3 + Math.random() * 0.5}cqw`,
+                        height: `${0.3 + Math.random() * 0.5}cqw`,
+                        borderRadius: '50%',
+                        background: '#ffd700',
+                        boxShadow: '0 0 0.4cqw #ffd700, 0 0 0.8cqw rgba(255,215,0,0.5)',
+                        animation: `sparkle ${2 + Math.random() * 3}s ease-in-out ${Math.random() * 3}s infinite`,
+                        zIndex: 2,
+                    };
+                    if (side === 0) { style.top = '0'; style.left = `${pos}%`; }
+                    else if (side === 1) { style.bottom = '0'; style.left = `${pos}%`; }
+                    else if (side === 2) { style.left = '0'; style.top = `${pos}%`; }
+                    else { style.right = '0'; style.top = `${pos}%`; }
+                    return <div key={`sp-${i}`} style={style} />;
+                })}
+
+                {/* INNER DARK AREA (inset from golden border) */}
+                <div className="absolute z-[3]"
+                    style={{
+                        top: '1.2cqw',
+                        left: '1.2cqw',
+                        right: '1.2cqw',
+                        bottom: '1.2cqw',
+                        borderRadius: '0.6cqw',
+                        background: '#0c0702',
+                        overflow: 'hidden',
                     }}
                 >
-                    {mainTitle}
-                </h1>
-            </div>
-
-            {/* DARK THEMATIC OVERLAYS */}
-            <div className="absolute inset-0 bg-linear-to-r from-black/80 via-transparent to-black/90 pointer-events-none z-[10]" />
-            <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_0%,rgba(0,0,0,0.7)_100%] pointer-events-none z-[10]" />
-            <div className="absolute inset-0 bg-red-900/20 mix-blend-color pointer-events-none z-[10]" />
-
-            {/* INNER GOLDEN FRAME */}
-            <div className="absolute inset-[12px] sm:inset-[20px] border border-[#d4af37]/50 rounded-[8px] z-[15] pointer-events-none shadow-[inset_0_0_20px_rgba(212,175,55,0.1)]">
-                {/* Corner Accents */}
-                <div className="absolute -top-[3px] -left-[3px] w-[6px] h-[6px] border border-[#d4af37] bg-black rotate-45" />
-                <div className="absolute -top-[3px] -right-[3px] w-[6px] h-[6px] border border-[#d4af37] bg-black rotate-45" />
-                <div className="absolute -bottom-[3px] -left-[3px] w-[6px] h-[6px] border border-[#d4af37] bg-black rotate-45" />
-                <div className="absolute -bottom-[3px] -right-[3px] w-[6px] h-[6px] border border-[#d4af37] bg-black rotate-45" />
-            </div>
-
-            {/* MAIN CONTENT CONTAINERS */}
-
-            {/* LEFT: PARCHMENT QR STUB (~22% width standard) */}
-            <div className="relative z-[20] hidden sm:flex h-[85%] w-[22%] min-w-[200px] ml-8 lg:ml-12 bg-gradient-to-b from-[#f9f1e1] to-[#e8d6b8] rounded-xl flex-col items-center justify-between p-4 shadow-[0_20px_40px_rgba(0,0,0,0.7)] border border-[#cba165]/60 shrink-0 transform transition-transform duration-500 hover:scale-[1.02]">
-                {/* Inner fainter border ring */}
-                <div className="absolute inset-[4px] border border-[#d5b383]/40 rounded-lg pointer-events-none" />
-
-                {/* QR Code Container */}
-                <div className="w-[85%] aspect-square bg-white border border-[#cba165] p-[2px] mt-1 relative z-10 shadow-sm rounded-sm">
-                    <QRCodeSVG
-                        value={ticketId}
-                        size={512}
-                        level="H"
-                        className="w-full h-full text-black"
-                        bgColor="#ffffff"
-                        fgColor="#2b1a10"
-                    />
-                </div>
-
-                {/* Scan Text */}
-                <div className="flex flex-col items-center w-full mt-2 relative z-10">
-                    <h4 className="font-[Cinzel] font-black text-[#5c4022] text-[15px] lg:text-[18px] tracking-[0.05em] drop-shadow-[0_1px_0_rgba(255,255,255,0.5)]">
-                        SCAN TO VERIFY
-                    </h4>
-
-                    <div className="w-[85%] h-[1px] bg-gradient-to-r from-transparent via-[#b38f56]/70 to-transparent my-1" />
-
-                    <p className="font-mono text-[11px] lg:text-[13px] text-[#555] tracking-[0.1em] opacity-90 mt-[2px]">
-                        FT...{shortId}
-                    </p>
-                </div>
-
-                {/* Diamond Separator */}
-                <div className="w-full flex items-center justify-center relative z-10 my-[2px]">
-                    <div className="h-px bg-[#b38f56]/60 w-[15%]" />
-                    <span className="text-[#b38f56] text-[15px] leading-none px-[6px] pb-[1px]">❖</span>
-                    <div className="h-px bg-[#b38f56]/60 w-[15%]" />
-                </div>
-
-                {/* Tear dashed line */}
-                <div className="w-[105%] relative z-10 border-t border-dashed border-[#8b6e4e]/60 mb-1" />
-
-                {/* MT Date Code */}
-                <div className="w-full text-center relative z-10 pb-1">
-                    <p className="font-[Cinzel] font-bold text-[#2b1a10] text-[15px] lg:text-[18px] tracking-[0.15em] drop-shadow-[0_1px_0_rgba(255,255,255,0.3)]">
-                        MT-2026-XQ
-                    </p>
-                </div>
-            </div>
-
-            {/* Mobile-only stub */}
-            <div className="sm:hidden w-[90%] bg-gradient-to-b from-[#f9f1e1] to-[#e8d6b8] rounded-xl flex items-center justify-between p-3 mt-4 relative z-[20] shadow-[0_20px_40px_rgba(0,0,0,0.7)] border border-[#cba165]/60 mb-2">
-                <div className="w-16 aspect-square bg-white border border-[#cba165] p-1 flex items-center justify-center relative z-10">
-                    <QRCodeSVG
-                        value={ticketId}
-                        size={60}
-                        level="M"
-                        className="w-full h-full"
-                        bgColor="#ffffff"
-                        fgColor="#2b1a10"
-                    />
-                </div>
-                <div className="flex flex-col items-center">
-                    <h4 className="font-[Cinzel] font-black text-[#6a4f2b] text-[12px] tracking-[0.05em]">
-                        SCAN TO VERIFY
-                    </h4>
-                    <p className="font-mono text-[10px] text-[#555] tracking-wide mt-1">FT...{shortId}</p>
-                </div>
-            </div>
-
-            {/* RIGHT: INFO PANEL */}
-            <div className="relative z-[20] sm:h-[80%] flex-1 ml-4 sm:ml-8 lg:ml-12 mr-8 lg:mr-12 my-auto flex flex-col justify-center pb-4 sm:pb-0">
-                {/* PANEL FRAME */}
-                <div className="relative bg-black/60 backdrop-blur-xl border border-[#d4af37]/40 rounded-lg p-6 lg:p-8 shadow-[0_0_40px_rgba(212,175,55,0.15)] flex flex-col h-full justify-between lg:h-auto lg:gap-0">
-                    {/* HEADER */}
-                    <div className="flex items-center gap-3 mb-4 lg:mb-6 text-[#d4af37]">
-                        <TicketIcon size={18} strokeWidth={2.5} />
-                        <span className="font-[Cinzel] text-[12px] lg:text-[14px] font-bold tracking-[0.2em] uppercase">
-                            OFFICIAL ENTRY PASS
-                        </span>
+                    {/* BACKGROUND POSTER (center area) */}
+                    <div className="absolute inset-0 overflow-hidden">
+                        <img
+                            src={poster}
+                            alt={eventTitle}
+                            className="absolute h-[130%] object-cover opacity-80 transition-transform duration-1000 group-hover:scale-105"
+                            style={{ left: '18%', top: '-15%', width: '58%' }}
+                        />
+                        {/* Gradient overlays to fade poster edges */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0c0702] via-transparent to-transparent" style={{ width: '22%' }} />
+                        <div className="absolute top-0 h-full bg-gradient-to-l from-[#0c0702] via-[#0c0702] to-transparent" style={{ left: '60%', width: '40%' }} />
+                        <div className="absolute inset-0 bg-gradient-to-b from-[#0c0702]/60 via-transparent to-[#0c0702]/60" />
                     </div>
 
-                    {/* TITLE */}
-                    <div className="mb-4 lg:mb-6">
-                        <h2 className="font-[Cinzel] font-black uppercase text-[32px] sm:text-[40px] leading-[1.1] text-[#fdf6e3]">
+                    {/* Event title watermark behind poster */}
+                    <div className="absolute top-[3%] left-[28%] z-[4] pointer-events-none">
+                        <h1
+                            className="font-[Cinzel] font-black uppercase whitespace-nowrap text-transparent bg-clip-text"
+                            style={{
+                                fontSize: '6cqw',
+                                backgroundImage: 'linear-gradient(to bottom, #ffd700, #b8860b)',
+                                opacity: 0.9,
+                                textShadow: '0 0 3cqw rgba(255,215,0,0.3)',
+                                letterSpacing: '0.08em',
+                            }}
+                        >
                             {mainTitle}
-                        </h2>
-
-                        <h3 className="font-[Cinzel] font-bold uppercase text-[18px] tracking-[0.1em] text-[#e3cf9d] mt-1">
-                            {subTitle}
-                        </h3>
+                        </h1>
                     </div>
 
-                    {/* INFO STACK */}
-                    <div className="flex flex-col flex-1 pb-4 lg:pb-6 justify-around lg:justify-start lg:gap-0">
-                        {/* ATTENDEE */}
-                        <div className="flex items-start gap-4 py-3 lg:py-4 border-t border-[#d4af37]/25 shrink-0">
-                            <User
-                                size={26}
-                                className="text-[#d4af37] shrink-0 fill-[#d4af37]/10"
-                                strokeWidth={2.5}
+                    {/* INNER GOLDEN FRAME LINE */}
+                    <div className="absolute z-[10] pointer-events-none"
+                        style={{
+                            top: '1cqw',
+                            left: '1cqw',
+                            right: '1cqw',
+                            bottom: '1cqw',
+                            border: '0.15cqw solid rgba(212,175,55,0.5)',
+                            borderRadius: '0.4cqw',
+                            boxShadow: 'inset 0 0 1.5cqw rgba(212,175,55,0.15)',
+                        }}
+                    >
+                        {/* Corner diamonds */}
+                        <div className="absolute -top-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] border-[#d4af37] bg-[#0c0702] rotate-45" />
+                        <div className="absolute -top-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] border-[#d4af37] bg-[#0c0702] rotate-45" />
+                        <div className="absolute -bottom-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] border-[#d4af37] bg-[#0c0702] rotate-45" />
+                        <div className="absolute -bottom-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] border-[#d4af37] bg-[#0c0702] rotate-45" />
+                    </div>
+
+                    {/* ========== LEFT SECTION: BEIGE QR STUB ========== */}
+                    <div className="absolute z-[20] flex flex-col items-center justify-between"
+                        style={{
+                            top: '6%',
+                            left: '2%',
+                            width: '20%',
+                            height: '88%',
+                            background: 'linear-gradient(135deg, #f8ecd2, #ebd9b2, #debe84)',
+                            borderRadius: '2cqw',
+                            padding: '1.2cqw',
+                            boxShadow: '0 0.8cqw 3cqw rgba(0,0,0,0.7)',
+                            border: '0.08cqw solid rgba(168,130,67,0.5)',
+                        }}
+                    >
+                        {/* Inner decorative border */}
+                        <div className="absolute pointer-events-none"
+                            style={{
+                                top: '0.5cqw',
+                                left: '0.5cqw',
+                                right: '0.5cqw',
+                                bottom: '0.5cqw',
+                                border: '0.08cqw solid rgba(168,130,67,0.3)',
+                                borderRadius: '1.6cqw',
+                            }}
+                        />
+
+                        {/* QR Code */}
+                        <div className="relative z-10 flex items-center justify-center bg-white"
+                            style={{
+                                width: '82%',
+                                aspectRatio: '1',
+                                borderRadius: '0.8cqw',
+                                padding: '3%',
+                                marginTop: '0.8cqw',
+                                boxShadow: 'inset 0 0 1cqw rgba(0,0,0,0.08)',
+                                border: '0.15cqw solid rgba(203,161,101,0.5)',
+                            }}
+                        >
+                            <QRCodeSVG
+                                value={ticketId}
+                                size={512}
+                                level="H"
+                                className="w-[95%] h-[95%]"
+                                bgColor="#ffffff"
+                                fgColor="#1a0f05"
                             />
+                        </div>
 
-                            <div>
-                                <p className="font-[Cinzel] text-[#d4af37] text-[12px] uppercase tracking-[0.15em] font-bold">
-                                    ATTENDEE
-                                </p>
-
-                                <p className="font-[Cinzel] text-white text-[20px] font-black mt-[2px] lg:mt-1 drop-shadow-sm">
-                                    {attendee}
-                                </p>
+                        {/* Label area */}
+                        <div className="flex flex-col items-center w-full relative z-10 flex-1 justify-center"
+                            style={{ marginTop: '0.8cqw' }}
+                        >
+                            <h4 className="font-[Cinzel] font-black text-[#5c4022] whitespace-nowrap"
+                                style={{ fontSize: '1.3cqw', letterSpacing: '0.08em' }}
+                            >
+                                SCAN TO VERIFY
+                            </h4>
+                            <p className="font-mono font-bold text-[#6b5133]"
+                                style={{ fontSize: '1cqw', letterSpacing: '0.1em', marginTop: '0.3cqw' }}
+                            >
+                                FT...{shortId}
+                            </p>
+                            {/* Diamond Separator */}
+                            <div className="w-full flex items-center justify-center"
+                                style={{ margin: '0.4cqw 0' }}
+                            >
+                                <div style={{ height: '0.08cqw', width: '15%', background: 'rgba(179,143,86,0.4)' }} />
+                                <span style={{ fontSize: '0.9cqw', color: 'rgba(179,143,86,0.8)', padding: '0 0.5cqw', lineHeight: 1 }}>❖</span>
+                                <div style={{ height: '0.08cqw', width: '15%', background: 'rgba(179,143,86,0.4)' }} />
                             </div>
                         </div>
 
-                        {/* VENUE */}
-                        <div className="flex items-start gap-4 py-3 lg:py-4 border-t border-[#d4af37]/25 shrink-0">
-                            <MapPin
-                                size={26}
-                                className="text-[#d4af37] shrink-0 fill-[#d4af37]/10"
-                                strokeWidth={2.5}
+                        {/* Tear dashed line */}
+                        <div className="w-[90%] relative z-10"
+                            style={{ borderTop: '0.18cqw dashed rgba(163,128,83,0.4)', marginBottom: '0.8cqw' }}
+                        />
+
+                        {/* MT Date Code */}
+                        <div className="w-full text-center relative z-10" style={{ padding: '0 0.8cqw' }}>
+                            <p className="font-mono font-bold text-[#3b2512]"
+                                style={{
+                                    fontSize: '1.5cqw',
+                                    letterSpacing: '0.15em',
+                                    background: 'rgba(222,185,129,0.2)',
+                                    padding: '0.4cqw 0',
+                                    borderRadius: '0.3cqw',
+                                }}
+                            >
+                                MT-2026-XQ
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* ========== RIGHT SECTION: DETAILS PANEL ========== */}
+                    <div className="absolute z-[20] flex flex-col"
+                        style={{
+                            right: '2%',
+                            top: '6%',
+                            width: '20%',
+                            height: '88%',
+                        }}
+                    >
+                        {/* Golden glitter background for right panel */}
+                        <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: '1cqw' }}>
+                            <div className="absolute inset-0"
+                                style={{
+                                    background: 'linear-gradient(135deg, rgba(12,7,2,1), rgba(30,20,5,0.98), rgba(12,7,2,1))',
+                                }}
                             />
-
-                            <div>
-                                <p className="font-[Cinzel] text-[#d4af37] text-[12px] uppercase tracking-[0.15em] font-bold">
-                                    VENUE
-                                </p>
-
-                                <p className="font-[Cinzel] text-white text-[20px] font-black mt-[2px] lg:mt-1 drop-shadow-sm">
-                                    {venue}
-                                </p>
-                            </div>
+                            {/* Golden shimmer edge on left side */}
+                            <div className="absolute top-0 left-0 w-[2%] h-full"
+                                style={{
+                                    background: 'linear-gradient(to bottom, transparent, rgba(212,175,55,0.3), transparent)',
+                                }}
+                            />
+                            {/* Sparkle particles in the background */}
+                            {Array.from({ length: 25 }).map((_, i) => (
+                                <div key={`rsp-${i}`}
+                                    style={{
+                                        position: 'absolute',
+                                        width: `${0.15 + Math.random() * 0.3}cqw`,
+                                        height: `${0.15 + Math.random() * 0.3}cqw`,
+                                        borderRadius: '50%',
+                                        background: '#ffd700',
+                                        opacity: 0.15 + Math.random() * 0.25,
+                                        left: `${5 + Math.random() * 90}%`,
+                                        top: `${5 + Math.random() * 90}%`,
+                                        animation: `sparkle ${3 + Math.random() * 4}s ease-in-out ${Math.random() * 3}s infinite`,
+                                        boxShadow: '0 0 0.3cqw rgba(255,215,0,0.4)',
+                                    }}
+                                />
+                            ))}
                         </div>
 
-                        {/* SCHEDULE */}
-                        <div className="flex items-start gap-4 py-3 lg:py-4 border-t border-[#d4af37]/25 shrink-0">
-                            <Clock
-                                size={26}
-                                className="text-[#d4af37] shrink-0 fill-[#d4af37]/5"
-                                strokeWidth={2.5}
-                            />
+                        {/* Content */}
+                        <div className="relative z-10 flex flex-col h-full" style={{ padding: '1.5cqw 2cqw' }}>
+                            {/* OFFICIAL ENTRY PASS */}
+                            <div className="flex items-center" style={{ gap: '0.4cqw', marginBottom: '0.6cqw' }}>
+                                <TicketIcon strokeWidth={2.5} style={{ width: '1.4cqw', height: '1.4cqw', color: '#d4af37' }} />
+                                <span className="font-[Cinzel] font-bold uppercase"
+                                    style={{ fontSize: '0.9cqw', color: '#d4af37', letterSpacing: '0.12em' }}
+                                >
+                                    OFFICIAL ENTRY PASS
+                                </span>
+                            </div>
 
-                            <div>
-                                <p className="font-[Cinzel] text-[#d4af37] text-[12px] uppercase tracking-[0.15em] font-bold">
-                                    SCHEDULE
-                                </p>
-
-                                <p className="font-[Cinzel] text-white text-[20px] font-black mt-[2px] lg:mt-1 drop-shadow-sm">
-                                    {datePart}
-                                </p>
-
-                                {timePart && (
-                                    <p className="font-[Cinzel] text-white/80 text-[16px] italic mt-1 font-medium">
-                                        • {timePart}
-                                    </p>
+                            {/* Title */}
+                            <div style={{ marginBottom: '0.8cqw' }}>
+                                <h2 className="font-[Cinzel] font-black uppercase truncate"
+                                    style={{
+                                        fontSize: '2.2cqw',
+                                        lineHeight: 1.1,
+                                        color: '#fdf6e3',
+                                        textShadow: '0 0.2cqw 0.6cqw rgba(0,0,0,0.8)',
+                                    }}
+                                >
+                                    {mainTitle}
+                                </h2>
+                                {subTitle && (
+                                    <h3 className="font-[Cinzel] font-bold uppercase truncate"
+                                        style={{
+                                            fontSize: '1.1cqw',
+                                            color: '#e3cf9d',
+                                            letterSpacing: '0.1em',
+                                            marginTop: '0.3cqw',
+                                            textShadow: '0 0.1cqw 0.3cqw rgba(0,0,0,0.8)',
+                                        }}
+                                    >
+                                        {subTitle}
+                                    </h3>
                                 )}
                             </div>
-                        </div>
-                    </div>
 
-                    {/* FOOTER */}
-                    <div className="flex items-center justify-between pt-4 lg:pt-6 border-t border-[#d4af37]/25 mt-auto">
-                        <span className="font-[Cinzel] text-[#a09476] text-[16px] tracking-[0.15em]">
-                            MT-2026-XQ
-                        </span>
+                            {/* INFO GRID */}
+                            <div className="flex flex-col flex-1" style={{ gap: '0.8cqw' }}>
+                                {/* ATTENDEE */}
+                                <div className="flex items-start" style={{ gap: '0.5cqw' }}>
+                                    <User style={{ width: '1.6cqw', height: '1.6cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                    <div style={{ borderBottom: '0.08cqw solid rgba(212,175,55,0.2)', paddingBottom: '0.4cqw', width: '90%' }}>
+                                        <p className="font-[Cinzel] font-bold uppercase"
+                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.1em' }}
+                                        >
+                                            ATTENDEE
+                                        </p>
+                                        <p className="font-[Cinzel] font-black truncate"
+                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw' }}
+                                        >
+                                            {attendee}
+                                        </p>
+                                    </div>
+                                </div>
 
-                        <div className="px-4 py-1 lg:py-[6px] border border-green-600 bg-green-900/40 rounded-sm shadow-[0_0_10px_rgba(34,197,94,0.3)] hover:bg-[#113a21] transition-colors duration-300">
-                            <span className="text-green-400 font-[Cinzel] font-black text-[12px] tracking-[0.15em] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                                VERIFIED
-                            </span>
+                                {/* VENUE */}
+                                <div className="flex items-start" style={{ gap: '0.5cqw' }}>
+                                    <MapPin style={{ width: '1.6cqw', height: '1.6cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                    <div style={{ borderBottom: '0.08cqw solid rgba(212,175,55,0.2)', paddingBottom: '0.4cqw', width: '90%' }}>
+                                        <p className="font-[Cinzel] font-bold uppercase"
+                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.1em' }}
+                                        >
+                                            VENUE
+                                        </p>
+                                        <p className="font-[Cinzel] font-black truncate"
+                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw' }}
+                                        >
+                                            {venue}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* SCHEDULE */}
+                                <div className="flex items-start" style={{ gap: '0.5cqw' }}>
+                                    <Clock style={{ width: '1.6cqw', height: '1.6cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                    <div style={{ width: '90%' }}>
+                                        <p className="font-[Cinzel] font-bold uppercase"
+                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.1em' }}
+                                        >
+                                            SCHEDULE
+                                        </p>
+                                        <p className="font-[Cinzel] font-black"
+                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw' }}
+                                        >
+                                            {datePart}
+                                        </p>
+                                        {timePart && (
+                                            <p className="font-[Cinzel] italic"
+                                                style={{ fontSize: '1cqw', color: 'rgba(255,255,255,0.7)', marginTop: '0.1cqw' }}
+                                            >
+                                                • {timePart}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* BOTTOM BADGES */}
+                            <div className="flex items-center justify-center" style={{ gap: '0.4cqw', marginTop: 'auto', paddingTop: '0.3cqw' }}>
+                                <span className="font-mono font-medium"
+                                    style={{
+                                        fontSize: '0.7cqw',
+                                        color: '#a09476',
+                                        letterSpacing: '0.06em',
+                                        border: '0.06cqw solid rgba(160,148,118,0.3)',
+                                        padding: '0.15cqw 0.4cqw',
+                                        background: 'rgba(0,0,0,0.4)',
+                                    }}
+                                >
+                                    MT-2026-XQ
+                                </span>
+                                <div className="inline-flex items-center" style={{
+                                    padding: '0.15cqw 0.4cqw',
+                                    border: '0.06cqw solid #16a34a',
+                                    background: 'rgba(20,83,45,0.4)',
+                                    borderRadius: '0.2cqw',
+                                    whiteSpace: 'nowrap',
+                                }}>
+                                    <span className="font-[Cinzel] font-black uppercase"
+                                        style={{
+                                            fontSize: '0.7cqw',
+                                            color: '#22c55e',
+                                            letterSpacing: '0.1em',
+                                            lineHeight: 1,
+                                        }}
+                                    >
+                                        VERIFIED
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </motion.div>
+            </motion.div>
+        </div>
     );
 };
 
