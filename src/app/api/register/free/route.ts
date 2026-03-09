@@ -44,7 +44,8 @@ export async function POST(req: NextRequest) {
                 },
             });
 
-            const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hackjklu-v5.vercel.app';
+            const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+            const siteUrl = rawSiteUrl.includes('localhost') ? 'https://hackjklu-v5.vercel.app' : (rawSiteUrl || 'https://hackjklu-v5.vercel.app');
             const posterUrl = eventInfo.poster && eventInfo.poster.startsWith('/') ? `${siteUrl}${eventInfo.poster}` : eventInfo.poster;
 
             try {

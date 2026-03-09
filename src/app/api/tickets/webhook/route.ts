@@ -90,7 +90,8 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
 
     console.log('[webhook API] Attempting to send confirmation email to:', order.customerEmail);
     const items = order.items as CartItem[];
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hackjklu-v5.vercel.app';
+    const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+    const siteUrl = rawSiteUrl.includes('localhost') ? 'https://hackjklu-v5.vercel.app' : (rawSiteUrl || 'https://hackjklu-v5.vercel.app');
 
     const passRows = tickets.map(t => {
         const eventInfo: any = eventsData.find(e => Number(e.id) === Number(t.eventId)) || eventsData.find(e => e.title === t.eventTitle) || { time: 'TBD', location: 'Campus' };
