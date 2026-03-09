@@ -24,7 +24,7 @@ export const ROW1_TEAM: TeamMember[] = [
     { name: "Agrima", role: "Hospitality", image: "/team/Hospt_TeamCard.png" },
     { name: "Anmol", role: "IA", image: "/team/IA_TeamCard-removebg-preview.png" },
     { name: "Jheel", role: "P&C", image: "/team/P_C_TeamCard_Jheel-removebg-preview.png" },
-    { name: "Swati", role: "Discipline", image: "/team/Discipline_TeamCard-removebg-preview.png" },
+    { name: "Swati", role: "Discipline", image: "/team/Discipline_TeamCard_2-removebg-preview.png" },
     { name: "Aditya", role: "Social Media", image: "/team/SocialMedia_TeamCard-removebg-preview.png" },
     { name: "Shourya", role: "Tech Team", image: "/team/Tech_TeamCard_SB.png" },
 ];
@@ -35,7 +35,7 @@ export const ROW2_TEAM: TeamMember[] = [
     { name: "Srishti", role: "Design Team", image: "/team/Design_TeamCard-removebg-preview.png" },
     { name: "Gaurav", role: "P&C", image: "/team/P_C_TeamCard_Gaurav-removebg-preview.png" },
     { name: "Aman", role: "Stage & Venue", image: "/team/S_V_TeamCard-removebg-preview.png" },
-    { name: "Shubham", role: "Discipline", image: "/team/Discipline_TeamCard_2-removebg-preview.png" },
+    { name: "Shubham", role: "Discipline", image: "/team/Discipline_TeamCard-removebg-preview.png" },
     { name: "Devam", role: "Sponsorships", image: "/team/Sponsor_TeamCard.png" },
     { name: "Mohit", role: "Social Media", image: "/team/SocialMedia_TeamCard-removebg-preview.png" },
     { name: "Aayan", role: "Tech Team", image: "/team/Tech_TeamCard_Aayan-removebg-preview.png" },

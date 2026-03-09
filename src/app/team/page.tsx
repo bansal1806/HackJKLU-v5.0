@@ -17,7 +17,7 @@ const ROW1_TEAM = [
     { name: "Agrima", role: "Hospitality", image: "/team/Hospt_TeamCard.png", insta: "https://www.instagram.com/thekesharii.ag", linkedin: "https://www.linkedin.com/in/agrima-keshari-3a3b55251" },
     { name: "Anmol", role: "IA", image: "/team/IA_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/sahu.anmol02", github: "https://github.com/Anmolsahu-02", linkedin: "https://linkedin.com/in/anmol-sahu-" },
     { name: "Jheel", role: "P&C", image: "/team/P_C_TeamCard_Jheel-removebg-preview.png", insta: "https://www.instagram.com/jheel_jain14", github: "https://github.com/JheelJain14", linkedin: "https://www.linkedin.com/in/jheel-jain-a14913357" },
-    { name: "Swati", role: "Discipline", image: "/team/Discipline_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/swatii._.06", github: "https://github.com/swatigupta06", linkedin: "https://www.linkedin.com/in/swati-gupta0607" },
+    { name: "Swati", role: "Discipline", image: "/team/Discipline_TeamCard_2-removebg-preview.png", insta: "https://www.instagram.com/swatii._.06", github: "https://github.com/swatigupta06", linkedin: "https://www.linkedin.com/in/swati-gupta0607" },
     { name: "Aditya", role: "Social Media", image: "/team/SocialMedia_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/quietadi06/", github: "https://github.com/Aditya4453", linkedin: "https://www.linkedin.com/in/aditya-modani-2b5654309/" },
     { name: "Shourya", role: "Tech Team", image: "/team/Tech_TeamCard_SB.png", insta: "https://www.instagram.com/its.shourya_18", github: "https://github.com/bansal1806", linkedin: "https://www.linkedin.com/in/shouryabansal18" },
 ];
@@ -28,7 +28,7 @@ const ROW2_TEAM = [
     { name: "Srishti", role: "Design Team", image: "/team/Design_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/srishti._j", linkedin: "https://www.linkedin.com/in/srishti-jain-1a614a366" },
     { name: "Gaurav", role: "P&C", image: "/team/P_C_TeamCard_Gaurav-removebg-preview.png", insta: "https://www.instagram.com/its.gaurav.2004", github: "https://github.com/GauravJangid2004", linkedin: "https://www.linkedin.com/in/gaurav-jangid-91149a2a8/" },
     { name: "Aman", role: "Stage & Venue", image: "/team/S_V_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/iaman.015/", github: "https://github.com/Amangp", linkedin: "https://www.linkedin.com/in/aman-gupta-056635215" },
-    { name: "Shubham", role: "Discipline", image: "/team/Discipline_TeamCard_2-removebg-preview.png", insta: "https://www.instagram.com/shubham.sharmaa05", github: "https://github.com/shubhamsharmaa05" },
+    { name: "Shubham", role: "Discipline", image: "/team/Discipline_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/shubham.sharmaa05", github: "https://github.com/shubhamsharmaa05" },
     { name: "Devam", role: "Sponsorships", image: "/team/Sponsor_TeamCard.png", insta: "https://www.instagram.com/who.is.devam/", github: "https://github.com/Devam759l", linkedin: "https://www.linkedin.com/in/devam-gupta-929239271/" },
     { name: "Mohit", role: "Social Media", image: "/team/SocialMedia_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/m.k__05__", github: "https://github.com/mohit03713", linkedin: "https://www.linkedin.com/in/mohit-khurana-25427a234" },
     { name: "Aayan", role: "Tech Team", image: "/team/Tech_TeamCard_Aayan-removebg-preview.png", insta: "https://www.instagram.com/aayan_a1430/", github: "https://github.com/AayanA20", linkedin: "https://www.linkedin.com/in/aayanansari/" },
