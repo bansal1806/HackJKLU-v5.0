@@ -7,6 +7,8 @@ import { CheckCircle, Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { QRCodeCanvas } from 'qrcode.react';
 import type { OrderStatusResponse } from '@/types/tickets';
+import BoardingPass from '@/components/ui/BoardingPass';
+import { events } from '@/components/sections/Events';
 
 function BookingSuccessContent() {
     const params = useSearchParams();
@@ -88,17 +90,25 @@ function BookingSuccessContent() {
                         <p className="text-stone-600 text-xs mb-8 font-mono">{order!.orderId}</p>
 
                         {order!.tickets && order!.tickets.length > 0 && (
-                            <div className="mb-8 p-6 bg-[#1A1C23] rounded-2xl border border-[#d4af37]/20">
-                                <h3 className="text-[#d4af37] font-[Cinzel] font-bold text-lg mb-4">Your Entry Passes</h3>
-                                <div className="flex flex-wrap items-center justify-center gap-6">
-                                    {order!.tickets.map((t, idx) => (
-                                        <div key={idx} className="bg-white p-3 rounded-xl shadow-lg flex flex-col items-center">
-                                            <QRCodeCanvas value={t.ticketId} size={150} level={"H"} />
-                                            <p className="text-black font-bold text-xs mt-3 uppercase font-[Cinzel]">{t.eventTitle}</p>
-                                        </div>
-                                    ))}
+                            <div className="mb-8">
+                                <h3 className="text-[#d4af37] font-[Cinzel] font-bold text-lg mb-6">Your Entry Passes</h3>
+                                <div className="space-y-6">
+                                    {order!.tickets.map((t, idx) => {
+                                        const eventData = events.find(e => e.title === t.eventTitle);
+                                        return (
+                                            <BoardingPass
+                                                key={idx}
+                                                ticketId={t.ticketId}
+                                                eventTitle={t.eventTitle}
+                                                attendee={order!.customerName}
+                                                time={eventData?.time || 'TBD'}
+                                                venue={eventData?.location || 'Campus'}
+                                                poster={eventData?.poster || '/events/artist_reveal.webp'}
+                                            />
+                                        );
+                                    })}
                                 </div>
-                                <p className="text-stone-400 text-xs mt-4">Please present these QR codes at the venue.</p>
+                                <p className="text-stone-500 text-xs mt-6 italic">Please present these boarding passes at the venue check-in.</p>
                             </div>
                         )}
 

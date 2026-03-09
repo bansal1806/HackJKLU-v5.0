@@ -4,159 +4,32 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
 import { QRCodeCanvas } from 'qrcode.react';
-import { ShoppingCart, CheckCircle } from 'lucide-react';
-import {
-  Gamepad2,
-  Music,
-  Map,
-  Mic,
-  Cpu,
-  Zap,
-  Star,
-  Camera,
-  Code2,
-  X,
-  Clock,
-  Search,
-  SlidersHorizontal,
-  Sparkles,
-  Flame,
-  MapPin,
-  Bot,
-  Palette,
-  Glasses,
-  Loader2,
-} from 'lucide-react';
+import { ShoppingCart, CheckCircle, Clock, MapPin, X, Loader2, User, Ticket as TicketIcon, Gamepad2, Music, Map, Mic, Cpu, Zap, Star, Camera, Code2, Search, SlidersHorizontal, Sparkles, Flame, Bot, Palette, Glasses } from 'lucide-react';
+import BoardingPass from '@/components/ui/BoardingPass';
 
-// ⚠️ UPDATE entryFee values before going live - 0 means free / no booking needed
-export const events = [
-  {
-    id: 1, title: 'Space Observation',
-    desc: 'Enjoy a stargazing session from the Tech Block Terrace under the open night sky.',
-    time: 'Day 1, 10:00 PM - 12:00 AM', location: 'Tech Block Terrace',
-    icon: Star, color: '#eebefa', poster: '/events/poster_template.png',
-    isEpic: true, isMythic: false,
-    entryFee: 0, requiresBooking: false,
-    details: 'View the stars and planets from the Tech Block Terrace. Take a break from coding and enjoy a relaxing stargazing session under the night sky.',
-  },
-  {
-    id: 2, title: 'Coding Competition',
-    desc: 'Compete against others to solve algorithmic programming challenges within a time limit.',
-    time: 'Day 2, 10:00 - 11:30 AM', location: 'IET Amphi',
-    icon: Code2, color: '#4dabf7', poster: '/events/tech.png',
-    isEpic: false, isMythic: true,
-    entryFee: 0, requiresBooking: false,
-    details: 'Test your programming skills by solving complex algorithmic challenges under strict time pressure. Only the most efficient coders will win.',
-  },
-  {
-    id: 3, title: 'Open Mic Night',
-    desc: 'Share your talents in singing, speaking, or performing during our midnight open mic session.',
-    time: 'Day 2, 12:00 - 2:00 AM', location: 'Tech Lawn',
-    icon: Mic, color: '#4ecdc4', poster: '/events/music.png',
-    isEpic: true, isMythic: false,
-    entryFee: 0, requiresBooking: false,
-    details: 'The stage is yours! Share your voice, stories, or art during our late-night open mic session on the Tech Lawn.',
-  },
-  {
-    id: 4, title: 'BGMI Tournament',
-    desc: 'Form a squad and compete in a Battlegrounds Mobile India (BGMI) tournament.',
-    time: 'Day 2, 10:00 AM - 4:00 PM', location: 'Gaming Zone',
-    icon: Gamepad2, color: '#ff6b6b', poster: '/events/gaming.png',
-    isEpic: true, isMythic: false,
-    entryFee: 50, requiresBooking: true,
-    details: 'Form a squad, drop into the map, and compete against other teams in our BGMI battle royale tournament to be the last squad standing.',
-  },
-  {
-    id: 13, title: 'Valorant Tournament',
-    desc: 'Join our Valorant tournament and compete to be the last team standing.',
-    time: 'Day 2, 10:00 AM - 4:00 PM', location: 'Gaming Zone',
-    icon: Gamepad2, color: '#ff922b', poster: '/events/gaming.png',
-    isEpic: true, isMythic: false,
-    entryFee: 50, requiresBooking: true,
-    details: 'Compete against other teams in intense 5v5 tactical shooter matches. Show your aim, strategy, and teamwork in this Valorant tournament.',
-  },
-  {
-    id: 5, title: 'Fun Quiz',
-    desc: 'Participate in a fun, fast-paced trivia quiz covering topics like technology and pop culture.',
-    time: 'Day 2, 11:30 AM - 12:30 PM', location: 'IM Amphi',
-    icon: Zap, color: '#fcc419', poster: '/events/poster_template.png',
-    isEpic: false, isMythic: false,
-    entryFee: 0, requiresBooking: false,
-    details: 'Answer rapid-fire trivia questions covering technology, science, pop culture, and more. Test your general knowledge in this fun competition.',
-  },
-  {
-    id: 6, title: 'RoboSoccer',
-    desc: 'Watch custom-built autonomous robots play soccer against each other on the field.',
-    time: 'Day 2, 12:30 - 3:00 PM', location: 'IET Building',
-    icon: Bot, color: '#51cf66', poster: '/events/tech.png',
-    isEpic: false, isMythic: true,
-    entryFee: 0, requiresBooking: false,
-    details: 'Watch an exciting game where autonomous custom-built robots clash in a soccer match testing engineering, programming, and strategy.',
-  },
-  {
-    id: 7, title: 'Drama Club Skit',
-    desc: 'Enjoy a live theatrical performance and story presented by the college Drama Club.',
-    time: 'Day 2, 4:30 - 5:00 PM', location: 'LRC Stairs',
-    icon: Camera, color: '#9775fa', poster: '/events/poster_template.png',
-    isEpic: true, isMythic: false,
-    entryFee: 0, requiresBooking: false,
-    details: 'Take a break and watch a live theatrical performance and storytelling spectacle presented by the talented college Drama Club on the LRC Stairs.',
-  },
-  {
-    id: 8, title: 'Line Follower',
-    desc: 'Program your robot to accurately follow a complex track as fast as possible.',
-    time: 'Day 2, 2:30 - 4:00 PM', location: 'Competition Floor',
-    icon: Cpu, color: '#4dabf7', poster: '/events/tech.png',
-    isEpic: false, isMythic: true,
-    entryFee: 0, requiresBooking: false,
-    details: 'A test of robotics and precision. Program your robot to quickly and accurately navigate a complex labyrinthine line track without going off course.',
-  },
-  {
-    id: 9, title: 'Block Printing',
-    desc: 'Learn the traditional art of block printing and create your own custom designs on fabric.',
-    time: 'Day 2, 1:00 - 4:00 PM', location: 'IET Building',
-    icon: Palette, color: '#ff922b', poster: '/events/poster_template.png',
-    isEpic: false, isMythic: false,
-    entryFee: 0, requiresBooking: false,
-    details: 'Step away from the screen to learn the traditional craft of block printing. Create and stamp your own custom artistic designs onto fabric.',
-  },
-  {
-    id: 10, title: 'Jamming Night',
-    desc: 'Bring your instruments or just your voice for a relaxed night of live music and open jamming.',
-    time: 'Day 2, 11:30 PM - 2:00 AM', location: 'Tech Lawn',
-    icon: Music, color: '#ff8787', poster: '/events/music.png',
-    isEpic: true, isMythic: false,
-    entryFee: 0, requiresBooking: false,
-    details: 'Bring your instruments or just sing along for a relaxed night of live music and open jamming on the Tech Lawn under the stars.',
-  },
-  {
-    id: 11, title: 'Space Object Hunt',
-    desc: 'Explore the campus at night in this fun scavenger hunt to find hidden space-themed objects.',
-    time: 'Day 2, 9:00 PM - 12:00 AM', location: 'Tech Block Terrace',
-    icon: Map, color: '#ffd43b', poster: '/events/poster_template.png',
-    isEpic: false, isMythic: true,
-    entryFee: 0, requiresBooking: false,
-    details: 'Join an exciting night-time scavenger hunt. Follow the clues and map to find hidden space-themed objects scattered across the entire campus.',
-  },
-  {
-    id: 12, title: 'Dance Battle',
-    desc: 'Watch or compete as dance crews face off in an energetic dance battle on the LRC Stairs.',
-    time: 'Day 2, 5:00 - 8:00 PM', location: 'LRC Stairs',
-    icon: Flame, color: '#ff6b6b', poster: '/events/poster_template.png',
-    isEpic: true, isMythic: false,
-    entryFee: 50, requiresBooking: true,
-    details: 'Watch or compete as talented dance crews face off against each other in a high-energy dance battle competition on the LRC Stairs.',
-  },
-  {
-    id: 14, title: 'AR-VR Zone',
-    desc: 'Try out immersive experiences and games in our dedicated Augmented and Virtual Reality zone.',
-    time: 'Day 2, 10:00 AM - 5:00 PM', location: 'Experience Zone',
-    icon: Glasses, color: '#74c0fc', poster: '/events/tech.png',
-    isEpic: false, isMythic: false,
-    entryFee: 0, requiresBooking: false,
-    details: 'Put on a headset and try out fully immersive virtual reality games, simulators, and augmented reality experiences in our dedicated AR-VR Experience Zone.',
-  },
-];
+import { eventsData } from '@/data/events';
+
+const iconMap: Record<number, any> = {
+  1: Star,
+  2: Code2,
+  3: Mic,
+  4: Gamepad2,
+  13: Gamepad2,
+  5: Zap,
+  6: Bot,
+  7: Camera,
+  8: Cpu,
+  9: Palette,
+  10: Music,
+  11: Map,
+  12: Flame,
+  14: Glasses,
+};
+
+export const events = eventsData.map(e => ({
+  ...e,
+  icon: iconMap[e.id] || Zap
+}));
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -385,7 +258,7 @@ export function Events() {
                 </p>
                 <div className="flex flex-wrap items-center gap-4 text-stone-400 font-bold uppercase tracking-widest text-xs sm:text-sm mb-6">
                   <span className="flex items-center gap-2"><Clock size={16} className="text-[#d4af37]" /> 15th March, 7:00 PM</span>
-                  <span className="flex items-center gap-2"><MapPin size={16} className="text-[#d4af37]" /> Sabrang Ground</span>
+                  <span className="flex items-center gap-2"><MapPin size={16} className="text-[#d4af37]" /> J.K LAKSHMIPAT UNIVERSITY</span>
                 </div>
               </div>
               <button
@@ -393,12 +266,12 @@ export function Events() {
                   setSelectedEvent({
                     id: 999, // Unique ID for Headliner
                     title: 'Maan Panu Live Performance',
-                    desc: 'Live performance by Maan Panu.',
-                    time: '15th March, 7:00 PM',
-                    location: 'Sabrang Ground',
+                    desc: 'The cinematic live performance highlight of Sabrang 2026. A legendary night of music and mystery.',
+                    time: '15th March, 2026 • 07:00 PM onwards',
+                    location: 'J.K LAKSHMIPAT UNIVERSITY',
                     icon: Mic,
                     color: '#d4af37',
-                    poster: '/events/mann_pannu.webp',
+                    poster: '/events/artist_reveal.webp',
                     isEpic: true,
                     isMythic: false,
                     entryFee: 0,
@@ -640,22 +513,26 @@ export function Events() {
                       <div className="bg-[#1A1C23]/60 p-4 sm:p-5 rounded-2xl border border-[#d4af37]/20 mt-2">
                         {rsvpStatus === 'success' ? (
                           <div className="flex flex-col items-center justify-center py-6 text-center">
-                            <CheckCircle size={48} className="text-green-400 mb-4" />
+                            <CheckCircle size={48} className="text-green-400 mb-6" />
                             <h4 className="text-xl font-[Cinzel] font-black text-white mb-2">Registration Confirmed</h4>
-                            <p className="text-stone-400 text-sm mb-6">You have successfully RSVP'd for {selectedEvent.title}. We look forward to seeing you!</p>
+                            <p className="text-stone-400 text-sm mb-8 italic">Your boarding pass is ready for the quest!</p>
 
                             {rsvpTicketId && (
-                              <div className="bg-white p-4 rounded-xl mb-6 flex flex-col items-center">
-                                <QRCodeCanvas value={rsvpTicketId} size={150} level={"H"} />
-                                <p className="text-black font-bold text-[10px] sm:text-xs mt-3 uppercase tracking-widest font-[Cinzel]">Entry Pass</p>
-                              </div>
+                              <BoardingPass
+                                ticketId={rsvpTicketId}
+                                eventTitle={selectedEvent.title}
+                                attendee={rsvpForm.name}
+                                time={selectedEvent.time}
+                                venue={selectedEvent.location}
+                                poster={selectedEvent.poster || '/events/artist_reveal.webp'}
+                              />
                             )}
 
                             <button
                               onClick={closeEventModal}
-                              className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors font-[Cinzel] text-sm uppercase tracking-wider"
+                              className="px-8 py-3 bg-[#d4af37] hover:bg-white text-black rounded-xl transition-all font-[Cinzel] font-black uppercase tracking-wider text-sm mt-4"
                             >
-                              Close
+                              Done
                             </button>
                           </div>
                         ) : (
