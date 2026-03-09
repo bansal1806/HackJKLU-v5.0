@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CheckCircle, Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { QRCodeCanvas } from 'qrcode.react';
 import type { OrderStatusResponse } from '@/types/tickets';
 
 function BookingSuccessContent() {
@@ -85,6 +86,21 @@ function BookingSuccessContent() {
                             Confirmation sent to <span className="text-white">{order!.customerEmail}</span>
                         </p>
                         <p className="text-stone-600 text-xs mb-8 font-mono">{order!.orderId}</p>
+
+                        {order!.tickets && order!.tickets.length > 0 && (
+                            <div className="mb-8 p-6 bg-[#1A1C23] rounded-2xl border border-[#d4af37]/20">
+                                <h3 className="text-[#d4af37] font-[Cinzel] font-bold text-lg mb-4">Your Entry Passes</h3>
+                                <div className="flex flex-wrap items-center justify-center gap-6">
+                                    {order!.tickets.map((t, idx) => (
+                                        <div key={idx} className="bg-white p-3 rounded-xl shadow-lg flex flex-col items-center">
+                                            <QRCodeCanvas value={t.ticketId} size={150} level={"H"} />
+                                            <p className="text-black font-bold text-xs mt-3 uppercase font-[Cinzel]">{t.eventTitle}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <p className="text-stone-400 text-xs mt-4">Please present these QR codes at the venue.</p>
+                            </div>
+                        )}
 
                         <Link href="/events" className="inline-flex items-center gap-2 bg-[#d4af37] text-black font-[Cinzel] font-black px-8 py-4 rounded-2xl hover:bg-white transition-all">
                             <ArrowLeft size={18} /> Back to Events

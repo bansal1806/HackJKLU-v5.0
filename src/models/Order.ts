@@ -7,6 +7,7 @@ export interface IOrder extends Document {
     customerName: string;
     customerEmail: string;
     customerPhone: string;
+    customerCollege: string;
     totalAmount: number; // paise
     items: CartItem[];
     status: OrderStatus;
@@ -31,6 +32,7 @@ const OrderSchema = new Schema<IOrder>(
         customerName: { type: String, required: true },
         customerEmail: { type: String, required: true, lowercase: true },
         customerPhone: { type: String, required: true },
+        customerCollege: { type: String, required: true },
         totalAmount: { type: Number, required: true },
         items: { type: [CartItemSchema], required: true },
         status: {

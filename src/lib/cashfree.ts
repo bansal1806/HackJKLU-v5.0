@@ -55,6 +55,19 @@ export async function createCashfreeOrder(params: {
     return res.json();
 }
 
+export async function getCashfreeOrderStatus(orderId: string): Promise<any> {
+    const res = await fetch(`${BASE_URL}/orders/${orderId}`, {
+        method: 'GET',
+        headers: CF_HEADERS,
+    });
+
+    if (!res.ok) {
+        return null;
+    }
+
+    return res.json();
+}
+
 export function verifyCashfreeWebhook(
     rawBody: string,
     signature: string,

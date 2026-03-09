@@ -4,6 +4,8 @@ import Order from '@/models/Order';
 import { verifyCashfreeWebhook } from '@/lib/cashfree';
 import type { IOrder } from '@/models/Order';
 import type { CartItem } from '@/types/tickets';
+import Ticket from '@/models/Ticket';
+import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
     try {
@@ -31,8 +33,29 @@ export async function POST(req: NextRequest) {
                 { new: true },
             );
 
-            if (updated && process.env.RESEND_API_KEY) {
-                await sendConfirmationEmail(updated).catch((e) =>
+            if (updated && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+                // Generate Tickets
+                const ticketsToCreate = [];
+                for (const item of updated.items) {
+                    for (let i = 0; i < item.quantity; i++) {
+                        ticketsToCreate.push({
+                            ticketId: crypto.randomUUID(),
+                            orderId: updated.cashfreeOrderId,
+                            eventId: item.eventId,
+                            eventTitle: item.eventTitle,
+                            attendeeName: updated.customerName,
+                            attendeeEmail: updated.customerEmail,
+                            attendeePhone: updated.customerPhone,
+                            college: updated.customerCollege || 'N/A',
+                            isPaid: true,
+                            paymentReference: paymentId,
+                            isCheckedIn: false,
+                        });
+                    }
+                }
+                const createdTickets = await Ticket.insertMany(ticketsToCreate);
+
+                await sendConfirmationEmail(updated, createdTickets).catch((e) =>
                     console.error('[webhook] Email error:', e),
                 );
             }
@@ -51,9 +74,20 @@ export async function POST(req: NextRequest) {
     }
 }
 
-async function sendConfirmationEmail(order: IOrder) {
-    const { Resend } = await import('resend');
-    const resend = new Resend(process.env.RESEND_API_KEY);
+async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
+    const nodemailer = await import('nodemailer');
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+
+    console.log('[webhook API] Attempting to send confirmation email to:', order.customerEmail);
+    console.log('[webhook API] Using EMAIL_USER:', process.env.EMAIL_USER);
     const items = order.items as CartItem[];
 
     const itemRows = items
@@ -67,11 +101,22 @@ async function sendConfirmationEmail(order: IOrder) {
         )
         .join('');
 
-    await resend.emails.send({
-        from: 'HackJKLU <onboarding@resend.dev>',
-        to: order.customerEmail,
-        subject: '✅ Booking Confirmed — HackJKLU v5.0',
-        html: `<!DOCTYPE html><html><body style="background:#0c0a09;color:#ffecd1;font-family:Georgia,serif;padding:32px">
+    const qrRows = tickets.map(t => `
+        <div style="margin-bottom: 24px; text-align: center; border: 1px solid #d4af3733; padding: 16px; border-radius: 8px; background: #1a1a1a;">
+            <p style="color: #d4af37; font-size: 16px; font-weight: bold; margin-top: 0;">${t.eventTitle}</p>
+            <p style="color: #8b8680; font-size: 12px; margin-bottom: 12px;">Ticket ID: ${t.ticketId}</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${t.ticketId}" alt="QR Code" width="200" height="200" style="border-radius: 8px; border: 4px solid white;" />
+        </div>
+    `).join('');
+
+    try {
+        const info = await transporter.sendMail({
+            from: `"HackJKLU v5.0" <${process.env.EMAIL_USER}>`,
+            to: order.customerEmail,
+            replyTo: process.env.EMAIL_USER,
+            subject: '✅ Booking Confirmed — HackJKLU v5.0',
+            text: `Hi ${order.customerName}, your booking is confirmed! Total Paid: ₹${order.totalAmount / 100}. Please check your email for QR codes.`,
+            html: `<!DOCTYPE html><html><body style="background:#0c0a09;color:#ffecd1;font-family:Georgia,serif;padding:32px">
       <div style="max-width:580px;margin:0 auto">
         <h1 style="color:#d4af37">HackJKLU v5.0</h1>
         <p style="color:#8b8680;margin-top:0">Booking Confirmation</p>
@@ -89,9 +134,21 @@ async function sendConfirmationEmail(order: IOrder) {
             <td style="padding:10px 12px;text-align:right;font-weight:bold;color:#d4af37">₹${order.totalAmount / 100}</td>
           </tr></tfoot>
         </table>
+
+        <h3 style="color:#d4af37; margin-top: 32px; text-align: center;">Your Entry Passes</h3>
+        <p style="text-align: center; color: #8b8680; margin-bottom: 20px; font-size: 14px;">Please present these QR codes at the venue for check-in.</p>
+        
+        ${qrRows}
+
         <p style="color:#8b8680;font-size:12px">Order ID: ${order.cashfreeOrderId}</p>
         <hr style="border-color:#d4af37;opacity:.3"/>
         <p style="text-align:center;color:#8b8680;font-size:12px">— Team HackJKLU</p>
       </div></body></html>`,
-    });
+        });
+        console.log(`[NodeMailer Webhook] Successfully sent confirmation email to ${order.customerEmail}. MessageId: ${info.messageId}`);
+    } catch (e: any) {
+        console.error('[NodeMailer Webhook Error] Failed to dispatch email:', e.message);
+        console.error('[NodeMailer Webhook Error] Details:', e);
+        throw e;
+    }
 }

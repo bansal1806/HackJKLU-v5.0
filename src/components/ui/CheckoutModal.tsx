@@ -35,7 +35,7 @@ export function CheckoutModal({ open, onClose }: Props) {
     const { items, total, clearCart } = useCart();
     const router = useRouter();
 
-    const [form, setForm] = useState({ name: '', email: '', phone: '' });
+    const [form, setForm] = useState({ name: '', email: '', phone: '', college: '' });
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState(false);
     const [apiError, setApiError] = useState('');
@@ -50,6 +50,7 @@ export function CheckoutModal({ open, onClose }: Props) {
         if (!form.name.trim()) e.name = 'Name is required';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Invalid email';
         if (!/^\d{10}$/.test(form.phone)) e.phone = 'Must be 10 digits';
+        if (!form.college.trim()) e.college = 'College is required';
         setErrors(e);
         return Object.keys(e).length === 0;
     };
@@ -69,6 +70,7 @@ export function CheckoutModal({ open, onClose }: Props) {
                     name: form.name,
                     email: form.email,
                     phone: form.phone,
+                    college: form.college,
                     items,
                 }),
             });
@@ -108,7 +110,7 @@ export function CheckoutModal({ open, onClose }: Props) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center"
+                    className="fixed inset-0 z-100 flex items-end sm:items-center justify-center"
                 >
                     {/* Backdrop */}
                     <motion.div
@@ -154,6 +156,7 @@ export function CheckoutModal({ open, onClose }: Props) {
                                 { id: 'name', label: 'Full Name', type: 'text', placeholder: 'Heracles of Athens' },
                                 { id: 'email', label: 'Email', type: 'email', placeholder: 'hero@olympus.com' },
                                 { id: 'phone', label: 'Phone (10 digits)', type: 'tel', placeholder: '9999999999' },
+                                { id: 'college', label: 'College / University', type: 'text', placeholder: 'JK Lakshmipat University' },
                             ].map(field => (
                                 <div key={field.id}>
                                     <label htmlFor={`checkout-${field.id}`} className="block text-stone-400 text-xs font-black uppercase tracking-widest mb-2 font-[Cinzel]">

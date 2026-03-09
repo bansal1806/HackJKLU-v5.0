@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
+import { QRCodeCanvas } from 'qrcode.react';
 import { ShoppingCart, CheckCircle } from 'lucide-react';
 import {
   Gamepad2,
@@ -24,17 +25,18 @@ import {
   Bot,
   Palette,
   Glasses,
+  Loader2,
 } from 'lucide-react';
 
 // ⚠️ UPDATE entryFee values before going live - 0 means free / no booking needed
-const events = [
+export const events = [
   {
     id: 1, title: 'Space Observation',
     desc: 'Enjoy a stargazing session from the Tech Block Terrace under the open night sky.',
     time: 'Day 1, 10:00 PM - 12:00 AM', location: 'Tech Block Terrace',
     icon: Star, color: '#eebefa', poster: '/events/poster_template.png',
     isEpic: true, isMythic: false,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'View the stars and planets from the Tech Block Terrace. Take a break from coding and enjoy a relaxing stargazing session under the night sky.',
   },
   {
@@ -43,7 +45,7 @@ const events = [
     time: 'Day 2, 10:00 - 11:30 AM', location: 'IET Amphi',
     icon: Code2, color: '#4dabf7', poster: '/events/tech.png',
     isEpic: false, isMythic: true,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'Test your programming skills by solving complex algorithmic challenges under strict time pressure. Only the most efficient coders will win.',
   },
   {
@@ -52,7 +54,7 @@ const events = [
     time: 'Day 2, 12:00 - 2:00 AM', location: 'Tech Lawn',
     icon: Mic, color: '#4ecdc4', poster: '/events/music.png',
     isEpic: true, isMythic: false,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'The stage is yours! Share your voice, stories, or art during our late-night open mic session on the Tech Lawn.',
   },
   {
@@ -65,13 +67,13 @@ const events = [
     details: 'Form a squad, drop into the map, and compete against other teams in our BGMI battle royale tournament to be the last squad standing.',
   },
   {
-    id: 13, title: 'Free Fire Tournament',
-    desc: 'Join our Free Fire battle royale tournament and compete to be the last player standing.',
+    id: 13, title: 'Valorant Tournament',
+    desc: 'Join our Valorant tournament and compete to be the last team standing.',
     time: 'Day 2, 10:00 AM - 4:00 PM', location: 'Gaming Zone',
     icon: Gamepad2, color: '#ff922b', poster: '/events/gaming.png',
     isEpic: true, isMythic: false,
     entryFee: 50, requiresBooking: true,
-    details: 'Fifty players drop onto one island in this fast-paced Free Fire battle royale tournament. Compete against others and survive to the end.',
+    details: 'Compete against other teams in intense 5v5 tactical shooter matches. Show your aim, strategy, and teamwork in this Valorant tournament.',
   },
   {
     id: 5, title: 'Fun Quiz',
@@ -79,7 +81,7 @@ const events = [
     time: 'Day 2, 11:30 AM - 12:30 PM', location: 'IM Amphi',
     icon: Zap, color: '#fcc419', poster: '/events/poster_template.png',
     isEpic: false, isMythic: false,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'Answer rapid-fire trivia questions covering technology, science, pop culture, and more. Test your general knowledge in this fun competition.',
   },
   {
@@ -88,7 +90,7 @@ const events = [
     time: 'Day 2, 12:30 - 3:00 PM', location: 'IET Building',
     icon: Bot, color: '#51cf66', poster: '/events/tech.png',
     isEpic: false, isMythic: true,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'Watch an exciting game where autonomous custom-built robots clash in a soccer match testing engineering, programming, and strategy.',
   },
   {
@@ -97,7 +99,7 @@ const events = [
     time: 'Day 2, 4:30 - 5:00 PM', location: 'LRC Stairs',
     icon: Camera, color: '#9775fa', poster: '/events/poster_template.png',
     isEpic: true, isMythic: false,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'Take a break and watch a live theatrical performance and storytelling spectacle presented by the talented college Drama Club on the LRC Stairs.',
   },
   {
@@ -106,7 +108,7 @@ const events = [
     time: 'Day 2, 2:30 - 4:00 PM', location: 'Competition Floor',
     icon: Cpu, color: '#4dabf7', poster: '/events/tech.png',
     isEpic: false, isMythic: true,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'A test of robotics and precision. Program your robot to quickly and accurately navigate a complex labyrinthine line track without going off course.',
   },
   {
@@ -115,7 +117,7 @@ const events = [
     time: 'Day 2, 1:00 - 4:00 PM', location: 'IET Building',
     icon: Palette, color: '#ff922b', poster: '/events/poster_template.png',
     isEpic: false, isMythic: false,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'Step away from the screen to learn the traditional craft of block printing. Create and stamp your own custom artistic designs onto fabric.',
   },
   {
@@ -124,7 +126,7 @@ const events = [
     time: 'Day 2, 11:30 PM - 2:00 AM', location: 'Tech Lawn',
     icon: Music, color: '#ff8787', poster: '/events/music.png',
     isEpic: true, isMythic: false,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'Bring your instruments or just sing along for a relaxed night of live music and open jamming on the Tech Lawn under the stars.',
   },
   {
@@ -133,7 +135,7 @@ const events = [
     time: 'Day 2, 9:00 PM - 12:00 AM', location: 'Tech Block Terrace',
     icon: Map, color: '#ffd43b', poster: '/events/poster_template.png',
     isEpic: false, isMythic: true,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'Join an exciting night-time scavenger hunt. Follow the clues and map to find hidden space-themed objects scattered across the entire campus.',
   },
   {
@@ -151,7 +153,7 @@ const events = [
     time: 'Day 2, 10:00 AM - 5:00 PM', location: 'Experience Zone',
     icon: Glasses, color: '#74c0fc', poster: '/events/tech.png',
     isEpic: false, isMythic: false,
-    entryFee: 50, requiresBooking: true,
+    entryFee: 0, requiresBooking: false,
     details: 'Put on a headset and try out fully immersive virtual reality games, simulators, and augmented reality experiences in our dedicated AR-VR Experience Zone.',
   },
 ];
@@ -210,6 +212,58 @@ export function Events() {
   type FilterId = 'all' | 'popular' | 'trending';
   const [mounted, setMounted] = useState(false);
   const { addItem, items } = useCart();
+
+  const [showRsvpForm, setShowRsvpForm] = useState(false);
+  const [rsvpForm, setRsvpForm] = useState({ name: '', email: '', phone: '', college: '' });
+  const [rsvpStatus, setRsvpStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [rsvpError, setRsvpError] = useState('');
+  const [rsvpTicketId, setRsvpTicketId] = useState<string | null>(null);
+
+  const closeEventModal = () => {
+    setSelectedEvent(null);
+    setShowRsvpForm(false);
+    setRsvpStatus('idle');
+    setRsvpTicketId(null);
+    setRsvpForm({ name: '', email: '', phone: '', college: '' });
+  };
+
+  const handleRsvpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedEvent) return;
+
+    if (!rsvpForm.name || !rsvpForm.email || !rsvpForm.phone || !rsvpForm.college) {
+      setRsvpError('All fields are required');
+      setRsvpStatus('error');
+      return;
+    }
+
+    setRsvpStatus('loading');
+    setRsvpError('');
+
+    try {
+      const res = await fetch('/api/register/free', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventId: selectedEvent.id,
+          eventTitle: selectedEvent.title,
+          attendeeName: rsvpForm.name,
+          attendeeEmail: rsvpForm.email,
+          attendeePhone: rsvpForm.phone,
+          college: rsvpForm.college,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to register');
+
+      setRsvpTicketId(data.ticketId);
+      setRsvpStatus('success');
+    } catch (err) {
+      setRsvpStatus('error');
+      setRsvpError(err instanceof Error ? err.message : 'Something went wrong');
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -309,6 +363,86 @@ export function Events() {
         </p>
       </motion.div>
 
+      {/* Artist Section */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto mb-16 sm:mb-24 px-4">
+        <div className="flex items-center gap-4 mb-8">
+          <h3 className="text-3xl md:text-5xl font-[Cinzel] font-black text-[#d4af37] tracking-wider uppercase">Headliner</h3>
+          <div className="h-px flex-1 bg-linear-to-r from-[#d4af37]/50 to-transparent" />
+        </div>
+
+        <div className="relative w-full overflow-hidden rounded-3xl border border-[#d4af37]/30 bg-[#1A1C23] group h-[500px] sm:h-[600px] lg:h-[70vh]">
+          <div className="absolute inset-0 bg-black">
+            <img src="/events/artist_reveal.webp" alt="Artist" className="w-full h-full object-cover object-top sm:object-center opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" />
+          </div>
+          <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-[#0B0C10]/80 to-transparent md:bg-linear-to-r md:from-[#0B0C10] md:via-[#0B0C10]/80 md:to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col md:flex-row items-end md:items-center h-full p-6 sm:p-8 md:p-12">
+            <div className="w-full md:w-3/5 lg:w-1/2">
+              <div className="transition-opacity duration-700 group-hover:opacity-0">
+                <h3 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-[Cinzel] font-black text-white mb-4 uppercase">Maan Panu</h3>
+                <p className="text-stone-300 sm:text-lg italic font-serif leading-relaxed mb-6 sm:mb-8 max-w-xl">
+                  Prepare for an unforgettable night of rhythm and energy. Maan Panu will take the stage to cap off the festival in spectacular fashion.
+                </p>
+                <div className="flex flex-wrap items-center gap-4 text-stone-400 font-bold uppercase tracking-widest text-xs sm:text-sm mb-6">
+                  <span className="flex items-center gap-2"><Clock size={16} className="text-[#d4af37]" /> 15th March, 7:00 PM</span>
+                  <span className="flex items-center gap-2"><MapPin size={16} className="text-[#d4af37]" /> Sabrang Ground</span>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setSelectedEvent({
+                    id: 999, // Unique ID for Headliner
+                    title: 'Maan Panu Live Performance',
+                    desc: 'Live performance by Maan Panu.',
+                    time: '15th March, 7:00 PM',
+                    location: 'Sabrang Ground',
+                    icon: Mic,
+                    color: '#d4af37',
+                    poster: '/events/mann_pannu.webp',
+                    isEpic: true,
+                    isMythic: false,
+                    entryFee: 0,
+                    requiresBooking: false,
+                    details: 'Prepare for an unforgettable night of rhythm and energy. Maan Panu will take the stage to cap off the festival in spectacular fashion.',
+                  });
+                }}
+                className="bg-[#d4af37] text-black font-[Cinzel] font-black py-3 sm:py-4 px-6 sm:px-8 rounded-xl hover:bg-white transition-all uppercase tracking-widest text-sm mb-4 md:mb-0 relative z-20"
+              >
+                Register Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Speakers Section */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto mb-16 sm:mb-24 px-4">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="h-px flex-1 bg-linear-to-l from-[#d4af37]/50 to-transparent" />
+          <h3 className="text-3xl md:text-5xl font-[Cinzel] font-black text-[#d4af37] tracking-wider uppercase text-right">Eminent Speakers</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {[1, 2, 3].map((speaker) => (
+            <div key={speaker} className="relative group rounded-3xl overflow-hidden border border-[#d4af37]/20 bg-[#1A1C23] aspect-4/5 flex flex-col justify-end">
+              <div className="absolute inset-0 bg-black">
+                <img src="/events/tech.png" alt={`Speaker ${speaker}`} className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700" />
+              </div>
+              <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-[#0B0C10]/60 to-transparent" />
+              <div className="relative z-10 p-6 sm:p-8">
+                <p className="text-[#d4af37] text-xs font-black tracking-widest uppercase mb-1">Keynote Speaker</p>
+                <h4 className="text-2xl sm:text-3xl font-[Cinzel] font-black text-white uppercase mb-2">Guest Speaker {speaker}</h4>
+                <p className="text-stone-400 text-sm italic line-clamp-2">Industry pioneer and expert joining the council to share profound knowledge and insights.</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative z-10 w-full mb-8 flex items-center justify-center">
+        <h3 className="text-4xl md:text-6xl font-[Cinzel] font-black text-white tracking-wider uppercase text-center border-b-2 border-[#d4af37] pb-4 px-12">The Labours</h3>
+      </div>
+
       {/* Oracle Sigils: Search & Filter */}
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-6 mb-10 sm:mb-16 md:mb-24 px-0 sm:px-4 italic">
         {/* Divine Search */}
@@ -399,7 +533,7 @@ export function Events() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedEvent(null)}
+              onClick={closeEventModal}
               className="absolute inset-0 bg-[#020205]/98 backdrop-blur-3xl"
             />
 
@@ -411,7 +545,7 @@ export function Events() {
               className="relative z-10 w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl h-[95vh] sm:max-h-[90vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-t-3xl sm:rounded-3xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold"
             >
               <button
-                onClick={() => setSelectedEvent(null)}
+                onClick={closeEventModal}
                 className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-black/50 text-white rounded-full hover:scale-110 transition-transform backdrop-blur-md border border-[#d4af37]/30 hover:bg-[#d4af37] hover:text-black"
                 aria-label="Close event details"
               >
@@ -419,7 +553,7 @@ export function Events() {
               </button>
 
               {/* Poster Side: The Artifact */}
-              <div className="w-full md:w-5/12 relative min-h-[30vh] sm:min-h-[35vh] md:min-h-0 bg-black overflow-hidden flex-shrink-0">
+              <div className="w-full md:w-5/12 relative min-h-[30vh] sm:min-h-[35vh] md:min-h-0 bg-black overflow-hidden shrink-0">
                 <motion.img
                   initial={{ scale: 1.2 }}
                   animate={{ scale: 1 }}
@@ -428,25 +562,15 @@ export function Events() {
                   className="w-full h-full object-cover"
                 />
 
-                {/* Decorative Elements */}
-                <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-transparent to-black/30" />
-                <div className="absolute top-6 left-6 sm:top-10 sm:left-10 p-4 sm:p-6 border-l-2 border-t-2 border-[#d4af37]/50 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none" />
-                <div className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 p-4 sm:p-6 border-r-2 border-b-2 border-[#d4af37]/50 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none" />
+                {/* Overlay Gradients */}
+                <div className="absolute inset-0 bg-linear-to-t from-[#1A1C23] via-transparent to-black/20" />
 
-                <div className="absolute bottom-6 sm:bottom-12 left-6 sm:left-12 right-6 sm:right-12">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className={`w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-3 sm:mb-6 bg-[#1A1C23] border border-[#d4af37]/30 event-color-${selectedEvent.id}`}
-                  >
-                    <selectedEvent.icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-(--evt-color)" />
-                  </motion.div>
+                <div className="absolute bottom-4 sm:bottom-12 left-4 sm:left-12 right-4 sm:right-12">
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-[Cinzel] font-black text-white leading-none uppercase"
+                    className="text-base sm:text-2xl md:text-3xl lg:text-4xl font-[Cinzel] font-black text-white leading-tight uppercase"
                   >
                     {selectedEvent.title}
                   </motion.h3>
@@ -512,16 +636,101 @@ export function Events() {
                       )}
                     </>
                   ) : (
-                    <div className="relative group/btn">
-                      <div className="absolute -inset-1 bg-[#d4af37] blur-lg opacity-20 group-hover/btn:opacity-40 transition-opacity duration-500" />
-                      <button
-                        onClick={() => setSelectedEvent(null)}
-                        aria-label={`Join ${selectedEvent.title}`}
-                        className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 sm:py-5 rounded-2xl hover:bg-white transition-all active:scale-95 text-base sm:text-lg md:text-xl tracking-[0.2em] uppercase relative z-10"
-                      >
-                        Join Event
-                      </button>
-                    </div>
+                    showRsvpForm ? (
+                      <div className="bg-[#1A1C23]/60 p-4 sm:p-5 rounded-2xl border border-[#d4af37]/20 mt-2">
+                        {rsvpStatus === 'success' ? (
+                          <div className="flex flex-col items-center justify-center py-6 text-center">
+                            <CheckCircle size={48} className="text-green-400 mb-4" />
+                            <h4 className="text-xl font-[Cinzel] font-black text-white mb-2">Registration Confirmed</h4>
+                            <p className="text-stone-400 text-sm mb-6">You have successfully RSVP'd for {selectedEvent.title}. We look forward to seeing you!</p>
+
+                            {rsvpTicketId && (
+                              <div className="bg-white p-4 rounded-xl mb-6 flex flex-col items-center">
+                                <QRCodeCanvas value={rsvpTicketId} size={150} level={"H"} />
+                                <p className="text-black font-bold text-[10px] sm:text-xs mt-3 uppercase tracking-widest font-[Cinzel]">Entry Pass</p>
+                              </div>
+                            )}
+
+                            <button
+                              onClick={closeEventModal}
+                              className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors font-[Cinzel] text-sm uppercase tracking-wider"
+                            >
+                              Close
+                            </button>
+                          </div>
+                        ) : (
+                          <form onSubmit={handleRsvpSubmit} className="flex flex-col gap-3">
+                            <h4 className="text-[#d4af37] font-[Cinzel] font-black text-lg mb-2 uppercase text-center">RSVP for Free Entry</h4>
+                            <input
+                              type="text"
+                              placeholder="Full Name"
+                              value={rsvpForm.name}
+                              onChange={e => setRsvpForm(prev => ({ ...prev, name: e.target.value }))}
+                              className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                              required
+                            />
+                            <input
+                              type="email"
+                              placeholder="Email Address"
+                              value={rsvpForm.email}
+                              onChange={e => setRsvpForm(prev => ({ ...prev, email: e.target.value }))}
+                              className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                              required
+                            />
+                            <div className="flex gap-3">
+                              <input
+                                type="tel"
+                                placeholder="Phone"
+                                value={rsvpForm.phone}
+                                onChange={e => setRsvpForm(prev => ({ ...prev, phone: e.target.value }))}
+                                className="w-1/2 bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                                required
+                              />
+                              <input
+                                type="text"
+                                placeholder="College"
+                                value={rsvpForm.college}
+                                onChange={e => setRsvpForm(prev => ({ ...prev, college: e.target.value }))}
+                                className="w-1/2 bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                                required
+                              />
+                            </div>
+
+                            {rsvpStatus === 'error' && (
+                              <div className="text-red-400 text-xs text-center mt-1">{rsvpError}</div>
+                            )}
+
+                            <div className="flex gap-3 mt-2">
+                              <button
+                                type="button"
+                                onClick={() => setShowRsvpForm(false)}
+                                className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-[Cinzel] py-3 rounded-xl transition-colors text-sm uppercase tracking-wider"
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                type="submit"
+                                disabled={rsvpStatus === 'loading'}
+                                className="flex-1 bg-[#d4af37] hover:bg-white text-black font-[Cinzel] font-black py-3 rounded-xl transition-colors text-sm uppercase tracking-wider flex items-center justify-center gap-2"
+                              >
+                                {rsvpStatus === 'loading' ? <Loader2 size={16} className="animate-spin" /> : 'Confirm RSVP'}
+                              </button>
+                            </div>
+                          </form>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="relative group/btn">
+                        <div className="absolute -inset-1 bg-[#d4af37] blur-lg opacity-20 group-hover/btn:opacity-40 transition-opacity duration-500" />
+                        <button
+                          onClick={() => setShowRsvpForm(true)}
+                          aria-label={`RSVP for ${selectedEvent.title}`}
+                          className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 sm:py-5 rounded-2xl hover:bg-white transition-all active:scale-95 text-base sm:text-lg md:text-xl tracking-[0.2em] uppercase relative z-10"
+                        >
+                          RSVP For Free
+                        </button>
+                      </div>
+                    )
                   )}
 
                   <div className="flex items-center justify-center gap-4 text-stone-500 text-xs font-black tracking-[0.3em] uppercase opacity-60">
@@ -582,11 +791,6 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
 
         {/* Overlay Gradients */}
         <div className="absolute inset-0 bg-linear-to-t from-[#1A1C23] via-transparent to-black/20" />
-
-        {/* Divine Category Icon */}
-        <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-2 sm:p-3 rounded-full bg-black/60 backdrop-blur-md border border-[#d4af37]/30 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-          <evt.icon className="w-4 h-4 sm:w-5 sm:h-5 text-(--evt-color)" />
-        </div>
       </div>
 
       {/* Content */}
@@ -599,7 +803,7 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
           <div className="h-px flex-1 bg-linear-to-r from-transparent via-[#d4af37]/30 to-transparent" />
         </div>
 
-        <h3 className="text-base sm:text-xl lg:text-2xl font-[Cinzel] font-black text-white mb-1 sm:mb-2 tracking-tight group-hover:text-[#d4af37] transition-all duration-300 uppercase line-clamp-1">
+        <h3 className="text-sm sm:text-lg lg:text-xl font-[Cinzel] font-black text-white mb-1 sm:mb-2 tracking-tight group-hover:text-[#d4af37] transition-all duration-300 uppercase line-clamp-2">
           {evt.title}
         </h3>
 

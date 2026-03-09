@@ -198,32 +198,38 @@ export function Footer({ className = '' }: FooterProps) {
                     </div>
                 </div>
 
-                {/* BOTTOM BAR (Tighter spacing) */}
-                <div className="pt-6 border-t border-[#d4af37]/10 flex flex-col lg:flex-row justify-between items-center gap-5 lg:gap-0">
-                    <div className="flex-1 flex justify-center lg:justify-start">
-                        <p className="text-[10px] font-[Cinzel] tracking-[0.2em] text-[#d4af37]/50 text-center">
-                            © 2026 HACKJKLU V5.0. ALL RIGHTS RESERVED.
+                {/* BOTTOM BAR (Enhanced Spacing & Layout) */}
+                <div className="pt-4 mt-2 border-t border-[#d4af37]/10 flex flex-col lg:flex-row justify-between items-center gap-6 lg:gap-4">
+                    <div className="flex-1 flex justify-center lg:justify-start w-full lg:w-auto order-3 lg:order-1 opacity-80 hover:opacity-100 transition-opacity">
+                        <p className="text-[10px] md:text-[11px] font-[Cinzel] tracking-[0.2em] text-[#d4af37] text-center lg:text-left leading-relaxed">
+                            © 2026 HACKJKLU V5.0.<br className="lg:hidden" /> ALL RIGHTS RESERVED.
                         </p>
                     </div>
 
-                    <div className="flex-1 flex justify-center items-center gap-3 text-[9px] text-[#EFE3A0]/40 tracking-widest uppercase flex-wrap text-center">
-                        <Link href="/privacy" className="hover:text-[#d4af37] transition-colors">Privacy Policy</Link>
-                        <span className="opacity-30">|</span>
-                        <Link href="/terms" className="hover:text-[#d4af37] transition-colors">Terms & Conditions</Link>
-                        <span className="opacity-30">|</span>
-                        <Link href="/refunds" className="hover:text-[#d4af37] transition-colors">Refunds & Cancellations</Link>
-                        <span className="opacity-30">|</span>
-                        <Link href="/contact" className="hover:text-[#d4af37] transition-colors">Contact Us</Link>
+                    <div className="flex-2 flex flex-col items-center justify-center gap-2 md:gap-2.5 text-[9px] md:text-[10px] text-[#EFE3A0]/60 tracking-[0.15em] uppercase text-center w-full lg:w-auto order-1 lg:order-2">
+                        <div className="flex flex-wrap items-center justify-center gap-x-3 md:gap-x-5 gap-y-1.5">
+                            <Link href="/privacy" className="hover:text-[#d4af37] hover:tracking-[0.2em] transition-all duration-300">Privacy Policy</Link>
+                            <span className="opacity-40 text-[#d4af37]">|</span>
+                            <Link href="/terms" className="hover:text-[#d4af37] hover:tracking-[0.2em] transition-all duration-300">Terms & Conditions</Link>
+                            <span className="hidden lg:inline opacity-40 text-[#d4af37]">|</span>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-x-3 md:gap-x-5 gap-y-1.5">
+                            <span className="inline lg:hidden opacity-40 text-[#d4af37]">|</span>
+                            <Link href="/refunds" className="hover:text-[#d4af37] hover:tracking-[0.2em] transition-all duration-300">Refunds & Cancellations</Link>
+                            <span className="opacity-40 text-[#d4af37]">|</span>
+                            <Link href="/contact" className="hover:text-[#d4af37] hover:tracking-[0.2em] transition-all duration-300">Contact Us</Link>
+                        </div>
                     </div>
 
-                    <div className="flex-1 flex justify-center lg:justify-end">
+                    <div className="flex-1 flex justify-center lg:justify-end w-full lg:w-auto order-2 lg:order-3">
                         <motion.div
-                            whileHover={{ scale: 1.02 }}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-[#d4af37]/5 border border-[#d4af37]/10 rounded-full"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center justify-center gap-3 px-5 pt-2 pb-2 bg-black/40 border border-[#d4af37]/20 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.05)] hover:border-[#d4af37]/50 hover:shadow-[0_0_25px_rgba(212,175,55,0.15)] transition-all duration-500 w-[90%] sm:w-auto cursor-pointer group"
                         >
-                            <Heart className="w-3 h-3 text-red-500 fill-red-500 animate-pulse" />
-                            <span className="text-[9px] font-[Cinzel] tracking-widest text-[#EFE3A0]/50 uppercase">
-                                Forged by <span className="text-[#d4af37]">Tech Team HackJKLU</span>
+                            <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 group-hover:scale-125 transition-transform duration-300 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
+                            <span className="text-[10px] md:text-[11px] font-[Cinzel] tracking-[0.15em] text-[#EFE3A0] uppercase">
+                                Forged by <strong className="text-[#d4af37] font-bold group-hover:text-white transition-colors duration-300">Tech Team HackJKLU</strong>
                             </span>
                         </motion.div>
                     </div>
