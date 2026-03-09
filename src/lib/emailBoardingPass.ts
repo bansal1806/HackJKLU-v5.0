@@ -116,6 +116,20 @@ export function generateBoardingPassHTML({
                                         <!-- INFO PANEL (right) -->
                                         <td width="65%" valign="top" style="padding:16px 16px 16px 8px;">
                                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                <!-- Logos -->
+                                                <tr>
+                                                    <td style="padding-bottom:12px;">
+                                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                            <tr>
+                                                                <td align="center" valign="middle">
+                                                                    <img src="https://hackjklu.tech/events/HackJKLU.webp" alt="HackJKLU" height="24" style="display:inline-block;vertical-align:middle;" />
+                                                                    <span style="font-family:Georgia,serif;font-weight:bold;font-size:12px;color:#d4af37;padding:0 6px;vertical-align:middle;">X</span>
+                                                                    <img src="https://hackjklu.tech/events/JkLU_Logo.webp" alt="JKLU" height="38" style="display:inline-block;vertical-align:middle;" />
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
                                                 <!-- Official badge -->
                                                 <tr>
                                                     <td style="padding-bottom:10px;">
