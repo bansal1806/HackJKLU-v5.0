@@ -295,6 +295,13 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
 
                         {/* Content */}
                         <div className="relative z-10 flex flex-col h-full" style={{ padding: '1.5cqw 2cqw' }}>
+                            {/* LOGOS */}
+                            <div className="flex items-center justify-center w-full" style={{ marginBottom: '1.5cqw' }}>
+                                <img src="/events/HackJKLU.webp" alt="HackJKLU" style={{ height: '3.8cqw', objectFit: 'contain' }} />
+                                <span className="font-[Cinzel] font-bold" style={{ fontSize: '1.4cqw', color: '#d4af37', paddingBottom: '0.2cqw', marginLeft: '-0.8cqw', marginRight: '0.8cqw' }}>X</span>
+                                <img src="/events/JkLU_Logo.webp" alt="JKLU" style={{ height: '6.5cqw', objectFit: 'contain' }} />
+                            </div>
+
                             {/* OFFICIAL ENTRY PASS */}
                             <div className="flex items-center" style={{ gap: '0.4cqw', marginBottom: '0.6cqw' }}>
                                 <TicketIcon strokeWidth={2.5} style={{ width: '1.4cqw', height: '1.4cqw', color: '#d4af37' }} />
@@ -394,7 +401,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             </div>
 
                             {/* BOTTOM BADGES */}
-                            <div className="flex items-center justify-center" style={{ gap: '0.4cqw', marginTop: 'auto', paddingTop: '0.3cqw' }}>
+                            <div className="flex items-center justify-center" style={{ gap: '0.4cqw', marginTop: 'auto' }}>
                                 <span className="font-mono font-medium"
                                     style={{
                                         fontSize: '0.7cqw',
