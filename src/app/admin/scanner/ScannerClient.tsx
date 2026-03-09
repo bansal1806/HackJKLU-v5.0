@@ -71,6 +71,12 @@ export function ScannerClient() {
                 })
             });
 
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({ error: 'Unknown server error' }));
+                setScanResult({ valid: false, message: `Server error: ${errorData.error || res.statusText}` });
+                return;
+            }
+
             const data = await res.json();
 
             if (data.valid) {
@@ -89,9 +95,9 @@ export function ScannerClient() {
                 scannerRef.current.pause();
             }
 
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            setScanResult({ valid: false, message: 'Network error verifying ticket.' });
+            setScanResult({ valid: false, message: `Network error: ${err.message || 'Check connection'}` });
         } finally {
             setIsVerifying(false);
         }

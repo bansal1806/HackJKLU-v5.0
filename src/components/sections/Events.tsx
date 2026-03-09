@@ -569,19 +569,11 @@ export function Events() {
                 <div className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 p-4 sm:p-6 border-r-2 border-b-2 border-[#d4af37]/50 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none" />
 
                 <div className="absolute bottom-6 sm:bottom-12 left-6 sm:left-12 right-6 sm:right-12">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className={`w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-3 sm:mb-6 bg-[#1A1C23] border border-[#d4af37]/30 event-color-${selectedEvent.id}`}
-                  >
-                    <selectedEvent.icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-(--evt-color)" />
-                  </motion.div>
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-[Cinzel] font-black text-white leading-none uppercase"
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-[Cinzel] font-black text-white leading-tight uppercase wrap-break-word"
                   >
                     {selectedEvent.title}
                   </motion.h3>
