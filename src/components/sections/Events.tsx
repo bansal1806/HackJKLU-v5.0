@@ -380,9 +380,9 @@ export function Events() {
             <div className="w-full md:w-3/5 lg:w-1/2">
               <div className="transition-opacity duration-700 group-hover:opacity-0">
                 <p className="text-[#d4af37] font-[Cinzel] tracking-[0.3em] text-sm md:text-base font-bold uppercase mb-2 sm:mb-4">Live Performance</p>
-                <h3 className="text-4xl sm:text-6xl md:text-7xl font-[Cinzel] font-black text-white mb-4 uppercase">Maan Pannu</h3>
+                <h3 className="text-4xl sm:text-6xl md:text-7xl font-[Cinzel] font-black text-white mb-4 uppercase">Maan Panu</h3>
                 <p className="text-stone-300 sm:text-lg italic font-serif leading-relaxed mb-6 sm:mb-8 max-w-xl">
-                  Prepare for an unforgettable night of rhythm and energy. Maan Pannu will take the stage to cap off the festival in spectacular fashion.
+                  Prepare for an unforgettable night of rhythm and energy. Maan Panu will take the stage to cap off the festival in spectacular fashion.
                 </p>
                 <div className="flex flex-wrap items-center gap-4 text-stone-400 font-bold uppercase tracking-widest text-xs sm:text-sm mb-6">
                   <span className="flex items-center gap-2"><Clock size={16} className="text-[#d4af37]" /> 15th March, 7:00 PM</span>
@@ -393,8 +393,8 @@ export function Events() {
                 onClick={() => {
                   setSelectedEvent({
                     id: 999, // Unique ID for Headliner
-                    title: 'Maan Pannu Live Performance',
-                    desc: 'Live performance by Maan Pannu.',
+                    title: 'Maan Panu Live Performance',
+                    desc: 'Live performance by Maan Panu.',
                     time: '15th March, 7:00 PM',
                     location: 'Sabrang Ground',
                     icon: Mic,
@@ -404,7 +404,7 @@ export function Events() {
                     isMythic: false,
                     entryFee: 0,
                     requiresBooking: false,
-                    details: 'Prepare for an unforgettable night of rhythm and energy. Maan Pannu will take the stage to cap off the festival in spectacular fashion.',
+                    details: 'Prepare for an unforgettable night of rhythm and energy. Maan Panu will take the stage to cap off the festival in spectacular fashion.',
                   });
                 }}
                 className="bg-[#d4af37] text-black font-[Cinzel] font-black py-3 sm:py-4 px-6 sm:px-8 rounded-xl hover:bg-white transition-all uppercase tracking-widest text-sm mb-4 md:mb-0 relative z-20"

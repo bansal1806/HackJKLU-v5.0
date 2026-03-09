@@ -144,7 +144,7 @@ export function ScannerClient() {
                     <option value="4">BGMI Tournament</option>
                     <option value="12">Dance Battle</option>
                     <option value="13">Valorant Tournament</option>
-                    <option value="999">Maan Pannu Live Performance</option>
+                    <option value="999">Maan Panu Live Performance</option>
                 </select>
             </div>
 
