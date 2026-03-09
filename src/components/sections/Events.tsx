@@ -379,8 +379,7 @@ export function Events() {
           <div className="relative z-10 flex flex-col md:flex-row items-end md:items-center h-full p-6 sm:p-8 md:p-12">
             <div className="w-full md:w-3/5 lg:w-1/2">
               <div className="transition-opacity duration-700 group-hover:opacity-0">
-                <p className="text-[#d4af37] font-[Cinzel] tracking-[0.3em] text-sm md:text-base font-bold uppercase mb-2 sm:mb-4">Live Performance</p>
-                <h3 className="text-4xl sm:text-6xl md:text-7xl font-[Cinzel] font-black text-white mb-4 uppercase">Maan Panu</h3>
+                <h3 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-[Cinzel] font-black text-white mb-4 uppercase">Maan Panu</h3>
                 <p className="text-stone-300 sm:text-lg italic font-serif leading-relaxed mb-6 sm:mb-8 max-w-xl">
                   Prepare for an unforgettable night of rhythm and energy. Maan Panu will take the stage to cap off the festival in spectacular fashion.
                 </p>
@@ -563,17 +562,15 @@ export function Events() {
                   className="w-full h-full object-cover"
                 />
 
-                {/* Decorative Elements */}
-                <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-transparent to-black/30" />
-                <div className="absolute top-6 left-6 sm:top-10 sm:left-10 p-4 sm:p-6 border-l-2 border-t-2 border-[#d4af37]/50 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none" />
-                <div className="absolute bottom-6 right-6 sm:bottom-10 sm:right-10 p-4 sm:p-6 border-r-2 border-b-2 border-[#d4af37]/50 w-16 h-16 sm:w-24 sm:h-24 pointer-events-none" />
+                {/* Overlay Gradients */}
+                <div className="absolute inset-0 bg-linear-to-t from-[#1A1C23] via-transparent to-black/20" />
 
-                <div className="absolute bottom-6 sm:bottom-12 left-6 sm:left-12 right-6 sm:right-12">
+                <div className="absolute bottom-4 sm:bottom-12 left-4 sm:left-12 right-4 sm:right-12">
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-[Cinzel] font-black text-white leading-tight uppercase wrap-break-word"
+                    className="text-base sm:text-2xl md:text-3xl lg:text-4xl font-[Cinzel] font-black text-white leading-tight uppercase"
                   >
                     {selectedEvent.title}
                   </motion.h3>
@@ -794,11 +791,6 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
 
         {/* Overlay Gradients */}
         <div className="absolute inset-0 bg-linear-to-t from-[#1A1C23] via-transparent to-black/20" />
-
-        {/* Divine Category Icon */}
-        <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-2 sm:p-3 rounded-full bg-black/60 backdrop-blur-md border border-[#d4af37]/30 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-          <evt.icon className="w-4 h-4 sm:w-5 sm:h-5 text-(--evt-color)" />
-        </div>
       </div>
 
       {/* Content */}
@@ -811,7 +803,7 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
           <div className="h-px flex-1 bg-linear-to-r from-transparent via-[#d4af37]/30 to-transparent" />
         </div>
 
-        <h3 className="text-base sm:text-xl lg:text-2xl font-[Cinzel] font-black text-white mb-1 sm:mb-2 tracking-tight group-hover:text-[#d4af37] transition-all duration-300 uppercase line-clamp-1">
+        <h3 className="text-sm sm:text-lg lg:text-xl font-[Cinzel] font-black text-white mb-1 sm:mb-2 tracking-tight group-hover:text-[#d4af37] transition-all duration-300 uppercase line-clamp-2">
           {evt.title}
         </h3>
 

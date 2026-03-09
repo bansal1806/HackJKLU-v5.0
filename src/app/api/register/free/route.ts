@@ -51,6 +51,10 @@ export async function POST(req: NextRequest) {
                     },
                 });
 
+                console.log('[register-free] Testing SMTP connection...');
+                await transporter.verify();
+                console.log('[register-free] SMTP Connection verified successfully!');
+
                 const info = await transporter.sendMail({
                     from: `"HackJKLU" <${process.env.EMAIL_USER}>`,
                     to: newTicket.attendeeEmail,

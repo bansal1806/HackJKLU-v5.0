@@ -90,9 +90,14 @@ export function ScannerClient() {
 
             setScanResult(data);
 
-            // Pause the scanner to prevent toggling/re-scanning the same code
+            // Pause the scanner safely
             if (scannerRef.current) {
-                scannerRef.current.pause();
+                try {
+                    // Only pause if actually scanning/started
+                    scannerRef.current.pause(true);
+                } catch (e) {
+                    console.log('Ignore pause error:', e);
+                }
             }
 
         } catch (err: any) {
@@ -140,7 +145,10 @@ export function ScannerClient() {
     return (
         <div className="flex flex-col gap-6">
             <div className="bg-[#1A1C23] p-4 rounded-2xl border border-[#d4af37]/20">
-                <label htmlFor="scanner-location-select" className="block text-stone-400 text-xs font-black uppercase tracking-widest mb-2 font-[Cinzel]">Select Scanner Location</label>
+                <div className="flex justify-between items-center mb-2">
+                    <label htmlFor="scanner-location-select" className="block text-stone-400 text-xs font-black uppercase tracking-widest font-[Cinzel]">Select Scanner Location</label>
+                    <span className="text-[10px] text-stone-600 font-mono">Scanner Engine v2.1</span>
+                </div>
                 <select
                     id="scanner-location-select"
                     value={selectedEventId}
