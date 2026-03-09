@@ -74,9 +74,9 @@ export function generateBoardingPassHTML({
                                             <table cellpadding="0" cellspacing="0" border="0">
                                                 <tr>
                                                     <td align="center" valign="middle">
-                                                        <img src="${siteUrl}/events/HackJKLU.webp" alt="HackJKLU" width="160" style="display:inline-block;vertical-align:middle;max-width:160px;height:auto;margin-right:2px;" />
+                                                        <img src="${siteUrl}/events/HackJKLU.webp" alt="HackJKLU" width="160" style="display:inline-block;vertical-align:middle;max-width:160px;height:auto;margin-right:2px;-ms-interpolation-mode:bicubic;image-rendering:high-quality;" />
                                                         <span style="font-family:Georgia,serif;font-weight:bold;font-size:20px;color:#d4af37;padding:0 14px;vertical-align:middle;">X</span>
-                                                        <img src="${siteUrl}/events/JkLU_Logo.webp" alt="JKLU" width="75" style="display:inline-block;vertical-align:middle;max-width:75px;height:auto;" />
+                                                        <img src="${siteUrl}/events/JkLU_Logo.webp" alt="JKLU" width="75" style="display:inline-block;vertical-align:middle;max-width:75px;height:auto;-ms-interpolation-mode:bicubic;image-rendering:high-quality;" />
                                                     </td>
                                                 </tr>
                                             </table>
