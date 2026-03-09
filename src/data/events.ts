@@ -125,4 +125,13 @@ export const eventsData = [
         entryFee: 0, requiresBooking: false,
         details: 'Put on a headset and try out fully immersive virtual reality games, simulators, and augmented reality experiences in our dedicated AR-VR Experience Zone.',
     },
+    {
+        id: 999, title: 'Maan Panu Live Performance',
+        desc: 'The cinematic live performance highlight of Sabrang 2026. A legendary night of music and mystery.',
+        time: '15th March, 2026 • 07:00 PM onwards', location: 'J.K LAKSHMIPAT UNIVERSITY',
+        color: '#d4af37', poster: '/events/maan_panu_ticket.webp',
+        isEpic: true, isMythic: false,
+        entryFee: 0, requiresBooking: false,
+        details: 'Prepare for an unforgettable night of rhythm and energy. Maan Panu will take the stage to cap off the festival in spectacular fashion.',
+    },
 ];
