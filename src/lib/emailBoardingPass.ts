@@ -13,6 +13,7 @@ interface BoardingPassEmailParams {
     venue: string;
     time: string;
     posterUrl?: string;
+    siteUrl: string;
 }
 
 export function generateBoardingPassHTML({
@@ -22,6 +23,7 @@ export function generateBoardingPassHTML({
     venue,
     time,
     posterUrl,
+    siteUrl,
 }: BoardingPassEmailParams): string {
     const shortId = ticketId.length > 10
         ? ticketId.slice(0, 6) + '...' + ticketId.slice(-4)
@@ -65,12 +67,19 @@ export function generateBoardingPassHTML({
                                 </table>
                                 ` : ''}
 
-                                <!-- ============ TITLE BAR ============ -->
+                                <!-- ============ LOGOS BAR ============ -->
                                 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0a0500;border-top:2px solid #b8860b;border-bottom:2px solid #b8860b;">
                                     <tr>
-                                        <td align="center" style="padding:12px 20px;">
-                                            <h1 style="font-family:Georgia,serif;font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:6px;color:#ffd700;margin:0;text-shadow:0 2px 8px rgba(0,0,0,0.9);">${mainTitle}</h1>
-                                            <p style="color:#e3cf9d;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;margin:4px 0 0 0;font-family:Georgia,serif;">${subTitle}</p>
+                                        <td align="center" style="padding:16px 20px;">
+                                            <table cellpadding="0" cellspacing="0" border="0">
+                                                <tr>
+                                                    <td align="center" valign="middle">
+                                                        <img src="${siteUrl}/events/HackJKLU.webp" alt="HackJKLU" height="70" width="180" style="display:inline-block;vertical-align:middle;margin-right:-2px;" />
+                                                        <span style="font-family:Georgia,serif;font-weight:bold;font-size:20px;color:#d4af37;padding:0 14px;vertical-align:middle;">X</span>
+                                                        <img src="${siteUrl}/events/JkLU_Logo.webp" alt="JKLU" height="80" style="display:inline-block;vertical-align:middle;" />
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                 </table>
@@ -116,18 +125,11 @@ export function generateBoardingPassHTML({
                                         <!-- INFO PANEL (right) -->
                                         <td width="65%" valign="top" style="padding:16px 16px 16px 8px;">
                                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                                <!-- Logos -->
+                                                <!-- Title -->
                                                 <tr>
                                                     <td style="padding-bottom:12px;">
-                                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                                            <tr>
-                                                                <td align="center" valign="middle">
-                                                                    <img src="https://hackjklu.tech/events/HackJKLU.webp" alt="HackJKLU" height="24" style="display:inline-block;vertical-align:middle;" />
-                                                                    <span style="font-family:Georgia,serif;font-weight:bold;font-size:12px;color:#d4af37;padding:0 6px;vertical-align:middle;">X</span>
-                                                                    <img src="https://hackjklu.tech/events/JkLU_Logo.webp" alt="JKLU" height="38" style="display:inline-block;vertical-align:middle;" />
-                                                                </td>
-                                                            </tr>
-                                                        </table>
+                                                        <h1 style="font-family:Georgia,serif;font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:4px;color:#ffd700;margin:0;text-shadow:0 1px 4px rgba(0,0,0,0.9);">${mainTitle}</h1>
+                                                        ${subTitle ? `<p style="color:#e3cf9d;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin:2px 0 0 0;font-family:Georgia,serif;">${subTitle}</p>` : ''}
                                                     </td>
                                                 </tr>
                                                 <!-- Official badge -->

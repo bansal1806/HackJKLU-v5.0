@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
                         venue: eventInfo.location || 'Campus',
                         time: eventInfo.time || 'TBD',
                         posterUrl,
+                        siteUrl,
                     })}
                 <p style="text-align:center;color:#444;font-size:11px;margin-top:32px">Ticket ID: ${newTicket.ticketId} | Verified Digital Entry Pass</p>
             </div></body></html>`,

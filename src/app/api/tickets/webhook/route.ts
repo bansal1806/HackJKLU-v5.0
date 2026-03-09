@@ -104,6 +104,7 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
             venue: eventInfo.location || 'Campus',
             time: eventInfo.time || 'TBD',
             posterUrl,
+            siteUrl,
         });
     }).join('');
 
