@@ -125,7 +125,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                     </div>
 
                     {/* Event title watermark behind poster */}
-                    <div className="absolute top-[3%] left-[28%] z-[4] pointer-events-none">
+                    <div className="absolute bottom-[5%] left-[24%] w-[52%] flex justify-center z-[4] pointer-events-none">
                         <h1
                             className="font-[Cinzel] font-black uppercase whitespace-nowrap text-transparent bg-clip-text"
                             style={{

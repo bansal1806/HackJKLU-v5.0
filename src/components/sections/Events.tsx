@@ -103,6 +103,9 @@ export function Events() {
         backgroundColor: '#0c0702',
         pixelRatio: 2,
         cacheBust: true,
+        // Prevent html-to-image from aggressively fetching external stylesheets like Google Fonts which throw CORS errors
+        fontEmbedCSS: '',
+        skipFonts: true, // Alternatively, you can use skipFonts: true to prevent font embedding entirely
       });
 
       const link = document.createElement('a');
