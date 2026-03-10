@@ -15,6 +15,12 @@ export async function POST(req: NextRequest) {
 
         await connectDB();
 
+        // Check for existing registration for this event by this email
+        const existingTicket = await Ticket.findOne({ attendeeEmail, eventId });
+        if (existingTicket) {
+            return NextResponse.json({ error: 'You have already registered for this event.' }, { status: 400 });
+        }
+
         // Create ticket
         const newTicket = await Ticket.create({
             ticketId: `FT-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,

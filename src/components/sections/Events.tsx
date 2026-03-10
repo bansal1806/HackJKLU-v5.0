@@ -4,7 +4,8 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
 import { QRCodeCanvas } from 'qrcode.react';
-import { ShoppingCart, CheckCircle, Clock, MapPin, X, Loader2, User, Ticket as TicketIcon, Gamepad2, Music, Map, Mic, Cpu, Zap, Star, Camera, Code2, Search, SlidersHorizontal, Sparkles, Flame, Bot, Palette, Glasses } from 'lucide-react';
+import { ShoppingCart, CheckCircle, Clock, MapPin, X, Loader2, User, Ticket as TicketIcon, Gamepad2, Music, Map, Mic, Cpu, Zap, Star, Camera, Code2, Search, SlidersHorizontal, Sparkles, Flame, Bot, Palette, Glasses, Download } from 'lucide-react';
+import html2canvas from 'html2canvas';
 import BoardingPass from '@/components/ui/BoardingPass';
 
 import { eventsData } from '@/data/events';
@@ -91,6 +92,30 @@ export function Events() {
   const [rsvpStatus, setRsvpStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [rsvpError, setRsvpError] = useState('');
   const [rsvpTicketId, setRsvpTicketId] = useState<string | null>(null);
+
+  const ticketRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadTicket = async () => {
+    if (!ticketRef.current || !selectedEvent) return;
+
+    try {
+      const canvas = await html2canvas(ticketRef.current, {
+        backgroundColor: '#0c0702',
+        scale: 2, // Higher resolution
+        useCORS: true, // Needed for external images like logos/posters
+      });
+
+      const image = canvas.toDataURL('image/png', 1.0);
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = `HackJKLU-Ticket-${selectedEvent.title.replace(/\s+/g, '-')}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error('Failed to download ticket:', err);
+    }
+  };
 
   const closeEventModal = () => {
     setSelectedEvent(null);
@@ -520,22 +545,33 @@ export function Events() {
                             <p className="text-stone-400 text-sm mb-8 italic">Your boarding pass is ready for the quest!</p>
 
                             {rsvpTicketId && (
-                              <BoardingPass
-                                ticketId={rsvpTicketId}
-                                eventTitle={selectedEvent.title}
-                                attendee={rsvpForm.name}
-                                time={selectedEvent.time}
-                                venue={selectedEvent.location}
-                                poster={selectedEvent.poster || '/events/artist_reveal.webp'}
-                              />
+                              <div ref={ticketRef} className="w-full flex justify-center mb-4">
+                                <BoardingPass
+                                  ticketId={rsvpTicketId}
+                                  eventTitle={selectedEvent.title}
+                                  attendee={rsvpForm.name}
+                                  time={selectedEvent.time}
+                                  venue={selectedEvent.location}
+                                  poster={selectedEvent.poster || '/events/artist_reveal.webp'}
+                                />
+                              </div>
                             )}
 
-                            <button
-                              onClick={closeEventModal}
-                              className="px-8 py-3 bg-[#d4af37] hover:bg-white text-black rounded-xl transition-all font-[Cinzel] font-black uppercase tracking-wider text-sm mt-4"
-                            >
-                              Done
-                            </button>
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2">
+                              <button
+                                onClick={handleDownloadTicket}
+                                className="px-6 sm:px-8 py-3 bg-white/10 hover:bg-[#d4af37] border border-[#d4af37]/30 text-white hover:text-black rounded-xl transition-all font-[Cinzel] font-black uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-2"
+                              >
+                                <Download size={16} />
+                                Download Pass
+                              </button>
+                              <button
+                                onClick={closeEventModal}
+                                className="px-6 sm:px-8 py-3 bg-[#d4af37] hover:bg-white text-black rounded-xl transition-all font-[Cinzel] font-black uppercase tracking-wider text-xs sm:text-sm"
+                              >
+                                Done
+                              </button>
+                            </div>
                           </div>
                         ) : (
                           <form onSubmit={handleRsvpSubmit} className="flex flex-col gap-3">

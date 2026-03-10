@@ -311,31 +311,33 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             </div>
 
                             {/* Title */}
-                            <div style={{ marginBottom: '0.8cqw' }}>
-                                <h2 className="font-[Cinzel] font-black uppercase truncate"
-                                    style={{
-                                        fontSize: '2.2cqw',
-                                        lineHeight: 1.1,
-                                        color: '#fdf6e3',
-                                        textShadow: '0 0.2cqw 0.6cqw rgba(0,0,0,0.8)',
-                                    }}
-                                >
-                                    {mainTitle}
-                                </h2>
-                                {subTitle && (
-                                    <h3 className="font-[Cinzel] font-bold uppercase truncate"
+                            {!isMaanPanu && (
+                                <div style={{ marginBottom: '0.8cqw' }}>
+                                    <h2 className="font-[Cinzel] font-black uppercase truncate"
                                         style={{
-                                            fontSize: '1.1cqw',
-                                            color: '#e3cf9d',
-                                            letterSpacing: '0.1em',
-                                            marginTop: '0.3cqw',
-                                            textShadow: '0 0.1cqw 0.3cqw rgba(0,0,0,0.8)',
+                                            fontSize: '2.2cqw',
+                                            lineHeight: 1.1,
+                                            color: '#fdf6e3',
+                                            textShadow: '0 0.2cqw 0.6cqw rgba(0,0,0,0.8)',
                                         }}
                                     >
-                                        {subTitle}
-                                    </h3>
-                                )}
-                            </div>
+                                        {mainTitle}
+                                    </h2>
+                                    {subTitle && (
+                                        <h3 className="font-[Cinzel] font-bold uppercase truncate"
+                                            style={{
+                                                fontSize: '1.1cqw',
+                                                color: '#e3cf9d',
+                                                letterSpacing: '0.1em',
+                                                marginTop: '0.3cqw',
+                                                textShadow: '0 0.1cqw 0.3cqw rgba(0,0,0,0.8)',
+                                            }}
+                                        >
+                                            {subTitle}
+                                        </h3>
+                                    )}
+                                </div>
+                            )}
 
                             {/* INFO GRID */}
                             <div className="flex flex-col flex-1" style={{ gap: '0.8cqw' }}>
@@ -365,7 +367,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                         >
                                             VENUE
                                         </p>
-                                        <p className="font-[Cinzel] font-black truncate"
+                                        <p className="font-[Cinzel] font-black leading-tight"
                                             style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw' }}
                                         >
                                             {venue}
