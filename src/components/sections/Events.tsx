@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
 import { QRCodeCanvas } from 'qrcode.react';
 import { ShoppingCart, CheckCircle, Clock, MapPin, X, Loader2, User, Ticket as TicketIcon, Gamepad2, Music, Map, Mic, Cpu, Zap, Star, Camera, Code2, Search, SlidersHorizontal, Sparkles, Flame, Bot, Palette, Glasses, Download } from 'lucide-react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import BoardingPass from '@/components/ui/BoardingPass';
 
 import { eventsData } from '@/data/events';
@@ -99,15 +99,14 @@ export function Events() {
     if (!ticketRef.current || !selectedEvent) return;
 
     try {
-      const canvas = await html2canvas(ticketRef.current, {
+      const dataUrl = await toPng(ticketRef.current, {
         backgroundColor: '#0c0702',
-        scale: 2, // Higher resolution
-        useCORS: true, // Needed for external images like logos/posters
+        pixelRatio: 2,
+        cacheBust: true,
       });
 
-      const image = canvas.toDataURL('image/png', 1.0);
       const link = document.createElement('a');
-      link.href = image;
+      link.href = dataUrl;
       link.download = `HackJKLU-Ticket-${selectedEvent.title.replace(/\s+/g, '-')}.png`;
       document.body.appendChild(link);
       link.click();

@@ -413,19 +413,19 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                 >
                                     MT-2026-XQ
                                 </span>
-                                <div className="inline-flex items-center" style={{
-                                    padding: '0.15cqw 0.4cqw',
+                                <div className="inline-flex items-center justify-center" style={{
+                                    padding: '0.2cqw 0.5cqw',
                                     border: '0.06cqw solid #16a34a',
                                     background: 'rgba(20,83,45,0.4)',
                                     borderRadius: '0.2cqw',
                                     whiteSpace: 'nowrap',
                                 }}>
-                                    <span className="font-[Cinzel] font-black uppercase"
+                                    <span className="font-data font-bold uppercase"
                                         style={{
-                                            fontSize: '0.7cqw',
+                                            fontSize: '0.75cqw',
                                             color: '#22c55e',
                                             letterSpacing: '0.1em',
-                                            lineHeight: 1,
+                                            lineHeight: 'normal',
                                         }}
                                     >
                                         VERIFIED
