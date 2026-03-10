@@ -20,8 +20,8 @@ export default function EventsPage() {
         <>
             <Events />
             <CartDrawer />
-            <Footer />
-            <PageNavigation />
+            {/* <Footer /> */}
+            {/* <PageNavigation /> */}
         </>
     );
 }

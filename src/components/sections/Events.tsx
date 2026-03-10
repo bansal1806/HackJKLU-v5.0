@@ -228,40 +228,41 @@ export function Events() {
         <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_0%,#020205_90%]" />
       </div>
 
-      {/* Mythic Header */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="relative z-10 w-full flex flex-col items-center mb-12 sm:mb-16 md:mb-24"
-      >
-        <div className="relative">
-          <h2 className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] text-transparent stroke-1 stroke-[#d4af37]/30 absolute inset-0 select-none">
-            EVENTS
-          </h2>
-          {/* Animated Glow Layer - cheaper than animating textShadow */}
-          <motion.h2
-            animate={{ opacity: [0.2, 0.6, 0.2] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] text-[#d4af37] absolute inset-0 blur-xl z-0 will-change-opacity select-none"
-          >
-            EVENTS
-          </motion.h2>
-          {/* Foreground Text */}
-          <h2 className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] bg-linear-to-b from-[#fff8e7] via-[#d4af37] to-[#8a6d3b] bg-clip-text text-transparent relative z-10 select-none">
-            EVENTS
-          </h2>
-        </div>
+      {false && (
         <motion.div
-          initial={{ width: 0 }}
-          whileInView={{ width: "min(300px, 80vw)" }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="h-px bg-linear-to-r from-transparent via-[#d4af37] to-transparent mt-3 sm:mt-4"
-        />
-        <p className="mt-4 sm:mt-6 text-[#d4af37] font-[Cinzel] italic text-sm sm:text-base md:text-xl tracking-[0.25em] sm:tracking-[0.4em] uppercase text-center opacity-80 px-4">
-          - The XII Labours -
-        </p>
-      </motion.div>
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="relative z-10 w-full flex flex-col items-center mb-12 sm:mb-16 md:mb-24"
+        >
+          <div className="relative">
+            <h2 className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] text-transparent stroke-1 stroke-[#d4af37]/30 absolute inset-0 select-none">
+              EVENTS
+            </h2>
+            {/* Animated Glow Layer - cheaper than animating textShadow */}
+            <motion.h2
+              animate={{ opacity: [0.2, 0.6, 0.2] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] text-[#d4af37] absolute inset-0 blur-xl z-0 will-change-opacity select-none"
+            >
+              EVENTS
+            </motion.h2>
+            {/* Foreground Text */}
+            <h2 className="text-5xl sm:text-7xl md:text-[9rem] lg:text-[12rem] font-[Cinzel] font-black tracking-[-0.05em] bg-linear-to-b from-[#fff8e7] via-[#d4af37] to-[#8a6d3b] bg-clip-text text-transparent relative z-10 select-none">
+              EVENTS
+            </h2>
+          </div>
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: "min(300px, 80vw)" }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="h-px bg-linear-to-r from-transparent via-[#d4af37] to-transparent mt-3 sm:mt-4"
+          />
+          <p className="mt-4 sm:mt-6 text-[#d4af37] font-[Cinzel] italic text-sm sm:text-base md:text-xl tracking-[0.25em] sm:tracking-[0.4em] uppercase text-center opacity-80 px-4">
+            - The XII Labours -
+          </p>
+        </motion.div>
+      )}
 
       {/* Artist Section */}
       <div className="relative z-10 w-full max-w-7xl mx-auto mb-16 sm:mb-24 px-4">
