@@ -216,8 +216,8 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             >
                                 SCAN TO VERIFY
                             </h4>
-                            <p className="font-mono font-bold text-[#6b5133]"
-                                style={{ fontSize: '1cqw', letterSpacing: '0.1em', marginTop: '0.3cqw' }}
+                            <p className="font-data font-bold text-[#6b5133]"
+                                style={{ fontSize: '1.2cqw', letterSpacing: '0.05em', marginTop: '0.3cqw' }}
                             >
                                 FT...{shortId}
                             </p>
@@ -238,11 +238,9 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
 
                         {/* MT Date Code */}
                         <div className="w-full text-center relative z-10" style={{ padding: '0 0.8cqw' }}>
-                            <p className="font-mono font-bold text-[#3b2512]"
+                            <p className="font-data font-bold text-[#3b2512]"
                                 style={{
                                     fontSize: '1.5cqw',
-                                    letterSpacing: '0.15em',
-                                    background: 'rgba(222,185,129,0.2)',
                                     padding: '0.4cqw 0',
                                     borderRadius: '0.3cqw',
                                 }}
@@ -297,8 +295,8 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                         <div className="relative z-10 flex flex-col h-full" style={{ padding: '1.5cqw 2cqw' }}>
                             {/* LOGOS */}
                             <div className="flex items-center justify-center w-full" style={{ marginBottom: '1.5cqw' }}>
-                                <img src="/events/HackJKLU.webp" alt="HackJKLU" style={{ height: '3.8cqw', objectFit: 'contain' }} />
-                                <span className="font-[Cinzel] font-bold" style={{ fontSize: '1.4cqw', color: '#d4af37', paddingBottom: '0.2cqw', marginLeft: '-0.8cqw', marginRight: '0.8cqw' }}>X</span>
+                                <img src="/logo.png" alt="HackJKLU" style={{ height: '3.8cqw', objectFit: 'contain' }} />
+                                <span className="font-[Cinzel] font-bold" style={{ fontSize: '1.4cqw', color: '#d4af37', paddingBottom: '0.2cqw', marginLeft: '2cqw', marginRight: '2cqw' }}>X</span>
                                 <img src="/events/JkLU_Logo.webp" alt="JKLU" style={{ height: '6.5cqw', objectFit: 'contain' }} />
                             </div>
 
@@ -384,13 +382,13 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                         >
                                             SCHEDULE
                                         </p>
-                                        <p className="font-[Cinzel] font-black"
+                                        <p className="font-data font-black"
                                             style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw' }}
                                         >
                                             {datePart}
                                         </p>
                                         {timePart && (
-                                            <p className="font-[Cinzel] italic"
+                                            <p className="font-data italic"
                                                 style={{ fontSize: '1cqw', color: 'rgba(255,255,255,0.7)', marginTop: '0.1cqw' }}
                                             >
                                                 • {timePart}
@@ -402,11 +400,10 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
 
                             {/* BOTTOM BADGES */}
                             <div className="flex items-center justify-center" style={{ gap: '0.4cqw', marginTop: 'auto' }}>
-                                <span className="font-mono font-medium"
+                                <span className="font-data font-medium"
                                     style={{
-                                        fontSize: '0.7cqw',
+                                        fontSize: '0.8cqw',
                                         color: '#a09476',
-                                        letterSpacing: '0.06em',
                                         border: '0.06cqw solid rgba(160,148,118,0.3)',
                                         padding: '0.15cqw 0.4cqw',
                                         background: 'rgba(0,0,0,0.4)',

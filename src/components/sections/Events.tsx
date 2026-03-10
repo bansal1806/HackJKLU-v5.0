@@ -257,7 +257,7 @@ export function Events() {
                   Prepare for an unforgettable night of rhythm and energy. Maan Panu will take the stage to cap off the festival in spectacular fashion.
                 </p>
                 <div className="flex flex-wrap items-center gap-4 text-stone-400 font-bold uppercase tracking-widest text-xs sm:text-sm mb-6">
-                  <span className="flex items-center gap-2"><Clock size={16} className="text-[#d4af37]" /> 15th March, 7:00 PM</span>
+                  <span className="flex items-center gap-2 font-data"><Clock size={16} className="text-[#d4af37]" /> 15th March, 7:00 PM</span>
                   <span className="flex items-center gap-2"><MapPin size={16} className="text-[#d4af37]" /> J.K LAKSHMIPAT UNIVERSITY</span>
                 </div>
               </div>
@@ -271,13 +271,14 @@ export function Events() {
                     location: 'J.K LAKSHMIPAT UNIVERSITY',
                     icon: Mic,
                     color: '#d4af37',
-                    poster: '/events/artist_reveal.webp',
+                    poster: '/events/maan_panu_ticket.webp',
                     isEpic: true,
                     isMythic: false,
                     entryFee: 0,
                     requiresBooking: false,
                     details: 'Prepare for an unforgettable night of rhythm and energy. Maan Panu will take the stage to cap off the festival in spectacular fashion.',
                   });
+                  setShowRsvpForm(true);
                 }}
                 className="bg-[#d4af37] text-black font-[Cinzel] font-black py-3 sm:py-4 px-6 sm:px-8 rounded-xl hover:bg-white transition-all uppercase tracking-widest text-sm mb-4 md:mb-0 relative z-20"
               >
@@ -411,10 +412,11 @@ export function Events() {
             />
 
             <motion.div
-              initial={{ scale: 0.95, y: 60, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.95, y: 60, opacity: 0 }}
-              transition={{ type: "spring", damping: 28, stiffness: 220 }}
+              initial={{ scale: 0.8, y: 60, opacity: 0, rotateY: 90 }}
+              animate={{ scale: 1, y: 0, opacity: 1, rotateY: 0 }}
+              exit={{ scale: 0.8, y: 60, opacity: 0, rotateY: -90 }}
+              transition={{ type: "spring", damping: 25, stiffness: 180 }}
+              style={{ perspective: 2000 }}
               className="relative z-10 w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl h-[95vh] sm:max-h-[90vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-t-3xl sm:rounded-3xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold"
             >
               <button
@@ -455,7 +457,7 @@ export function Events() {
                 <div className="mb-6 sm:mb-10 flex flex-wrap gap-2 sm:gap-4">
                   <div className="flex items-center gap-2 sm:gap-3 bg-white/5 px-3 sm:px-5 py-2 sm:py-3 rounded-xl border border-[#d4af37]/10">
                     <Clock className="text-[#d4af37] shrink-0" size={16} />
-                    <span className="text-white text-xs sm:text-sm md:text-base font-bold tracking-wider sm:tracking-widest uppercase">{selectedEvent.time}</span>
+                    <span className="text-white text-xs sm:text-sm md:text-base font-data font-bold tracking-wider sm:tracking-widest uppercase">{selectedEvent.time}</span>
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3 bg-white/5 px-3 sm:px-5 py-2 sm:py-3 rounded-xl border border-[#d4af37]/10">
                     <MapPin className="text-[#d4af37] shrink-0" size={16} />
@@ -483,7 +485,7 @@ export function Events() {
                     <>
                       <div className="flex items-center justify-between bg-[#1A1C23] rounded-xl px-4 sm:px-5 py-3 border border-[#d4af37]/20">
                         <span className="text-stone-400 font-[Cinzel] text-sm">Entry Fee</span>
-                        <span className="text-[#d4af37] font-[Cinzel] font-black text-base sm:text-lg">
+                        <span className="text-[#d4af37] font-data font-black text-base sm:text-lg">
                           {selectedEvent.entryFee === 0 ? 'Free' : `₹${selectedEvent.entryFee}`}
                         </span>
                       </div>
@@ -674,7 +676,7 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
       <div className="relative z-10 flex-1 flex flex-col italic px-1 sm:px-2">
         <div className="flex items-center gap-2 mb-2 sm:mb-3">
           <div className="h-px flex-1 bg-linear-to-r from-transparent via-[#d4af37]/30 to-transparent" />
-          <span className="text-[#d4af37] font-[Cinzel] text-[9px] sm:text-[10px] font-black tracking-[0.15em] sm:tracking-[0.2em] uppercase">
+          <span className="text-[#d4af37] font-data text-[9px] sm:text-[10px] font-black tracking-[0.15em] sm:tracking-[0.2em] uppercase">
             Day {evt.time.split(',')[0]}
           </span>
           <div className="h-px flex-1 bg-linear-to-r from-transparent via-[#d4af37]/30 to-transparent" />
@@ -694,7 +696,7 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
             <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider truncate">{evt.location}</span>
           </div>
           <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-1">
-            <span className="text-[#d4af37] font-black text-sm sm:text-base">₹{evt.entryFee}</span>
+            <span className="text-[#d4af37] font-data font-black text-sm sm:text-base">₹{evt.entryFee}</span>
             <span className="text-white text-[9px] sm:text-[10px] font-black tracking-widest uppercase">Select</span>
           </div>
         </div>

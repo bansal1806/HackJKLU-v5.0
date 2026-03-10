@@ -86,6 +86,7 @@
   --font-baskerville: 'IM Fell English', 'Libre Baskerville', serif;
   /* Remapped to Subheading */
   --font-cursive: 'Cinzel Decorative', cursive;
+  --font-outfit: 'Outfit', sans-serif;
 
   --color-gold-50: #fff9e6;
   --color-gold-100: #ffebb3;
@@ -477,6 +478,11 @@ textarea,
 
   .bg-etch {
     filter: grayscale(1) contrast(1.2);
+  }
+
+  .font-data {
+    font-family: var(--font-outfit);
+    letter-spacing: 0.05em;
   }
 }
 
