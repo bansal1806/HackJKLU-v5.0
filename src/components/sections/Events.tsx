@@ -316,101 +316,107 @@ export function Events() {
         </div>
       </div>
 
-      {/* Speakers Section */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto mb-16 sm:mb-24 px-4">
-        <div className="flex items-center gap-4 mb-8">
-          <div className="h-px flex-1 bg-linear-to-l from-[#d4af37]/50 to-transparent" />
-          <h3 className="text-3xl md:text-5xl font-[Cinzel] font-black text-[#d4af37] tracking-wider uppercase text-right">Eminent Speakers</h3>
-        </div>
+      {false && (
+        <div className="relative z-10 w-full max-w-7xl mx-auto mb-16 sm:mb-24 px-4">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-px flex-1 bg-linear-to-l from-[#d4af37]/50 to-transparent" />
+            <h3 className="text-3xl md:text-5xl font-[Cinzel] font-black text-[#d4af37] tracking-wider uppercase text-right">Eminent Speakers</h3>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {[1, 2, 3].map((speaker) => (
-            <div key={speaker} className="relative group rounded-3xl overflow-hidden border border-[#d4af37]/20 bg-[#1A1C23] aspect-4/5 flex flex-col justify-end">
-              <div className="absolute inset-0 bg-black">
-                <img src="/events/tech.png" alt={`Speaker ${speaker}`} className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {[1, 2, 3].map((speaker) => (
+              <div key={speaker} className="relative group rounded-3xl overflow-hidden border border-[#d4af37]/20 bg-[#1A1C23] aspect-4/5 flex flex-col justify-end">
+                <div className="absolute inset-0 bg-black">
+                  <img src="/events/tech.png" alt={`Speaker ${speaker}`} className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700" />
+                </div>
+                <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-[#0B0C10]/60 to-transparent" />
+                <div className="relative z-10 p-6 sm:p-8">
+                  <p className="text-[#d4af37] text-xs font-black tracking-widest uppercase mb-1">Keynote Speaker</p>
+                  <h4 className="text-2xl sm:text-3xl font-[Cinzel] font-black text-white uppercase mb-2">Guest Speaker {speaker}</h4>
+                  <p className="text-stone-400 text-sm italic line-clamp-2">Industry pioneer and expert joining the council to share profound knowledge and insights.</p>
+                </div>
               </div>
-              <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-[#0B0C10]/60 to-transparent" />
-              <div className="relative z-10 p-6 sm:p-8">
-                <p className="text-[#d4af37] text-xs font-black tracking-widest uppercase mb-1">Keynote Speaker</p>
-                <h4 className="text-2xl sm:text-3xl font-[Cinzel] font-black text-white uppercase mb-2">Guest Speaker {speaker}</h4>
-                <p className="text-stone-400 text-sm italic line-clamp-2">Industry pioneer and expert joining the council to share profound knowledge and insights.</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="relative z-10 w-full mb-8 flex items-center justify-center">
-        <h3 className="text-4xl md:text-6xl font-[Cinzel] font-black text-white tracking-wider uppercase text-center border-b-2 border-[#d4af37] pb-4 px-12">The Labours</h3>
-      </div>
-
-      {/* Oracle Sigils: Search & Filter */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-6 mb-10 sm:mb-16 md:mb-24 px-0 sm:px-4 italic">
-        {/* Divine Search */}
-        <div className="relative flex-1 group">
-          <div className="absolute -inset-0.5 bg-linear-to-r from-[#d4af37]/0 via-[#d4af37]/20 to-[#d4af37]/0 rounded-2xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-          <input
-            type="text"
-            placeholder="Search events..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#1A1C23]/40 border border-[#d4af37]/20 rounded-2xl py-4 sm:py-5 pl-12 sm:pl-14 pr-4 sm:pr-6 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] transition-all backdrop-blur-xl relative z-10 text-base sm:text-lg font-[Cinzel]"
-          />
-          <Search className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-stone-500 group-focus-within:text-[#d4af37] transition-colors z-20" size={20} />
+      {false && (
+        <div className="relative z-10 w-full mb-8 flex items-center justify-center">
+          <h3 className="text-4xl md:text-6xl font-[Cinzel] font-black text-white tracking-wider uppercase text-center border-b-2 border-[#d4af37] pb-4 px-12">The Labours</h3>
         </div>
+      )}
 
-        {/* Oracle Sigils */}
-        <div className="flex gap-2 sm:gap-4 justify-center sm:justify-end">
-          {[
-            { id: 'all', icon: SlidersHorizontal, label: 'All' },
-            { id: 'popular', icon: Sparkles, label: 'Epic' },
-            { id: 'trending', icon: Flame, label: 'Mythic' }
-          ].map((type) => {
-            const Icon = type.icon;
-            const isActive = filterType === type.id;
-            return (
-              <button
-                key={type.id}
-                onClick={() => setFilterType(type.id as FilterId)}
-                aria-label={`Filter by ${type.label}`}
-                className={`relative flex flex-col items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border transition-all duration-500 group ${isActive ? 'bg-[#d4af37] border-[#d4af37] text-black scale-110 shadow-[0_0_30px_rgba(212,175,55,0.3)]' : 'bg-white/5 border-white/10 text-white hover:border-[#d4af37]/50'
-                  }`}
-              >
-                <Icon size={20} className={`mb-0.5 sm:mb-1 transition-transform duration-300 ${!isActive && 'group-hover:scale-125'}`} />
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-tighter">{type.label}</span>
-                {isActive && (
-                  <motion.div
-                    layoutId="active-sigil"
-                    className="absolute -bottom-2 w-1.5 h-1.5 bg-[#d4af37] rounded-full"
-                  />
-                )}
-              </button>
-            );
-          })}
+      {false && (
+        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-6 mb-10 sm:mb-16 md:mb-24 px-0 sm:px-4 italic">
+          {/* Divine Search */}
+          <div className="relative flex-1 group">
+            <div className="absolute -inset-0.5 bg-linear-to-r from-[#d4af37]/0 via-[#d4af37]/20 to-[#d4af37]/0 rounded-2xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+            <input
+              type="text"
+              placeholder="Search events..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-[#1A1C23]/40 border border-[#d4af37]/20 rounded-2xl py-4 sm:py-5 pl-12 sm:pl-14 pr-4 sm:pr-6 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] transition-all backdrop-blur-xl relative z-10 text-base sm:text-lg font-[Cinzel]"
+            />
+            <Search className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-stone-500 group-focus-within:text-[#d4af37] transition-colors z-20" size={20} />
+          </div>
+
+          {/* Oracle Sigils */}
+          <div className="flex gap-2 sm:gap-4 justify-center sm:justify-end">
+            {[
+              { id: 'all', icon: SlidersHorizontal, label: 'All' },
+              { id: 'popular', icon: Sparkles, label: 'Epic' },
+              { id: 'trending', icon: Flame, label: 'Mythic' }
+            ].map((type) => {
+              const Icon = type.icon;
+              const isActive = filterType === type.id;
+              return (
+                <button
+                  key={type.id}
+                  onClick={() => setFilterType(type.id as FilterId)}
+                  aria-label={`Filter by ${type.label}`}
+                  className={`relative flex flex-col items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border transition-all duration-500 group ${isActive ? 'bg-[#d4af37] border-[#d4af37] text-black scale-110 shadow-[0_0_30px_rgba(212,175,55,0.3)]' : 'bg-white/5 border-white/10 text-white hover:border-[#d4af37]/50'
+                    }`}
+                >
+                  <Icon size={20} className={`mb-0.5 sm:mb-1 transition-transform duration-300 ${!isActive && 'group-hover:scale-125'}`} />
+                  <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-tighter">{type.label}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-sigil"
+                      className="absolute -bottom-2 w-1.5 h-1.5 bg-[#d4af37] rounded-full"
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Staggered Temple Pillar Grid */}
-      <div className="relative z-10 flex flex-wrap justify-center gap-y-10 sm:gap-y-16 md:gap-y-24 gap-x-6 sm:gap-x-8 md:gap-x-12 max-w-7xl mx-auto w-full px-0 sm:px-2 md:px-4">
-        <AnimatePresence mode="popLayout">
-          {filteredEvents.map((evt, idx) => (
-            <motion.div
-              key={evt.id}
-              layout
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.9, transition: { duration: 0.2 } }}
-              transition={{ duration: 0.4, ease: "easeOut", delay: idx * 0.04 }}
-              className={`w-[calc(50%-12px)] sm:w-[calc(50%-16px)] md:w-[calc(50%-24px)] lg:w-[calc(33.33%-32px)] xl:w-[calc(25%-36px)] ${idx % 2 === 1 ? 'sm:mt-16 md:mt-24' : ''}`}
-            >
-              <EventCard evt={evt} onClick={() => setSelectedEvent(evt)} />
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+      {false && (
+        <div className="relative z-10 flex flex-wrap justify-center gap-y-10 sm:gap-y-16 md:gap-y-24 gap-x-6 sm:gap-x-8 md:gap-x-12 max-w-7xl mx-auto w-full px-0 sm:px-2 md:px-4">
+          <AnimatePresence mode="popLayout">
+            {filteredEvents.map((evt, idx) => (
+              <motion.div
+                key={evt.id}
+                layout
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.9, transition: { duration: 0.2 } }}
+                transition={{ duration: 0.4, ease: "easeOut", delay: idx * 0.04 }}
+                className={`w-[calc(50%-12px)] sm:w-[calc(50%-16px)] md:w-[calc(50%-24px)] lg:w-[calc(33.33%-32px)] xl:w-[calc(25%-36px)] ${idx % 2 === 1 ? 'sm:mt-16 md:mt-24' : ''}`}
+              >
+                <EventCard evt={evt} onClick={() => setSelectedEvent(evt)} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* No Results Placeholder */}
-      {filteredEvents.length === 0 && (
+      {false && filteredEvents.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
