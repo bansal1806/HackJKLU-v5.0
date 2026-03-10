@@ -12,6 +12,7 @@ export interface ITicket extends Document {
     isPaid: boolean;
     paymentReference?: string;
     isCheckedIn: boolean;
+    accessTier: 'GA' | 'VIP' | 'HACK_TEAM' | 'ALL_ACCESS' | 'ARTIST_TEAM' | 'BACKSTAGE';
     createdAt: Date;
     updatedAt: Date;
 }
@@ -29,9 +30,19 @@ const TicketSchema = new Schema<ITicket>(
         isPaid: { type: Boolean, default: false },
         paymentReference: { type: String },
         isCheckedIn: { type: Boolean, default: false },
+        accessTier: {
+            type: String,
+            enum: ['GA', 'VIP', 'HACK_TEAM', 'ALL_ACCESS', 'ARTIST_TEAM', 'BACKSTAGE'],
+            default: 'GA'
+        },
     },
     { timestamps: true }
 );
+
+// Force Mongoose to recompile the schema in development mode for hot-reloading
+if (process.env.NODE_ENV === 'development') {
+    delete mongoose.models.Ticket;
+}
 
 const Ticket: Model<ITicket> =
     (mongoose.models.Ticket as Model<ITicket>) ||

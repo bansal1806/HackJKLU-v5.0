@@ -7,7 +7,7 @@ import { generateBoardingPassHTML } from '@/lib/emailBoardingPass';
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { eventId, eventTitle, attendeeName, attendeeEmail, attendeePhone, college } = body;
+        const { eventId, eventTitle, attendeeName, attendeeEmail, attendeePhone, college, accessCode } = body;
 
         if (!eventId || !eventTitle || !attendeeName || !attendeeEmail) {
             return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
@@ -21,6 +21,16 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'You have already registered for this event.' }, { status: 400 });
         }
 
+        let accessTier = 'GA';
+        if (accessCode) {
+            const code = accessCode.toUpperCase().trim();
+            if (code === '1F4A9C3B') accessTier = 'VIP';
+            else if (code === '8B2E5D1F') accessTier = 'HACK_TEAM';
+            else if (code === '4C90A7E2') accessTier = 'ALL_ACCESS';
+            else if (code === 'D5132F8C') accessTier = 'ARTIST_TEAM';
+            else if (code === 'E7A64B09') accessTier = 'BACKSTAGE';
+        }
+
         // Create ticket
         const newTicket = await Ticket.create({
             ticketId: `FT-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
@@ -32,62 +42,110 @@ export async function POST(req: NextRequest) {
             college: college || 'N/A',
             isPaid: false,
             isCheckedIn: false,
+            accessTier,
         });
 
         // Send Email (optional/async)
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
             const eventInfo: any = eventsData.find(e => Number(e.id) === Number(eventId)) || eventsData.find(e => e.title === eventTitle) || { time: 'TBD', location: 'Campus' };
-            console.log('[register-free] Attempting to send email to:', newTicket.attendeeEmail);
-
-            const nodemailer = await import('nodemailer');
-            const transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true,
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS,
-                },
-            });
 
             const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
             const siteUrl = rawSiteUrl.includes('localhost') ? 'https://hackjklu-v5.vercel.app' : (rawSiteUrl || 'https://hackjklu-v5.vercel.app');
             const posterUrl = eventInfo.poster && eventInfo.poster.startsWith('/') ? `${siteUrl}${eventInfo.poster}` : eventInfo.poster;
 
-            try {
-                await transporter.sendMail({
-                    from: `"HackJKLU v5.0" <${process.env.EMAIL_USER}>`,
-                    to: newTicket.attendeeEmail,
-                    replyTo: process.env.EMAIL_USER,
-                    subject: `✅ RSVP Confirmed: ${newTicket.eventTitle} — HackJKLU v5.0`,
-                    text: `Hi ${newTicket.attendeeName}, your RSVP for ${newTicket.eventTitle} is confirmed! Ticket ID: ${newTicket.ticketId}. Please present your QR code at the venue.`,
-                    html: `<!DOCTYPE html><html><body style="background:#020205;color:#ffecd1;font-family:Georgia,serif;padding:32px">
-            <div style="max-width:600px;margin:0 auto">
+            const emailHtml = `<!DOCTYPE html><html><body style="background:#020205;color:#ffecd1;font-family:Georgia,serif;padding:32px">
+            <div style="max-width:640px;margin:0 auto">
                 <h1 style="color:#d4af37;margin-bottom:4px;font-size:28px">HackJKLU v5.0</h1>
                 <p style="color:#8b8680;margin:0 0 32px 0;font-size:14px;letter-spacing:2px">RSVP CONFIRMATION</p>
-                <p style="margin:0 0 32px 0;font-size:16px">Hi <strong>${newTicket.attendeeName}</strong>, your RSVP for <strong>${newTicket.eventTitle}</strong> is confirmed!</p>
+                
+                <div style="margin-bottom:40px; line-height:1.6; font-size:16px;">
+                    <p>Hi <strong>${newTicket.attendeeName}</strong>,</p>
+                    <p>Welcome to the HackJKLU experience! We're thrilled to have you join us for this legendary edition of the festival.</p>
+                    <p>Your RSVP for <strong>${newTicket.eventTitle}</strong> has been successfully confirmed. Below is your digital boarding pass, containing both the entry details and the official terms and conditions.</p>
+                </div>
+
                 <h3 style="color:#fff;margin-bottom:20px;text-align:center;font-size:22px;text-transform:uppercase;letter-spacing:4px">Your Digital Boarding Pass</h3>
+                
                 ${generateBoardingPassHTML({
-                        ticketId: newTicket.ticketId,
-                        eventTitle: newTicket.eventTitle,
-                        attendeeName: newTicket.attendeeName,
-                        venue: eventInfo.location || 'Campus',
-                        time: eventInfo.time || 'TBD',
-                        posterUrl,
-                        siteUrl,
-                    })}
-                <p style="text-align:center;color:#444;font-size:11px;margin-top:32px">Ticket ID: ${newTicket.ticketId} | Verified Digital Entry Pass</p>
-            </div></body></html>`,
+                ticketId: newTicket.ticketId,
+                eventTitle: newTicket.eventTitle,
+                attendeeName: newTicket.attendeeName,
+                venue: eventInfo.location || 'Campus',
+                time: eventInfo.time || 'TBD',
+                posterUrl,
+                siteUrl,
+                accessTier: newTicket.accessTier,
+            })}
+                
+                <div style="margin-top:40px; border-top:1px solid #3d3520; padding-top:20px; color:#8b8680; font-size:14px;">
+                    <p>We look forward to seeing you at the event!</p>
+                    <p style="margin-top:20px;"><strong>Regards,</strong><br/>JKLU & HackJKLU v5.0 Team</p>
+                </div>
+
+                <p style="text-align:center;color:#444;font-size:11px;margin-top:40px">Ticket ID: ${newTicket.ticketId} | Verified Digital Entry Pass</p>
+            </div></body></html>`;
+
+            const cleanEmail = (process.env.EMAIL_USER || '').trim();
+            const rawPass = (process.env.EMAIL_PASS || '').trim();
+            const cleanPass = rawPass.replace(/\s+/g, '');
+
+            console.log(`[register-free] Diagnostic: User="${cleanEmail}", PassLength=${cleanPass.length}`);
+
+            console.log('[register-free] Attempting to send email via Gmail (Port 465)...');
+
+            try {
+                const nodemailer = await import('nodemailer');
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true, // Use SSL/TLS
+                    auth: {
+                        user: cleanEmail,
+                        pass: cleanPass,
+                    },
+                    debug: true,
+                    logger: true,
                 });
-                console.log('[register-free] Email sent successfully');
-            } catch (emailError: any) {
-                console.error('[register-free] Email error:', emailError.message);
+
+                await transporter.sendMail({
+                    from: `"HackJKLU v5.0" <${cleanEmail}>`,
+                    to: newTicket.attendeeEmail,
+                    replyTo: cleanEmail,
+                    subject: `✅ RSVP Confirmed: ${newTicket.eventTitle} — HackJKLU v5.0`,
+                    text: `Welcome to the HackJKLU experience! Hi ${newTicket.attendeeName}, your RSVP for ${newTicket.eventTitle} is confirmed! Ticket ID: ${newTicket.ticketId}. Regards, JKLU & HackJKLU v5.0 Team`,
+                    html: emailHtml,
+                });
+                console.log('[register-free] Gmail: Email sent successfully');
+            } catch (gmailError: any) {
+                console.warn('[register-free] Gmail failed:', gmailError.message);
+
+                // Fallback to Resend
+                if (process.env.RESEND_API_KEY) {
+                    console.log('[register-free] Fallback: Attempting via Resend...');
+                    try {
+                        const { Resend } = await import('resend');
+                        const resend = new Resend(process.env.RESEND_API_KEY);
+
+                        await resend.emails.send({
+                            from: 'HackJKLU v5.0 <onboarding@resend.dev>', // Default testing domain unless custom domain verified
+                            to: newTicket.attendeeEmail,
+                            subject: `✅ RSVP Confirmed: ${newTicket.eventTitle} — HackJKLU v5.0`,
+                            html: emailHtml,
+                        });
+                        console.log('[register-free] Resend: Email sent successfully (Fallback)');
+                    } catch (resendError: any) {
+                        console.error('[register-free] Resend failed also:', resendError.message);
+                    }
+                } else {
+                    console.error('[register-free] No fallback available (RESEND_API_KEY missing)');
+                }
             }
         }
 
         return NextResponse.json({
             success: true,
             ticketId: newTicket.ticketId,
+            accessTier: newTicket.accessTier,
         });
     } catch (err: any) {
         console.error('[register-free]', err);

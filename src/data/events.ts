@@ -128,7 +128,7 @@ export const eventsData = [
     {
         id: 999, title: 'Maan Panu Live Performance',
         desc: 'The cinematic live performance highlight of Sabrang 2026. A legendary night of music and mystery.',
-        time: '15th March, 2026 • 07:00 PM onwards', location: 'J.K LAKSHMIPAT UNIVERSITY',
+        time: '15th March, 2026 • 07:00 PM onwards', location: 'JK LAKSHMIPAT UNIVERSITY',
         color: '#d4af37', poster: '/events/maan_panu_ticket.webp',
         isEpic: true, isMythic: false,
         entryFee: 0, requiresBooking: false,
