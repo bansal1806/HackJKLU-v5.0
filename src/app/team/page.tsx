@@ -30,9 +30,9 @@ const ROW2_TEAM = [
     { name: "Aman", role: "Stage & Venue", image: "/team/S_V_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/iaman.015/", github: "https://github.com/Amangp", linkedin: "https://www.linkedin.com/in/aman-gupta-056635215" },
     { name: "Shubham", role: "Discipline", image: "/team/Discipline_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/shubham.sharmaa05", github: "https://github.com/shubhamsharmaa05" },
     { name: "Devam", role: "Sponsorships", image: "/team/Sponsor_TeamCard.png", insta: "https://www.instagram.com/who.is.devam/", github: "https://github.com/Devam759l", linkedin: "https://www.linkedin.com/in/devam-gupta-929239271/" },
-    { name: "Mohit", role: "Social Media", image: "/team/SocialMedia_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/m.k__05__", github: "https://github.com/mohit03713", linkedin: "https://www.linkedin.com/in/mohit-khurana-25427a234" },
+    { name: "Mohit", role: "Social Media", image: "/team/SocialMedia_Mohit.png", insta: "https://www.instagram.com/m.k__05__", github: "https://github.com/mohit03713", linkedin: "https://www.linkedin.com/in/mohit-khurana-25427a234" },
     { name: "Aayan", role: "Tech Team", image: "/team/Tech_TeamCard_Aayan-removebg-preview.png", insta: "https://www.instagram.com/aayan_a1430/", github: "https://github.com/AayanA20", linkedin: "https://www.linkedin.com/in/aayanansari/" },
-    { name: "Vaishnavi", role: "Anchoring", image: "/team/Anchoring_TeamCard.png" },
+    { name: "Vaishnavi", role: "Anchoring", image: "/team/Anchoring_TeamCard.png", insta: "https://www.instagram.com/_vaishnaavii._/", github: "https://github.com/vaishnaviii14", linkedin: "https://www.linkedin.com/in/vaishnavi-shukla-9b567b315/" },
     { name: "Pratigya", role: "PS", image: "/team/PS_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/pratigyaa.12/", github: "https://github.com/pratigyabomb", linkedin: "https://www.linkedin.com/in/pratigya-bomb-295857349/" },
     { name: "Ekansh", role: "Photography", image: "/team/Photography_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/ekansh.saraswat/", github: "https://github.com/EkanshSaraswat", linkedin: "https://www.linkedin.com/in/ekansh-saraswat-a2a883285/" },
 ];
