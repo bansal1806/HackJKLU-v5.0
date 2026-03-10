@@ -88,10 +88,11 @@ export function Events() {
   const { addItem, items } = useCart();
 
   const [showRsvpForm, setShowRsvpForm] = useState(false);
-  const [rsvpForm, setRsvpForm] = useState({ name: '', email: '', phone: '', college: '' });
+  const [rsvpForm, setRsvpForm] = useState({ name: '', email: '', phone: '', college: '', accessCode: '' });
   const [rsvpStatus, setRsvpStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [rsvpError, setRsvpError] = useState('');
   const [rsvpTicketId, setRsvpTicketId] = useState<string | null>(null);
+  const [rsvpAccessTier, setRsvpAccessTier] = useState<string>('GA');
 
   const ticketRef = useRef<HTMLDivElement>(null);
 
@@ -124,7 +125,8 @@ export function Events() {
     setShowRsvpForm(false);
     setRsvpStatus('idle');
     setRsvpTicketId(null);
-    setRsvpForm({ name: '', email: '', phone: '', college: '' });
+    setRsvpAccessTier('GA');
+    setRsvpForm({ name: '', email: '', phone: '', college: '', accessCode: '' });
   };
 
   const handleRsvpSubmit = async (e: React.FormEvent) => {
@@ -151,14 +153,18 @@ export function Events() {
           attendeeEmail: rsvpForm.email,
           attendeePhone: rsvpForm.phone,
           college: rsvpForm.college,
+          accessCode: rsvpForm.accessCode,
         }),
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to register');
-
-      setRsvpTicketId(data.ticketId);
-      setRsvpStatus('success');
+      if (res.ok) {
+        setRsvpStatus('success');
+        setRsvpTicketId(data.ticketId);
+        setRsvpAccessTier(data.accessTier || 'GA');
+        if (selectedEvent.entryFee > 0) { /* Additional logic for paid events if needed */ }
+      }
     } catch (err) {
       setRsvpStatus('error');
       setRsvpError(err instanceof Error ? err.message : 'Something went wrong');
@@ -286,7 +292,7 @@ export function Events() {
                 </p>
                 <div className="flex flex-wrap items-center gap-4 text-stone-400 font-bold uppercase tracking-widest text-xs sm:text-sm mb-6">
                   <span className="flex items-center gap-2 font-data"><Clock size={16} className="text-[#d4af37]" /> 15th March, 7:00 PM</span>
-                  <span className="flex items-center gap-2"><MapPin size={16} className="text-[#d4af37]" /> J.K LAKSHMIPAT UNIVERSITY</span>
+                  <span className="flex items-center gap-2"><MapPin size={16} className="text-[#d4af37]" /> JK LAKSHMIPAT UNIVERSITY</span>
                 </div>
               </div>
               <button
@@ -296,7 +302,7 @@ export function Events() {
                     title: 'Maan Panu Live Performance',
                     desc: 'The cinematic live performance highlight of Sabrang 2026. A legendary night of music and mystery.',
                     time: '15th March, 2026 • 07:00 PM onwards',
-                    location: 'J.K LAKSHMIPAT UNIVERSITY',
+                    location: 'JK LAKSHMIPAT UNIVERSITY',
                     icon: Mic,
                     color: '#d4af37',
                     poster: '/events/maan_panu_ticket.webp',
@@ -451,7 +457,7 @@ export function Events() {
               exit={{ scale: 0.8, y: 60, opacity: 0, rotateY: -90 }}
               transition={{ type: "spring", damping: 25, stiffness: 180 }}
               style={{ perspective: 2000 }}
-              className="relative z-10 w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl h-[95vh] sm:max-h-[90vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-t-3xl sm:rounded-3xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold"
+              className="relative z-10 w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl h-[85vh] sm:max-h-[82vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-t-3xl sm:rounded-3xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold"
             >
               <button
                 onClick={closeEventModal}
@@ -562,6 +568,7 @@ export function Events() {
                                   time={selectedEvent.time}
                                   venue={selectedEvent.location}
                                   poster={selectedEvent.poster || '/events/artist_reveal.webp'}
+                                  accessTier={rsvpAccessTier}
                                 />
                               </div>
                             )}
@@ -619,6 +626,14 @@ export function Events() {
                                 required
                               />
                             </div>
+                            <input
+                              type="text"
+                              placeholder="Access Code (Optional)"
+                              value={rsvpForm.accessCode}
+                              onChange={e => setRsvpForm(prev => ({ ...prev, accessCode: e.target.value.toUpperCase() }))}
+                              className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-[#d4af37]/50 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm text-center tracking-[0.2em]"
+                              maxLength={8}
+                            />
 
                             {rsvpStatus === 'error' && (
                               <div className="text-red-400 text-xs text-center mt-1">{rsvpError}</div>

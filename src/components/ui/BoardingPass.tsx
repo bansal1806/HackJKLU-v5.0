@@ -12,7 +12,93 @@ interface BoardingPassProps {
     venue: string;
     time: string;
     poster: string;
+    accessTier?: string;
 }
+
+const TIER_STYLES: Record<string, any> = {
+    GA: {
+        border: 'linear-gradient(135deg, #16a34a, #22c55e, #86efac, #22c55e, #16a34a, #15803d, #22c55e, #86efac)',
+        sparkle: '#86efac',
+        sparkleGlow: 'rgba(34,197,94,0.5)',
+        stub: 'linear-gradient(135deg, #f0fdf4, #dcfce7, #bbf7d0)',
+        stubBorder: 'rgba(34,197,94,0.5)',
+        qrBorder: 'rgba(34,197,94,0.5)',
+        badgeText: 'GENERAL PASS',
+        badgeColor: '#22c55e',
+        frameBorder: 'rgba(34,197,94,0.5)',
+        frameShadow: 'rgba(34,197,94,0.15)',
+        qrLabelColor: '#166534',
+        qrSubLabelColor: '#15803d',
+    },
+    VIP: {
+        border: 'linear-gradient(135deg, #b8860b, #daa520, #ffd700, #daa520, #b8860b, #8b6914, #daa520, #ffd700)',
+        sparkle: '#ffd700',
+        sparkleGlow: 'rgba(255,215,0,0.5)',
+        stub: 'linear-gradient(135deg, #f8ecd2, #ebd9b2, #debe84)',
+        stubBorder: 'rgba(168,130,67,0.5)',
+        qrBorder: 'rgba(203,161,101,0.5)',
+        badgeText: 'VVIP PASS',
+        badgeColor: '#d4af37',
+        frameBorder: 'rgba(212,175,55,0.5)',
+        frameShadow: 'rgba(212,175,55,0.15)',
+        qrLabelColor: '#5c4022',
+        qrSubLabelColor: '#6b5133',
+    },
+    HACK_TEAM: {
+        border: 'linear-gradient(135deg, #7e22ce, #9333ea, #c084fc, #9333ea, #7e22ce, #6b21a8, #9333ea, #c084fc)',
+        sparkle: '#c084fc',
+        sparkleGlow: 'rgba(168,85,247,0.5)',
+        stub: 'linear-gradient(135deg, #faf5ff, #f3e8ff, #d8b4fe)',
+        stubBorder: 'rgba(147,51,234,0.5)',
+        qrBorder: 'rgba(147,51,234,0.5)',
+        badgeText: 'HACK TEAM PASS',
+        badgeColor: '#a855f7',
+        frameBorder: 'rgba(168,85,247,0.5)',
+        frameShadow: 'rgba(168,85,247,0.15)',
+        qrLabelColor: '#581c87',
+        qrSubLabelColor: '#6b21a8',
+    },
+    ALL_ACCESS: {
+        border: 'linear-gradient(135deg, #9ca3af, #d1d5db, #f3f4f6, #d1d5db, #9ca3af, #6b7280, #d1d5db, #f3f4f6)',
+        sparkle: '#f3f4f6',
+        sparkleGlow: 'rgba(209,213,219,0.5)',
+        stub: 'linear-gradient(135deg, #f9fafb, #f3f4f6, #e5e7eb)',
+        stubBorder: 'rgba(156,163,175,0.5)',
+        qrBorder: 'rgba(156,163,175,0.5)',
+        badgeText: 'ALL PASS',
+        badgeColor: '#d1d5db',
+        frameBorder: 'rgba(209,213,219,0.5)',
+        frameShadow: 'rgba(209,213,219,0.15)',
+        qrLabelColor: '#374151',
+        qrSubLabelColor: '#4b5563',
+    },
+    ARTIST_TEAM: {
+        border: 'linear-gradient(135deg, #dc2626, #ef4444, #fca5a5, #ef4444, #dc2626, #b91c1c, #ef4444, #fca5a5)',
+        sparkle: '#fca5a5',
+        sparkleGlow: 'rgba(239,68,68,0.5)',
+        stub: 'linear-gradient(135deg, #fef2f2, #fee2e2, #fecaca)',
+        stubBorder: 'rgba(239,68,68,0.5)',
+        qrBorder: 'rgba(239,68,68,0.5)',
+        badgeText: 'ARTIST TEAM PASS',
+        badgeColor: '#ef4444',
+        frameBorder: 'rgba(239,68,68,0.5)',
+        frameShadow: 'rgba(239,68,68,0.15)',
+        qrLabelColor: '#7f1d1d',
+        qrSubLabelColor: '#991b1b',
+    },
+    BACKSTAGE: {
+        border: 'linear-gradient(135deg, #2563eb, #3b82f6, #93c5fd, #3b82f6, #2563eb, #1d4ed8, #3b82f6, #93c5fd)',
+        sparkle: '#93c5fd',
+        sparkleGlow: 'rgba(59,130,246,0.5)',
+        stub: 'linear-gradient(135deg, #eff6ff, #dbeafe, #bfdbfe)',
+        stubBorder: 'rgba(59,130,246,0.5)',
+        qrBorder: 'rgba(59,130,246,0.5)',
+        badgeText: 'BACKSTAGE PASS',
+        badgeColor: '#3b82f6',
+        frameBorder: 'rgba(59,130,246,0.5)',
+        frameShadow: 'rgba(59,130,246,0.15)',
+    }
+};
 
 const BoardingPass: React.FC<BoardingPassProps> = ({
     ticketId,
@@ -21,8 +107,10 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
     venue,
     time,
     poster,
+    accessTier = 'GA',
 }) => {
     const shortId = ticketId.slice(0, 6) + '...' + ticketId.slice(-4);
+    const styleObj = TIER_STYLES[accessTier] || TIER_STYLES.GA;
 
     const isMaanPanu = eventTitle.toLowerCase().includes('maan panu');
 
@@ -50,11 +138,17 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 4cqw var(--tier-glow-soft); filter: drop-shadow(0 0 2cqw var(--tier-glow-vivid)); }
+            50% { box-shadow: 0 0 8cqw var(--tier-glow-soft); filter: drop-shadow(0 0 4cqw var(--tier-glow-vivid)); }
+        }
     `;
 
     return (
-        <div className="w-full flex justify-center" style={{ containerType: 'inline-size' }}>
+        <div className="w-full flex flex-col items-center justify-center gap-6" style={{ containerType: 'inline-size' }}>
             <style dangerouslySetInnerHTML={{ __html: sparkleKeyframes }} />
+
+            {/* ================= FRONT SIDE ================= */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -69,10 +163,9 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                     WebkitMaskRepeat: 'repeat-y, repeat-y, no-repeat',
                 }}
             >
-                {/* ========== GOLDEN GLITTER BORDER ========== */}
                 <div className="absolute inset-0 z-[1] pointer-events-none"
                     style={{
-                        background: 'linear-gradient(135deg, #b8860b, #daa520, #ffd700, #daa520, #b8860b, #8b6914, #daa520, #ffd700)',
+                        backgroundImage: styleObj.border,
                         backgroundSize: '300% 300%',
                         animation: 'shimmer 4s linear infinite',
                     }}
@@ -86,8 +179,8 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                         width: `${0.3 + Math.random() * 0.5}cqw`,
                         height: `${0.3 + Math.random() * 0.5}cqw`,
                         borderRadius: '50%',
-                        background: '#ffd700',
-                        boxShadow: '0 0 0.4cqw #ffd700, 0 0 0.8cqw rgba(255,215,0,0.5)',
+                        background: styleObj.sparkle,
+                        boxShadow: `0 0 0.4cqw ${styleObj.sparkle}, 0 0 0.8cqw ${styleObj.sparkleGlow}`,
                         animation: `sparkle ${2 + Math.random() * 3}s ease-in-out ${Math.random() * 3}s infinite`,
                         zIndex: 2,
                     };
@@ -125,7 +218,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                     </div>
 
                     {/* Event title watermark behind poster */}
-                    <div className="absolute bottom-[5%] left-[24%] w-[52%] flex justify-center z-[4] pointer-events-none">
+                    <div className="absolute bottom-[5%] left-[24%] w-[52%] flex flex-col items-center justify-center z-[4] pointer-events-none">
                         <h1
                             className="font-[Cinzel] font-black uppercase whitespace-nowrap text-transparent bg-clip-text"
                             style={{
@@ -134,10 +227,22 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                 opacity: 0.9,
                                 textShadow: '0 0 3cqw rgba(255,215,0,0.3)',
                                 letterSpacing: '0.08em',
+                                lineHeight: 1,
                             }}
                         >
                             {mainTitle}
                         </h1>
+                        {isMaanPanu && (
+                            <p className="font-[Cinzel] font-bold uppercase tracking-[0.2em]"
+                                style={{
+                                    fontSize: '1.6cqw',
+                                    color: '#e3cf9d',
+                                    textShadow: '0 0.1cqw 0.5cqw rgba(0,0,0,0.8)',
+                                }}
+                            >
+                                LIVE PERFORMANCE
+                            </p>
+                        )}
                     </div>
 
                     {/* INNER GOLDEN FRAME LINE */}
@@ -147,16 +252,22 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             left: '1cqw',
                             right: '1cqw',
                             bottom: '1cqw',
-                            border: '0.15cqw solid rgba(212,175,55,0.5)',
+                            border: `0.15cqw solid ${styleObj.frameBorder}`,
                             borderRadius: '0.4cqw',
-                            boxShadow: 'inset 0 0 1.5cqw rgba(212,175,55,0.15)',
+                            boxShadow: `inset 0 0 1.5cqw ${styleObj.frameShadow}`,
                         }}
                     >
                         {/* Corner diamonds */}
-                        <div className="absolute -top-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] border-[#d4af37] bg-[#0c0702] rotate-45" />
-                        <div className="absolute -top-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] border-[#d4af37] bg-[#0c0702] rotate-45" />
-                        <div className="absolute -bottom-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] border-[#d4af37] bg-[#0c0702] rotate-45" />
-                        <div className="absolute -bottom-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] border-[#d4af37] bg-[#0c0702] rotate-45" />
+                        <div className="absolute -top-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
+                        <div className="absolute -top-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
+                        <div className="absolute -bottom-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
+                        <div className="absolute -bottom-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
+                    </div>
+
+                    {/* TOP LOGOS OVER POSTER */}
+                    <div className="absolute top-[6%] left-[24%] z-[15] pointer-events-none flex items-center justify-between w-[52%] px-[1.5cqw]">
+                        <img src="/events/HackJKLU.webp" alt="HackJKLU" style={{ height: '4.5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
+                        <img src="/events/JkLU_Logo.webp" alt="JKLU" style={{ height: '5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
                     </div>
 
                     {/* ========== LEFT SECTION: BEIGE QR STUB ========== */}
@@ -166,11 +277,11 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             left: '2%',
                             width: '20%',
                             height: '88%',
-                            background: 'linear-gradient(135deg, #f8ecd2, #ebd9b2, #debe84)',
+                            background: styleObj.stub,
                             borderRadius: '2cqw',
                             padding: '1.2cqw',
                             boxShadow: '0 0.8cqw 3cqw rgba(0,0,0,0.7)',
-                            border: '0.08cqw solid rgba(168,130,67,0.5)',
+                            border: `0.08cqw solid ${styleObj.stubBorder}`,
                         }}
                     >
                         {/* Inner decorative border */}
@@ -180,7 +291,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                 left: '0.5cqw',
                                 right: '0.5cqw',
                                 bottom: '0.5cqw',
-                                border: '0.08cqw solid rgba(168,130,67,0.3)',
+                                border: `0.08cqw solid ${styleObj.stubBorder}`,
                                 borderRadius: '1.6cqw',
                             }}
                         />
@@ -194,7 +305,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                 padding: '3%',
                                 marginTop: '0.8cqw',
                                 boxShadow: 'inset 0 0 1cqw rgba(0,0,0,0.08)',
-                                border: '0.15cqw solid rgba(203,161,101,0.5)',
+                                border: `0.15cqw solid ${styleObj.qrBorder}`,
                             }}
                         >
                             <QRCodeSVG
@@ -211,7 +322,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                         <div className="flex flex-col items-center w-full relative z-10 flex-1 justify-center"
                             style={{ marginTop: '0.8cqw' }}
                         >
-                            <h4 className="font-[Cinzel] font-black text-[#5c4022] whitespace-nowrap"
+                            <h4 className="font-[Cinzel] font-black whitespace-nowrap text-[#5c4022]"
                                 style={{ fontSize: '1.3cqw', letterSpacing: '0.08em' }}
                             >
                                 SCAN TO VERIFY
@@ -225,15 +336,15 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             <div className="w-full flex items-center justify-center"
                                 style={{ margin: '0.4cqw 0' }}
                             >
-                                <div style={{ height: '0.08cqw', width: '15%', background: 'rgba(179,143,86,0.4)' }} />
-                                <span style={{ fontSize: '0.9cqw', color: 'rgba(179,143,86,0.8)', padding: '0 0.5cqw', lineHeight: 1 }}>❖</span>
-                                <div style={{ height: '0.08cqw', width: '15%', background: 'rgba(179,143,86,0.4)' }} />
+                                <div style={{ height: '0.08cqw', width: '15%', background: styleObj.stubBorder }} />
+                                <span className="text-[#5c4022]" style={{ fontSize: '0.9cqw', padding: '0 0.5cqw', lineHeight: 1 }}>❖</span>
+                                <div style={{ height: '0.08cqw', width: '15%', background: styleObj.stubBorder }} />
                             </div>
                         </div>
 
                         {/* Tear dashed line */}
                         <div className="w-[90%] relative z-10"
-                            style={{ borderTop: '0.18cqw dashed rgba(163,128,83,0.4)', marginBottom: '0.8cqw' }}
+                            style={{ borderTop: `0.18cqw dashed ${styleObj.stubBorder}`, marginBottom: '0.8cqw' }}
                         />
 
                         {/* MT Date Code */}
@@ -269,7 +380,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             {/* Golden shimmer edge on left side */}
                             <div className="absolute top-0 left-0 w-[2%] h-full"
                                 style={{
-                                    background: 'linear-gradient(to bottom, transparent, rgba(212,175,55,0.3), transparent)',
+                                    background: `linear-gradient(to bottom, transparent, ${styleObj.sparkleGlow}, transparent)`,
                                 }}
                             />
                             {/* Sparkle particles in the background */}
@@ -280,42 +391,35 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                         width: `${0.15 + Math.random() * 0.3}cqw`,
                                         height: `${0.15 + Math.random() * 0.3}cqw`,
                                         borderRadius: '50%',
-                                        background: '#ffd700',
+                                        background: styleObj.sparkle,
                                         opacity: 0.15 + Math.random() * 0.25,
                                         left: `${5 + Math.random() * 90}%`,
                                         top: `${5 + Math.random() * 90}%`,
                                         animation: `sparkle ${3 + Math.random() * 4}s ease-in-out ${Math.random() * 3}s infinite`,
-                                        boxShadow: '0 0 0.3cqw rgba(255,215,0,0.4)',
+                                        boxShadow: `0 0 0.3cqw ${styleObj.sparkleGlow}`,
                                     }}
                                 />
                             ))}
                         </div>
 
                         {/* Content */}
-                        <div className="relative z-10 flex flex-col h-full" style={{ padding: '1.5cqw 2cqw' }}>
-                            {/* LOGOS */}
-                            <div className="flex items-center justify-center w-full" style={{ marginBottom: '1.5cqw' }}>
-                                <img src="/logo.png" alt="HackJKLU" style={{ height: '3.8cqw', objectFit: 'contain' }} />
-                                <span className="font-[Cinzel] font-bold" style={{ fontSize: '1.4cqw', color: '#d4af37', paddingBottom: '0.2cqw', marginLeft: '2cqw', marginRight: '2cqw' }}>X</span>
-                                <img src="/events/JkLU_Logo.webp" alt="JKLU" style={{ height: '6.5cqw', objectFit: 'contain' }} />
-                            </div>
-
-                            {/* OFFICIAL ENTRY PASS */}
-                            <div className="flex items-center" style={{ gap: '0.4cqw', marginBottom: '0.6cqw' }}>
-                                <TicketIcon strokeWidth={2.5} style={{ width: '1.4cqw', height: '1.4cqw', color: '#d4af37' }} />
-                                <span className="font-[Cinzel] font-bold uppercase"
-                                    style={{ fontSize: '0.9cqw', color: '#d4af37', letterSpacing: '0.12em' }}
+                        <div className="relative z-10 flex flex-col h-full" style={{ padding: '1.2cqw 1.8cqw' }}>
+                            {/* PASS TYPE HEADING */}
+                            <div className="flex items-center" style={{ gap: '0.6cqw', marginBottom: '1.2cqw', borderBottom: `0.1cqw solid ${styleObj.badgeColor}44`, paddingBottom: '0.8cqw' }}>
+                                <TicketIcon strokeWidth={2.5} style={{ width: '1.8cqw', height: '1.8cqw', color: styleObj.badgeColor }} />
+                                <h2 className="font-[Cinzel] font-black uppercase truncate"
+                                    style={{ fontSize: '1.4cqw', color: styleObj.badgeColor, letterSpacing: '0.15em' }}
                                 >
-                                    OFFICIAL ENTRY PASS
-                                </span>
+                                    {styleObj.badgeText}
+                                </h2>
                             </div>
 
-                            {/* Title */}
+                            {/* Title (for non-Maan Panu) */}
                             {!isMaanPanu && (
-                                <div style={{ marginBottom: '0.8cqw' }}>
+                                <div style={{ marginBottom: '1cqw' }}>
                                     <h2 className="font-[Cinzel] font-black uppercase truncate"
                                         style={{
-                                            fontSize: '2.2cqw',
+                                            fontSize: '2cqw',
                                             lineHeight: 1.1,
                                             color: '#fdf6e3',
                                             textShadow: '0 0.2cqw 0.6cqw rgba(0,0,0,0.8)',
@@ -326,10 +430,10 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                     {subTitle && (
                                         <h3 className="font-[Cinzel] font-bold uppercase truncate"
                                             style={{
-                                                fontSize: '1.1cqw',
+                                                fontSize: '1cqw',
                                                 color: '#e3cf9d',
                                                 letterSpacing: '0.1em',
-                                                marginTop: '0.3cqw',
+                                                marginTop: '0.2cqw',
                                                 textShadow: '0 0.1cqw 0.3cqw rgba(0,0,0,0.8)',
                                             }}
                                         >
@@ -339,19 +443,19 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                 </div>
                             )}
 
-                            {/* INFO GRID */}
-                            <div className="flex flex-col flex-1" style={{ gap: '0.8cqw' }}>
+                            {/* INFO GRID - Using space-between to fill vertical area */}
+                            <div className="flex flex-col flex-1 justify-between" style={{ paddingBottom: '1cqw' }}>
                                 {/* ATTENDEE */}
-                                <div className="flex items-start" style={{ gap: '0.5cqw' }}>
-                                    <User style={{ width: '1.6cqw', height: '1.6cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
-                                    <div style={{ borderBottom: '0.08cqw solid rgba(212,175,55,0.2)', paddingBottom: '0.4cqw', width: '90%' }}>
+                                <div className="flex items-start" style={{ gap: '0.6cqw' }}>
+                                    <User style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                    <div style={{ borderBottom: `0.08cqw solid rgba(212,175,55,0.2)`, paddingBottom: '0.4cqw', width: '90%' }}>
                                         <p className="font-[Cinzel] font-bold uppercase"
-                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.1em' }}
+                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
                                         >
                                             ATTENDEE
                                         </p>
-                                        <p className="font-[Cinzel] font-black truncate"
-                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw' }}
+                                        <p className="font-[Cinzel] font-black leading-none"
+                                            style={{ fontSize: '1.5cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2' }}
                                         >
                                             {attendee}
                                         </p>
@@ -359,16 +463,16 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                 </div>
 
                                 {/* VENUE */}
-                                <div className="flex items-start" style={{ gap: '0.5cqw' }}>
-                                    <MapPin style={{ width: '1.6cqw', height: '1.6cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
-                                    <div style={{ borderBottom: '0.08cqw solid rgba(212,175,55,0.2)', paddingBottom: '0.4cqw', width: '90%' }}>
+                                <div className="flex items-start" style={{ gap: '0.6cqw' }}>
+                                    <MapPin style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                    <div style={{ borderBottom: `0.08cqw solid rgba(212,175,55,0.2)`, paddingBottom: '0.4cqw', width: '90%' }}>
                                         <p className="font-[Cinzel] font-bold uppercase"
-                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.1em' }}
+                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
                                         >
                                             VENUE
                                         </p>
-                                        <p className="font-[Cinzel] font-black leading-tight"
-                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw' }}
+                                        <p className="font-[Cinzel] font-black"
+                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2' }}
                                         >
                                             {venue}
                                         </p>
@@ -376,32 +480,38 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                 </div>
 
                                 {/* SCHEDULE */}
-                                <div className="flex items-start" style={{ gap: '0.5cqw' }}>
-                                    <Clock style={{ width: '1.6cqw', height: '1.6cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                <div className="flex items-start" style={{ gap: '0.6cqw' }}>
+                                    <Clock style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
                                     <div style={{ width: '90%' }}>
                                         <p className="font-[Cinzel] font-bold uppercase"
-                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.1em' }}
+                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
                                         >
                                             SCHEDULE
                                         </p>
                                         <p className="font-data font-black"
-                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw' }}
+                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2', whiteSpace: 'nowrap' }}
                                         >
                                             {datePart}
                                         </p>
                                         {timePart && (
                                             <p className="font-data italic"
-                                                style={{ fontSize: '1cqw', color: 'rgba(255,255,255,0.7)', marginTop: '0.1cqw' }}
+                                                style={{ fontSize: '1.1cqw', color: 'rgba(255,255,255,0.7)', marginTop: '0.1cqw', lineHeight: '1.2' }}
                                             >
                                                 • {timePart}
                                             </p>
                                         )}
+                                        {/* T&C NOTE */}
+                                        <p className="font-[Cinzel] font-bold uppercase italic"
+                                            style={{ fontSize: '0.7cqw', color: '#8b8680', marginTop: '0.6cqw', letterSpacing: '0.05em', lineHeight: '1.2' }}
+                                        >
+                                            Terms and conditions are on backside
+                                        </p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* BOTTOM BADGES */}
-                            <div className="flex items-center justify-center" style={{ gap: '0.4cqw', marginTop: 'auto' }}>
+                            <div className="flex items-center justify-center border-t pt-[0.8cqw]" style={{ gap: '0.6cqw', borderColor: 'rgba(212,175,55,0.1)' }}>
                                 <span className="font-data font-medium"
                                     style={{
                                         fontSize: '0.8cqw',
@@ -436,6 +546,159 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                     </div>
                 </div>
             </motion.div>
+
+            {/* ================= BACK SIDE ================= */}
+            <div
+                className="relative w-full max-w-[800px] overflow-hidden bg-[#000] select-none"
+                style={{
+                    aspectRatio: '2.5 / 1',
+                    borderRadius: '1.2cqw',
+                    WebkitMaskImage:
+                        'radial-gradient(circle at 0px 50%, transparent 1.6cqw, black 1.7cqw), radial-gradient(circle at 100% 50%, transparent 1.6cqw, black 1.7cqw), linear-gradient(black, black)',
+                    WebkitMaskSize: '3.2cqw 3.2cqw, 3.2cqw 3.2cqw, calc(100% - 3.2cqw) 100%',
+                    WebkitMaskPosition: '-1.6cqw center, calc(100% + 1.6cqw) center, center',
+                    WebkitMaskRepeat: 'repeat-y, repeat-y, no-repeat',
+                    animation: 'glow-pulse 2.5s infinite ease-in-out',
+                    // @ts-ignore
+                    '--tier-glow-soft': styleObj.badgeColor + '66',
+                    // @ts-ignore
+                    '--tier-glow-vivid': styleObj.badgeColor + '99'
+                } as React.CSSProperties}
+            >
+                <div className="absolute inset-0 z-[1] pointer-events-none"
+                    style={{
+                        backgroundImage: styleObj.border,
+                        backgroundSize: '300% 300%',
+                        animation: 'shimmer 2.5s linear infinite',
+                    }}
+                />
+
+                {/* Pulsing particles for tier-specific effect */}
+                {Array.from({ length: 40 }).map((_, i) => (
+                    <div key={`bp-tier-sp-${i}`}
+                        style={{
+                            position: 'absolute',
+                            width: `${0.1 + Math.random() * 0.5}cqw`,
+                            height: `${0.1 + Math.random() * 0.5}cqw`,
+                            borderRadius: '50%',
+                            background: styleObj.sparkle,
+                            boxShadow: `0 0 0.8cqw ${styleObj.sparkle}`,
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                            animation: `sparkle ${1.5 + Math.random() * 2}s ease-in-out ${Math.random() * 2}s infinite`,
+                            zIndex: 2,
+                            opacity: 0.8,
+                        }}
+                    />
+                ))}
+
+                {/* INNER BLOODY RED AREA (Back side) - No backdrop filter */}
+                <div className="absolute z-[3]"
+                    style={{
+                        top: '1.2cqw',
+                        left: '1.2cqw',
+                        right: '1.2cqw',
+                        bottom: '1.2cqw',
+                        borderRadius: '0.6cqw',
+                        background: 'radial-gradient(circle at center, rgba(139, 0, 0, 0.95) 0%, rgba(45, 0, 0, 0.98) 45%, rgba(0, 0, 0, 1) 85%)',
+                        overflow: 'hidden',
+                        padding: '2.5cqw 4cqw',
+                        border: '0.15cqw solid rgba(255, 0, 0, 0.2)',
+                    }}
+                >
+                    <div className="relative z-10 w-full h-full flex flex-col text-white">
+                        <div className="flex items-center justify-between border-b" style={{ borderColor: 'rgba(239, 68, 68, 0.2)', paddingBottom: '1.2cqw', marginBottom: '1.2cqw' }}>
+                            {/* Left Side: HackJKLU Logo + Event Name */}
+                            <div className="flex flex-col items-start gap-1" style={{ width: '15cqw' }}>
+                                <div className="flex flex-col items-center">
+                                    <img src="/logo.png" alt="HackJKLU logo" style={{ height: '3.5cqw', width: 'auto', objectFit: 'contain' }} />
+                                    <span className="font-[Cinzel] font-bold uppercase tracking-wider text-[#ef4444]" style={{ fontSize: '0.85cqw' }}>HACKJKLU V5.0</span>
+                                </div>
+                            </div>
+
+                            {/* Center: Terms & Conditions Title */}
+                            <div className="flex-1 text-center">
+                                <h2 className="font-[Cinzel] font-black uppercase text-[#ef4444]" style={{ fontSize: '2.4cqw', letterSpacing: '0.05em' }}>TERMS & CONDITIONS</h2>
+                            </div>
+
+                            {/* Right Side: JKLU Logo */}
+                            <div className="flex items-center justify-end" style={{ width: '15cqw' }}>
+                                <img src="/events/JkLU_Logo.png" alt="JKLU logo" style={{ height: '4.5cqw', width: 'auto', objectFit: 'contain' }} />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 flex-1" style={{ gap: '3cqw' }}>
+                            {/* Left Column */}
+                            <div className="flex flex-col justify-between" style={{ gap: '1cqw' }}>
+                                <div>
+                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>1. Identification & Entry</h3>
+                                    <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
+                                        Carry your physical ID card (Aadhar/Driving Licence) at all times. Entry pass is mandatory; verification will be conducted at the gate. Re-entry is not allowed.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>2. Prohibited Substances</h3>
+                                    <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
+                                        Alcohol, intoxicants, and banned substances are strictly prohibited. Security may use breath analyzers. Violators face strict disciplinary action.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>3. Important Timings</h3>
+                                    <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
+                                        Gate Closing Time: 07:30 PM, 15 March 2026. Please ensure you arrive well before the deadline for smooth processing.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Right Column */}
+                            <div className="flex flex-col justify-between" style={{ gap: '1cqw' }}>
+                                <div>
+                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>4. Concert Rules (15th March)</h3>
+                                    <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
+                                        Water bottles, cold drinks, bags, food, and other prohibited items are NOT allowed inside the Sabrang Ground during the concert.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>5. Conduct & Misbehavior</h3>
+                                    <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
+                                        Nuisance, misbehavior, or misconduct will lead to immediate expulsion and strict disciplinary action by the institute.
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>6. Property Damage</h3>
+                                    <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
+                                        Damage to institute property will not be tolerated and will invite strict financial and disciplinary penalties.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer / Contact */}
+                        <div className="mt-auto flex items-center justify-between text-stone-400 font-data border-t" style={{ borderColor: 'rgba(239, 68, 68, 0.2)', paddingTop: '1cqw', fontSize: '0.8cqw' }}>
+                            <span>Need Help? Contact the Organizing Committee at hackjklu@jklu.edu.in</span>
+                            <span className="uppercase tracking-[0.2em] text-[#ef4444]">DO NOT DUPLICATE</span>
+                        </div>
+                    </div>
+
+                    {/* INNER RED FRAME LINE */}
+                    <div className="absolute z-[10] pointer-events-none"
+                        style={{
+                            top: '1cqw',
+                            left: '1cqw',
+                            right: '1cqw',
+                            bottom: '1cqw',
+                            border: '0.15cqw solid rgba(239, 68, 68, 0.4)',
+                            borderRadius: '0.4cqw',
+                        }}
+                    >
+                        {/* Corner diamonds */}
+                        <div className="absolute -top-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: '#ef4444' }} />
+                        <div className="absolute -top-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: '#ef4444' }} />
+                        <div className="absolute -bottom-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: '#ef4444' }} />
+                        <div className="absolute -bottom-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: '#ef4444' }} />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
