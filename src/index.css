@@ -264,9 +264,11 @@ textarea,
 }
 
 /* Custom Scrollbar for Themes Page Content */
-.themes-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #5c3a21 rgba(62, 39, 21, 0.1);
+@supports (scrollbar-color: auto) {
+  .themes-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #5c3a21 rgba(62, 39, 21, 0.1);
+  }
 }
 
 .themes-scrollbar::-webkit-scrollbar {

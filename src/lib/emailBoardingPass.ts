@@ -239,6 +239,17 @@ export function generateBoardingPassHTML({
             </tr>
         </table>
 
+        <!-- Download Button -->
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 30px;">
+            <tr>
+                <td align="center">
+                    <a href="${siteUrl}/ticket/${ticketId}" target="_blank" style="background-color: ${style.accent}; color: #0c0702; padding: 14px 28px; text-decoration: none; border-radius: 30px; font-family: 'Times New Roman', serif; font-weight: bold; font-size: 16px; letter-spacing: 2px; display: inline-block; text-transform: uppercase;">
+                        VIEW & DOWNLOAD HIGH-RES TICKET
+                    </a>
+                </td>
+            </tr>
+        </table>
+
         <p style="text-align:center;color:#444;font-size:11px;margin-top:32px;letter-spacing:1px;">Ticket ID: ${ticketId} | Verified Digital Entry Pass</p>
     </div>`;
 }

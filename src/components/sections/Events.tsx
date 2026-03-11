@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -88,7 +88,7 @@ export function Events() {
   const { addItem, items } = useCart();
 
   const [showRsvpForm, setShowRsvpForm] = useState(false);
-  const [rsvpForm, setRsvpForm] = useState({ name: '', email: '', phone: '', college: '', accessCode: '' });
+  const [rsvpForm, setRsvpForm] = useState({ name: '', email: '', phone: '', college: '', accessCode: '', transactionId: '', receipt: null as File | null, teamMembers: [] as string[] });
   const [rsvpStatus, setRsvpStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [rsvpError, setRsvpError] = useState('');
   const [rsvpTicketId, setRsvpTicketId] = useState<string | null>(null);
@@ -126,7 +126,7 @@ export function Events() {
     setRsvpStatus('idle');
     setRsvpTicketId(null);
     setRsvpAccessTier('GA');
-    setRsvpForm({ name: '', email: '', phone: '', college: '', accessCode: '' });
+    setRsvpForm({ name: '', email: '', phone: '', college: '', accessCode: '', transactionId: '', receipt: null, teamMembers: [] });
   };
 
   const handleRsvpSubmit = async (e: React.FormEvent) => {
@@ -139,31 +139,62 @@ export function Events() {
       return;
     }
 
+    if (selectedEvent.entryFee > 0) {
+      if (!rsvpForm.transactionId || !rsvpForm.receipt) {
+        setRsvpError('Transaction ID and Payment Receipt are required for paid events');
+        setRsvpStatus('error');
+        return;
+      }
+    }
+
     setRsvpStatus('loading');
     setRsvpError('');
 
     try {
-      const res = await fetch('/api/register/free', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          eventId: selectedEvent.id,
-          eventTitle: selectedEvent.title,
-          attendeeName: rsvpForm.name,
-          attendeeEmail: rsvpForm.email,
-          attendeePhone: rsvpForm.phone,
-          college: rsvpForm.college,
-          accessCode: rsvpForm.accessCode,
-        }),
-      });
+      let res;
+      if (selectedEvent.entryFee > 0) {
+        const formData = new FormData();
+        formData.append('eventId', selectedEvent.id.toString());
+        formData.append('eventTitle', selectedEvent.title);
+        formData.append('attendeeName', rsvpForm.name);
+        formData.append('attendeeEmail', rsvpForm.email);
+        formData.append('attendeePhone', rsvpForm.phone);
+        formData.append('college', rsvpForm.college);
+        formData.append('transactionId', rsvpForm.transactionId);
+        formData.append('receipt', rsvpForm.receipt as Blob);
+        formData.append('teamMembers', JSON.stringify(rsvpForm.teamMembers));
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to register');
-      if (res.ok) {
+        res = await fetch('/api/register/paid', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to submit details');
+
+        setRsvpStatus('success');
+        // Paid tickets won't have a ticketId yet because they are pending
+      } else {
+        res = await fetch('/api/register/free', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventId: selectedEvent.id,
+            eventTitle: selectedEvent.title,
+            attendeeName: rsvpForm.name,
+            attendeeEmail: rsvpForm.email,
+            attendeePhone: rsvpForm.phone,
+            college: rsvpForm.college,
+            accessCode: rsvpForm.accessCode,
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to register');
+
         setRsvpStatus('success');
         setRsvpTicketId(data.ticketId);
         setRsvpAccessTier(data.accessTier || 'GA');
-        if (selectedEvent.entryFee > 0) { /* Additional logic for paid events if needed */ }
       }
     } catch (err) {
       setRsvpStatus('error');
@@ -234,7 +265,7 @@ export function Events() {
         <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_0%,#020205_90%]" />
       </div>
 
-      {false && (
+      {(
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -299,8 +330,8 @@ export function Events() {
                 onClick={() => {
                   setSelectedEvent({
                     id: 999, // Unique ID for Headliner
-                    title: 'Maan Panu Live Performance',
-                    desc: 'The cinematic live performance highlight of Sabrang 2026. A legendary night of music and mystery.',
+                    title: 'Maan Panu Live Concert',
+                    desc: 'The cinematic live concert highlight of Sabrang 2026. A legendary night of music and mystery.',
                     time: '15th March, 2026 • 07:00 PM onwards',
                     location: 'JK LAKSHMIPAT UNIVERSITY',
                     icon: Mic,
@@ -316,14 +347,15 @@ export function Events() {
                 }}
                 className="bg-[#d4af37] text-black font-[Cinzel] font-black py-3 sm:py-4 px-6 sm:px-8 rounded-xl hover:bg-white transition-all uppercase tracking-widest text-sm mb-4 md:mb-0 relative z-20"
               >
-                Register Now
+                Register for Free
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {false && (
+      {/* Eminent Speakers Section Hidden by Request
+      (
         <div className="relative z-10 w-full max-w-7xl mx-auto mb-16 sm:mb-24 px-4">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-px flex-1 bg-linear-to-l from-[#d4af37]/50 to-transparent" />
@@ -346,15 +378,16 @@ export function Events() {
             ))}
           </div>
         </div>
-      )}
+      )
+      */}
 
-      {false && (
+      {(
         <div className="relative z-10 w-full mb-8 flex items-center justify-center">
           <h3 className="text-4xl md:text-6xl font-[Cinzel] font-black text-white tracking-wider uppercase text-center border-b-2 border-[#d4af37] pb-4 px-12">The Labours</h3>
         </div>
       )}
 
-      {false && (
+      {(
         <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col sm:flex-row gap-3 sm:gap-6 mb-10 sm:mb-16 md:mb-24 px-0 sm:px-4 italic">
           {/* Divine Search */}
           <div className="relative flex-1 group">
@@ -401,9 +434,9 @@ export function Events() {
         </div>
       )}
 
-      {/* Staggered Temple Pillar Grid */}
-      {false && (
-        <div className="relative z-10 flex flex-wrap justify-center gap-y-10 sm:gap-y-16 md:gap-y-24 gap-x-6 sm:gap-x-8 md:gap-x-12 max-w-7xl mx-auto w-full px-0 sm:px-2 md:px-4">
+      {/* Masonry Temple Pillar Grid */}
+      {(
+        <div className="relative z-10 columns-1 sm:columns-2 lg:columns-3 gap-6 sm:gap-8 md:gap-12 max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-8 pb-24">
           <AnimatePresence mode="popLayout">
             {filteredEvents.map((evt, idx) => (
               <motion.div
@@ -413,7 +446,7 @@ export function Events() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.9, transition: { duration: 0.2 } }}
                 transition={{ duration: 0.4, ease: "easeOut", delay: idx * 0.04 }}
-                className={`w-[calc(50%-12px)] sm:w-[calc(50%-16px)] md:w-[calc(50%-24px)] lg:w-[calc(33.33%-32px)] xl:w-[calc(25%-36px)] ${idx % 2 === 1 ? 'sm:mt-16 md:mt-24' : ''}`}
+                className="break-inside-avoid w-full mb-6 sm:mb-8 md:mb-12"
               >
                 <EventCard evt={evt} onClick={() => setSelectedEvent(evt)} />
               </motion.div>
@@ -423,7 +456,7 @@ export function Events() {
       )}
 
       {/* No Results Placeholder */}
-      {false && filteredEvents.length === 0 && (
+      {filteredEvents.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -457,7 +490,7 @@ export function Events() {
               exit={{ scale: 0.8, y: 60, opacity: 0, rotateY: -90 }}
               transition={{ type: "spring", damping: 25, stiffness: 180 }}
               style={{ perspective: 2000 }}
-              className="relative z-10 w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl h-[85vh] sm:max-h-[82vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-t-3xl sm:rounded-3xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold"
+              className="relative z-10 w-full sm:max-w-3xl md:max-w-5xl lg:max-w-7xl h-[85vh] sm:max-h-[85vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-t-3xl sm:rounded-3xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold"
             >
               <button
                 onClick={closeEventModal}
@@ -467,33 +500,29 @@ export function Events() {
                 <X size={20} />
               </button>
 
-              {/* Poster Side: The Artifact */}
-              <div className="w-full md:w-5/12 relative min-h-[30vh] sm:min-h-[35vh] md:min-h-0 bg-black overflow-hidden shrink-0">
+              {/* Poster Side: The Artifact (Perfect Fit) */}
+              <div className={`w-full relative shrink-0 flex items-center justify-center bg-[#0B0C10] border-b md:border-b-0 md:border-r border-[#d4af37]/10 overflow-hidden ${selectedEvent.id === 999 ? 'md:w-1/2' : 'md:w-auto md:max-w-[50%]'}`}>
                 <motion.img
-                  initial={{ scale: 1.2 }}
-                  animate={{ scale: 1 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
                   src={selectedEvent.poster}
                   alt={selectedEvent.title}
-                  className="w-full h-full object-cover"
+                  className={`w-full relative z-10 drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] ${selectedEvent.id === 999 ? 'h-[40vh] md:h-full object-cover object-[55%_center]' : 'md:w-auto h-auto max-h-[40vh] md:max-h-none md:h-full object-contain p-0 sm:p-2'}`}
                 />
 
                 {/* Overlay Gradients */}
-                <div className="absolute inset-0 bg-linear-to-t from-[#1A1C23] via-transparent to-black/20" />
-
-                <div className="absolute bottom-4 sm:bottom-12 left-4 sm:left-12 right-4 sm:right-12">
-                  <motion.h3
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-base sm:text-2xl md:text-3xl lg:text-4xl font-[Cinzel] font-black text-white leading-tight uppercase"
-                  >
-                    {selectedEvent.title}
-                  </motion.h3>
-                </div>
+                <div className="absolute inset-0 z-20 bg-linear-to-t from-[#1A1C23] via-[#1A1C23]/10 md:via-transparent to-black/40 pointer-events-none" />
               </div>
 
               {/* Details Side: The Legend */}
-              <div className="flex-1 p-5 sm:p-8 md:p-10 lg:p-14 overflow-y-auto italic bg-[#1A1C23]/30 backdrop-blur-sm custom-scrollbar">
+              <div className="flex-1 p-5 sm:p-8 md:p-10 lg:p-14 overflow-y-auto italic bg-[#1A1C23]/30 backdrop-blur-sm custom-scrollbar flex flex-col">
+                <motion.h2
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-2xl sm:text-3xl lg:text-4xl font-[Cinzel] font-black text-[#d4af37] mb-4 sm:mb-6 uppercase tracking-widest leading-tight"
+                >
+                  {selectedEvent.title}
+                </motion.h2>
                 <div className="mb-6 sm:mb-10 flex flex-wrap gap-2 sm:gap-4">
                   <div className="flex items-center gap-2 sm:gap-3 bg-white/5 px-3 sm:px-5 py-2 sm:py-3 rounded-xl border border-[#d4af37]/10">
                     <Clock className="text-[#d4af37] shrink-0" size={16} />
@@ -521,59 +550,34 @@ export function Events() {
                 </motion.div>
 
                 <div className="flex flex-col gap-3 sm:gap-4">
-                  {selectedEvent.requiresBooking ? (
-                    <>
-                      <div className="flex items-center justify-between bg-[#1A1C23] rounded-xl px-4 sm:px-5 py-3 border border-[#d4af37]/20">
-                        <span className="text-stone-400 font-[Cinzel] text-sm">Entry Fee</span>
-                        <span className="text-[#d4af37] font-data font-black text-base sm:text-lg">
-                          {selectedEvent.entryFee === 0 ? 'Free' : `₹${selectedEvent.entryFee}`}
-                        </span>
-                      </div>
-                      {items.some(i => i.eventId === selectedEvent.id) ? (
-                        <div className="flex items-center justify-center gap-3 bg-green-900/20 border border-green-500/30 rounded-2xl py-4 sm:py-5">
-                          <CheckCircle size={18} className="text-green-400" />
-                          <span className="text-green-400 font-[Cinzel] font-black uppercase tracking-wider text-sm sm:text-base">Added to Cart</span>
-                        </div>
-                      ) : (
-                        <div className="relative group/btn">
-                          <div className="absolute -inset-1 bg-[#d4af37] blur-lg opacity-20 group-hover/btn:opacity-40 transition-opacity duration-500" />
-                          <button
-                            onClick={() => {
-                              addItem({ eventId: selectedEvent.id, eventTitle: selectedEvent.title, quantity: 1, pricePerUnit: selectedEvent.entryFee });
-                            }}
-                            aria-label={`Add ${selectedEvent.title} to cart`}
-                            className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 sm:py-5 rounded-2xl hover:bg-white transition-all active:scale-95 text-sm sm:text-base md:text-lg tracking-[0.15em] sm:tracking-[0.2em] uppercase relative z-10 flex items-center justify-center gap-2 sm:gap-3"
-                          >
-                            <ShoppingCart size={18} />
-                            {selectedEvent.entryFee === 0 ? 'Register Free' : `Add to Cart - ₹${selectedEvent.entryFee}`}
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    showRsvpForm ? (
-                      <div className="bg-[#1A1C23]/60 p-4 sm:p-5 rounded-2xl border border-[#d4af37]/20 mt-2">
-                        {rsvpStatus === 'success' ? (
-                          <div className="flex flex-col items-center justify-center py-6 text-center">
-                            <CheckCircle size={48} className="text-green-400 mb-6" />
-                            <h4 className="text-xl font-[Cinzel] font-black text-white mb-2">Registration Confirmed</h4>
-                            <p className="text-stone-400 text-sm mb-8 italic">Your boarding pass is ready for the quest!</p>
+                  {showRsvpForm ? (
+                    <div className="bg-[#1A1C23]/60 p-4 sm:p-5 rounded-2xl border border-[#d4af37]/20 mt-2">
+                      {rsvpStatus === 'success' ? (
+                        <div className="flex flex-col items-center justify-center py-6 text-center">
+                          <CheckCircle size={48} className="text-green-400 mb-6" />
+                          <h4 className="text-xl font-[Cinzel] font-black text-white mb-2">
+                            {selectedEvent.entryFee === 0 ? 'Registration Confirmed' : 'Submission Received'}
+                          </h4>
+                          <p className="text-stone-400 text-sm mb-8 italic">
+                            {selectedEvent.entryFee === 0 ? 'Your boarding pass is ready for the quest!' : 'Your payment proof will be verified by our team. You will receive an email with your boarding pass once approved!'}
+                          </p>
 
-                            {rsvpTicketId && (
-                              <div ref={ticketRef} className="w-full flex justify-center mb-4">
-                                <BoardingPass
-                                  ticketId={rsvpTicketId}
-                                  eventTitle={selectedEvent.title}
-                                  attendee={rsvpForm.name}
-                                  time={selectedEvent.time}
-                                  venue={selectedEvent.location}
-                                  poster={selectedEvent.poster || '/events/artist_reveal.webp'}
-                                  accessTier={rsvpAccessTier}
-                                />
-                              </div>
-                            )}
+                          {selectedEvent.entryFee === 0 && rsvpTicketId && (
+                            <div ref={ticketRef} className="w-full flex justify-center mb-4">
+                              <BoardingPass
+                                ticketId={rsvpTicketId}
+                                eventTitle={selectedEvent.title}
+                                attendee={rsvpForm.name}
+                                time={selectedEvent.time}
+                                venue={selectedEvent.location}
+                                poster={selectedEvent.poster || '/events/artist_reveal.webp'}
+                                accessTier={rsvpAccessTier}
+                              />
+                            </div>
+                          )}
 
-                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2">
+                          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2">
+                            {selectedEvent.entryFee === 0 && (
                               <button
                                 onClick={handleDownloadTicket}
                                 className="px-6 sm:px-8 py-3 bg-white/10 hover:bg-[#d4af37] border border-[#d4af37]/30 text-white hover:text-black rounded-xl transition-all font-[Cinzel] font-black uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-2"
@@ -581,95 +585,193 @@ export function Events() {
                                 <Download size={16} />
                                 Download Pass
                               </button>
-                              <button
-                                onClick={closeEventModal}
-                                className="px-6 sm:px-8 py-3 bg-[#d4af37] hover:bg-white text-black rounded-xl transition-all font-[Cinzel] font-black uppercase tracking-wider text-xs sm:text-sm"
-                              >
-                                Done
-                              </button>
-                            </div>
+                            )}
+                            <button
+                              onClick={closeEventModal}
+                              className="px-6 sm:px-8 py-3 bg-[#d4af37] hover:bg-white text-black rounded-xl transition-all font-[Cinzel] font-black uppercase tracking-wider text-xs sm:text-sm"
+                            >
+                              Done
+                            </button>
                           </div>
-                        ) : (
-                          <form onSubmit={handleRsvpSubmit} className="flex flex-col gap-3">
-                            <h4 className="text-[#d4af37] font-[Cinzel] font-black text-lg mb-2 uppercase text-center">RSVP for Free Entry</h4>
+                        </div>
+                      ) : (
+                        <form onSubmit={handleRsvpSubmit} className="flex flex-col gap-3">
+                          <h4 className="text-[#d4af37] font-[Cinzel] font-black text-lg mb-2 uppercase text-center">
+                            {selectedEvent.entryFee === 0 ? 'RSVP for Free Entry' : 'Submit Payment Proof'}
+                          </h4>
+
+                          {selectedEvent.entryFee > 0 && (
+                            <div className="mb-4 bg-white/5 p-4 rounded-xl border border-[#d4af37]/20 text-center text-sm font-sans flex flex-col gap-3">
+                              <p className="text-stone-300">
+                                Step 1: Complete your payment of <strong className="text-[#d4af37]">₹{selectedEvent.entryFee}</strong>{(selectedEvent.id === 4 || selectedEvent.id === 13) ? ' (for entire team)' : ''} on Cashfree.
+                              </p>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    let link = '';
+                                    if (selectedEvent.id === 4) link = 'https://payments.cashfree.com/forms/bgmihackjklu';
+                                    else if (selectedEvent.id === 13) link = 'https://payments.cashfree.com/forms/valoranthackjklu';
+                                    else if (selectedEvent.id === 12) link = 'https://payments.cashfree.com/forms/dancebattlehackjklu';
+                                    else if (selectedEvent.id === 11) link = 'https://payments.cashfree.com/forms/astronomyjklu';
+                                    if (link) window.open(link, '_blank');
+                                  }}
+                                className="bg-[#d4af37] hover:bg-white text-black font-black py-2 px-4 rounded-lg uppercase tracking-wide transition-colors"
+                              >
+                                Pay on Cashfree
+                              </button>
+                              <p className="text-stone-300 mt-2">
+                                Step 2: Save your receipt and submit its details below.
+                              </p>
+                            </div>
+                          )}
+
+                          <input
+                            type="text"
+                            placeholder="Full Name"
+                            value={rsvpForm.name}
+                            onChange={e => setRsvpForm(prev => ({ ...prev, name: e.target.value }))}
+                            className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                            required
+                          />
+                          <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={rsvpForm.email}
+                            onChange={e => setRsvpForm(prev => ({ ...prev, email: e.target.value }))}
+                            className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                            required
+                          />
+                          <div className="flex gap-3">
+                            <input
+                              type="tel"
+                              placeholder="Phone"
+                              value={rsvpForm.phone}
+                              onChange={e => setRsvpForm(prev => ({ ...prev, phone: e.target.value }))}
+                              className="w-1/2 bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                              required
+                            />
                             <input
                               type="text"
-                              placeholder="Full Name"
-                              value={rsvpForm.name}
-                              onChange={e => setRsvpForm(prev => ({ ...prev, name: e.target.value }))}
-                              className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                              placeholder="College"
+                              value={rsvpForm.college}
+                              onChange={e => setRsvpForm(prev => ({ ...prev, college: e.target.value }))}
+                              className="w-1/2 bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
                               required
                             />
-                            <input
-                              type="email"
-                              placeholder="Email Address"
-                              value={rsvpForm.email}
-                              onChange={e => setRsvpForm(prev => ({ ...prev, email: e.target.value }))}
-                              className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
-                              required
-                            />
-                            <div className="flex gap-3">
+                          </div>
+
+                          {(selectedEvent.id === 4 || selectedEvent.id === 13) && (
+                            Array.from({ length: selectedEvent.id === 4 ? 3 : 4 }).map((_, idx) => (
                               <input
-                                type="tel"
-                                placeholder="Phone"
-                                value={rsvpForm.phone}
-                                onChange={e => setRsvpForm(prev => ({ ...prev, phone: e.target.value }))}
-                                className="w-1/2 bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
+                                key={`teammate-${idx}`}
+                                type="text"
+                                placeholder={`Teammate ${idx + 1} Name`}
+                                value={rsvpForm.teamMembers[idx] || ''}
+                                onChange={e => {
+                                  const newMembers = [...rsvpForm.teamMembers];
+                                  newMembers[idx] = e.target.value;
+                                  setRsvpForm(prev => ({ ...prev, teamMembers: newMembers }));
+                                }}
+                                className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
                                 required
                               />
+                            ))
+                          )}
+                          <input
+                            type="text"
+                            placeholder={selectedEvent.entryFee === 0 ? "Access Code (Optional)" : "Access Code"}
+                            value={rsvpForm.accessCode}
+                            onChange={e => setRsvpForm(prev => ({ ...prev, accessCode: e.target.value.toUpperCase() }))}
+                            className={`w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-[#d4af37]/50 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm text-center tracking-[0.2em] ${selectedEvent.entryFee > 0 ? 'hidden' : ''}`}
+                            maxLength={8}
+                          />
+
+                          {selectedEvent.entryFee > 0 && (
+                            <>
                               <input
                                 type="text"
-                                placeholder="College"
-                                value={rsvpForm.college}
-                                onChange={e => setRsvpForm(prev => ({ ...prev, college: e.target.value }))}
-                                className="w-1/2 bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-stone-600 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm"
-                                required
+                                placeholder="Cashfree Transaction ID"
+                                value={rsvpForm.transactionId}
+                                onChange={e => setRsvpForm(prev => ({ ...prev, transactionId: e.target.value }))}
+                                className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-[#d4af37]/50 focus:outline-none focus:border-[#d4af37] font-sans text-sm tracking-wider"
+                                required={selectedEvent.entryFee > 0}
                               />
-                            </div>
-                            <input
-                              type="text"
-                              placeholder="Access Code (Optional)"
-                              value={rsvpForm.accessCode}
-                              onChange={e => setRsvpForm(prev => ({ ...prev, accessCode: e.target.value.toUpperCase() }))}
-                              className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white placeholder-[#d4af37]/50 focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm text-center tracking-[0.2em]"
-                              maxLength={8}
-                            />
+                              <div className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3">
+                                <label className="block text-xs text-stone-400 mb-2 uppercase tracking-widest font-[Cinzel]">Upload Payment Receipt (Image/PDF)</label>
+                                <input
+                                  type="file"
+                                  accept="image/*,application/pdf"
+                                  title="Upload Receipt Document"
+                                  onChange={e => setRsvpForm(prev => ({ ...prev, receipt: e.target.files ? e.target.files[0] : null }))}
+                                  className="w-full text-sm text-stone-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#d4af37] file:text-black hover:file:bg-white transition-colors"
+                                  required={selectedEvent.entryFee > 0}
+                                />
+                              </div>
+                            </>
+                          )}
 
-                            {rsvpStatus === 'error' && (
-                              <div className="text-red-400 text-xs text-center mt-1">{rsvpError}</div>
-                            )}
+                          {rsvpStatus === 'error' && (
+                            <div className="text-red-400 text-xs text-center mt-1">{rsvpError}</div>
+                          )}
 
-                            <div className="flex gap-3 mt-2">
-                              <button
-                                type="button"
-                                onClick={() => setShowRsvpForm(false)}
-                                className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-[Cinzel] py-3 rounded-xl transition-colors text-sm uppercase tracking-wider"
-                              >
-                                Cancel
-                              </button>
-                              <button
-                                type="submit"
-                                disabled={rsvpStatus === 'loading'}
-                                className="flex-1 bg-[#d4af37] hover:bg-white text-black font-[Cinzel] font-black py-3 rounded-xl transition-colors text-sm uppercase tracking-wider flex items-center justify-center gap-2"
-                              >
-                                {rsvpStatus === 'loading' ? <Loader2 size={16} className="animate-spin" /> : 'Confirm RSVP'}
-                              </button>
-                            </div>
-                          </form>
-                        )}
+                          <div className="flex gap-3 mt-2">
+                            <button
+                              type="button"
+                              onClick={() => setShowRsvpForm(false)}
+                              className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-[Cinzel] py-3 rounded-xl transition-colors text-sm uppercase tracking-wider"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              disabled={rsvpStatus === 'loading'}
+                              className="flex-1 bg-[#d4af37] hover:bg-white text-black font-[Cinzel] font-black py-3 rounded-xl transition-colors text-sm uppercase tracking-wider flex items-center justify-center gap-2"
+                            >
+                              {rsvpStatus === 'loading' ? <Loader2 size={16} className="animate-spin" /> : (selectedEvent.entryFee === 0 ? 'Confirm RSVP' : 'Submit Proof')}
+                            </button>
+                          </div>
+                        </form>
+                      )}
+                    </div>
+                  ) : selectedEvent.requiresBooking ? (
+                    <>
+                      <div className="flex items-center justify-between bg-[#1A1C23] rounded-xl px-4 sm:px-5 py-3 border border-[#d4af37]/20">
+                        <span className="text-stone-400 font-[Cinzel] text-sm">Entry Fee</span>
+                        <span className="text-[#d4af37] font-data font-black text-base sm:text-lg">
+                          {selectedEvent.entryFee === 0 ? 'Free' : `₹${selectedEvent.entryFee}${(selectedEvent.id === 4 || selectedEvent.id === 13) ? ' (Per Team)' : ''}`}
+                        </span>
                       </div>
-                    ) : (
-                      <div className="relative group/btn">
+                      <div className="relative group/btn mt-2">
                         <div className="absolute -inset-1 bg-[#d4af37] blur-lg opacity-20 group-hover/btn:opacity-40 transition-opacity duration-500" />
                         <button
                           onClick={() => setShowRsvpForm(true)}
-                          aria-label={`RSVP for ${selectedEvent.title}`}
-                          className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 sm:py-5 rounded-2xl hover:bg-white transition-all active:scale-95 text-base sm:text-lg md:text-xl tracking-[0.2em] uppercase relative z-10"
+                          aria-label={`Register for ${selectedEvent.title}`}
+                          className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 sm:py-5 rounded-2xl hover:bg-white transition-all active:scale-95 text-sm sm:text-base md:text-lg tracking-[0.15em] sm:tracking-[0.2em] uppercase relative z-10 flex items-center justify-center gap-2 sm:gap-3"
                         >
-                          RSVP For Free
+                          <TicketIcon size={18} />
+                          {selectedEvent.entryFee === 0 ? 'Register Free' : `Register Now - ₹${selectedEvent.entryFee}${(selectedEvent.id === 4 || selectedEvent.id === 13) ? ' (Per Team)' : ''}`}
                         </button>
                       </div>
-                    )
+                    </>
+                  ) : selectedEvent.id !== 999 ? (
+                    <div className="mt-2 w-full bg-[#1A1C23] border border-[#d4af37]/30 text-[#d4af37] font-[Cinzel] py-4 sm:py-5 rounded-2xl flex flex-col items-center justify-center gap-2 relative z-10 cursor-default">
+                      <div className="flex items-center gap-2 font-black text-base sm:text-lg tracking-[0.2em] uppercase">
+                        <CheckCircle size={20} />
+                        Open For All
+                      </div>
+                      <span className="text-xs sm:text-sm text-stone-400 italic font-serif lowercase tracking-widest">(No RSVP Required)</span>
+                    </div>
+                  ) : (
+                    <div className="relative group/btn mt-2">
+                      <div className="absolute -inset-1 bg-[#d4af37] blur-lg opacity-20 group-hover/btn:opacity-40 transition-opacity duration-500" />
+                      <button
+                        onClick={() => setShowRsvpForm(true)}
+                        aria-label={`RSVP for ${selectedEvent.title}`}
+                        className="w-full bg-[#d4af37] text-black font-[Cinzel] font-black py-4 sm:py-5 rounded-2xl hover:bg-white transition-all active:scale-95 text-base sm:text-lg md:text-xl tracking-[0.2em] uppercase relative z-10"
+                      >
+                        RSVP For Free
+                      </button>
+                    </div>
                   )}
 
                   <div className="flex items-center justify-center gap-4 text-stone-500 text-xs font-black tracking-[0.3em] uppercase opacity-60">
@@ -720,16 +822,17 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
       </div>
 
       {/* Image Container */}
-      <div className="relative aspect-3/4 w-full overflow-hidden mb-3 sm:mb-6 bg-black mask-relic">
+      <div className="relative w-full overflow-hidden mb-3 sm:mb-6 bg-black mask-relic shrink-0 flex items-center justify-center">
+        {/* The organically fitted actual poster */}
         <img
           src={evt.poster}
           alt={evt.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0"
+          className="relative z-10 w-full h-auto object-cover group-hover:scale-105 transition-transform duration-1000 ease-out grayscale group-hover:grayscale-0 drop-shadow-2xl"
           loading="lazy"
         />
 
         {/* Overlay Gradients */}
-        <div className="absolute inset-0 bg-linear-to-t from-[#1A1C23] via-transparent to-black/20" />
+        <div className="absolute inset-0 z-20 bg-linear-to-t from-[#1A1C23] via-transparent to-black/40 pointer-events-none" />
       </div>
 
       {/* Content */}
@@ -756,8 +859,8 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
             <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider truncate">{evt.location}</span>
           </div>
           <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-1">
-            <span className="text-[#d4af37] font-data font-black text-sm sm:text-base">₹{evt.entryFee}</span>
-            <span className="text-white text-[9px] sm:text-[10px] font-black tracking-widest uppercase">Select</span>
+            <span className="text-[#d4af37] font-data font-black text-sm sm:text-base">{evt.entryFee === 0 ? 'Free' : `₹${evt.entryFee}`}</span>
+            {evt.entryFee > 0 && <span className="text-white text-[9px] sm:text-[10px] font-black tracking-widest uppercase">Select</span>}
           </div>
         </div>
       </div>

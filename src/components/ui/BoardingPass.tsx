@@ -114,19 +114,36 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
 
     const isMaanPanu = eventTitle.toLowerCase().includes('maan panu');
 
-    const mainTitle = eventTitle.toUpperCase().includes('LIVE')
+    const mainTitle = (eventTitle.toUpperCase().includes('LIVE')
         ? eventTitle.substring(0, eventTitle.toUpperCase().indexOf('LIVE')).trim()
-        : eventTitle;
+        : eventTitle).toUpperCase();
 
     const subTitle = eventTitle.toUpperCase().includes('LIVE')
         ? eventTitle.substring(eventTitle.toUpperCase().indexOf('LIVE')).trim()
         : isMaanPanu
-            ? 'LIVE PERFORMANCE'
+            ? 'LIVE CONCERT'
             : 'EVENT PASS';
 
     const timeParts = time.split('•');
-    const datePart = timeParts[0]?.trim() || time;
-    const timePart = timeParts[1]?.trim() || '';
+    const datePart = (timeParts[0]?.trim() || time).toUpperCase();
+    const timePart = (timeParts[1]?.trim() || '').toUpperCase();
+
+    const displayAttendee = attendee ? attendee.toUpperCase() : '';
+    const displayVenue = venue ? venue.toUpperCase() : '';
+
+    const backTheme = isMaanPanu ? {
+        bgGradient: 'radial-gradient(circle at center, rgba(139, 0, 0, 0.95) 0%, rgba(45, 0, 0, 0.98) 45%, rgba(0, 0, 0, 1) 85%)',
+        borderColor: 'rgba(212, 175, 55, 0.2)',
+        borderColorBright: 'rgba(212, 175, 55, 0.4)',
+        borderSolidColor: '#d4af37',
+        textColor: '#d4af37'
+    } : {
+        bgGradient: 'radial-gradient(circle at center, rgba(139, 0, 0, 0.95) 0%, rgba(45, 0, 0, 0.98) 45%, rgba(0, 0, 0, 1) 85%)',
+        borderColor: 'rgba(239, 68, 68, 0.2)',
+        borderColorBright: 'rgba(239, 68, 68, 0.4)',
+        borderSolidColor: '#ef4444',
+        textColor: '#ef4444'
+    };
 
     // CSS keyframes for sparkle animation
     const sparkleKeyframes = `
@@ -163,7 +180,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                     WebkitMaskRepeat: 'repeat-y, repeat-y, no-repeat',
                 }}
             >
-                <div className="absolute inset-0 z-[1] pointer-events-none"
+                <div className="absolute inset-0 z-1 pointer-events-none"
                     style={{
                         backgroundImage: styleObj.border,
                         backgroundSize: '300% 300%',
@@ -192,7 +209,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                 })}
 
                 {/* INNER DARK AREA (inset from golden border) */}
-                <div className="absolute z-[3]"
+                <div className="absolute z-3"
                     style={{
                         top: '1.2cqw',
                         left: '1.2cqw',
@@ -203,353 +220,495 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                         overflow: 'hidden',
                     }}
                 >
-                    {/* BACKGROUND POSTER (center area) */}
-                    <div className="absolute inset-0 overflow-hidden">
-                        <img
-                            src={poster}
-                            alt={eventTitle}
-                            className="absolute h-[130%] object-cover opacity-80 transition-transform duration-1000 group-hover:scale-105"
-                            style={{ left: '18%', top: '-15%', width: '58%' }}
-                        />
-                        {/* Gradient overlays to fade poster edges */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0c0702] via-transparent to-transparent" style={{ width: '22%' }} />
-                        <div className="absolute top-0 h-full bg-gradient-to-l from-[#0c0702] via-[#0c0702] to-transparent" style={{ left: '60%', width: '40%' }} />
-                        <div className="absolute inset-0 bg-gradient-to-b from-[#0c0702]/60 via-transparent to-[#0c0702]/60" />
-                    </div>
-
-                    {/* Event title watermark behind poster */}
-                    <div className="absolute bottom-[5%] left-[24%] w-[52%] flex flex-col items-center justify-center z-[4] pointer-events-none">
-                        <h1
-                            className="font-[Cinzel] font-black uppercase whitespace-nowrap text-transparent bg-clip-text"
-                            style={{
-                                fontSize: '6cqw',
-                                backgroundImage: 'linear-gradient(to bottom, #ffd700, #b8860b)',
-                                opacity: 0.9,
-                                textShadow: '0 0 3cqw rgba(255,215,0,0.3)',
-                                letterSpacing: '0.08em',
-                                lineHeight: 1,
-                            }}
-                        >
-                            {mainTitle}
-                        </h1>
-                        {isMaanPanu && (
-                            <p className="font-[Cinzel] font-bold uppercase tracking-[0.2em]"
-                                style={{
-                                    fontSize: '1.6cqw',
-                                    color: '#e3cf9d',
-                                    textShadow: '0 0.1cqw 0.5cqw rgba(0,0,0,0.8)',
-                                }}
-                            >
-                                LIVE PERFORMANCE
-                            </p>
-                        )}
-                    </div>
-
-                    {/* INNER GOLDEN FRAME LINE */}
-                    <div className="absolute z-[10] pointer-events-none"
-                        style={{
-                            top: '1cqw',
-                            left: '1cqw',
-                            right: '1cqw',
-                            bottom: '1cqw',
-                            border: `0.15cqw solid ${styleObj.frameBorder}`,
-                            borderRadius: '0.4cqw',
-                            boxShadow: `inset 0 0 1.5cqw ${styleObj.frameShadow}`,
-                        }}
-                    >
-                        {/* Corner diamonds */}
-                        <div className="absolute -top-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
-                        <div className="absolute -top-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
-                        <div className="absolute -bottom-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
-                        <div className="absolute -bottom-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
-                    </div>
-
-                    {/* TOP LOGOS OVER POSTER */}
-                    <div className="absolute top-[6%] left-[24%] z-[15] pointer-events-none flex items-center justify-between w-[52%] px-[1.5cqw]">
-                        <img src="/events/HackJKLU.webp" alt="HackJKLU" style={{ height: '4.5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
-                        <img src="/events/JkLU_Logo.webp" alt="JKLU" style={{ height: '5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
-                    </div>
-
-                    {/* ========== LEFT SECTION: BEIGE QR STUB ========== */}
-                    <div className="absolute z-[20] flex flex-col items-center justify-between"
-                        style={{
-                            top: '6%',
-                            left: '2%',
-                            width: '20%',
-                            height: '88%',
-                            background: styleObj.stub,
-                            borderRadius: '2cqw',
-                            padding: '1.2cqw',
-                            boxShadow: '0 0.8cqw 3cqw rgba(0,0,0,0.7)',
-                            border: `0.08cqw solid ${styleObj.stubBorder}`,
-                        }}
-                    >
-                        {/* Inner decorative border */}
-                        <div className="absolute pointer-events-none"
-                            style={{
-                                top: '0.5cqw',
-                                left: '0.5cqw',
-                                right: '0.5cqw',
-                                bottom: '0.5cqw',
-                                border: `0.08cqw solid ${styleObj.stubBorder}`,
-                                borderRadius: '1.6cqw',
-                            }}
-                        />
-
-                        {/* QR Code */}
-                        <div className="relative z-10 flex items-center justify-center bg-white"
-                            style={{
-                                width: '82%',
-                                aspectRatio: '1',
-                                borderRadius: '0.8cqw',
-                                padding: '3%',
-                                marginTop: '0.8cqw',
-                                boxShadow: 'inset 0 0 1cqw rgba(0,0,0,0.08)',
-                                border: `0.15cqw solid ${styleObj.qrBorder}`,
-                            }}
-                        >
-                            <QRCodeSVG
-                                value={ticketId}
-                                size={512}
-                                level="H"
-                                className="w-[95%] h-[95%]"
-                                bgColor="#ffffff"
-                                fgColor="#1a0f05"
-                            />
-                        </div>
-
-                        {/* Label area */}
-                        <div className="flex flex-col items-center w-full relative z-10 flex-1 justify-center"
-                            style={{ marginTop: '0.8cqw' }}
-                        >
-                            <h4 className="font-[Cinzel] font-black whitespace-nowrap text-[#5c4022]"
-                                style={{ fontSize: '1.3cqw', letterSpacing: '0.08em' }}
-                            >
-                                SCAN TO VERIFY
-                            </h4>
-                            <p className="font-data font-bold text-[#6b5133]"
-                                style={{ fontSize: '1.2cqw', letterSpacing: '0.05em', marginTop: '0.3cqw' }}
-                            >
-                                FT...{shortId}
-                            </p>
-                            {/* Diamond Separator */}
-                            <div className="w-full flex items-center justify-center"
-                                style={{ margin: '0.4cqw 0' }}
-                            >
-                                <div style={{ height: '0.08cqw', width: '15%', background: styleObj.stubBorder }} />
-                                <span className="text-[#5c4022]" style={{ fontSize: '0.9cqw', padding: '0 0.5cqw', lineHeight: 1 }}>❖</span>
-                                <div style={{ height: '0.08cqw', width: '15%', background: styleObj.stubBorder }} />
+                    {isMaanPanu ? (
+                        <>
+                            {/* BACKGROUND POSTER (center area) */}
+                            <div className="absolute inset-0 overflow-hidden">
+                                <img
+                                    src={poster}
+                                    alt={eventTitle}
+                                    className="absolute inset-0 w-full h-full object-cover object-[70%_center] opacity-80 transition-transform duration-1000 group-hover:scale-105"
+                                />
+                                {/* Gradient overlays to fade poster edges smoothly */}
+                                <div className="absolute inset-0 bg-linear-to-r from-[#0c0702] via-transparent to-transparent" style={{ width: '35%' }} />
+                                <div className="absolute top-0 h-full bg-linear-to-l from-[#0c0702] to-transparent" style={{ left: '80%', width: '20%' }} />
+                                <div className="absolute inset-0 bg-linear-to-b from-[#0c0702]/80 via-transparent to-[#0c0702]/80" />
                             </div>
-                        </div>
 
-                        {/* Tear dashed line */}
-                        <div className="w-[90%] relative z-10"
-                            style={{ borderTop: `0.18cqw dashed ${styleObj.stubBorder}`, marginBottom: '0.8cqw' }}
-                        />
+                            {/* Event title watermark behind poster */}
+                            <div className="absolute bottom-[5%] left-[24%] w-[52%] flex flex-col items-center justify-center z-4 pointer-events-none">
+                                <h1
+                                    className="font-[Cinzel] font-black uppercase whitespace-nowrap text-transparent bg-clip-text"
+                                    style={{
+                                        fontSize: '6cqw',
+                                        backgroundImage: 'linear-gradient(to bottom, #ffd700, #b8860b)',
+                                        opacity: 0.9,
+                                        textShadow: '0 0 3cqw rgba(255,215,0,0.3)',
+                                        letterSpacing: '0.08em',
+                                        lineHeight: 1,
+                                    }}
+                                >
+                                    {mainTitle}
+                                </h1>
+                                {isMaanPanu && (
+                                    <p className="font-[Cinzel] font-bold uppercase tracking-[0.2em]"
+                                        style={{
+                                            fontSize: '1.6cqw',
+                                            color: '#e3cf9d',
+                                            textShadow: '0 0.1cqw 0.5cqw rgba(0,0,0,0.8)',
+                                        }}
+                                    >
+                                        LIVE CONCERT
+                                    </p>
+                                )}
+                            </div>
 
-                        {/* MT Date Code */}
-                        <div className="w-full text-center relative z-10" style={{ padding: '0 0.8cqw' }}>
-                            <p className="font-data font-bold text-[#3b2512]"
+                            {/* INNER GOLDEN FRAME LINE */}
+                            <div className="absolute z-10 pointer-events-none"
                                 style={{
-                                    fontSize: '1.5cqw',
-                                    padding: '0.4cqw 0',
-                                    borderRadius: '0.3cqw',
+                                    top: '1cqw',
+                                    left: '1cqw',
+                                    right: '1cqw',
+                                    bottom: '1cqw',
+                                    border: `0.15cqw solid ${styleObj.frameBorder}`,
+                                    borderRadius: '0.4cqw',
+                                    boxShadow: `inset 0 0 1.5cqw ${styleObj.frameShadow}`,
                                 }}
                             >
-                                MT-2026-XQ
-                            </p>
-                        </div>
-                    </div>
+                                {/* Corner diamonds */}
+                                <div className="absolute -top-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
+                                <div className="absolute -top-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
+                                <div className="absolute -bottom-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
+                                <div className="absolute -bottom-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: styleObj.badgeColor }} />
+                            </div>
 
-                    {/* ========== RIGHT SECTION: DETAILS PANEL ========== */}
-                    <div className="absolute z-[20] flex flex-col"
-                        style={{
-                            right: '2%',
-                            top: '6%',
-                            width: '20%',
-                            height: '88%',
-                        }}
-                    >
-                        {/* Golden glitter background for right panel */}
-                        <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: '1cqw' }}>
-                            <div className="absolute inset-0"
+                            {/* TOP LOGOS OVER POSTER */}
+                            <div className="absolute top-[6%] left-[24%] z-15 pointer-events-none flex items-center justify-between w-[52%] px-[1.5cqw]">
+                                <img src="/events/HackJKLU.webp" alt="HackJKLU" style={{ height: '4.5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
+                                <img src="/events/JkLU_Logo.webp" alt="JKLU" style={{ height: '5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
+                            </div>
+
+                            {/* ========== LEFT SECTION: BEIGE QR STUB ========== */}
+                            <div className="absolute z-20 flex flex-col items-center justify-between"
                                 style={{
-                                    background: 'linear-gradient(135deg, rgba(12,7,2,1), rgba(30,20,5,0.98), rgba(12,7,2,1))',
+                                    top: '6%',
+                                    left: '2%',
+                                    width: '20%',
+                                    height: '88%',
+                                    background: styleObj.stub,
+                                    borderRadius: '2cqw',
+                                    padding: '1.2cqw',
+                                    boxShadow: '0 0.8cqw 3cqw rgba(0,0,0,0.7)',
+                                    border: `0.08cqw solid ${styleObj.stubBorder}`,
                                 }}
-                            />
-                            {/* Golden shimmer edge on left side */}
-                            <div className="absolute top-0 left-0 w-[2%] h-full"
-                                style={{
-                                    background: `linear-gradient(to bottom, transparent, ${styleObj.sparkleGlow}, transparent)`,
-                                }}
-                            />
-                            {/* Sparkle particles in the background */}
-                            {Array.from({ length: 25 }).map((_, i) => (
-                                <div key={`rsp-${i}`}
+                            >
+                                {/* Inner decorative border */}
+                                <div className="absolute pointer-events-none"
                                     style={{
-                                        position: 'absolute',
-                                        width: `${0.15 + Math.random() * 0.3}cqw`,
-                                        height: `${0.15 + Math.random() * 0.3}cqw`,
-                                        borderRadius: '50%',
-                                        background: styleObj.sparkle,
-                                        opacity: 0.15 + Math.random() * 0.25,
-                                        left: `${5 + Math.random() * 90}%`,
-                                        top: `${5 + Math.random() * 90}%`,
-                                        animation: `sparkle ${3 + Math.random() * 4}s ease-in-out ${Math.random() * 3}s infinite`,
-                                        boxShadow: `0 0 0.3cqw ${styleObj.sparkleGlow}`,
+                                        top: '0.5cqw',
+                                        left: '0.5cqw',
+                                        right: '0.5cqw',
+                                        bottom: '0.5cqw',
+                                        border: `0.08cqw solid ${styleObj.stubBorder}`,
+                                        borderRadius: '1.6cqw',
                                     }}
                                 />
-                            ))}
-                        </div>
 
-                        {/* Content */}
-                        <div className="relative z-10 flex flex-col h-full" style={{ padding: '1.2cqw 1.8cqw' }}>
-                            {/* PASS TYPE HEADING */}
-                            <div className="flex items-center" style={{ gap: '0.6cqw', marginBottom: '1.2cqw', borderBottom: `0.1cqw solid ${styleObj.badgeColor}44`, paddingBottom: '0.8cqw' }}>
-                                <TicketIcon strokeWidth={2.5} style={{ width: '1.8cqw', height: '1.8cqw', color: styleObj.badgeColor }} />
-                                <h2 className="font-[Cinzel] font-black uppercase truncate"
-                                    style={{ fontSize: '1.4cqw', color: styleObj.badgeColor, letterSpacing: '0.15em' }}
-                                >
-                                    {styleObj.badgeText}
-                                </h2>
-                            </div>
-
-                            {/* Title (for non-Maan Panu) */}
-                            {!isMaanPanu && (
-                                <div style={{ marginBottom: '1cqw' }}>
-                                    <h2 className="font-[Cinzel] font-black uppercase truncate"
-                                        style={{
-                                            fontSize: '2cqw',
-                                            lineHeight: 1.1,
-                                            color: '#fdf6e3',
-                                            textShadow: '0 0.2cqw 0.6cqw rgba(0,0,0,0.8)',
-                                        }}
-                                    >
-                                        {mainTitle}
-                                    </h2>
-                                    {subTitle && (
-                                        <h3 className="font-[Cinzel] font-bold uppercase truncate"
-                                            style={{
-                                                fontSize: '1cqw',
-                                                color: '#e3cf9d',
-                                                letterSpacing: '0.1em',
-                                                marginTop: '0.2cqw',
-                                                textShadow: '0 0.1cqw 0.3cqw rgba(0,0,0,0.8)',
-                                            }}
-                                        >
-                                            {subTitle}
-                                        </h3>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* INFO GRID - Using space-between to fill vertical area */}
-                            <div className="flex flex-col flex-1 justify-between" style={{ paddingBottom: '1cqw' }}>
-                                {/* ATTENDEE */}
-                                <div className="flex items-start" style={{ gap: '0.6cqw' }}>
-                                    <User style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
-                                    <div style={{ borderBottom: `0.08cqw solid rgba(212,175,55,0.2)`, paddingBottom: '0.4cqw', width: '90%' }}>
-                                        <p className="font-[Cinzel] font-bold uppercase"
-                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
-                                        >
-                                            ATTENDEE
-                                        </p>
-                                        <p className="font-[Cinzel] font-black leading-none"
-                                            style={{ fontSize: '1.5cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2' }}
-                                        >
-                                            {attendee}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* VENUE */}
-                                <div className="flex items-start" style={{ gap: '0.6cqw' }}>
-                                    <MapPin style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
-                                    <div style={{ borderBottom: `0.08cqw solid rgba(212,175,55,0.2)`, paddingBottom: '0.4cqw', width: '90%' }}>
-                                        <p className="font-[Cinzel] font-bold uppercase"
-                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
-                                        >
-                                            VENUE
-                                        </p>
-                                        <p className="font-[Cinzel] font-black"
-                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2' }}
-                                        >
-                                            {venue}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* SCHEDULE */}
-                                <div className="flex items-start" style={{ gap: '0.6cqw' }}>
-                                    <Clock style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
-                                    <div style={{ width: '90%' }}>
-                                        <p className="font-[Cinzel] font-bold uppercase"
-                                            style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
-                                        >
-                                            SCHEDULE
-                                        </p>
-                                        <p className="font-data font-black"
-                                            style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2', whiteSpace: 'nowrap' }}
-                                        >
-                                            {datePart}
-                                        </p>
-                                        {timePart && (
-                                            <p className="font-data italic"
-                                                style={{ fontSize: '1.1cqw', color: 'rgba(255,255,255,0.7)', marginTop: '0.1cqw', lineHeight: '1.2' }}
-                                            >
-                                                • {timePart}
-                                            </p>
-                                        )}
-                                        {/* T&C NOTE */}
-                                        <p className="font-[Cinzel] font-bold uppercase italic"
-                                            style={{ fontSize: '0.7cqw', color: '#8b8680', marginTop: '0.6cqw', letterSpacing: '0.05em', lineHeight: '1.2' }}
-                                        >
-                                            Terms and conditions are on backside
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* BOTTOM BADGES */}
-                            <div className="flex items-center justify-center border-t pt-[0.8cqw]" style={{ gap: '0.6cqw', borderColor: 'rgba(212,175,55,0.1)' }}>
-                                <span className="font-data font-medium"
+                                {/* QR Code */}
+                                <div className="relative z-10 flex items-center justify-center bg-white"
                                     style={{
-                                        fontSize: '0.8cqw',
-                                        color: '#a09476',
-                                        border: '0.06cqw solid rgba(160,148,118,0.3)',
-                                        padding: '0.15cqw 0.4cqw',
-                                        background: 'rgba(0,0,0,0.4)',
+                                        width: '82%',
+                                        aspectRatio: '1',
+                                        borderRadius: '0.8cqw',
+                                        padding: '3%',
+                                        marginTop: '0.8cqw',
+                                        boxShadow: 'inset 0 0 1cqw rgba(0,0,0,0.08)',
+                                        border: `0.15cqw solid ${styleObj.qrBorder}`,
                                     }}
                                 >
-                                    MT-2026-XQ
-                                </span>
-                                <div className="inline-flex items-center justify-center" style={{
-                                    padding: '0.2cqw 0.5cqw',
-                                    border: '0.06cqw solid #16a34a',
-                                    background: 'rgba(20,83,45,0.4)',
-                                    borderRadius: '0.2cqw',
-                                    whiteSpace: 'nowrap',
-                                }}>
-                                    <span className="font-data font-bold uppercase"
+                                    <QRCodeSVG
+                                        value={ticketId}
+                                        size={512}
+                                        level="H"
+                                        className="w-[95%] h-[95%]"
+                                        bgColor="#ffffff"
+                                        fgColor="#1a0f05"
+                                    />
+                                </div>
+
+                                {/* Label area */}
+                                <div className="flex flex-col items-center w-full relative z-10 flex-1 justify-center"
+                                    style={{ marginTop: '0.8cqw' }}
+                                >
+                                    <h4 className="font-[Cinzel] font-black whitespace-nowrap text-[#5c4022]"
+                                        style={{ fontSize: '1.3cqw', letterSpacing: '0.08em' }}
+                                    >
+                                        SCAN TO VERIFY
+                                    </h4>
+                                    <p className="font-data font-bold text-[#6b5133]"
+                                        style={{ fontSize: '1.2cqw', letterSpacing: '0.05em', marginTop: '0.3cqw' }}
+                                    >
+                                        FT...{shortId}
+                                    </p>
+                                    {/* Diamond Separator */}
+                                    <div className="w-full flex items-center justify-center"
+                                        style={{ margin: '0.4cqw 0' }}
+                                    >
+                                        <div style={{ height: '0.08cqw', width: '15%', background: styleObj.stubBorder }} />
+                                        <span className="text-[#5c4022]" style={{ fontSize: '0.9cqw', padding: '0 0.5cqw', lineHeight: 1 }}>❖</span>
+                                        <div style={{ height: '0.08cqw', width: '15%', background: styleObj.stubBorder }} />
+                                    </div>
+                                </div>
+
+                                {/* Tear dashed line */}
+                                <div className="w-[90%] relative z-10"
+                                    style={{ borderTop: `0.18cqw dashed ${styleObj.stubBorder}`, marginBottom: '0.8cqw' }}
+                                />
+
+                                {/* MT Date Code */}
+                                <div className="w-full text-center relative z-10" style={{ padding: '0 0.8cqw' }}>
+                                    <p className="font-data font-bold text-[#3b2512]"
                                         style={{
-                                            fontSize: '0.75cqw',
-                                            color: '#22c55e',
-                                            letterSpacing: '0.1em',
-                                            lineHeight: 'normal',
+                                            fontSize: '1.5cqw',
+                                            padding: '0.4cqw 0',
+                                            borderRadius: '0.3cqw',
                                         }}
                                     >
-                                        VERIFIED
-                                    </span>
+                                        MT-2026-XQ
+                                    </p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+
+                            {/* ========== RIGHT SECTION: DETAILS PANEL ========== */}
+                            <div className="absolute z-20 flex flex-col"
+                                style={{
+                                    right: '2%',
+                                    top: '6%',
+                                    width: '20%',
+                                    height: '88%',
+                                }}
+                            >
+                                {/* Golden glitter background for right panel */}
+                                <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: '1cqw' }}>
+                                    <div className="absolute inset-0"
+                                        style={{
+                                            background: 'linear-gradient(135deg, rgba(12,7,2,1), rgba(30,20,5,0.98), rgba(12,7,2,1))',
+                                        }}
+                                    />
+                                    {/* Golden shimmer edge on left side */}
+                                    <div className="absolute top-0 left-0 w-[2%] h-full"
+                                        style={{
+                                            background: `linear-gradient(to bottom, transparent, ${styleObj.sparkleGlow}, transparent)`,
+                                        }}
+                                    />
+                                    {/* Sparkle particles in the background */}
+                                    {Array.from({ length: 25 }).map((_, i) => (
+                                        <div key={`rsp-${i}`}
+                                            style={{
+                                                position: 'absolute',
+                                                width: `${0.15 + Math.random() * 0.3}cqw`,
+                                                height: `${0.15 + Math.random() * 0.3}cqw`,
+                                                borderRadius: '50%',
+                                                background: styleObj.sparkle,
+                                                opacity: 0.15 + Math.random() * 0.25,
+                                                left: `${5 + Math.random() * 90}%`,
+                                                top: `${5 + Math.random() * 90}%`,
+                                                animation: `sparkle ${3 + Math.random() * 4}s ease-in-out ${Math.random() * 3}s infinite`,
+                                                boxShadow: `0 0 0.3cqw ${styleObj.sparkleGlow}`,
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Content */}
+                                <div className="relative z-10 flex flex-col h-full" style={{ padding: '1.2cqw 1.8cqw' }}>
+                                    {/* PASS TYPE HEADING */}
+                                    <div className="flex items-center" style={{ gap: '0.6cqw', marginBottom: '1.2cqw', borderBottom: `0.1cqw solid ${styleObj.badgeColor}44`, paddingBottom: '0.8cqw' }}>
+                                        <TicketIcon strokeWidth={2.5} style={{ width: '1.8cqw', height: '1.8cqw', color: styleObj.badgeColor }} />
+                                        <h2 className="font-[Cinzel] font-black uppercase truncate"
+                                            style={{ fontSize: '1.4cqw', color: styleObj.badgeColor, letterSpacing: '0.15em' }}
+                                        >
+                                            {styleObj.badgeText}
+                                        </h2>
+                                    </div>
+
+                                    {/* Title (for non-Maan Panu) */}
+                                    {!isMaanPanu && (
+                                        <div style={{ marginBottom: '1cqw' }}>
+                                            <h2 className="font-[Cinzel] font-black uppercase truncate"
+                                                style={{
+                                                    fontSize: '2cqw',
+                                                    lineHeight: 1.1,
+                                                    color: '#fdf6e3',
+                                                    textShadow: '0 0.2cqw 0.6cqw rgba(0,0,0,0.8)',
+                                                }}
+                                            >
+                                                {mainTitle}
+                                            </h2>
+                                            {subTitle && (
+                                                <h3 className="font-[Cinzel] font-bold uppercase truncate"
+                                                    style={{
+                                                        fontSize: '1cqw',
+                                                        color: '#e3cf9d',
+                                                        letterSpacing: '0.1em',
+                                                        marginTop: '0.2cqw',
+                                                        textShadow: '0 0.1cqw 0.3cqw rgba(0,0,0,0.8)',
+                                                    }}
+                                                >
+                                                    {subTitle}
+                                                </h3>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* INFO GRID - Using space-between to fill vertical area */}
+                                    <div className="flex flex-col flex-1 justify-between" style={{ paddingBottom: '1cqw' }}>
+                                        {/* ATTENDEE */}
+                                        <div className="flex items-start" style={{ gap: '0.6cqw' }}>
+                                            <User style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                            <div style={{ borderBottom: `0.08cqw solid rgba(212,175,55,0.2)`, paddingBottom: '0.4cqw', width: '90%' }}>
+                                                <p className="font-[Cinzel] font-bold uppercase"
+                                                    style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
+                                                >
+                                                    ATTENDEE
+                                                </p>
+                                                <p className="font-[Cinzel] font-black leading-none"
+                                                    style={{ fontSize: '1.5cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2' }}
+                                                >
+                                                    {displayAttendee}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* VENUE */}
+                                        <div className="flex items-start" style={{ gap: '0.6cqw' }}>
+                                            <MapPin style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                            <div style={{ borderBottom: `0.08cqw solid rgba(212,175,55,0.2)`, paddingBottom: '0.4cqw', width: '90%' }}>
+                                                <p className="font-[Cinzel] font-bold uppercase"
+                                                    style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
+                                                >
+                                                    VENUE
+                                                </p>
+                                                <p className="font-[Cinzel] font-black"
+                                                    style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2' }}
+                                                >
+                                                    {displayVenue}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* SCHEDULE */}
+                                        <div className="flex items-start" style={{ gap: '0.6cqw' }}>
+                                            <Clock style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                            <div style={{ width: '90%' }}>
+                                                <p className="font-[Cinzel] font-bold uppercase"
+                                                    style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
+                                                >
+                                                    SCHEDULE
+                                                </p>
+                                                <p className="font-data font-black"
+                                                    style={{ fontSize: '1.4cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2', whiteSpace: 'nowrap' }}
+                                                >
+                                                    {datePart}
+                                                </p>
+                                                {timePart && (
+                                                    <p className="font-data italic"
+                                                        style={{ fontSize: '1.1cqw', color: 'rgba(255,255,255,0.7)', marginTop: '0.1cqw', lineHeight: '1.2' }}
+                                                    >
+                                                        • {timePart}
+                                                    </p>
+                                                )}
+                                                {/* T&C NOTE */}
+                                                <p className="font-[Cinzel] font-bold uppercase italic"
+                                                    style={{ fontSize: '0.7cqw', color: '#8b8680', marginTop: '0.6cqw', letterSpacing: '0.05em', lineHeight: '1.2' }}
+                                                >
+                                                    Terms and conditions are on backside
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* BOTTOM BADGES */}
+                                    <div className="flex items-center justify-center border-t pt-[0.8cqw]" style={{ gap: '0.6cqw', borderColor: 'rgba(212,175,55,0.1)' }}>
+                                        <span className="font-data font-medium"
+                                            style={{
+                                                fontSize: '0.8cqw',
+                                                color: '#a09476',
+                                                border: '0.06cqw solid rgba(160,148,118,0.3)',
+                                                padding: '0.15cqw 0.4cqw',
+                                                background: 'rgba(0,0,0,0.4)',
+                                            }}
+                                        >
+                                            MT-2026-XQ
+                                        </span>
+                                        <div className="inline-flex items-center justify-center" style={{
+                                            padding: '0.2cqw 0.5cqw',
+                                            border: '0.06cqw solid #16a34a',
+                                            background: 'rgba(20,83,45,0.4)',
+                                            borderRadius: '0.2cqw',
+                                            whiteSpace: 'nowrap',
+                                        }}>
+                                            <span className="font-data font-bold uppercase"
+                                                style={{
+                                                    fontSize: '0.75cqw',
+                                                    color: '#22c55e',
+                                                    letterSpacing: '0.1em',
+                                                    lineHeight: 'normal',
+                                                }}
+                                            >
+                                                VERIFIED
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {/* ================= NEW DARK GLOW DESIGN FOR OTHER EVENTS ================= */}
+                            <div className="absolute inset-0 overflow-hidden" style={{ background: '#1c1c1f' }}>
+                                {/* Soft glow overlay */}
+                                <div className="absolute inset-0"
+                                    style={{
+                                        background: `radial-gradient(circle at center, rgba(40,40,45,1) 0%, rgba(20,20,22,1) 100%)`,
+                                    }}
+                                />
+                                {/* Bottom right gradient accent */}
+                                <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] rounded-full blur-[6cqw]"
+                                    style={{ background: 'rgba(212,175,55,0.08)' }}
+                                />
+                            </div>
+
+                            {/* Outer container for the black card with glowing border */}
+                            <div className="absolute z-10 flex items-center justify-center p-[2cqw]"
+                                style={{ inset: 0 }}
+                            >
+                                <div className="w-full h-full relative"
+                                    style={{
+                                        background: '#111214',
+                                        borderRadius: '2cqw',
+                                        boxShadow: `0 0 0 0.15cqw ${styleObj.badgeColor || '#d4af37'}, 0 0.5cqw 2cqw rgba(0,0,0,0.8), inset 0 0 2cqw rgba(0,0,0,0.5)`,
+                                    }}
+                                >
+                                    {/* Vertical dashed separator */}
+                                    <div className="absolute top-[10%] bottom-[10%] left-[55%] pointer-events-none"
+                                        style={{ borderLeft: `0.15cqw dashed rgba(212,175,55,0.3)` }}
+                                    />
+
+                                    {/* Left and Right Notches (simulating a ticket) */}
+                                    <div className="absolute top-1/2 -ml-[1cqw] -mt-[1cqw] w-[2cqw] h-[2cqw] rounded-full"
+                                        style={{
+                                            left: 0,
+                                            background: '#1c1c1f',
+                                            boxShadow: `inset -0.15cqw 0 0 ${styleObj.badgeColor || '#d4af37'}`,
+                                        }}
+                                    />
+                                    <div className="absolute top-1/2 -mr-[1cqw] -mt-[1cqw] w-[2cqw] h-[2cqw] rounded-full"
+                                        style={{
+                                            right: 0,
+                                            background: '#1c1c1f',
+                                            boxShadow: `inset 0.15cqw 0 0 ${styleObj.badgeColor || '#d4af37'}`,
+                                        }}
+                                    />
+
+                                    <div className="flex w-full h-full">
+                                        {/* LEFT SECTION: DETAILS */}
+                                        <div className="flex-[0.55] p-[3cqw] flex flex-col justify-center relative">
+                                            {/* Subtitle / Pass Type */}
+                                            <h3 className="font-[Cinzel] font-black uppercase text-[#e1b764]"
+                                                style={{ fontSize: '1.2cqw', letterSpacing: '0.1em', marginBottom: '0.5cqw' }}
+                                            >
+                                                {styleObj.badgeText || "OFFICIAL ENTRY PASS"}
+                                            </h3>
+
+                                            {/* Main Title */}
+                                            <h2 className="font-[Cinzel] font-black uppercase truncate"
+                                                style={{
+                                                    fontSize: '2.8cqw',
+                                                    color: '#f8f8f8',
+                                                    lineHeight: '1.1',
+                                                    marginBottom: '2cqw',
+                                                    textShadow: '0 0.2cqw 1cqw rgba(255,255,255,0.2)'
+                                                }}
+                                            >
+                                                {eventTitle}
+                                            </h2>
+
+                                            {/* Grid Details */}
+                                            <div className="grid grid-cols-2 gap-[1.5cqw]">
+                                                {/* ATTENDEE */}
+                                                <div>
+                                                    <div className="flex items-center gap-[0.5cqw] mb-[0.2cqw]">
+                                                        <User size={12} className="text-[#a0824b]" strokeWidth={2.5} />
+                                                        <span className="font-sans font-semibold text-[#a0824b] text-[0.8cqw] tracking-widest uppercase">ATTENDEE</span>
+                                                    </div>
+                                                    <p className="font-[Cinzel] font-bold text-white text-[1.4cqw] uppercase truncate w-[95%]">{attendee}</p>
+                                                </div>
+
+                                                {/* VENUE */}
+                                                <div>
+                                                    <div className="flex items-center gap-[0.5cqw] mb-[0.2cqw]">
+                                                        <MapPin size={12} className="text-[#a0824b]" strokeWidth={2.5} />
+                                                        <span className="font-sans font-semibold text-[#a0824b] text-[0.8cqw] tracking-widest uppercase">VENUE</span>
+                                                    </div>
+                                                    <p className="font-[Cinzel] font-bold text-white text-[1.4cqw] uppercase truncate w-[95%]">{venue}</p>
+                                                </div>
+
+                                                {/* SCHEDULE */}
+                                                <div className="mt-[1cqw]">
+                                                    <div className="flex items-center gap-[0.5cqw] mb-[0.2cqw]">
+                                                        <Clock size={12} className="text-[#a0824b]" strokeWidth={2.5} />
+                                                        <span className="font-sans font-semibold text-[#a0824b] text-[0.8cqw] tracking-widest uppercase">SCHEDULE</span>
+                                                    </div>
+                                                    <p className="font-[Cinzel] font-bold text-white text-[1.4cqw] uppercase">{datePart.toUpperCase()}</p>
+                                                </div>
+
+                                                {/* PASS STATUS */}
+                                                <div className="mt-[1cqw]">
+                                                    <div className="flex items-center gap-[0.5cqw] mb-[0.4cqw]">
+                                                        <span className="font-sans font-semibold text-[#a0824b] text-[0.8cqw] tracking-widest uppercase">PASS STATUS</span>
+                                                    </div>
+                                                    <div className="inline-block border-[0.1cqw] border-[#22c55e] bg-[#14532d] px-[0.8cqw] py-[0.2cqw] rounded-[0.4cqw]">
+                                                        <span className="font-sans font-bold text-[#4ade80] text-[0.9cqw] tracking-widest uppercase">VERIFIED</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* RIGHT SECTION: QR CODE */}
+                                        <div className="flex-[0.45] flex flex-col items-center justify-center p-[2cqw] relative">
+                                            <div className="bg-white p-[1.5cqw] rounded-[1cqw] shadow-[0_0_2cqw_rgba(255,255,255,0.1)] relative">
+                                                {/* Corner markers on QR container similar to image */}
+                                                <div className="absolute top-0 left-0 w-full h-full border-[0.1cqw] border-[#111214] opacity-10 pointer-events-none rounded-[1cqw]" />
+                                                <QRCodeSVG
+                                                    value={ticketId}
+                                                    size={512}
+                                                    level="H"
+                                                    className="w-[14cqw] h-[14cqw]"
+                                                    bgColor="#ffffff"
+                                                    fgColor="#111214"
+                                                />
+                                            </div>
+                                            <div className="mt-[1.5cqw] text-center">
+                                                <p className="font-[Cinzel] font-black italic text-[#e1b764] text-[1.2cqw] tracking-[0.2em] uppercase flex items-center justify-center">
+                                                    SCAN TO VERIFY <span className="ml-[0.5cqw] text-[1.5cqw]">➔</span>
+                                                </p>
+                                                <p className="font-mono text-gray-500 text-[0.8cqw] mt-[0.5cqw] text-center">
+                                                    {ticketId.slice(0, 8)}...{ticketId.slice(-8)}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </motion.div>
 
             {/* ================= BACK SIDE ================= */}
             <div
-                className="relative w-full max-w-[800px] overflow-hidden bg-[#000] select-none"
+                className="relative w-full max-w-[800px] overflow-hidden bg-black select-none"
                 style={{
                     aspectRatio: '2.5 / 1',
                     borderRadius: '1.2cqw',
@@ -565,7 +724,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                     '--tier-glow-vivid': styleObj.badgeColor + '99'
                 } as React.CSSProperties}
             >
-                <div className="absolute inset-0 z-[1] pointer-events-none"
+                <div className="absolute inset-0 z-1 pointer-events-none"
                     style={{
                         backgroundImage: styleObj.border,
                         backgroundSize: '300% 300%',
@@ -593,37 +752,36 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                 ))}
 
                 {/* INNER BLOODY RED AREA (Back side) - No backdrop filter */}
-                <div className="absolute z-[3]"
+                <div className="absolute z-3"
                     style={{
                         top: '1.2cqw',
                         left: '1.2cqw',
                         right: '1.2cqw',
                         bottom: '1.2cqw',
                         borderRadius: '0.6cqw',
-                        background: 'radial-gradient(circle at center, rgba(139, 0, 0, 0.95) 0%, rgba(45, 0, 0, 0.98) 45%, rgba(0, 0, 0, 1) 85%)',
+                        background: backTheme.bgGradient,
                         overflow: 'hidden',
                         padding: '2.5cqw 4cqw',
-                        border: '0.15cqw solid rgba(255, 0, 0, 0.2)',
+                        border: `0.15cqw solid ${backTheme.borderColor}`,
                     }}
                 >
                     <div className="relative z-10 w-full h-full flex flex-col text-white">
-                        <div className="flex items-center justify-between border-b" style={{ borderColor: 'rgba(239, 68, 68, 0.2)', paddingBottom: '1.2cqw', marginBottom: '1.2cqw' }}>
+                        <div className="flex items-center justify-between border-b" style={{ borderColor: backTheme.borderColor, paddingBottom: '1.2cqw', marginBottom: '1.2cqw' }}>
                             {/* Left Side: HackJKLU Logo + Event Name */}
                             <div className="flex flex-col items-start gap-1" style={{ width: '15cqw' }}>
                                 <div className="flex flex-col items-center">
                                     <img src="/logo.png" alt="HackJKLU logo" style={{ height: '3.5cqw', width: 'auto', objectFit: 'contain' }} />
-                                    <span className="font-[Cinzel] font-bold uppercase tracking-wider text-[#ef4444]" style={{ fontSize: '0.85cqw' }}>HACKJKLU V5.0</span>
+                                    <span className="font-[Cinzel] font-bold uppercase tracking-wider text-[#ffffff]" style={{ fontSize: '0.85cqw' }}>HACKJKLU V5.0</span>
                                 </div>
                             </div>
 
-                            {/* Center: Terms & Conditions Title */}
                             <div className="flex-1 text-center">
-                                <h2 className="font-[Cinzel] font-black uppercase text-[#ef4444]" style={{ fontSize: '2.4cqw', letterSpacing: '0.05em' }}>TERMS & CONDITIONS</h2>
+                                <h2 className="font-[Cinzel] font-black uppercase" style={{ color: backTheme.textColor, fontSize: '2.4cqw', letterSpacing: '0.05em' }}>TERMS & CONDITIONS</h2>
                             </div>
 
                             {/* Right Side: JKLU Logo */}
                             <div className="flex items-center justify-end" style={{ width: '15cqw' }}>
-                                <img src="/events/JkLU_Logo.png" alt="JKLU logo" style={{ height: '4.5cqw', width: 'auto', objectFit: 'contain' }} />
+                                <img src="/events/JkLU_Logo.webp" alt="JKLU logo" style={{ height: '4.5cqw', width: 'auto', objectFit: 'contain' }} />
                             </div>
                         </div>
 
@@ -631,19 +789,19 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             {/* Left Column */}
                             <div className="flex flex-col justify-between" style={{ gap: '1cqw' }}>
                                 <div>
-                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>1. Identification & Entry</h3>
+                                    <h3 className="font-[Cinzel] font-bold uppercase mb-1" style={{ color: backTheme.textColor, fontSize: '1.1cqw' }}>1. Identification & Entry</h3>
                                     <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
                                         Carry your physical ID card (Aadhar/Driving Licence) at all times. Entry pass is mandatory; verification will be conducted at the gate. Re-entry is not allowed.
                                     </p>
                                 </div>
                                 <div>
-                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>2. Prohibited Substances</h3>
+                                    <h3 className="font-[Cinzel] font-bold uppercase mb-1" style={{ color: backTheme.textColor, fontSize: '1.1cqw' }}>2. Prohibited Substances</h3>
                                     <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
                                         Alcohol, intoxicants, and banned substances are strictly prohibited. Security may use breath analyzers. Violators face strict disciplinary action.
                                     </p>
                                 </div>
                                 <div>
-                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>3. Important Timings</h3>
+                                    <h3 className="font-[Cinzel] font-bold uppercase mb-1" style={{ color: backTheme.textColor, fontSize: '1.1cqw' }}>3. Important Timings</h3>
                                     <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
                                         Gate Closing Time: 07:30 PM, 15 March 2026. Please ensure you arrive well before the deadline for smooth processing.
                                     </p>
@@ -653,19 +811,19 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                             {/* Right Column */}
                             <div className="flex flex-col justify-between" style={{ gap: '1cqw' }}>
                                 <div>
-                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>4. Concert Rules (15th March)</h3>
+                                    <h3 className="font-[Cinzel] font-bold uppercase mb-1" style={{ color: backTheme.textColor, fontSize: '1.1cqw' }}>4. Concert Rules (15th March)</h3>
                                     <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
                                         Water bottles, cold drinks, bags, food, and other prohibited items are NOT allowed inside the Sabrang Ground during the concert.
                                     </p>
                                 </div>
                                 <div>
-                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>5. Conduct & Misbehavior</h3>
+                                    <h3 className="font-[Cinzel] font-bold uppercase mb-1" style={{ color: backTheme.textColor, fontSize: '1.1cqw' }}>5. Conduct & Misbehavior</h3>
                                     <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
                                         Nuisance, misbehavior, or misconduct will lead to immediate expulsion and strict disciplinary action by the institute.
                                     </p>
                                 </div>
                                 <div>
-                                    <h3 className="font-[Cinzel] font-bold text-[#ef4444] uppercase mb-1" style={{ fontSize: '1.1cqw' }}>6. Property Damage</h3>
+                                    <h3 className="font-[Cinzel] font-bold uppercase mb-1" style={{ color: backTheme.textColor, fontSize: '1.1cqw' }}>6. Property Damage</h3>
                                     <p className="font-data text-stone-200 leading-snug" style={{ fontSize: '0.9cqw' }}>
                                         Damage to institute property will not be tolerated and will invite strict financial and disciplinary penalties.
                                     </p>
@@ -674,28 +832,27 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                         </div>
 
                         {/* Footer / Contact */}
-                        <div className="mt-auto flex items-center justify-between text-stone-400 font-data border-t" style={{ borderColor: 'rgba(239, 68, 68, 0.2)', paddingTop: '1cqw', fontSize: '0.8cqw' }}>
+                        <div className="mt-auto flex items-center justify-between text-stone-400 font-data border-t" style={{ borderColor: backTheme.borderColor, paddingTop: '1cqw', fontSize: '0.8cqw' }}>
                             <span>Need Help? Contact the Organizing Committee at hackjklu@jklu.edu.in</span>
-                            <span className="uppercase tracking-[0.2em] text-[#ef4444]">DO NOT DUPLICATE</span>
                         </div>
                     </div>
 
                     {/* INNER RED FRAME LINE */}
-                    <div className="absolute z-[10] pointer-events-none"
+                    <div className="absolute z-10 pointer-events-none"
                         style={{
                             top: '1cqw',
                             left: '1cqw',
                             right: '1cqw',
                             bottom: '1cqw',
-                            border: '0.15cqw solid rgba(239, 68, 68, 0.4)',
+                            border: `0.15cqw solid ${backTheme.borderColorBright}`,
                             borderRadius: '0.4cqw',
                         }}
                     >
                         {/* Corner diamonds */}
-                        <div className="absolute -top-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: '#ef4444' }} />
-                        <div className="absolute -top-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: '#ef4444' }} />
-                        <div className="absolute -bottom-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: '#ef4444' }} />
-                        <div className="absolute -bottom-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: '#ef4444' }} />
+                        <div className="absolute -top-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: backTheme.borderSolidColor }} />
+                        <div className="absolute -top-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: backTheme.borderSolidColor }} />
+                        <div className="absolute -bottom-[0.3cqw] -left-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: backTheme.borderSolidColor }} />
+                        <div className="absolute -bottom-[0.3cqw] -right-[0.3cqw] w-[0.6cqw] h-[0.6cqw] border-[0.12cqw] bg-[#0c0702] rotate-45" style={{ borderColor: backTheme.borderSolidColor }} />
                     </div>
                 </div>
             </div>

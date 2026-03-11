@@ -9,10 +9,15 @@ export interface ITicket extends Document {
     attendeeEmail: string;
     attendeePhone: string;
     college: string;
+    teamMembers?: string[];
     isPaid: boolean;
     paymentReference?: string;
     isCheckedIn: boolean;
     accessTier: 'GA' | 'VIP' | 'HACK_TEAM' | 'ALL_ACCESS' | 'ARTIST_TEAM' | 'BACKSTAGE';
+    status?: 'pending' | 'approved' | 'rejected';
+    transactionId?: string;
+    paymentReceiptData?: string; // Base64 encoded image
+    paymentReceiptMimeType?: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -27,6 +32,7 @@ const TicketSchema = new Schema<ITicket>(
         attendeeEmail: { type: String, required: true, lowercase: true },
         attendeePhone: { type: String, required: true },
         college: { type: String, required: true },
+        teamMembers: { type: [String], default: [] },
         isPaid: { type: Boolean, default: false },
         paymentReference: { type: String },
         isCheckedIn: { type: Boolean, default: false },
@@ -35,6 +41,14 @@ const TicketSchema = new Schema<ITicket>(
             enum: ['GA', 'VIP', 'HACK_TEAM', 'ALL_ACCESS', 'ARTIST_TEAM', 'BACKSTAGE'],
             default: 'GA'
         },
+        status: {
+            type: String,
+            enum: ['pending', 'approved', 'rejected'],
+            default: 'approved' // Default to approved for free registrations, overridden for paid
+        },
+        transactionId: { type: String },
+        paymentReceiptData: { type: String }, // Storing base64 string
+        paymentReceiptMimeType: { type: String },
     },
     { timestamps: true }
 );
