@@ -37,7 +37,7 @@ export const ROW2_TEAM: TeamMember[] = [
     { name: "Aman", role: "Stage & Venue", image: "/team/S_V_TeamCard-removebg-preview.png" },
     { name: "Shubham", role: "Discipline", image: "/team/Discipline_TeamCard-removebg-preview.png" },
     { name: "Devam", role: "Sponsorships", image: "/team/Sponsor_TeamCard.png" },
-    { name: "Mohit", role: "Social Media", image: "/team/SocialMedia_TeamCard-removebg-preview.png" },
+    { name: "Mohit", role: "Social Media", image: "/team/SocialMedia_mohit.png" },
     { name: "Aayan", role: "Tech Team", image: "/team/Tech_TeamCard_Aayan-removebg-preview.png" },
     { name: "Vaishnavi", role: "Anchoring", image: "/team/Anchoring_TeamCard.png" },
     { name: "Pratigya", role: "PS", image: "/team/PS_TeamCard-removebg-preview.png" },
