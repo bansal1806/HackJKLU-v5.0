@@ -21,8 +21,6 @@ const CosmicItinerary = dynamic(
 
 export function ItineraryClient() {
     return (
-        <ComingSoonOverlay>
-            <CosmicItinerary />
-        </ComingSoonOverlay>
+        <CosmicItinerary />
     );
 }
