@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { Linkedin, Instagram, Github, X } from 'lucide-react';
 import { PageNavigation } from '@/components/navigation/PageNavigation';
 import { COMMITTEE_DATA } from '@/data/committeeData';
+import useEmblaCarousel from 'embla-carousel-react';
+import AutoScroll from 'embla-carousel-auto-scroll';
 
 // Row 1 (11 members)
 const ROW1_TEAM = [
@@ -35,6 +37,7 @@ const ROW2_TEAM = [
     { name: "Vaishnavi", role: "Anchoring", image: "/team/Anchoring_TeamCard.png", insta: "https://www.instagram.com/_vaishnaavii._/", github: "https://github.com/vaishnaviii14", linkedin: "https://www.linkedin.com/in/vaishnavi-shukla-9b567b315/" },
     { name: "Pratigya", role: "PS", image: "/team/PS_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/pratigyaa.12/", github: "https://github.com/pratigyabomb", linkedin: "https://www.linkedin.com/in/pratigya-bomb-295857349/" },
     { name: "Ekansh", role: "Photography", image: "/team/Photography_TeamCard-removebg-preview.png", insta: "https://www.instagram.com/ekansh.saraswat/", github: "https://github.com/EkanshSaraswat", linkedin: "https://www.linkedin.com/in/ekansh-saraswat-a2a883285/" },
+    { name: "Arpan", role: "Treasurer", image: "/team/Treasurer_TeamCard_AP-removebg-preview.png", insta: "https://www.instagram.com/arpan4112/", github: "https://github.com/ArpanGoyal09", linkedin: "https://www.linkedin.com/in/arpan-goyal-394960352/" },
 ];
 
 // Hack Team Office Bearers (3 members)
@@ -134,18 +137,30 @@ function MemberCard({ member, onViewCommittee }: { member: any; onViewCommittee:
 }
 
 function InfiniteRow({ items, direction, speed, onViewCommittee }: { items: any[]; direction: 'left' | 'right'; speed: number; onViewCommittee: (name: string) => void }) {
+    // Original speed was in seconds for a full CSS animation.
+    // Higher original speed -> slower. So inverse calculation:
+    const emblaSpeed = 120 / speed;
+
+    const [emblaRef] = useEmblaCarousel({ loop: true, dragFree: true }, [
+        AutoScroll({ 
+            playOnInit: true, 
+            speed: emblaSpeed,
+            direction: direction === 'left' ? 'forward' : 'backward',
+            stopOnInteraction: false,
+            stopOnMouseEnter: true
+        })
+    ]);
+
     return (
-        <div className="relative flex w-full py-8 group overflow-visible pause-on-hover">
-            <div
-                className={`flex gap-6 shrink-0 w-max ${direction === 'left' ? 'animate-scroll-left' : 'animate-scroll-right'}`}
-                style={{ animationDuration: `${speed}s` }}
-            >
+        <div className="relative w-full py-8 overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
+            <div className="flex touch-pan-y" style={{ backfaceVisibility: 'hidden' }}>
                 {items.map((member, idx) => (
-                    <MemberCard
-                        key={idx}
-                        member={member}
-                        onViewCommittee={onViewCommittee}
-                    />
+                    <div className="flex-[0_0_auto] min-w-0 pr-6" key={idx}>
+                        <MemberCard
+                            member={member}
+                            onViewCommittee={onViewCommittee}
+                        />
+                    </div>
                 ))}
             </div>
         </div>
