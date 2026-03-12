@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
         });
 
         // Send Email (optional/async)
-        if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+        if (process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
             const eventInfo: any = eventsData.find(e => Number(e.id) === Number(eventId)) || eventsData.find(e => e.title === eventTitle) || { time: 'TBD', location: 'Campus' };
 
             const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
@@ -85,59 +85,52 @@ export async function POST(req: NextRequest) {
                 <p style="text-align:center;color:#444;font-size:11px;margin-top:40px">Ticket ID: ${newTicket.ticketId} | Verified Digital Entry Pass</p>
             </div></body></html>`;
 
-            const cleanEmail = (process.env.EMAIL_USER || '').trim();
-            const rawPass = (process.env.EMAIL_PASS || '').trim();
-            const cleanPass = rawPass.replace(/\s+/g, '');
-
-            console.log(`[register-free] Diagnostic: User="${cleanEmail}", PassLength=${cleanPass.length}`);
-
-            console.log('[register-free] Attempting to send email via Gmail (Port 465)...');
+            console.log('[register-free] Attempting to send email via Resend...');
 
             try {
-                const nodemailer = await import('nodemailer');
-                const transporter = nodemailer.createTransport({
-                    host: 'smtp.gmail.com',
-                    port: 465,
-                    secure: true, // Use SSL/TLS
-                    auth: {
-                        user: cleanEmail,
-                        pass: cleanPass,
-                    },
-                    debug: true,
-                    logger: true,
-                });
+                if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY not configured');
+                const { Resend } = await import('resend');
+                const resend = new Resend(process.env.RESEND_API_KEY);
 
-                await transporter.sendMail({
-                    from: `"HackJKLU v5.0" <${cleanEmail}>`,
+                await resend.emails.send({
+                    from: 'HackJKLU v5.0 <teams@jklu.edu.in>',
                     to: newTicket.attendeeEmail,
-                    replyTo: cleanEmail,
+                    replyTo: 'teams@jklu.edu.in',
                     subject: `✅ RSVP Confirmed: ${newTicket.eventTitle} — HackJKLU v5.0`,
-                    text: `Welcome to the HackJKLU experience! Hi ${newTicket.attendeeName}, your RSVP for ${newTicket.eventTitle} is confirmed! Ticket ID: ${newTicket.ticketId}. Regards, JKLU & HackJKLU v5.0 Team`,
                     html: emailHtml,
                 });
-                console.log('[register-free] Gmail: Email sent successfully');
-            } catch (gmailError: any) {
-                console.warn('[register-free] Gmail failed:', gmailError.message);
+                console.log('[register-free] Resend: Email sent successfully');
+            } catch (resendError: any) {
+                console.warn('[register-free] Resend failed:', resendError.message);
 
-                // Fallback to Resend
-                if (process.env.RESEND_API_KEY) {
-                    console.log('[register-free] Fallback: Attempting via Resend...');
+                // Fallback to Gmail SMTP
+                const cleanEmail = (process.env.EMAIL_USER || '').trim();
+                const cleanPass = (process.env.EMAIL_PASS || '').trim().replace(/\s+/g, '');
+                if (cleanEmail && cleanPass) {
+                    console.log('[register-free] Fallback: Attempting via Gmail SMTP...');
                     try {
-                        const { Resend } = await import('resend');
-                        const resend = new Resend(process.env.RESEND_API_KEY);
+                        const nodemailer = await import('nodemailer');
+                        const transporter = nodemailer.createTransport({
+                            host: 'smtp.gmail.com',
+                            port: 465,
+                            secure: true,
+                            auth: { user: cleanEmail, pass: cleanPass },
+                        });
 
-                        await resend.emails.send({
-                            from: 'HackJKLU v5.0 <onboarding@resend.dev>', // Default testing domain unless custom domain verified
+                        await transporter.sendMail({
+                            from: `"HackJKLU v5.0" <teams@jklu.edu.in>`,
                             to: newTicket.attendeeEmail,
+                            replyTo: 'teams@jklu.edu.in',
                             subject: `✅ RSVP Confirmed: ${newTicket.eventTitle} — HackJKLU v5.0`,
+                            text: `Welcome to the HackJKLU experience! Hi ${newTicket.attendeeName}, your RSVP for ${newTicket.eventTitle} is confirmed! Ticket ID: ${newTicket.ticketId}. Regards, JKLU & HackJKLU v5.0 Team`,
                             html: emailHtml,
                         });
-                        console.log('[register-free] Resend: Email sent successfully (Fallback)');
-                    } catch (resendError: any) {
-                        console.error('[register-free] Resend failed also:', resendError.message);
+                        console.log('[register-free] Gmail fallback: Email sent successfully');
+                    } catch (gmailError: any) {
+                        console.error('[register-free] Gmail fallback failed also:', gmailError.message);
                     }
                 } else {
-                    console.error('[register-free] No fallback available (RESEND_API_KEY missing)');
+                    console.error('[register-free] No fallback available (EMAIL_USER/EMAIL_PASS missing)');
                 }
             }
         }

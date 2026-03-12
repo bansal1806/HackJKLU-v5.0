@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
                 { new: true },
             );
 
-            if (updated && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            if (updated && (process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS))) {
                 // Generate Tickets
                 const ticketsToCreate = [];
                 for (const item of updated.items) {
@@ -77,17 +77,6 @@ export async function POST(req: NextRequest) {
 }
 
 async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
-    const nodemailer = await import('nodemailer');
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        },
-    });
-
     console.log('[webhook API] Attempting to send confirmation email to:', order.customerEmail);
     const items = order.items as CartItem[];
     const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
@@ -108,14 +97,7 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
         });
     }).join('');
 
-    try {
-        const info = await transporter.sendMail({
-            from: `"HackJKLU v5.0" <${process.env.EMAIL_USER}>`,
-            to: order.customerEmail,
-            replyTo: process.env.EMAIL_USER,
-            subject: '✅ Booking Confirmed — HackJKLU v5.0',
-            text: `Hi ${order.customerName}, your booking is confirmed! Total Paid: ₹${order.totalAmount / 100}. Please check your email for QR codes.`,
-            html: `<!DOCTYPE html><html><body style="background:#020205;color:#ffecd1;font-family:Georgia,serif;padding:32px">
+    const emailHtml = `<!DOCTYPE html><html><body style="background:#020205;color:#ffecd1;font-family:Georgia,serif;padding:32px">
       <div style="max-width:600px;margin:0 auto">
         <h1 style="color:#d4af37;margin-bottom:4px;font-size:28px">HackJKLU v5.0</h1>
         <p style="color:#8b8680;margin:0 0 32px 0;font-size:14px;letter-spacing:2px">YOUR QUEST CONFIRMATION</p>
@@ -143,11 +125,53 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
             <p style="color:#8b8680;font-size:11px;text-transform:uppercase;letter-spacing:1px">Order ID: ${order.cashfreeOrderId}</p>
             <p style="color:#d4af37;font-size:10px;letter-spacing:4px;margin-top:12px;font-weight:bold">THE GREAT LEGEND • MARCH 2026</p>
         </div>
-      </div></body></html>`,
+      </div></body></html>`;
+
+    const emailSubject = '✅ Booking Confirmed — HackJKLU v5.0';
+    const emailText = `Hi ${order.customerName}, your booking is confirmed! Total Paid: ₹${order.totalAmount / 100}. Please check your email for QR codes.`;
+
+    // Primary: Resend
+    try {
+        if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY not configured');
+        const { Resend } = await import('resend');
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        await resend.emails.send({
+            from: 'HackJKLU v5.0 <teams@jklu.edu.in>',
+            to: order.customerEmail,
+            replyTo: 'teams@jklu.edu.in',
+            subject: emailSubject,
+            html: emailHtml,
         });
-        console.log(`[NodeMailer Webhook] Successfully sent confirmation email to ${order.customerEmail}. MessageId: ${info.messageId}`);
-    } catch (e: any) {
-        console.error('[NodeMailer Webhook Error] Failed to dispatch email:', e.message);
-        throw e;
+        console.log(`[Resend Webhook] Successfully sent confirmation email to ${order.customerEmail}`);
+    } catch (resendError: any) {
+        console.warn('[Resend Webhook] Failed:', resendError.message);
+
+        // Fallback: Gmail SMTP
+        try {
+            const nodemailer = await import('nodemailer');
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS,
+                },
+            });
+
+            const info = await transporter.sendMail({
+                from: `"HackJKLU v5.0" <teams@jklu.edu.in>`,
+                to: order.customerEmail,
+                replyTo: 'teams@jklu.edu.in',
+                subject: emailSubject,
+                text: emailText,
+                html: emailHtml,
+            });
+            console.log(`[NodeMailer Webhook Fallback] Successfully sent to ${order.customerEmail}. MessageId: ${info.messageId}`);
+        } catch (gmailError: any) {
+            console.error('[NodeMailer Webhook Fallback] Failed:', gmailError.message);
+            throw gmailError;
+        }
     }
 }

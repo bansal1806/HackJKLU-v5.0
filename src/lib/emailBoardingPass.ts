@@ -48,12 +48,12 @@ export function generateBoardingPassHTML({
 
     // Color mapping for tiers (Sync with BoardingPass.tsx)
     const tierColors: Record<string, { border: string; accent: string; label: string }> = {
-        'GA': { border: '#b8860b', accent: '#d4af37', label: 'GENERAL PASS' },
-        'VIP': { border: '#7e22ce', accent: '#c084fc', label: 'VVIP ACCESS' },
-        'HACK_TEAM': { border: '#15803d', accent: '#22c55e', label: 'HACK TEAM' },
-        'ALL_ACCESS': { border: '#b91c1c', accent: '#ef4444', label: 'ALL ACCESS' },
-        'ARTIST_TEAM': { border: '#0369a1', accent: '#0ea5e9', label: 'ARTIST TEAM' },
-        'BACKSTAGE': { border: '#a16207', accent: '#eab308', label: 'BACKSTAGE' },
+        'GA': { border: '#16a34a', accent: '#22c55e', label: 'GENERAL PASS' },
+        'VIP': { border: '#b8860b', accent: '#d4af37', label: 'VVIP ACCESS' },
+        'HACK_TEAM': { border: '#7e22ce', accent: '#a855f7', label: 'HACK TEAM' },
+        'ALL_ACCESS': { border: '#9ca3af', accent: '#d1d5db', label: 'ALL ACCESS' },
+        'ARTIST_TEAM': { border: '#dc2626', accent: '#ef4444', label: 'ARTIST TEAM' },
+        'BACKSTAGE': { border: '#2563eb', accent: '#3b82f6', label: 'BACKSTAGE' },
     };
 
     const style = tierColors[accessTier] || tierColors['GA'];
@@ -83,13 +83,15 @@ export function generateBoardingPassHTML({
                                 <!-- LOGOS BAR -->
                                 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0a0500;border-top:2px solid ${style.border};border-bottom:2px solid ${style.border};">
                                     <tr>
-                                        <td align="center" style="padding:16px 20px;">
+                                        <td align="center" style="padding:12px 20px;">
                                             <table cellpadding="0" cellspacing="0" border="0">
                                                 <tr>
+                                                    <td align="center" valign="middle" style="padding-right:30px;">
+                                                        <img src="${siteUrl}/logo.png" alt="HackJKLU" width="80" style="display:block;max-width:80px;height:auto;border:0;" />
+                                                        <p style="margin:4px 0 0 0;font-family:Georgia,serif;font-weight:900;font-size:11px;color:#fff;letter-spacing:2px;text-transform:uppercase;">HackJKLU</p>
+                                                    </td>
                                                     <td align="center" valign="middle">
-                                                        <img src="${siteUrl}/events/HackJKLU.png" alt="HackJKLU" width="160" style="display:inline-block;vertical-align:middle;max-width:160px;height:auto;margin-right:2px;" />
-                                                        <span style="font-family:Georgia,serif;font-weight:bold;font-size:20px;color:${style.accent};padding:0 14px;vertical-align:middle;">X</span>
-                                                        <img src="${siteUrl}/events/JkLU_Logo.png" alt="JKLU" width="75" style="display:inline-block;vertical-align:middle;max-width:75px;height:auto;" />
+                                                        <img src="${siteUrl}/events/JkLU_Logo.webp" alt="JKLU" width="65" style="display:block;max-width:65px;height:auto;border:0;" />
                                                     </td>
                                                 </tr>
                                             </table>
@@ -193,7 +195,7 @@ export function generateBoardingPassHTML({
                                         <tr>
                                             <td width="20%"><img src="${siteUrl}/logo.png" alt="HackJKLU" width="50" style="display:block;" /></td>
                                             <td align="center"><h2 style="font-family:Georgia,serif;font-size:22px;font-weight:900;color:#ef4444;margin:0;letter-spacing:2px;">TERMS & CONDITIONS</h2></td>
-                                            <td width="20%" align="right"><img src="${siteUrl}/events/JkLU_Logo.png" alt="JKLU" width="60" style="display:block;" /></td>
+                                            <td width="20%" align="right"><img src="${siteUrl}/events/JkLU_Logo.webp" alt="JKLU" width="60" style="display:block;" /></td>
                                         </tr>
                                     </table>
 
@@ -228,7 +230,6 @@ export function generateBoardingPassHTML({
                                     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid rgba(239, 68, 68, 0.2); padding-top:12px;">
                                         <tr>
                                             <td style="color:#9ca3af;font-size:9px;">hackjklu@jklu.edu.in | Sabrang Ground</td>
-                                            <td align="right" style="color:#ef4444;font-size:9px;font-weight:900;letter-spacing:1px;">DO NOT DUPLICATE</td>
                                         </tr>
                                     </table>
                                 </div>

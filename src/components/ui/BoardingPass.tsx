@@ -1,3 +1,4 @@
+/* eslint-disable react/no-inline-styles */
 'use client';
 
 import React from 'react';
@@ -169,7 +170,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative w-full max-w-[800px] overflow-hidden bg-[#0c0702] group select-none"
+                className="relative w-full max-w-[1200px] overflow-hidden bg-[#0c0702] group select-none"
                 style={{
                     aspectRatio: '2.5 / 1',
                     borderRadius: '1.2cqw',
@@ -227,7 +228,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                 <img
                                     src={poster}
                                     alt={eventTitle}
-                                    className="absolute inset-0 w-full h-full object-cover object-[70%_center] opacity-80 transition-transform duration-1000 group-hover:scale-105"
+                                    className="absolute inset-0 w-full h-full object-cover object-[15%_40%] opacity-80 transition-transform duration-1000 group-hover:scale-105"
                                 />
                                 {/* Gradient overlays to fade poster edges smoothly */}
                                 <div className="absolute inset-0 bg-linear-to-r from-[#0c0702] via-transparent to-transparent" style={{ width: '35%' }} />
@@ -284,7 +285,10 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
 
                             {/* TOP LOGOS OVER POSTER */}
                             <div className="absolute top-[6%] left-[24%] z-15 pointer-events-none flex items-center justify-between w-[52%] px-[1.5cqw]">
-                                <img src="/events/HackJKLU.webp" alt="HackJKLU" style={{ height: '4.5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <img src="/logo.png" alt="HackJKLU" style={{ height: '3.5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
+                                    <span style={{ fontSize: '1.2cqw', fontWeight: 900, color: '#fff', letterSpacing: '0.15cqw', textTransform: 'uppercase' as const, fontFamily: 'Georgia, serif', textShadow: '0 0.1cqw 0.3cqw rgba(0,0,0,0.9)', marginTop: '0.2cqw' }}>HackJKLU</span>
+                                </div>
                                 <img src="/events/JkLU_Logo.webp" alt="JKLU" style={{ height: '5cqw', objectFit: 'contain', filter: 'drop-shadow(0 0.2cqw 0.6cqw rgba(0,0,0,0.8))' }} />
                             </div>
 
@@ -708,7 +712,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
 
             {/* ================= BACK SIDE ================= */}
             <div
-                className="relative w-full max-w-[800px] overflow-hidden bg-black select-none"
+                className="relative w-full max-w-[1200px] overflow-hidden bg-black select-none"
                 style={{
                     aspectRatio: '2.5 / 1',
                     borderRadius: '1.2cqw',

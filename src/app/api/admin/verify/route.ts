@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
         await ticket.save();
 
         // Send Email using same logic as free RSVP
-        if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+        if (process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
             const eventInfo: any = eventsData.find(e => Number(e.id) === Number(ticket.eventId)) || eventsData.find(e => e.title === ticket.eventTitle) || { time: 'TBD', location: 'Campus' };
 
             const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
@@ -80,45 +80,47 @@ export async function POST(req: NextRequest) {
                 <p style="text-align:center;color:#444;font-size:11px;margin-top:40px">Ticket ID: ${ticket.ticketId} | Verified Digital Entry Pass</p>
             </div></body></html>`;
 
-            const cleanEmail = (process.env.EMAIL_USER || '').trim();
-            const rawPass = (process.env.EMAIL_PASS || '').trim();
-            const cleanPass = rawPass.replace(/\s+/g, '');
-
             try {
-                const nodemailer = await import('nodemailer');
-                const transporter = nodemailer.createTransport({
-                    host: 'smtp.gmail.com',
-                    port: 465,
-                    secure: true,
-                    auth: {
-                        user: cleanEmail,
-                        pass: cleanPass,
-                    },
-                });
+                if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY not configured');
+                const { Resend } = await import('resend');
+                const resend = new Resend(process.env.RESEND_API_KEY);
 
-                await transporter.sendMail({
-                    from: `"HackJKLU v5.0" <${cleanEmail}>`,
+                await resend.emails.send({
+                    from: 'HackJKLU v5.0 <teams@jklu.edu.in>',
                     to: ticket.attendeeEmail,
-                    replyTo: cleanEmail,
+                    replyTo: 'teams@jklu.edu.in',
                     subject: `✅ Payment Verified: ${ticket.eventTitle} — HackJKLU v5.0`,
-                    text: `Your payment is verified! Hi ${ticket.attendeeName}, your RSVP for ${ticket.eventTitle} is confirmed! Ticket ID: ${ticket.ticketId}.`,
                     html: emailHtml,
                 });
-            } catch (gmailError: any) {
-                console.warn('[admin-verify] Gmail failed:', gmailError.message);
-                if (process.env.RESEND_API_KEY) {
-                    try {
-                        const { Resend } = await import('resend');
-                        const resend = new Resend(process.env.RESEND_API_KEY);
+                console.log('[admin-verify] Resend: Email sent successfully');
+            } catch (resendError: any) {
+                console.warn('[admin-verify] Resend failed:', resendError.message);
 
-                        await resend.emails.send({
-                            from: 'HackJKLU v5.0 <onboarding@resend.dev>',
+                // Fallback to Gmail SMTP
+                const cleanEmail = (process.env.EMAIL_USER || '').trim();
+                const cleanPass = (process.env.EMAIL_PASS || '').trim().replace(/\s+/g, '');
+                if (cleanEmail && cleanPass) {
+                    console.log('[admin-verify] Fallback: Attempting via Gmail SMTP...');
+                    try {
+                        const nodemailer = await import('nodemailer');
+                        const transporter = nodemailer.createTransport({
+                            host: 'smtp.gmail.com',
+                            port: 465,
+                            secure: true,
+                            auth: { user: cleanEmail, pass: cleanPass },
+                        });
+
+                        await transporter.sendMail({
+                            from: `"HackJKLU v5.0" <teams@jklu.edu.in>`,
                             to: ticket.attendeeEmail,
+                            replyTo: 'teams@jklu.edu.in',
                             subject: `✅ Payment Verified: ${ticket.eventTitle} — HackJKLU v5.0`,
+                            text: `Your payment is verified! Hi ${ticket.attendeeName}, your RSVP for ${ticket.eventTitle} is confirmed! Ticket ID: ${ticket.ticketId}.`,
                             html: emailHtml,
                         });
-                    } catch (resendError: any) {
-                        console.error('[admin-verify] Resend failed also:', resendError.message);
+                        console.log('[admin-verify] Gmail fallback: Email sent successfully');
+                    } catch (gmailError: any) {
+                        console.error('[admin-verify] Gmail fallback failed also:', gmailError.message);
                     }
                 }
             }
