@@ -5,19 +5,27 @@ import { Download, Search, Loader2 } from 'lucide-react';
 
 export default function AttendeesPage() {
     const [attendees, setAttendees] = useState<any[]>([]);
+    const [collections, setCollections] = useState<{name: string, label: string}[]>([]);
+    const [selectedEventId, setSelectedEventId] = useState<string>('');
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         fetchAttendees();
-    }, []);
+    }, [selectedEventId]);
 
     const fetchAttendees = async () => {
+        setLoading(true);
         try {
-            const res = await fetch('/api/admin/attendees');
+            const baseUrl = '/api/admin/attendees?password=1234';
+            const url = selectedEventId ? `${baseUrl}&eventId=${selectedEventId}` : baseUrl;
+            const res = await fetch(url);
             const data = await res.json();
             if (data.success) {
                 setAttendees(data.data);
+                if (data.collections) {
+                    setCollections(data.collections);
+                }
             }
         } catch (error) {
             console.error('Failed to fetch attendees:', error);
@@ -29,7 +37,7 @@ export default function AttendeesPage() {
     const handleExportCSV = () => {
         if (attendees.length === 0) return;
 
-        const headers = ['Ticket ID', 'Event Title', 'Name', 'Email', 'Phone', 'College', 'Paid', 'Checked In', 'Registration Date'];
+        const headers = ['Ticket ID', 'Event Title', 'Name', 'Email', 'Phone', 'College', 'Team Members', 'Paid', 'Checked In', 'Registration Date'];
         const csvContent = [
             headers.join(','),
             ...attendees.map(a => [
@@ -39,6 +47,7 @@ export default function AttendeesPage() {
                 `"${a.attendeeEmail}"`,
                 `"${a.attendeePhone || ''}"`,
                 `"${a.college || ''}"`,
+                `"${(a.teamMembers || []).join(', ')}"`,
                 a.isPaid ? 'Yes' : 'No',
                 a.isCheckedIn ? 'Yes' : 'No',
                 `"${a.createdAt ? new Date(a.createdAt).toLocaleString() : ''}"`
@@ -78,6 +87,18 @@ export default function AttendeesPage() {
                     </div>
 
                     <div className="flex flex-col sm:flex-row w-full md:w-auto gap-4">
+                        <select
+                            title="Select Event Table"
+                            value={selectedEventId}
+                            onChange={(e) => setSelectedEventId(e.target.value)}
+                            className="bg-[#1A1C23]/60 border border-[#d4af37]/20 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#d4af37] text-[#d4af37] font-bold cursor-pointer"
+                        >
+                            <option value="">-- RECENT TICKETS (ALL) --</option>
+                            {collections.map(col => (
+                                <option key={col.name} value={col.name}>{col.label}</option>
+                            ))}
+                        </select>
+
                         <div className="relative flex-1 md:w-72">
                             <input
                                 type="text"
@@ -107,6 +128,7 @@ export default function AttendeesPage() {
                                     <th className="px-6 py-4 whitespace-nowrap">Attendee</th>
                                     <th className="px-6 py-4 hidden md:table-cell whitespace-nowrap">Contact</th>
                                     <th className="px-6 py-4 hidden lg:table-cell whitespace-nowrap">Reg. Details</th>
+                                    <th className="px-6 py-4 whitespace-nowrap">Team</th>
                                     <th className="px-6 py-4 text-center whitespace-nowrap">Status</th>
                                 </tr>
                             </thead>
@@ -145,6 +167,19 @@ export default function AttendeesPage() {
                                                     <div className="text-[10px] text-stone-500 font-mono">
                                                         {new Date(a.createdAt).toLocaleString()}
                                                     </div>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4 min-w-[150px]">
+                                                {a.teamMembers && a.teamMembers.length > 0 ? (
+                                                    <div className="flex flex-wrap gap-1 max-w-[200px]">
+                                                        {a.teamMembers.map((m: string, idx: number) => (
+                                                            <span key={idx} className="text-[10px] bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-stone-300">
+                                                                {m}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-stone-600 text-[10px]">—</span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4">

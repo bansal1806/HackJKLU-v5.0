@@ -15,6 +15,7 @@ interface BoardingPassEmailParams {
     posterUrl?: string;
     siteUrl: string;
     accessTier?: string;
+    teamMembers?: string[];
 }
 
 export function generateBoardingPassHTML({
@@ -26,6 +27,7 @@ export function generateBoardingPassHTML({
     posterUrl,
     siteUrl,
     accessTier = 'GA',
+    teamMembers = [],
 }: BoardingPassEmailParams): string {
     const shortId = ticketId.length > 10
         ? ticketId.slice(0, 6) + '...' + ticketId.slice(-4)
@@ -158,6 +160,14 @@ export function generateBoardingPassHTML({
                                                         ${timePart ? `<p style="color:#ccc;font-size:11px;font-style:italic;margin:2px 0 0 0;">&#8226; ${timePart}</p>` : ''}
                                                     </td>
                                                 </tr>
+                                                ${teamMembers && teamMembers.length > 0 ? `
+                                                <tr>
+                                                    <td style="border-bottom:1px solid #3d3520;padding:12px 0;">
+                                                        <p style="color:${style.accent};font-size:8px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;margin:0 0 4px 0;">TEAM MEMBERS</p>
+                                                        <p style="color:#fff;font-size:12px;font-weight:900;margin:0;">${teamMembers.join(', ')}</p>
+                                                    </td>
+                                                </tr>
+                                                ` : ''}
                                                 <tr><td><p style="color:${style.accent};font-size:10px;margin-top:4px;font-style:italic;opacity:0.8;">* Terms and conditions are on backside</p></td></tr>
                                                 <tr>
                                                     <td style="padding-top:12px;">

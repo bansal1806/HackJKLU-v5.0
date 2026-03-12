@@ -4,7 +4,7 @@
 import React from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
-import { User, MapPin, Clock, Ticket as TicketIcon } from 'lucide-react';
+import { User, Users, MapPin, Clock, Ticket as TicketIcon } from 'lucide-react';
 
 interface BoardingPassProps {
     ticketId: string;
@@ -14,6 +14,7 @@ interface BoardingPassProps {
     time: string;
     poster: string;
     accessTier?: string;
+    teamMembers?: string[];
 }
 
 const TIER_STYLES: Record<string, any> = {
@@ -109,6 +110,7 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
     time,
     poster,
     accessTier = 'GA',
+    teamMembers = [],
 }) => {
     const shortId = ticketId.slice(0, 6) + '...' + ticketId.slice(-4);
     const styleObj = TIER_STYLES[accessTier] || TIER_STYLES.GA;
@@ -501,6 +503,25 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                             </div>
                                         </div>
 
+                                        {/* TEAM MEMBERS (Conditional) */}
+                                        {teamMembers && teamMembers.length > 0 && (
+                                            <div className="flex items-start" style={{ gap: '0.6cqw' }}>
+                                                <Users style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
+                                                <div style={{ borderBottom: `0.08cqw solid rgba(212,175,55,0.2)`, paddingBottom: '0.4cqw', width: '90%' }}>
+                                                    <p className="font-[Cinzel] font-bold uppercase"
+                                                        style={{ fontSize: '0.8cqw', color: '#d4af37', letterSpacing: '0.12em', lineHeight: '1.2' }}
+                                                    >
+                                                        TEAM
+                                                    </p>
+                                                    <p className="font-[Cinzel] font-black truncate max-w-full"
+                                                        style={{ fontSize: '1cqw', color: 'white', marginTop: '0.1cqw', lineHeight: '1.2' }}
+                                                    >
+                                                        {teamMembers.join(', ')}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+
                                         {/* SCHEDULE */}
                                         <div className="flex items-start" style={{ gap: '0.6cqw' }}>
                                             <Clock style={{ width: '1.8cqw', height: '1.8cqw', color: '#d4af37', marginTop: '0.1cqw', flexShrink: 0 }} strokeWidth={2.5} />
@@ -657,6 +678,17 @@ const BoardingPass: React.FC<BoardingPassProps> = ({
                                                     </div>
                                                     <p className="font-[Cinzel] font-bold text-white text-[1.4cqw] uppercase truncate w-[95%]">{venue}</p>
                                                 </div>
+
+                                                {/* TEAM MEMBERS */}
+                                                {teamMembers && teamMembers.length > 0 && (
+                                                    <div>
+                                                        <div className="flex items-center gap-[0.5cqw] mb-[0.2cqw]">
+                                                            <Users size={12} className="text-[#a0824b]" strokeWidth={2.5} />
+                                                            <span className="font-sans font-semibold text-[#a0824b] text-[0.8cqw] tracking-widest uppercase">TEAM</span>
+                                                        </div>
+                                                        <p className="font-[Cinzel] font-bold text-white text-[1cqw] uppercase truncate w-[95%]">{teamMembers.join(', ')}</p>
+                                                    </div>
+                                                )}
 
                                                 {/* SCHEDULE */}
                                                 <div className="mt-[1cqw]">

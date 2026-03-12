@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Order from '@/models/Order';
 import { getCashfreeOrderStatus } from '@/lib/cashfree';
-import Ticket from '@/models/Ticket';
+import { getTicketModel } from '@/lib/dynamicTicket';
 import { eventsData } from '@/data/events';
 import crypto from 'crypto';
 import type { IOrder } from '@/models/Order';
@@ -24,7 +24,14 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    let tickets = await Ticket.find({ orderId: order.cashfreeOrderId }).lean();
+    // Find all tickets for this order across multiple event collections
+    const ticketPromises = order.items.map(async (item) => {
+        const TicketModel = getTicketModel(item.eventId);
+        return await TicketModel.find({ orderId: order.cashfreeOrderId }).lean();
+    });
+    
+    const ticketResults = await Promise.all(ticketPromises);
+    let tickets = ticketResults.flat();
 
     // Local dev workaround: If webhooks failed but the user paid, resolve it here.
     if (order.status === 'PENDING') {
@@ -36,11 +43,14 @@ export async function GET(req: NextRequest) {
                 await order.save();
 
                 if (tickets.length === 0) {
-                    // Generate Tickets
-                    const ticketsToCreate = [];
+                    // Generate Tickets and save to correct collections
+                    const allCreated: any[] = [];
+                    const groups: Record<number, any[]> = {};
+                    
                     for (const item of order.items) {
+                        if (!groups[item.eventId]) groups[item.eventId] = [];
                         for (let i = 0; i < item.quantity; i++) {
-                            ticketsToCreate.push({
+                            groups[item.eventId].push({
                                 ticketId: crypto.randomUUID(),
                                 orderId: order.cashfreeOrderId,
                                 eventId: item.eventId,
@@ -55,7 +65,13 @@ export async function GET(req: NextRequest) {
                             });
                         }
                     }
-                    tickets = await Ticket.insertMany(ticketsToCreate) as any;
+
+                    for (const [eventId, groupTickets] of Object.entries(groups)) {
+                        const TicketModel = getTicketModel(eventId);
+                        const inserted = await TicketModel.insertMany(groupTickets);
+                        allCreated.push(...inserted);
+                    }
+                    tickets = allCreated;
 
                     if (process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
                         await sendConfirmationEmail(order, tickets).catch(e => {

@@ -4,7 +4,7 @@ import Order from '@/models/Order';
 import { verifyCashfreeWebhook } from '@/lib/cashfree';
 import type { IOrder } from '@/models/Order';
 import type { CartItem } from '@/types/tickets';
-import Ticket from '@/models/Ticket';
+import { getTicketModel } from '@/lib/dynamicTicket';
 import crypto from 'crypto';
 import { eventsData } from '@/data/events';
 import { generateBoardingPassHTML } from '@/lib/emailBoardingPass';
@@ -35,12 +35,15 @@ export async function POST(req: NextRequest) {
                 { new: true },
             );
 
-            if (updated && (process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS))) {
-                // Generate Tickets
-                const ticketsToCreate = [];
+            if (updated) {
+                // Group tickets by eventId to save them to separate collections
+                const allCreatedTickets: any[] = [];
+                const groups: Record<number, any[]> = {};
+                
                 for (const item of updated.items) {
+                    if (!groups[item.eventId]) groups[item.eventId] = [];
                     for (let i = 0; i < item.quantity; i++) {
-                        ticketsToCreate.push({
+                        groups[item.eventId].push({
                             ticketId: crypto.randomUUID(),
                             orderId: updated.cashfreeOrderId,
                             eventId: item.eventId,
@@ -55,11 +58,19 @@ export async function POST(req: NextRequest) {
                         });
                     }
                 }
-                const createdTickets = await Ticket.insertMany(ticketsToCreate);
 
-                await sendConfirmationEmail(updated, createdTickets).catch((e) =>
-                    console.error('[webhook] Email error:', e),
-                );
+                // Batch insert into each event collection
+                for (const [eventId, tickets] of Object.entries(groups)) {
+                    const TicketModel = getTicketModel(eventId);
+                    const inserted = await TicketModel.insertMany(tickets);
+                    allCreatedTickets.push(...inserted);
+                }
+
+                if (process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
+                    await sendConfirmationEmail(updated, allCreatedTickets).catch((e) =>
+                        console.error('[webhook] Email error:', e),
+                    );
+                }
             }
         } else if (type === 'PAYMENT_FAILED_WEBHOOK') {
             const orderId = (data.order as Record<string, string>).order_id;

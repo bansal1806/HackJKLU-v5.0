@@ -1,22 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
-import Ticket from '@/models/Ticket';
+import { getTicketModel } from '@/lib/dynamicTicket';
 import { eventsData } from '@/data/events';
 import { generateBoardingPassHTML } from '@/lib/emailBoardingPass';
 
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { eventId, eventTitle, attendeeName, attendeeEmail, attendeePhone, college, accessCode } = body;
+        const { eventId, eventTitle, attendeeName, attendeeEmail, attendeePhone, college, accessCode, teamMembers } = body;
 
         if (!eventId || !eventTitle || !attendeeName || !attendeeEmail) {
             return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
         }
 
+        const event = eventsData.find(e => Number(e.id) === Number(eventId));
+        if (event && event.entryFee > 0) {
+            return NextResponse.json({ error: 'This is a paid event. Please use the paid registration flow.' }, { status: 400 });
+        }
+
         await connectDB();
+        
+        // Use dynamic model for specific event
+        const TicketModel = getTicketModel(eventId);
 
         // Check for existing registration for this event by this email
-        const existingTicket = await Ticket.findOne({ attendeeEmail, eventId });
+        const existingTicket = await TicketModel.findOne({ attendeeEmail, eventId });
         if (existingTicket) {
             return NextResponse.json({ error: 'You have already registered for this event.' }, { status: 400 });
         }
@@ -32,7 +40,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Create ticket
-        const newTicket = await Ticket.create({
+        const newTicket = await TicketModel.create({
             ticketId: `FT-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
             eventId,
             eventTitle,
@@ -40,6 +48,7 @@ export async function POST(req: NextRequest) {
             attendeeEmail,
             attendeePhone: attendeePhone || 'N/A',
             college: college || 'N/A',
+            teamMembers: teamMembers || [],
             isPaid: false,
             isCheckedIn: false,
             accessTier,

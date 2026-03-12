@@ -186,6 +186,7 @@ export function Events() {
             attendeePhone: rsvpForm.phone,
             college: rsvpForm.college,
             accessCode: rsvpForm.accessCode,
+            teamMembers: rsvpForm.teamMembers,
           }),
         });
 
@@ -572,6 +573,7 @@ export function Events() {
                                 venue={selectedEvent.location}
                                 poster={selectedEvent.poster || '/events/artist_reveal.webp'}
                                 accessTier={rsvpAccessTier}
+                                teamMembers={rsvpForm.teamMembers}
                               />
                             </div>
                           )}

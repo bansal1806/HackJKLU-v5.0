@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
-import Ticket from '@/models/Ticket';
+import { getTicketModel } from '@/lib/dynamicTicket';
 
 export const config = {
     api: {
@@ -36,9 +36,12 @@ export async function POST(req: NextRequest) {
         }
 
         await connectDB();
+        
+        // Use dynamic model for specific event
+        const TicketModel = getTicketModel(eventId);
 
         // Check for existing registration for this event by this email
-        const existingTicket = await Ticket.findOne({ attendeeEmail, eventId: Number(eventId) });
+        const existingTicket = await TicketModel.findOne({ attendeeEmail, eventId: Number(eventId) });
         if (existingTicket) {
             if (existingTicket.status === 'pending') {
                  return NextResponse.json({ error: 'You already have a pending registration for this event. Please wait for verification.' }, { status: 400 });
@@ -46,7 +49,7 @@ export async function POST(req: NextRequest) {
                  return NextResponse.json({ error: 'Your registration for this event is already approved.' }, { status: 400 });
             } else {
                  // Allowing retry if rejected
-                 await Ticket.deleteOne({ _id: existingTicket._id });
+                 await TicketModel.deleteOne({ _id: existingTicket._id });
             }
         }
 
@@ -57,7 +60,7 @@ export async function POST(req: NextRequest) {
         const mimeType = receiptFile.type;
 
         // Create pending ticket
-        const newTicket = await Ticket.create({
+        const newTicket = await TicketModel.create({
             ticketId: `PT-${Math.random().toString(36).substr(2, 9).toUpperCase()}`, // Temp ID
             eventId: Number(eventId),
             eventTitle,

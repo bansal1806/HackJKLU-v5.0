@@ -4,7 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Instagram, Twitter, ArrowRight, MapPin, Heart, Phone, Mail, ExternalLink } from 'lucide-react';
-import owlLogo from '@/assets/owl-logo.png';
+// import owlLogo from '@/assets/owl-logo.png';
+const owlLogo = '/owl-logo.png';
 
 const footerLinks = [
     { name: 'Home', path: '/' },
