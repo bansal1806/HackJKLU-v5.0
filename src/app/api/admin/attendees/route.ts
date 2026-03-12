@@ -4,8 +4,15 @@ import Ticket from '@/models/Ticket';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(req: Request) {
     try {
+        const { searchParams } = new URL(req.url);
+        const password = searchParams.get('password');
+
+        if (password !== '1234') {
+            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+        }
+
         await connectDB();
 
         // Fetch all tickets, sorted by newest first

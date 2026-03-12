@@ -5,15 +5,20 @@ import Ticket from '@/models/Ticket';
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { ticketId, scannerEventId } = body;
+        const { ticketId, scannerEventId, password } = body;
 
-        if (!ticketId || scannerEventId === undefined) {
-            return NextResponse.json({ error: 'Missing ticketId or scannerEventId' }, { status: 400 });
+        // Simple auth
+        if (password !== '1234') {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        if (!ticketId || typeof ticketId !== 'string' || scannerEventId === undefined) {
+            return NextResponse.json({ error: 'Missing or invalid parameters' }, { status: 400 });
         }
 
         await connectDB();
 
-        const ticket = await Ticket.findOne({ ticketId });
+        const ticket = await Ticket.findOne({ ticketId: ticketId.toString() });
 
         if (!ticket) {
             return NextResponse.json({ valid: false, message: 'Ticket not found' });
