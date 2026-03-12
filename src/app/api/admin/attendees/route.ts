@@ -11,7 +11,7 @@ export async function GET(req: Request) {
         const password = searchParams.get('password');
         const eventId = searchParams.get('eventId');
 
-        if (password !== '1234') {
+        if (password !== 'poseidon') {
             return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
 

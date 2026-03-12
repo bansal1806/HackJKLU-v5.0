@@ -5,10 +5,10 @@ import Ticket from '@/models/Ticket';
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { password } = body;
+        const { password, eventId } = body;
 
         // Simple auth
-        if (password !== '1234') {
+        if (password !== 'poseidon') {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 

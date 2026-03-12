@@ -17,7 +17,9 @@ export default function AttendeesPage() {
     const fetchAttendees = async () => {
         setLoading(true);
         try {
-            const baseUrl = '/api/admin/attendees?password=1234';
+            // Build the URL, including the eventId query param if 'all' is not selected
+            // Use 'poseidon' password as requested
+            let baseUrl = '/api/admin/attendees?password=poseidon';
             const url = selectedEventId ? `${baseUrl}&eventId=${selectedEventId}` : baseUrl;
             const res = await fetch(url);
             const data = await res.json();

@@ -23,8 +23,8 @@ export function ScannerClient() {
     // Simple client-side PIN for basic protection. In production, use a secure backend session.
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        // Placeholder PIN: 1234
-        if (pin === '1234') {
+        // Placeholder PIN: poseidon
+        if (pin === 'poseidon') {
             setIsAuthorized(true);
         } else {
             alert('Invalid PIN');

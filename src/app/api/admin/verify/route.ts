@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
         const { ticketId, action, password } = body;
 
         // Simple auth
-        if (password !== '1234') {
+        if (password !== 'poseidon') {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
