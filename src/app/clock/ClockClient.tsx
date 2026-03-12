@@ -3,136 +3,200 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-const HACKATHON_DATE = new Date('2026-03-14T09:00:00+05:30');
+const SPONSORS = [
+    { name: "Commudle", src: "/partners/Commudle - Ecosystem Partner.webp" },
+    { name: "DMV Core Tech", src: "/partners/DMV Core Tech - Internship Partner.png" },
+    { name: "Genesis", src: "/partners/Genesis Logo Vertical.png" },
+    { name: "HeLa Labs", src: "/partners/HeLa Labs - Track sponsor.png" },
+    { name: "Mangalam Waters", src: "/partners/Mangalam Waters - Hydration Partner.jpeg" },
+    { name: "TruScholar", src: "/partners/TruScholar - Credential Partner.png" },
+    { name: "Balsamiq", src: "/partners/balsamiq-logo.webp" },
+    { name: "Belgian Waffle", src: "/partners/belgian_waffle.png" },
+    { name: "Blockpen", src: "/partners/blockpen-logo.webp" },
+    { name: "CodeChef", src: "/partners/codechef.png" },
+    { name: "Coding Ninjas", src: "/partners/coding-ninjas.webp" },
+    { name: "Dev Station", src: "/partners/dev-station.webp" },
+    { name: "Devarmy", src: "/partners/devarmy.webp" },
+    { name: "Devfolio", src: "/partners/devfolio-logo.webp" },
+    { name: "Ention", src: "/partners/ention-logo.webp" },
+    { name: "EthIndia", src: "/partners/ethindia-logo.webp" },
+    { name: "Fluxor", src: "/partners/fluxor-logo.webp" },
+    { name: "GDG", src: "/partners/gdg.webp" },
+    { name: "GeeksForGeeks Camus", src: "/partners/geeksforgeeks-Camus.png" },
+    { name: "GeeksForGeeks", src: "/partners/geeksforgeeks-logo.webp" },
+    { name: "Interview Buddy", src: "/partners/interview_buddy.png" },
+    { name: "Microsoft Learn Community", src: "/partners/microsoft_learn_community.png" },
+    { name: "CubeTech", src: "/partners/ws.cubetech-logo.webp" }
+];
+
+type HackathonEvent = {
+    title: string;
+    start: Date;
+    end?: Date;
+    dateLabel: string;
+    timeLabel: string;
+};
+
+// Year assumed as 2026 based on previous HACKATHON_DATE
+const SCHEDULE: HackathonEvent[] = [
+    { title: "Check-in + Registration", start: new Date('2026-03-13T08:00:00+05:30'), end: new Date('2026-03-13T12:00:00+05:30'), dateLabel: "13 March", timeLabel: "8:00 – 12:00" },
+    { title: "Inauguration Ceremony", start: new Date('2026-03-13T12:30:00+05:30'), end: new Date('2026-03-13T13:30:00+05:30'), dateLabel: "13 March", timeLabel: "12:30 – 1:30 PM" },
+    { title: "Hackathon Starts", start: new Date('2026-03-13T14:00:00+05:30'), dateLabel: "13 March", timeLabel: "2:00 PM" },
+    { title: "PS Selection Time", start: new Date('2026-03-13T14:00:00+05:30'), end: new Date('2026-03-13T15:00:00+05:30'), dateLabel: "13 March", timeLabel: "2:00 – 3:00 PM" },
+    { title: "Speaker Session (Urvij Saroliya)", start: new Date('2026-03-13T16:00:00+05:30'), end: new Date('2026-03-13T17:00:00+05:30'), dateLabel: "13 March", timeLabel: "4:00 – 5:00 PM" },
+    { title: "RoboSoccer", start: new Date('2026-03-13T18:00:00+05:30'), dateLabel: "13 March", timeLabel: "6:00 onwards" },
+    { title: "Dinner + Networking", start: new Date('2026-03-13T21:00:00+05:30'), end: new Date('2026-03-13T22:00:00+05:30'), dateLabel: "13 March", timeLabel: "9:00 – 10:00 PM" },
+    { title: "Space Observation", start: new Date('2026-03-13T22:00:00+05:30'), end: new Date('2026-03-14T00:00:00+05:30'), dateLabel: "13 March", timeLabel: "10:00 – 12:00" },
+    { title: "Mentoring Round 1", start: new Date('2026-03-13T22:00:00+05:30'), end: new Date('2026-03-14T00:00:00+05:30'), dateLabel: "13 March", timeLabel: "10:00 PM – 12:00 AM" },
+
+    { title: "Open Mic Night", start: new Date('2026-03-14T00:00:00+05:30'), end: new Date('2026-03-14T02:00:00+05:30'), dateLabel: "14 March", timeLabel: "12:00 – 2:00" },
+    { title: "Mentoring Round 2", start: new Date('2026-03-14T09:30:00+05:30'), end: new Date('2026-03-14T13:00:00+05:30'), dateLabel: "14 March", timeLabel: "9:30 AM – 1:00 PM" },
+    { title: "AR-VR Experience Zone", start: new Date('2026-03-14T10:00:00+05:30'), dateLabel: "14 March", timeLabel: "10:00 AM onwards" },
+    { title: "Esports Arena", start: new Date('2026-03-14T10:00:00+05:30'), dateLabel: "14 March", timeLabel: "10:00 AM onwards" },
+    { title: "Coding Competition", start: new Date('2026-03-14T10:00:00+05:30'), end: new Date('2026-03-14T12:00:00+05:30'), dateLabel: "14 March", timeLabel: "10:00 – 12:00 PM" },
+    { title: "Fun Quiz", start: new Date('2026-03-14T11:30:00+05:30'), end: new Date('2026-03-14T12:30:00+05:30'), dateLabel: "14 March", timeLabel: "11:30 – 12:30 PM" },
+    { title: "Block Printing Workshop", start: new Date('2026-03-14T13:00:00+05:30'), dateLabel: "14 March", timeLabel: "1:00 onwards" },
+    { title: "Speaker Session (Keerti Purswani)", start: new Date('2026-03-14T13:00:00+05:30'), end: new Date('2026-03-14T14:00:00+05:30'), dateLabel: "14 March", timeLabel: "1:00 – 2:00 PM" },
+    { title: "Panel Discussion", start: new Date('2026-03-14T14:30:00+05:30'), end: new Date('2026-03-14T16:00:00+05:30'), dateLabel: "14 March", timeLabel: "2:30 – 4:00 PM" },
+    { title: "Judging Round 3 (150 → 60)", start: new Date('2026-03-14T16:00:00+05:30'), end: new Date('2026-03-14T20:00:00+05:30'), dateLabel: "14 March", timeLabel: "4:00 – 8:00 PM" },
+    { title: "Drama Club Skit", start: new Date('2026-03-14T16:30:00+05:30'), end: new Date('2026-03-14T17:00:00+05:30'), dateLabel: "14 March", timeLabel: "4:30 – 5:00 PM" },
+    { title: "Dance Battle", start: new Date('2026-03-14T17:00:00+05:30'), end: new Date('2026-03-14T20:00:00+05:30'), dateLabel: "14 March", timeLabel: "5:00 – 8:00 PM" },
+    { title: "Dinner Break", start: new Date('2026-03-14T20:00:00+05:30'), end: new Date('2026-03-14T21:00:00+05:30'), dateLabel: "14 March", timeLabel: "8:00 – 9:00 PM" },
+    { title: "Space Object Finding Competition", start: new Date('2026-03-14T21:00:00+05:30'), end: new Date('2026-03-15T00:00:00+05:30'), dateLabel: "14 March", timeLabel: "9:00 – 12:00" },
+    { title: "Jamming Night", start: new Date('2026-03-14T23:30:00+05:30'), end: new Date('2026-03-15T02:00:00+05:30'), dateLabel: "14 March", timeLabel: "11:30 – 2:00 AM" },
+
+    { title: "Breakfast + Debug Time", start: new Date('2026-03-15T08:00:00+05:30'), end: new Date('2026-03-15T09:30:00+05:30'), dateLabel: "15 March", timeLabel: "8:00 – 9:30 AM" },
+    { title: "Judging Round 4 (60 → 10)", start: new Date('2026-03-15T10:00:00+05:30'), dateLabel: "15 March", timeLabel: "10:00 AM" },
+    { title: "Top 10 Team Presentation", start: new Date('2026-03-15T13:30:00+05:30'), dateLabel: "15 March", timeLabel: "1:30 onwards" },
+    { title: "Closing Ceremony + Winners", start: new Date('2026-03-15T17:00:00+05:30'), end: new Date('2026-03-15T19:00:00+05:30'), dateLabel: "15 March", timeLabel: "5:00 – 7:00 PM" },
+    { title: "Concert (Maan Panu)", start: new Date('2026-03-15T19:00:00+05:30'), dateLabel: "15 March", timeLabel: "7:00 onwards" }
+];
 
 interface TimeUnit {
     value: number;
     label: string;
-    max: number;
 }
 
 function pad(n: number) {
     return String(Math.max(0, n)).padStart(2, '0');
 }
 
-function getTimeLeft() {
-    const now = new Date();
-    const diff = HACKATHON_DATE.getTime() - now.getTime();
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 };
-    const total = diff;
-    const seconds = Math.floor((diff / 1000) % 60);
-    const minutes = Math.floor((diff / 1000 / 60) % 60);
-    const hours = Math.floor((diff / 1000 / 60 / 60) % 24);
-    const days = Math.floor(diff / 1000 / 60 / 60 / 24);
+function formatDuration(diffMs: number) {
+    if (diffMs <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 };
+    const total = diffMs;
+    const seconds = Math.floor((diffMs / 1000) % 60);
+    const minutes = Math.floor((diffMs / 1000 / 60) % 60);
+    const hours = Math.floor((diffMs / 1000 / 60 / 60) % 24);
+    const days = Math.floor(diffMs / 1000 / 60 / 60 / 24);
     return { days, hours, minutes, seconds, total };
 }
 
-// Gear Component
-function SVGGear({ className, size = 100, color = "#d4af37" }: { className?: string, size?: number, color?: string }) {
-    return (
-        <svg 
-            width={size} 
-            height={size} 
-            viewBox="0 0 100 100" 
-            fill="none" 
-            stroke={color} 
-            strokeWidth="2" 
-            className={className}
-        >
-            <path d="M50 15 A35 35 0 1 0 50 85 A35 35 0 1 0 50 15 Z" strokeDasharray="4 4" />
-            <path d="M50 25 A25 25 0 1 0 50 75 A25 25 0 1 0 50 25 Z" strokeDasharray="1 6" strokeWidth="4" />
-            <circle cx="50" cy="50" r="10" fill={color} fillOpacity="0.2" />
-        </svg>
-    )
-}
-
-function AstrolabeRing({ className, size, reverse = false }: { className?: string, size: number, reverse?: boolean }) {
-    return (
-        <svg 
-            width={size} 
-            height={size} 
-            viewBox="0 0 200 200" 
-            className={`${className} overflow-visible`}
-            style={{ animationDirection: reverse ? 'reverse' : 'normal' }}
-        >
-            <circle cx="100" cy="100" r="98" fill="none" stroke="rgba(212,175,55,0.3)" strokeWidth="1" />
-            <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(212,175,55,0.5)" strokeWidth="0.5" strokeDasharray="4 8" />
-            <circle cx="100" cy="100" r="82" fill="none" stroke="rgba(212,175,55,0.2)" strokeWidth="4" strokeDasharray="1 12" />
-            {/* Markings */}
-            {[...Array(12)].map((_, i) => (
-                <line 
-                    key={i} 
-                    x1="100" y1="2" x2="100" y2="8" 
-                    stroke="rgba(212,175,55,0.8)" 
-                    strokeWidth="2"
-                    transform={`rotate(${i * 30} 100 100)`}
-                />
-            ))}
-            {[...Array(60)].map((_, i) => i % 5 !== 0 && (
-                <line 
-                    key={`small-${i}`} 
-                    x1="100" y1="2" x2="100" y2="5" 
-                    stroke="rgba(212,175,55,0.4)" 
-                    strokeWidth="1"
-                    transform={`rotate(${i * 6} 100 100)`}
-                />
-            ))}
-        </svg>
-    )
+function formatTimeOnly(diffMs: number) {
+    if (diffMs <= 0) return "00:00:00";
+    const hours = Math.floor((diffMs / 1000 / 60 / 60) % 24);
+    const minutes = Math.floor((diffMs / 1000 / 60) % 60);
+    const seconds = Math.floor((diffMs / 1000) % 60);
+    // If days > 0, include days in hours for "begins in" formatting realistically for >24h.
+    const days = Math.floor(diffMs / 1000 / 60 / 60 / 24);
+    const totalHours = days * 24 + hours;
+    return `${pad(totalHours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
 export function ClockClient() {
-    const [time, setTime] = useState(getTimeLeft());
+    const [time, setTime] = useState(formatDuration(0));
     const [started, setStarted] = useState(false);
+    
+    const [currentEvent, setCurrentEvent] = useState<HackathonEvent | null>(null);
+    const [upcomingEvents, setUpcomingEvents] = useState<HackathonEvent[]>([]);
+    const [timerTarget, setTimerTarget] = useState<Date | null>(null);
+    const [pinnedEvent, setPinnedEvent] = useState<HackathonEvent | null>(null);
+    const [pinnedTime, setPinnedTime] = useState(formatDuration(0));
+
+    // Sort to ensure chronological order for logic
+    const SORTED_SCHEDULE = [...SCHEDULE].sort((a, b) => a.start.getTime() - b.start.getTime());
 
     useEffect(() => {
-        setTime(getTimeLeft());
-        setStarted(true);
-        const id = setInterval(() => setTime(getTimeLeft()), 1000);
+        const updateState = () => {
+            const now = new Date();
+            let activeEvent: HackathonEvent | null = null;
+            let target: Date | null = null;
+            let firstFutureIndex = -1;
+
+            // Find active and target
+            for (let i = 0; i < SORTED_SCHEDULE.length; i++) {
+                const event = SORTED_SCHEDULE[i];
+                if (now >= event.start && (!event.end || now < event.end)) {
+                    const nextEv = SORTED_SCHEDULE[i+1];
+                    if (!event.end && nextEv && now >= nextEv.start) {
+                        continue;
+                    }
+                    activeEvent = event;
+                    target = event.end ? event.end : (nextEv ? nextEv.start : null);
+                    firstFutureIndex = i + 1;
+                    break;
+                } else if (now < event.start) {
+                    firstFutureIndex = i;
+                    target = event.start;
+                    break;
+                }
+            }
+
+            const upcs = firstFutureIndex !== -1 ? SORTED_SCHEDULE.slice(firstFutureIndex, firstFutureIndex + 3) : [];
+
+            setCurrentEvent(activeEvent);
+            setUpcomingEvents(upcs);
+            setTimerTarget(target);
+
+            if (target) {
+                setTime(formatDuration(target.getTime() - now.getTime()));
+            } else {
+                setTime(formatDuration(0)); // All events over
+            }
+
+            setStarted(true);
+        };
+
+        updateState();
+        const id = setInterval(updateState, 1000);
         return () => clearInterval(id);
     }, []);
 
+    // Update pinnedTime every second when a pinned event is set
+    useEffect(() => {
+        if (!pinnedEvent) return;
+        const tick = () => setPinnedTime(formatDuration(pinnedEvent.start.getTime() - Date.now()));
+        tick();
+        const id = setInterval(tick, 1000);
+        return () => clearInterval(id);
+    }, [pinnedEvent]);
+
+    const activeTime = pinnedEvent ? pinnedTime : time;
     const units: TimeUnit[] = [
-        { value: time.days, label: 'DAY', max: 365 },
-        { value: time.hours, label: 'HR', max: 23 },
-        { value: time.minutes, label: 'MIN', max: 59 },
-        { value: time.seconds, label: 'SEC', max: 59 },
+        { value: activeTime.days, label: 'DAY' },
+        { value: activeTime.hours, label: 'HR' },
+        { value: activeTime.minutes, label: 'MIN' },
+        { value: activeTime.seconds, label: 'SEC' },
     ];
 
-    if (!started) return <div className="min-h-screen bg-[#050301]" />;
+    if (!started) return <div className="min-h-screen bg-[#0a0a0a]" />;
 
     return (
-        <div className="relative min-h-screen flex flex-col items-center justify-center bg-[#050301] overflow-hidden font-cinzel selection:bg-gold-500/30">
+        <div className="relative min-h-screen flex flex-col items-center bg-[#0a0a0a] overflow-x-hidden pt-16 pb-32">
             
-            {/* Ambient Background Glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(60,30,0,0.8),transparent_70%)] mix-blend-screen" />
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] pointer-events-none mix-blend-overlay" />
-
-            {/* Central Giant Astrolabe Graphic */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] opacity-40 mix-blend-screen pointer-events-none animate-spin-extremely-slow">
-                <Image
-                    src="/astrolabe-bg.png"
-                    alt="Ancient Clockwork Mask"
-                    fill
-                    className="object-contain rounded-full"
-                    style={{
-                        maskImage: 'radial-gradient(circle at center, black 40%, transparent 70%)',
-                        WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 70%)'
-                    }}
-                />
-            </div>
-
-            {/* --- Magical Embers/Particles --- */}
-            <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none">
-                {[...Array(25)].map((_, i) => {
+            {/* Background Layer */}
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(40,30,10,0.5),transparent_60%)] mix-blend-screen z-0" />
+                
+                {/* 1. Ambient Floating Embers (Background Wide) */}
+                {[...Array(30)].map((_, i) => {
                     const size = Math.random() * 4 + 2;
                     const left = Math.random() * 100;
-                    const animDuration = Math.random() * 10 + 10;
+                    const animDuration = Math.random() * 15 + 10;
                     const delay = Math.random() * 10;
                     return (
                         <div
-                            key={i}
-                            className="absolute rounded-full bg-gold-400 blur-[1px] mix-blend-screen opacity-0 animate-float-up"
+                            key={`ember-${i}`}
+                            className="absolute rounded-full bg-[#F4C430] blur-[1px] mix-blend-screen opacity-0 animate-float-up"
                             style={{
                                 width: size,
                                 height: size,
@@ -140,274 +204,323 @@ export function ClockClient() {
                                 bottom: '-5%',
                                 animationDuration: `${animDuration}s`,
                                 animationDelay: `${delay}s`,
-                                boxShadow: '0 0 10px 2px rgba(212,175,55,0.6)'
+                                boxShadow: '0 0 10px 2px rgba(244,196,48,0.4)',
                             }}
                         />
                     );
                 })}
-            </div>
 
-            {/* --- Left Panel: Divine Telemetry --- */}
-            <div className="absolute left-0 top-16 bottom-12 w-20 sm:w-64 border-r border-gold-500/10 bg-[#050301]/80 backdrop-blur-sm z-20 flex col pt-8 pb-8 px-4 hidden lg:flex flex-col gap-12 overflow-hidden">
-                {/* Protocol Status List */}
-                <div className="flex flex-col gap-4 w-full">
-                    <div className="text-gold-500/80 font-mono text-[0.65rem] tracking-[0.3em] uppercase border-b border-gold-500/20 pb-2 mb-2">Active Protocols</div>
-                    {['DIONYSUS_VINE', 'HEPHAESTUS_FORGE', 'ATHENA_AEGIS', 'APOLLO_SUN'].map((proto, i) => (
-                        <div key={proto} className="flex items-center justify-between w-full">
-                            <span className="text-gold-200/60 font-mono text-[0.55rem] tracking-widest">{proto}</span>
-                            <div className="flex gap-1">
-                                {[...Array(3)].map((_, j) => (
-                                    <div key={j} className={`w-1.5 h-1.5 rounded-full ${j === i % 3 ? 'bg-gold-500 animate-pulse' : 'bg-gold-500/20'}`} />
+                {/* 2. Vertical Greek Runes (Left & Right Flanks) */}
+                <div className="absolute left-2 sm:left-6 top-0 bottom-0 w-8 flex-col text-[#F4C430]/15 font-cinzel text-xl sm:text-2xl font-bold select-none overflow-hidden hidden md:flex opacity-50">
+                    <div className="animate-runes flex flex-col items-center justify-around h-[200%] w-full">
+                        {['Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω'].map((char, j) => (
+                            <span key={`l-${j}`} className="my-6 lg:my-8">{char}</span>
+                        ))}
+                    </div>
+                </div>
+                <div className="absolute right-2 sm:right-6 top-0 bottom-0 w-8 flex-col text-[#F4C430]/15 font-cinzel text-xl sm:text-2xl font-bold select-none overflow-hidden hidden md:flex opacity-50">
+                    <div className="animate-runes-reverse flex flex-col items-center justify-around h-[200%] w-full">
+                        {['Ω', 'Ψ', 'Χ', 'Φ', 'Υ', 'Τ', 'Σ', 'Ρ', 'Π', 'Ο', 'Ξ', 'Ν', 'Μ', 'Λ', 'Κ', 'Ι', 'Θ', 'Η', 'Ζ', 'Ε', 'Δ', 'Γ', 'Β', 'Α', 'Ω', 'Ψ', 'Χ', 'Φ', 'Υ', 'Τ', 'Σ', 'Ρ', 'Π', 'Ο', 'Ξ', 'Ν', 'Μ', 'Λ', 'Κ', 'Ι', 'Θ', 'Η', 'Ζ', 'Ε', 'Δ', 'Γ', 'Β', 'Α'].map((char, j) => (
+                            <span key={`r-${j}`} className="my-6 lg:my-8">{char}</span>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 3. Screen Corner Borders (Framing the viewport) */}
+                <div className="absolute top-20 left-12 w-24 h-24 border-t-2 border-l-2 border-[#F4C430]/20 rounded-tl-3xl hidden xl:block" />
+                <div className="absolute top-20 right-12 w-24 h-24 border-t-2 border-r-2 border-[#F4C430]/20 rounded-tr-3xl hidden xl:block" />
+                <div className="absolute bottom-36 left-12 w-24 h-24 border-b-2 border-l-2 border-[#F4C430]/20 rounded-bl-3xl hidden xl:block" />
+                <div className="absolute bottom-36 right-12 w-24 h-24 border-b-2 border-r-2 border-[#F4C430]/20 rounded-br-3xl hidden xl:block" />
+
+                {/* 4. VERTICAL UPCOMING EVENTS TICKER (Right Side) */}
+                <div className="absolute right-14 sm:right-20 top-0 bottom-0 w-36 lg:w-44 hidden lg:flex flex-col items-end overflow-hidden pointer-events-none"
+                    style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent)', maskImage: 'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent)' }}>
+                    <div className="flex flex-col items-end animate-ticker-up w-full">
+                        {[...Array(3)].map((_, i) => (
+                            <div key={i} className="flex flex-col items-end w-full">
+                                {SORTED_SCHEDULE.filter(e => new Date() < e.start).map((evt, j) => (
+                                    <div key={`v-${i}-${j}`} className="flex flex-col items-end text-right mb-8 w-full">
+                                        <span className="text-[#F4C430]/50 text-[0.6rem] font-mono tracking-[0.3em] uppercase mb-1">upcoming</span>
+                                        <span className="text-white/80 text-xs font-medium leading-snug">{evt.title}</span>
+                                        <span className="text-[#F4C430]/50 text-[0.65rem] font-mono tracking-wide mt-0.5">{evt.dateLabel}</span>
+                                    </div>
                                 ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Vertical Progress Bar */}
-                <div className="flex-1 w-full flex gap-4 mt-8">
-                    <div className="w-1 h-full bg-gold-900/30 rounded-full relative overflow-hidden">
-                        <div className="absolute bottom-0 w-full bg-gradient-to-t from-gold-600 to-amber-400 h-[76%] rounded-full animate-pulse-slow shadow-[0_0_10px_rgba(212,175,55,0.8)]" />
-                    </div>
-                    <div className="flex-1 flex flex-col justify-end pb-4 font-mono">
-                        <span className="text-white text-3xl font-light tabular-nums">76%</span>
-                        <span className="text-gold-500/50 text-[0.5rem] tracking-[0.2em] uppercase mt-1">Energy Matrix</span>
-                    </div>
-                </div>
-
-                {/* Scrolling Cipher Text Block */}
-                <div className="w-full h-32 overflow-hidden relative border-t border-gold-500/20 pt-4 cursor-default select-none">
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#050301] via-transparent to-[#050301] z-10 pointer-events-none" />
-                    <div className="flex flex-col animate-scroll-up text-gold-500/30 font-serif text-[0.6rem] tracking-widest leading-relaxed break-all">
-                        {`ΕΝ ΑΡΧΗ ΗΝ Ο ΧΑΟΣ ΚΑΙ ΕΚ ΤΟΥ ΧΑΟΥΣ ΕΓΕΝΕΤΟ ΓΑΙΑ Η ΕΥΡΥΣΤΕΡΝΟΣ... ΟΥΡΑΝΟΣ ΑΣΤΕΡΟΕΙΔΗΣ... ΚΡΟΝΟΣ ΑΓΚΥΛΟΜΗΤΗΣ... ΖΕΥΣ ΥΨΙΒΡΕΜΕΤΗΣ... ΤΟ ΠΥΡ ΤΟΥ ΠΡΟΜΗΘΕΩΣ...`.repeat(10)}
-                    </div>
-                </div>
-            </div>
-
-            {/* --- Right Panel: Astrological Data --- */}
-            <div className="absolute right-0 top-16 bottom-12 w-20 sm:w-64 border-l border-gold-500/10 bg-[#050301]/80 backdrop-blur-sm z-20 flex col pt-8 pb-8 px-4 hidden lg:flex flex-col justify-between items-end overflow-hidden overflow-y-auto">
-                
-                {/* Alignment Graph */}
-                <div className="flex flex-col items-end gap-2 w-full text-right">
-                    <div className="text-gold-500/80 font-mono text-[0.65rem] tracking-[0.3em] uppercase border-b border-gold-500/20 pb-2 mb-4 w-full text-right">Celestial Alignment</div>
-                    <div className="relative w-32 h-32 flex items-center justify-center opacity-80 mix-blend-screen">
-                        {/* Nested rotating squares */}
-                        <div className="absolute w-28 h-28 border border-gold-500/40 animate-spin-slow" />
-                        <div className="absolute w-24 h-24 border border-gold-400/60 rotate-45 animate-spin-slower animation-reverse" />
-                        <div className="w-12 h-12 rounded-full border border-gold-300 shadow-[0_0_15px_rgba(212,175,55,0.6)] flex items-center justify-center">
-                            <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Coordinates Block */}
-                <div className="flex flex-col items-end gap-3 mt-12 w-full">
-                    {[
-                        { label: 'DECLINATION', val: '+23° 26′ 14″' },
-                        { label: 'RIGHT ASCEN.', val: '05h 36m 23s' },
-                        { label: 'LUNAR PHASE', val: 'WAXING GIB.' },
-                        { label: 'SOLAR WIND', val: '412 KM/S' }
-                    ].map((data, i) => (
-                        <div key={i} className="flex flex-col items-end">
-                            <span className="text-gold-500/40 font-mono text-[0.5rem] tracking-[0.3em] uppercase">{data.label}</span>
-                            <span className="text-white/90 font-mono text-[0.7rem] tracking-wider">{data.val}</span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Vertical Decorative Lines & Runes */}
-                <div className="w-full flex-1 flex justify-end items-end gap-2 pr-2 opacity-40 mt-12">
-                     <div className="w-[1px] h-full bg-gradient-to-t from-gold-500/50 to-transparent" />
-                     <div className="flex flex-col gap-2 text-[0.5rem] text-gold-400 font-serif pb-4">
-                         {'ΟΛΥΜΠΟΣ'.split('').map((char, i) => <span key={i}>{char}</span>)}
-                     </div>
-                </div>
-            </div>
-
-            {/* Intricate Corner Framing */}
-            <div className="absolute top-4 left-4 w-16 h-16 border-t-2 border-l-2 border-gold-500/40 z-20 pointer-events-none" />
-            <div className="absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-gold-500/40 z-20 pointer-events-none" />
-            <div className="absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-gold-500/40 z-20 pointer-events-none" />
-            <div className="absolute bottom-4 right-4 w-16 h-16 border-b-2 border-r-2 border-gold-500/40 z-20 pointer-events-none" />
-
-            {/* Thematic Header Bar */}
-            <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-[#0a0501] to-transparent z-30 flex items-center justify-between px-8 sm:px-12 border-b border-gold-500/10">
-                <div className="flex items-center gap-4">
-                    <div className="w-2 h-2 rounded-full bg-gold-400 animate-pulse" />
-                    <span className="text-gold-200 font-serif tracking-[0.4em] text-xs sm:text-sm uppercase">HACKJKLU V5.0</span>
-                </div>
-                <div className="hidden md:flex items-center gap-6">
-                    <div className="h-[1px] w-32 bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
-                    <span className="text-gold-500/60 font-mono tracking-[0.2em] text-[0.6rem] uppercase">System: ORACLE_UPLINK</span>
-                    <span className="text-green-500/80 font-mono tracking-widest text-[0.6rem] uppercase">Stable</span>
-                </div>
-            </div>
-
-            {/* Complex Bottom Footer Log */}
-            <div className="absolute bottom-0 left-0 w-full h-12 bg-[#050301]/80 backdrop-blur-md z-30 border-t border-gold-500/20 overflow-hidden flex items-center">
-                <div className="flex whitespace-nowrap animate-marquee">
-                    {[...Array(5)].map((_, i) => (
-                        <span key={i} className="text-gold-600/40 font-mono text-[0.6rem] tracking-[0.3em] uppercase mx-8">
-                            [SYS.LOG] CONSTELLATION ALIGNMENT: {Math.floor(Math.random() * 100)}% ... GATES OF OLYMPUS: PREPARING ... AMBROSIA LEVELS: NOMINAL ... {Date.now().toString(16).toUpperCase()}
-                        </span>
-                    ))}
-                </div>
-            </div>
-
-            {/* Main Interface Wrapper */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-screen">
-                
-                {/* Title Section mapped to ancient lore */}
-                <div className="text-center mb-16 md:mb-24 relative">
-                    {/* Decorative Top Arch */}
-                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-[300px] h-[60px]">
-                        <svg viewBox="0 0 300 60" fill="none" className="w-full h-full opacity-60">
-                            <defs>
-                                <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="transparent" />
-                                    <stop offset="50%" stopColor="#d4af37" />
-                                    <stop offset="100%" stopColor="transparent" />
-                                </linearGradient>
-                            </defs>
-                            <path d="M 0 60 Q 150 -20 300 60" stroke="url(#goldLine)" strokeWidth="1" fill="none" />
-                            <circle cx="150" cy="20" r="4" fill="#d4af37" className="animate-pulse" />
-                            <circle cx="150" cy="20" r="12" fill="none" stroke="#d4af37" strokeWidth="0.5" />
-                        </svg>
-                    </div>
-
-                    <h2 className="text-gold-400 text-xs sm:text-sm tracking-[0.5em] uppercase font-light mb-4 ml-2 animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
-                        The Mechanism Awakens
-                    </h2>
-                    <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-[#fffac2] via-[#d4af37] to-[#8a5a19] drop-shadow-[0_0_40px_rgba(212,175,55,0.3)] animate-fade-in opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
-                        HACKJKLU
-                    </h1>
-                    <div className="flex items-center justify-center gap-6 mt-6 animate-fade-in opacity-0" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
-                        <div className="h-[1px] w-20 bg-gradient-to-r from-transparent to-gold-600" />
-                        <span className="text-gold-300 tracking-[0.4em] text-sm uppercase">Volume 5.0</span>
-                        <div className="h-[1px] w-20 bg-gradient-to-l from-transparent to-gold-600" />
-                    </div>
-                </div>
-
-                {/* The "Mechanical" Clock Display */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center items-center pointer-events-none mt-16 md:mt-24">
-                    
-                    {/* Horizontal connecting rod */}
-                    <div className="absolute top-1/2 left-[5%] right-[5%] h-[2px] bg-gradient-to-r from-transparent via-gold-500/30 to-transparent -translate-y-1/2 z-0 hidden md:block" />
-
-                    <div className="flex flex-wrap md:flex-nowrap justify-center items-center gap-12 md:gap-20 lg:gap-32 w-full z-10 pointer-events-auto">
-                        {units.map((unit, idx) => (
-                            <div key={unit.label} className="relative group flex flex-col items-center">
-                                
-                                {/* Ethereal Glowing Orb Behind Number */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] lg:w-[320px] lg:h-[320px] bg-gold-600/10 rounded-full blur-3xl opacity-50 group-hover:opacity-100 group-hover:bg-gold-500/20 transition-all duration-1000 ease-out" />
-                                
-                                {/* Outer Spinning SVG Ring - Simplified for elegance */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] lg:w-[360px] lg:h-[360px] pointer-events-none opacity-30 group-hover:opacity-60 transition-opacity duration-1000">
-                                    <svg viewBox="0 0 200 200" className={`w-full h-full animate-spin-extremely-slow ${idx % 2 !== 0 ? 'animation-reverse' : ''}`}>
-                                        <circle cx="100" cy="100" r="95" fill="none" stroke="url(#goldRim)" strokeWidth="0.5" strokeDasharray="2 6" />
-                                        <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(212,175,55,0.2)" strokeWidth="1" strokeDasharray="20 40" />
-                                    </svg>
-                                </div>
-
-                                {/* The Giant Elegant Digits */}
-                                <div className="relative z-10 flex flex-col items-center justify-center transition-transform duration-700 ease-out group-hover:scale-110">
-                                    <span style={{ fontVariantNumeric: 'tabular-nums' }} className="relative z-20 font-serif text-8xl sm:text-[9rem] md:text-[11rem] lg:text-[14rem] font-medium tracking-normal text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] via-[#fed7aa] to-[#d97706] drop-shadow-[0_0_35px_rgba(212,175,55,0.5)]">
-                                        {pad(unit.value)}
-                                    </span>
-                                </div>
-
-                                {/* Minimal Label */}
-                                <div className="mt-4 sm:mt-6 relative z-20 flex flex-col items-center gap-2">
-                                    <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
-                                    <span className="text-xs sm:text-sm font-semibold tracking-[0.5em] sm:tracking-[0.6em] text-gold-300/80 group-hover:text-gold-200 transition-colors uppercase m-0 p-0 drop-shadow-md">
-                                        {unit.label}
-                                    </span>
-                                    <div className="w-4 h-[1px] bg-gold-500/30" />
-                                </div>
-
                             </div>
                         ))}
                     </div>
+                </div>
+                
+                {/* Full Page Hourglass Graphic perfectly centered behind everything */}
+                <div className="absolute inset-0 w-full h-full opacity-40 mix-blend-screen z-0">
+                    <Image
+                        src="/hourglass-bg.png"
+                        alt="Ancient Mythological Hourglass"
+                        fill
+                        className="object-cover md:object-contain object-center scale-[1.2] md:scale-100"
+                        style={{
+                            maskImage: 'radial-gradient(circle at center, black 50%, transparent 90%)',
+                            WebkitMaskImage: 'radial-gradient(circle at center, black 50%, transparent 90%)'
+                        }}
+                    />
+                    <div className="absolute inset-0 rounded-full bg-[#F4C430] blur-[150px] opacity-10" />
+                    
+                    {/* Sand Animation built directly inside the hourglass bounds (adjusting left to stay central) */}
+                    {[...Array(40)].map((_, i) => {
+                        const size = Math.random() * 3 + 1.5;
+                        const left = Math.random() * 20 + 40; // tight center
+                        const animDuration = Math.random() * 6 + 4;
+                        const delay = Math.random() * 6;
+                        return (
+                            <div
+                                key={`sand-${i}`}
+                                className="absolute rounded-full bg-[#F4C430] blur-[0.5px] mix-blend-screen opacity-0 animate-fall-down"
+                                style={{
+                                    width: size,
+                                    height: size * 1.5,
+                                    left: `${left}%`,
+                                    top: '5%',
+                                    animationDuration: `${animDuration}s`,
+                                    animationDelay: `${delay}s`,
+                                    boxShadow: '0 0 8px 1px rgba(244,196,48,0.8)'
+                                }}
+                            />
+                        );
+                    })}
+                </div>
+            </div>
 
+            {/* 1. TOP HEADER */}
+            <div className="fixed top-0 left-0 w-full h-16 bg-[#0a0a0a]/90 backdrop-blur-md z-30 flex items-center justify-between px-8 sm:px-12 border-b border-[#F4C430]/20 font-inter">
+                <span className="text-[#F4C430] font-mono tracking-[0.2em] text-xs sm:text-sm font-semibold uppercase">HACKJKLU V5.0</span>
+                <span className="text-[#F4C430]/70 font-mono tracking-widest text-[0.6rem] uppercase hidden sm:block">SYSTEM: ORACLE UPLINK — <span className="text-green-500/80">STABLE</span></span>
+            </div>
+
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col justify-between items-center min-h-[calc(100vh-10rem)] pb-8 mt-4">
+                
+                {/* 2. MAIN COUNTDOWN TIMER */}
+                <div className="relative w-full flex flex-col justify-center items-center flex-1">
+                    
+                    <div className="flex flex-wrap md:flex-nowrap justify-center items-center gap-6 sm:gap-12 md:gap-16 lg:gap-24 w-full z-10">
+                        {units.map((unit) => (
+                            <div key={unit.label} className="flex flex-col items-center z-10 relative">
+                                <span style={{ fontVariantNumeric: 'tabular-nums' }} className="font-cinzel text-7xl sm:text-[7rem] md:text-[10rem] lg:text-[12rem] xl:text-[15rem] font-bold tracking-normal text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] to-[#F4C430] drop-shadow-[0_0_20px_rgba(244,196,48,0.4)] leading-none">
+                                    {pad(unit.value)}
+                                </span>
+                                <span className="mt-2 text-xs sm:text-sm font-inter font-bold tracking-[0.4em] text-[#F4C430]/80 uppercase">
+                                    {unit.label}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Bottom Coordinates & Engraving */}
-                <div className="absolute bottom-8 w-full text-center flex flex-col items-center opacity-0 animate-fade-in" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
-                    <div className="w-16 h-16 opacity-30 mb-2">
-                        <SVGGear size={64} className="animate-spin-slow" />
+                {/* 3. CURRENT & UPCOMING / PINNED EVENT STRIP */}
+                <div className={`w-full max-w-6xl mt-6 z-10 font-inter backdrop-blur-md rounded-2xl border transition-all duration-500 overflow-hidden ${
+                    pinnedEvent
+                        ? 'bg-[#1a1000]/80 border-[#F4C430]/50 shadow-[0_0_60px_rgba(244,196,48,0.15)]'
+                        : 'bg-black/60 border-white/10'
+                }`}>
+                    {pinnedEvent ? (
+                        /* PINNED EVENT MODE */
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 sm:p-6">
+                            <div className="flex items-center gap-5">
+                                <div className="w-1 h-16 bg-[#F4C430] rounded-full shadow-[0_0_20px_#F4C430] shrink-0" />
+                                <div className="flex flex-col">
+                                    <span className="text-[0.65rem] text-[#F4C430] font-mono tracking-[0.35em] font-semibold uppercase mb-1">⏱ Timer focused on</span>
+                                    <div className="text-2xl sm:text-3xl text-white font-bold">{pinnedEvent.title}</div>
+                                    <div className="text-sm text-[#F4C430]/70 font-mono mt-1">{pinnedEvent.dateLabel} · {pinnedEvent.timeLabel}</div>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setPinnedEvent(null)}
+                                className="flex items-center gap-2 text-xs font-mono tracking-widest text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-4 py-2.5 rounded-xl transition-all duration-200 shrink-0 hover:bg-white/5"
+                            >
+                                ✕ CLEAR FOCUS
+                            </button>
+                        </div>
+                    ) : (
+                        /* NORMAL MODE */
+                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+
+                            {/* LIVE NOW card */}
+                            <div className="relative p-5 sm:p-6 flex flex-col justify-center gap-2 overflow-hidden bg-gradient-to-br from-[#F4C430]/8 to-transparent">
+                                <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#F4C430] to-[#F4C430]/30 shadow-[0_0_20px_#F4C430]" />
+                                <div className="flex items-center gap-2.5">
+                                    <span className="relative flex h-3 w-3">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F4C430] opacity-50"></span>
+                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#F4C430] shadow-[0_0_10px_#F4C430]"></span>
+                                    </span>
+                                    <span className="text-[0.7rem] text-[#F4C430] font-mono tracking-[0.4em] font-bold uppercase">Live Now</span>
+                                </div>
+                                <div className="text-2xl sm:text-3xl font-bold text-white leading-tight mt-1">
+                                    {currentEvent ? currentEvent.title : (time.total > 0 ? "AWAITING EVENTS" : "HACKATHON CONCLUDED")}
+                                </div>
+                                <div className="text-sm text-[#F4C430]/60 font-mono">
+                                    {currentEvent ? `${currentEvent.dateLabel} · ${currentEvent.timeLabel}` : "Stay tuned"}
+                                </div>
+                            </div>
+
+                            {/* Upcoming event cards */}
+                            {upcomingEvents.slice(0, 2).map((evt, idx) => (
+                                <div key={idx} className="p-5 sm:p-6 flex flex-col justify-center gap-2 hover:bg-white/5 transition-colors duration-200">
+                                    <span className="text-[0.65rem] text-gray-500 font-mono tracking-[0.4em] uppercase font-semibold">Upcoming</span>
+                                    <div className="text-xl sm:text-2xl font-semibold text-white/90 leading-tight">{evt.title}</div>
+                                    <div className="text-sm text-[#F4C430]/50 font-mono mt-0.5">{evt.dateLabel} · {evt.timeLabel}</div>
+                                </div>
+                            ))}
+                            {upcomingEvents.length === 0 && (
+                                <div className="p-6 flex items-center justify-center col-span-2 text-gray-500 text-sm font-mono tracking-widest uppercase">End of Schedule</div>
+                            )}
+                            {upcomingEvents.length === 1 && (
+                                <div className="p-5 sm:p-6 flex items-center justify-center text-gray-600 text-xs font-mono tracking-widest uppercase">End of upcoming</div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* SPACER BETWEEN MAIN FRAME AND TIMELINE */}
+            <div className="w-full pt-16" />
+
+                {/* 4. EVENT SCHEDULE TIMELINE */}
+                <div className="w-full max-w-5xl flex flex-col gap-8 z-10 font-inter bg-black/40 backdrop-blur-sm p-4 sm:p-8 rounded-2xl border border-white/5">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-2xl font-cinzel text-white/90 text-center tracking-widest uppercase drop-shadow-md">Event Schedule</h3>
+                        <span className="text-[0.6rem] text-gray-500 font-mono tracking-widest hidden sm:block">CLICK ANY EVENT TO FOCUS TIMER</span>
                     </div>
-                    <p className="text-[0.55rem] sm:text-[0.6rem] tracking-[0.3em] font-sans text-gold-500/40 uppercase">
-                        LAT: 26.8361° N · LON: 75.6508° E
-                    </p>
-                    <p className="text-xs tracking-[0.2em] text-gold-600/60 mt-2">
-                        INITIATION PROTOCOL: ACTIVE
-                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
+                        {SORTED_SCHEDULE.map((event, idx) => {
+                            const isActive = currentEvent?.title === event.title && currentEvent?.timeLabel === event.timeLabel;
+                            const isPinned = pinnedEvent?.title === event.title && pinnedEvent?.timeLabel === event.timeLabel;
+                            const isPast = !isActive && new Date() > (event.end || event.start);
+
+                            return (
+                                <div 
+                                    key={idx}
+                                    onClick={() => setPinnedEvent(isPinned ? null : event)}
+                                    className={`p-4 rounded-lg flex flex-col gap-1 border transition-all duration-300 cursor-pointer group ${
+                                        isPinned
+                                            ? 'border-[#F4C430] bg-[#F4C430]/20 shadow-[0_0_25px_rgba(244,196,48,0.3)] scale-[1.02]'
+                                            : isActive
+                                                ? 'border-[#F4C430]/60 bg-[#F4C430]/10 shadow-[0_0_20px_rgba(244,196,48,0.1)]'
+                                                : 'border-white/10 bg-black/40 hover:border-white/30 hover:bg-white/5'
+                                    } ${isPast && !isPinned ? 'opacity-40 grayscale' : 'opacity-100'}`}
+                                >
+                                    <div className="flex justify-between items-start text-xs font-mono font-medium tracking-wide">
+                                        <span className={isPinned ? 'text-[#F4C430]' : isActive ? 'text-[#F4C430]/80' : 'text-gray-400'}>{event.dateLabel}</span>
+                                        <div className="flex items-center gap-2">
+                                            {isPinned && <span className="text-[#F4C430] text-[0.5rem] tracking-widest animate-pulse">⏱ FOCUSED</span>}
+                                            <span className={isPinned ? 'text-[#F4C430]' : isActive ? 'text-[#F4C430]/80' : 'text-gray-500'}>{event.timeLabel}</span>
+                                        </div>
+                                    </div>
+                                    <div className={`text-sm font-semibold mt-1 ${isPinned || isActive ? 'text-white' : 'text-gray-300 group-hover:text-white/80'}`}>
+                                        {event.title}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+ 
+             {/* 5. PARTNER LOGO STRIP */}
+             <div className="fixed bottom-0 left-0 w-full h-24 sm:h-28 z-30 bg-[#0a0a0a]/90 backdrop-blur-md flex flex-col justify-center overflow-hidden">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[0.6rem] tracking-[0.4em] font-mono text-[#F4C430]/90 font-semibold drop-shadow-[0_0_8px_rgba(244,196,48,0.5)] uppercase">
+                    PARTNERS OF OLYMPUS
+                </div>
+                
+                <div className="w-full flex items-center mt-4 relative overflow-hidden" style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)', maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)' }}>
+                    <div className="flex whitespace-nowrap animate-marquee items-center transition-opacity duration-700 w-max" style={{ animationDuration: '100s' }}>
+                        {[...Array(4)].map((_, i) => (
+                            <div key={i} className="flex items-center shrink-0">
+                                {SPONSORS.map((sponsor, j) => (
+                                    <div key={i + "-" + j} className="flex items-center shrink-0 mx-10 sm:mx-16 gap-4">
+                                        <div className="h-6 sm:h-8 lg:h-10 shrink-0 relative flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                            <img 
+                                                src={sponsor.src} 
+                                                alt={sponsor.name}
+                                                className="h-full w-auto object-contain shrink-0 max-w-none"
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 
             <style>{`
-                .animate-spin-slow {
-                    animation: spin 30s linear infinite;
-                }
-                .animate-spin-slower {
-                    animation: spin 60s linear infinite;
-                }
-                .animate-spin-extremely-slow {
-                    animation: spin 180s linear infinite;
-                }
-                .animation-reverse {
-                    animation-direction: reverse;
-                }
-                .animate-pulse-slow {
-                    animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-                }
-                .animation-delay-300 {
-                    animation-delay: 3s;
-                }
-                .animate-float-up {
-                    animation-name: float-up;
-                    animation-timing-function: linear;
-                    animation-iteration-count: infinite;
-                }
                 .animate-marquee {
                     animation: marquee 30s linear infinite;
                 }
+                .animate-fall-down {
+                    animation-name: fall-down;
+                    animation-timing-function: linear;
+                    animation-iteration-count: infinite;
+                }
+                .font-cinzel {
+                    font-family: var(--font-cinzel), Cinzel, serif;
+                }
+                .font-inter {
+                    font-family: var(--font-inter), Inter, sans-serif;
+                }
+                .animate-runes {
+                    animation: runes 60s linear infinite;
+                }
+                .animate-runes-reverse {
+                    animation: runes-reverse 60s linear infinite;
+                }
+                .animate-float-up {
+                    animation: float-up 15s linear infinite;
+                }
                 
-                @keyframes spin {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
+                @keyframes runes {
+                    0% { transform: translateY(0%); }
+                    100% { transform: translateY(-50%); }
                 }
-
-                @keyframes fade-in {
-                    0% { opacity: 0; transform: translateY(20px); filter: blur(10px); }
-                    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+                
+                @keyframes runes-reverse {
+                    0% { transform: translateY(-50%); }
+                    100% { transform: translateY(0%); }
                 }
-
+                
                 @keyframes float-up {
-                    0% {
-                        transform: translateY(100vh) scale(0.5);
-                        opacity: 0;
-                    }
-                    10% {
-                        opacity: 0.8;
-                    }
-                    90% {
-                        opacity: 0.8;
-                    }
-                    100% {
-                        transform: translateY(-10vh) scale(1.2);
-                        opacity: 0;
-                    }
+                    0% { transform: translateY(10vh) scale(0.8); opacity: 0; }
+                    20% { opacity: 0.6; }
+                    80% { opacity: 0.4; }
+                    100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
                 }
 
                 @keyframes marquee {
                     0% { transform: translateX(0); }
                     100% { transform: translateX(-50%); }
                 }
+                
+                @keyframes ticker-up {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(-33.33%); }
+                }
+                .animate-ticker-up {
+                    animation: ticker-up 50s linear infinite;
+                }
 
-                @keyframes scroll-up {
-                    0% { transform: translateY(100%); }
-                    100% { transform: translateY(-100%); }
+                @keyframes fall-down {
+                    0% {
+                        transform: translateY(-5vh) scale(0.8);
+                        opacity: 0;
+                    }
+                    10% {
+                        opacity: 1;
+                    }
+                    90% {
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(105vh) scale(1.2);
+                        opacity: 0;
+                    }
                 }
             `}</style>
         </div>

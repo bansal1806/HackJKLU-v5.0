@@ -455,40 +455,59 @@ function ProblemCard({
                         </div>
                     </div>
 
-                    {/* Team count badge */}
-                    <div
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm shrink-0 transition-all duration-400"
-                        style={{
-                            background: count >= 2
-                                ? 'rgba(239,68,68,0.12)'
-                                : count > 0
-                                    ? (hovered ? `rgba(${domain.rgb},0.2)` : `rgba(${domain.rgb},0.10)`)
-                                    : 'rgba(255,255,255,0.04)',
-                            border: `1px solid ${count >= 2
-                                ? 'rgba(239,68,68,0.5)'
-                                : count > 0
-                                    ? (hovered ? `rgba(${domain.rgb},0.7)` : `rgba(${domain.rgb},0.35)`)
-                                    : 'rgba(255,255,255,0.1)'}`,
-                        }}
-                    >
-                        <span style={{ fontSize: '10px' }}>{count >= 2 ? '⚒' : '⚔'}</span>
-                        <span
-                            className="text-[9px] font-bold uppercase tracking-[0.25em] leading-none"
-                            style={{
-                                fontFamily: 'Cinzel, serif',
-                                color: count >= 2
-                                    ? '#ef4444'
-                                    : count > 0
-                                        ? (hovered ? '#ffffff' : accentColor)
-                                        : 'rgba(255,255,255,0.35)',
-                            }}
+                    {/* Availability Status */}
+                    <div className="flex flex-col items-end shrink-0 transition-all duration-400">
+                        <span 
+                            className="text-[9px] uppercase tracking-[0.4em] font-bold mb-2 transition-colors" 
+                            style={{ fontFamily: 'Cinzel, serif', color: hovered ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.4)' }}
                         >
-                            {count === 0
-                                ? 'First to claim'
-                                : count === 1
-                                    ? '1 Team · 1 spot left'
-                                    : 'SEALED'}
+                            Status
                         </span>
+                        
+                        <div className="flex items-center gap-2.5">
+                            {/* Visual Spots */}
+                            <div className="flex gap-2">
+                                {[1, 2].map((spot) => (
+                                    <motion.div 
+                                        key={spot}
+                                        animate={count < spot ? { opacity: [0.6, 1, 0.6], borderColor: ['rgba(212,175,55,0.4)', 'rgba(212,175,55,0.9)', 'rgba(212,175,55,0.4)'] } : {}}
+                                        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: spot * 0.5 }}
+                                        className="w-2.5 h-2.5 transition-all duration-500"
+                                        style={{ 
+                                            transform: 'rotate(45deg)',
+                                            background: count >= spot 
+                                                ? (count >= 2 ? 'rgba(239,68,68,0.9)' : 'rgba(240,208,96,0.9)') // filled spot
+                                                : 'rgba(0,0,0,0.6)', // empty spot
+                                            border: `1px solid ${count >= spot 
+                                                ? (count >= 2 ? '#ef4444' : '#f0d060') 
+                                                : 'rgba(212,175,55,0.4)'}`,
+                                            boxShadow: count >= spot ? `0 0 10px ${count >= 2 ? 'rgba(239,68,68,0.6)' : 'rgba(240,208,96,0.6)'}` : 'none'
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                            
+                            {/* Text */}
+                            <motion.div
+                                animate={
+                                    count < 2 
+                                        ? { textShadow: ['0 0 4px rgba(240,208,96,0.3)', '0 0 12px rgba(240,208,96,0.9)', '0 0 4px rgba(240,208,96,0.3)'] } 
+                                        : { textShadow: '0 0 12px rgba(239,68,68,0.6)' }
+                                }
+                                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] leading-none ml-2 w-[70px] text-right"
+                                style={{
+                                    fontFamily: 'Cinzel, serif',
+                                    color: count >= 2 
+                                        ? '#ef4444' 
+                                        : count === 1 
+                                            ? '#f59e0b' 
+                                            : '#f0d060',
+                                }}
+                            >
+                                {count >= 2 ? 'Sealed' : count === 1 ? '1 Left' : 'Open'}
+                            </motion.div>
+                        </div>
                     </div>
                 </div>
 

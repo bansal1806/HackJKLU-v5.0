@@ -5,16 +5,21 @@ import Ticket from '@/models/Ticket';
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { ticketId } = body;
+        const { ticketId, password } = body;
 
-        if (!ticketId) {
-            return NextResponse.json({ error: 'Missing ticketId' }, { status: 400 });
+        // Simple auth
+        if (password !== '1234') {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        if (!ticketId || typeof ticketId !== 'string') {
+            return NextResponse.json({ error: 'Missing or invalid ticketId' }, { status: 400 });
         }
 
         await connectDB();
 
         const updated = await Ticket.findOneAndUpdate(
-            { ticketId, isCheckedIn: false },
+            { ticketId: ticketId.toString(), isCheckedIn: false },
             { isCheckedIn: true },
             { new: true }
         );

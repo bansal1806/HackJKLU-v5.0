@@ -52,10 +52,10 @@ export function Layout({ children }: LayoutProps) {
           ></div>
 
           {/* Menu - Left */}
-          <div className="absolute top-0 left-6 md:left-8 -translate-y-1/2 pointer-events-auto px-2">
-            <button onClick={() => setIsMenuOpen(true)} className="flex items-center gap-2 group">
+          <div className="absolute top-0 left-4 md:left-8 -translate-y-1/2 pointer-events-auto">
+            <button onClick={() => setIsMenuOpen(true)} className="flex items-center gap-2 group p-2">
               <span
-                className="uppercase text-xs md:text-sm tracking-[0.2em] transition-colors text-[rgba(255,236,209,0.8)] hover:text-(--golden-amber)"
+                className="uppercase text-base md:text-lg tracking-[0.2em] font-medium transition-colors text-[rgba(255,236,209,0.9)] hover:text-(--golden-amber)"
               >
                 Menu
               </span>
