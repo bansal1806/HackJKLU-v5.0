@@ -86,9 +86,9 @@ export async function POST(req: NextRequest) {
                 const resend = new Resend(process.env.RESEND_API_KEY);
 
                 await resend.emails.send({
-                    from: 'HackJKLU v5.0 <teams@jklu.edu.in>',
+                    from: 'HackJKLU v5.0 <teams@hackjklu.com>',
                     to: ticket.attendeeEmail,
-                    replyTo: 'teams@jklu.edu.in',
+                    replyTo: 'teams@hackjklu.com',
                     subject: `✅ Payment Verified: ${ticket.eventTitle} — HackJKLU v5.0`,
                     html: emailHtml,
                 });

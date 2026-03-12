@@ -93,9 +93,9 @@ export async function POST(req: NextRequest) {
                 const resend = new Resend(process.env.RESEND_API_KEY);
 
                 await resend.emails.send({
-                    from: 'HackJKLU v5.0 <teams@jklu.edu.in>',
+                    from: 'HackJKLU v5.0 <teams@hackjklu.com>',
                     to: newTicket.attendeeEmail,
-                    replyTo: 'teams@jklu.edu.in',
+                    replyTo: 'teams@hackjklu.com',
                     subject: `✅ RSVP Confirmed: ${newTicket.eventTitle} — HackJKLU v5.0`,
                     html: emailHtml,
                 });
@@ -118,9 +118,9 @@ export async function POST(req: NextRequest) {
                         });
 
                         await transporter.sendMail({
-                            from: `"HackJKLU v5.0" <teams@jklu.edu.in>`,
+                            from: `"HackJKLU v5.0" <teams@hackjklu.com>`,
                             to: newTicket.attendeeEmail,
-                            replyTo: 'teams@jklu.edu.in',
+                            replyTo: 'teams@hackjklu.com',
                             subject: `✅ RSVP Confirmed: ${newTicket.eventTitle} — HackJKLU v5.0`,
                             text: `Welcome to the HackJKLU experience! Hi ${newTicket.attendeeName}, your RSVP for ${newTicket.eventTitle} is confirmed! Ticket ID: ${newTicket.ticketId}. Regards, JKLU & HackJKLU v5.0 Team`,
                             html: emailHtml,

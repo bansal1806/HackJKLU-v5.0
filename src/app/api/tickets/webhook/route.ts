@@ -137,7 +137,7 @@ async function sendConfirmationEmail(order: IOrder, tickets: any[]) {
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         await resend.emails.send({
-            from: 'HackJKLU v5.0 <teams@jklu.edu.in>',
+            from: 'HackJKLU v5.0 <teams@hackjklu.com>',
             to: order.customerEmail,
             replyTo: 'teams@jklu.edu.in',
             subject: emailSubject,
