@@ -4,8 +4,16 @@ import ThemeRegistration from '@/models/ThemeRegistration';
 
 export const dynamic = 'force-dynamic';
 
-const MAX_TEAMS = 2;
 const NO_CACHE = { 'Cache-Control': 'no-store' };
+
+function getLimitForDomain(domain: string): number {
+    const d = domain.toLowerCase();
+    if (d === 'blockchain') return 5;
+    if (d === 'webdev') return 2;
+    if (d === 'bounty') return 5;
+    if (d === 'bounty_tishitu') return 999;
+    return 2;
+}
 
 // ─── GET: look up a single team by teamNumber ────────────────────────────────
 export async function GET(req: Request) {
@@ -66,7 +74,8 @@ export async function POST(req: Request) {
             // ── CASE B: different problem → switching ──
             // Check capacity on the NEW problem (excluding current team since they'll move)
             const newProblemCount = await ThemeRegistration.countDocuments({ problemId });
-            if (newProblemCount >= MAX_TEAMS) {
+            const limit = getLimitForDomain(domain);
+            if (newProblemCount >= limit) {
                 return NextResponse.json(
                     { error: 'PROBLEM_FULL', message: 'This problem statement has already reached its team limit.' },
                     { status: 403, headers: NO_CACHE }
@@ -84,7 +93,8 @@ export async function POST(req: Request) {
         } else {
             // ── CASE C: brand new team ──
             const currentCount = await ThemeRegistration.countDocuments({ problemId });
-            if (currentCount >= MAX_TEAMS) {
+            const limit = getLimitForDomain(domain);
+            if (currentCount >= limit) {
                 return NextResponse.json(
                     { error: 'PROBLEM_FULL', message: 'This problem statement has already reached its team limit.' },
                     { status: 403, headers: NO_CACHE }
