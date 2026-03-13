@@ -297,6 +297,40 @@ export function ClockClient() {
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 flex flex-col justify-between items-center min-h-[calc(100vh-10rem)] pb-8 mt-4">
                 
+                {/* Mobile-Only WiFi Banner */}
+                <div className="w-full md:hidden mb-6 mt-2 z-10 font-inter backdrop-blur-md rounded-xl border border-[#F4C430]/40 bg-black/60 overflow-hidden shadow-[0_0_30px_rgba(244,196,48,0.15)] animate-fade-in">
+                    <div className="flex flex-col p-4 gap-3">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[0.6rem] text-[#F4C430] font-mono tracking-[0.3em] font-bold uppercase">Sacred Connection</span>
+                            <span className="text-[0.55rem] text-gray-500 font-mono tracking-widest uppercase">WiFi</span>
+                        </div>
+                        <div className="flex justify-between items-center bg-white/5 p-2.5 rounded-lg border border-white/5">
+                            <div>
+                                <div className="text-[0.5rem] text-gray-500 font-mono uppercase tracking-tighter">SSID</div>
+                                <div className="text-sm font-bold text-white leading-none mt-1">JKLU</div>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-[0.5rem] text-gray-500 font-mono uppercase tracking-tighter">Password</div>
+                                <div className="text-sm font-bold text-[#F4C430] font-mono leading-none mt-1">wifi@jklu21</div>
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between mt-1">
+                            <span className="text-[0.6rem] text-[#F4C430] font-mono tracking-[0.3em] font-bold uppercase">Oracle Access</span>
+                            <span className="text-[0.55rem] text-gray-500 font-mono tracking-widest uppercase">Portal</span>
+                        </div>
+                        <div className="flex justify-between items-center bg-[#F4C430]/5 p-2.5 rounded-lg border border-[#F4C430]/10">
+                            <div>
+                                <div className="text-[0.5rem] text-gray-500 font-mono uppercase tracking-tighter">User</div>
+                                <div className="text-sm font-bold text-white leading-none mt-1 text-ellipsis overflow-hidden">hackjklu</div>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-[0.5rem] text-gray-500 font-mono uppercase tracking-tighter">Pass</div>
+                                <div className="text-sm font-bold text-[#F4C430] font-mono leading-none mt-1">hackjklu@26</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 {/* 2. MAIN COUNTDOWN TIMER */}
                 <div className="relative w-full flex flex-col justify-center items-center flex-1">
                     
@@ -378,8 +412,8 @@ export function ClockClient() {
                     )}
                 </div>
 
-                {/* WiFi Credentials Card */}
-                <div className="w-full max-w-6xl mt-6 z-10 font-inter backdrop-blur-md rounded-2xl border border-[#F4C430]/30 bg-black/60 overflow-hidden shadow-[0_0_40px_rgba(244,196,48,0.1)]">
+                {/* WiFi Credentials Card (Desktop Only) */}
+                <div className="w-full max-w-6xl mt-6 z-10 font-inter backdrop-blur-md rounded-2xl border border-[#F4C430]/30 bg-black/60 overflow-hidden shadow-[0_0_40px_rgba(244,196,48,0.1)] hidden md:block">
                     <div className="flex flex-col md:flex-row items-stretch divide-y md:divide-y-0 md:divide-x divide-[#F4C430]/20">
                         {/* WiFi Section */}
                         <div className="flex-1 p-5 sm:p-6 flex flex-col gap-3">
@@ -543,6 +577,14 @@ export function ClockClient() {
                 }
                 .animate-ticker-up {
                     animation: ticker-up 50s linear infinite;
+                }
+                .animate-fade-in {
+                    animation: fade-in 0.8s ease-out forwards;
+                }
+
+                @keyframes fade-in {
+                    0% { opacity: 0; transform: translateY(-10px); }
+                    100% { opacity: 1; transform: translateY(0); }
                 }
 
                 @keyframes fall-down {
