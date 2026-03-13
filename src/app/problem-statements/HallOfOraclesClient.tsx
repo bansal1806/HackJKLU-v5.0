@@ -196,24 +196,87 @@ const PROBLEMS: ProblemStatement[] = DOMAINS.flatMap(d =>
 
 
 
-// ─── DIVINE AURA CANVAS (PARALLAX BACKGROUND) ─────────────────────────────────
+// ─── ATMOSPHERIC BACKGROUND ──────────────────────────────────────────────────
 
 function DivineAuraCanvas() {
     return (
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#050403]">
-            {/* Standard Background Image Layer - No Parallax offsets to stop cutoff */}
+        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#030201]">
+            {/* Base Background Image */}
             <div 
                 className="absolute inset-0" 
                 style={{ 
                     backgroundImage: "url('/labors_bg.png')", 
                     backgroundSize: 'cover', 
                     backgroundPosition: 'center top',
-                    opacity: 0.85, 
+                    opacity: 0.4,
+                    filter: 'contrast(1.2) brightness(0.8)',
                 }} 
             />
 
-            {/* Dark sacred vignette/glow - adjusted slightly to keep content readable but show more bg */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_rgba(40,30,15,0)_0%,_rgba(10,8,5,0.75)_70%,_#050403_100%)]" />
+            {/* Sacred Sunlight Beam */}
+            <div 
+                className="absolute inset-0 bg-transparent opacity-30"
+                style={{
+                    background: 'linear-gradient(135deg, rgba(212,175,55,0.15) 0%, transparent 40%, transparent 100%)',
+                    filter: 'blur(60px)'
+                }}
+            />
+            
+            <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.15 }}
+                className="absolute top-[-10%] left-[-10%] w-[60%] h-[150%] origin-top-left -rotate-12 bg-linear-to-b from-yellow-500/30 via-transparent to-transparent pointer-events-none"
+                style={{ filter: 'blur(100px)' }}
+            />
+
+            {/* Dust Motes / Particles */}
+            <DustMotes />
+
+            {/* Film Grain / Texture */}
+            <div 
+                className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                style={{ 
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                }}
+            />
+
+            {/* Vignette */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_transparent_20%,_rgba(0,0,0,0.8)_100%)]" />
+            
+            {/* Deep Shadow Bottom */}
+            <div className="absolute bottom-0 left-0 right-0 h-64 bg-linear-to-t from-[#030201] to-transparent" />
+        </div>
+    );
+}
+
+function DustMotes() {
+    const motes = Array.from({ length: 40 });
+    return (
+        <div className="absolute inset-0 overflow-hidden">
+            {motes.map((_, i) => (
+                <motion.div
+                    key={i}
+                    className="absolute bg-yellow-200/40 rounded-full"
+                    style={{
+                        width: Math.random() * 3 + 1,
+                        height: Math.random() * 3 + 1,
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        filter: 'blur(1px)'
+                    }}
+                    animate={{
+                        x: [0, Math.random() * 100 - 50],
+                        y: [0, Math.random() * 100 - 50],
+                        opacity: [0, 0.6, 0]
+                    }}
+                    transition={{
+                        duration: Math.random() * 10 + 10,
+                        repeat: Infinity,
+                        ease: "linear",
+                        delay: Math.random() * 10
+                    }}
+                />
+            ))}
         </div>
     );
 }
@@ -534,11 +597,11 @@ function ProblemCard({
                     </div>
 
                     <p
-                        className="italic leading-[1.8] transition-colors duration-400"
+                        className="leading-[1.7] transition-colors duration-400"
                         style={{
-                            fontFamily: '"IM Fell English", "Libre Baskerville", serif',
-                            fontSize: '14.5px',
-                            color: hovered ? 'rgba(255,255,255,0.75)' : 'rgba(237,224,196,0.55)',
+                            fontFamily: '"Libre Baskerville", serif',
+                            fontSize: '16px',
+                            color: hovered ? 'rgba(255,255,255,0.85)' : 'rgba(237,224,196,0.65)',
                             display: '-webkit-box',
                             WebkitLineClamp: 3,
                             WebkitBoxOrient: 'vertical' as const,
@@ -779,7 +842,10 @@ function DetailModal({
                                     <h4 className="text-[11px] sm:text-xs uppercase tracking-[0.3em] font-bold mb-4" style={{ fontFamily: 'Cinzel, serif', color: domain.color }}>
                                         The Oracle's Decree
                                     </h4>
-                                    <p className="text-neutral-300 leading-relaxed text-base sm:text-lg mb-8 pr-4">
+                                    <p 
+                                        className="text-neutral-200 leading-[1.8] text-lg sm:text-xl mb-8 pr-4"
+                                        style={{ fontFamily: '"Libre Baskerville", serif' }}
+                                    >
                                         {p.description}
                                     </p>
                                 </div>
