@@ -871,7 +871,6 @@ function DetailModal({
     const [teamCheck, setTeamCheck] = useState<'idle' | 'checking' | 'available' | 'registered'>('idle');
     const [registeredInfo, setRegisteredInfo] = useState<{ problemTitle: string; domain: string } | null>(null);
     const [formData, setFormData] = useState({
-        teamNumber: '',
         teamName: '',
         leaderName: '',
         email: '',
@@ -884,10 +883,10 @@ function DetailModal({
         return () => window.removeEventListener('keydown', onKey);
     }, [onClose]);
 
-    // Debounced team number check — fires 600ms after user stops typing.
+    // Debounced team name check — fires 600ms after user stops typing.
     // React's cleanup cancels the timer on every keystroke: no stale closures.
     useEffect(() => {
-        const tn = formData.teamNumber.trim();
+        const tn = formData.teamName.trim();
         if (!tn) {
             setTeamCheck('idle');
             setRegisteredInfo(null);
@@ -896,7 +895,7 @@ function DetailModal({
         setTeamCheck('checking');
         const timer = setTimeout(async () => {
             try {
-                const res = await fetch(`/api/register-labor?teamNumber=${encodeURIComponent(tn)}`);
+                const res = await fetch(`/api/register-labor?teamName=${encodeURIComponent(tn)}`);
                 if (!res.ok) { setTeamCheck('idle'); return; }
                 const data = await res.json();
                 if (data.exists) {
@@ -916,14 +915,13 @@ function DetailModal({
         }, 600);
         return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formData.teamNumber]);
+    }, [formData.teamName]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('submitting');
 
         const payload = {
-            teamNumber: formData.teamNumber.trim(),
             teamName: formData.teamName,
             leaderName: formData.leaderName,
             email: formData.email,
@@ -1076,7 +1074,7 @@ function DetailModal({
                                     </div>
                                     
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7 mt-4">
-                                        {/* ── TEAM NUMBER (primary, first) ── */}
+                                        {/* ── TEAM NAME (primary, first) ── */}
                                         <div className="flex flex-col relative group/input mt-1 sm:col-span-2">
                                             <label
                                                 className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold mb-1 absolute -top-6 left-0 transition-colors flex items-center gap-2"
@@ -1085,7 +1083,7 @@ function DetailModal({
                                                     color: teamCheck === 'registered' ? 'rgba(251,191,36,0.9)' : teamCheck === 'available' ? '#8ba85a' : 'rgba(180,140,50,0.85)',
                                                 }}
                                             >
-                                                Team Number <span style={{ color: domain.color }}>♦</span>
+                                                Team Name <span style={{ color: domain.color }}>♦</span>
                                                 {teamCheck === 'checking' && <span className="text-neutral-400 normal-case tracking-normal font-normal">checking…</span>}
                                                 {teamCheck === 'available' && <span className="text-green-400 normal-case tracking-normal font-normal">✓ Available</span>}
                                                 {teamCheck === 'registered' && <span className="text-amber-400 normal-case tracking-normal font-normal">⚠ Already registered</span>}
@@ -1093,16 +1091,15 @@ function DetailModal({
                                             <input
                                                 required
                                                 type="text"
-                                                value={formData.teamNumber}
-                                                onChange={e => setFormData(prev => ({ ...prev, teamNumber: e.target.value }))}
-                                                onBlur={() => {/* check runs via useEffect debounce */}}
+                                                value={formData.teamName}
+                                                onChange={e => setFormData(prev => ({ ...prev, teamName: e.target.value }))}
                                                 className="bg-black/40 border-b px-3 py-1.5 text-xl sm:text-2xl text-white placeholder-neutral-700/50 focus:outline-none focus:bg-black/60 transition-all w-full shadow-inner"
                                                 style={{
                                                     fontFamily: '"IM Fell English", serif',
                                                     boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.5)',
                                                     borderColor: teamCheck === 'registered' ? 'rgba(251,191,36,0.4)' : teamCheck === 'available' ? 'rgba(139,168,90,0.5)' : 'rgba(255,255,255,0.1)',
                                                 }}
-                                                placeholder="e.g. JKLU-2026-042"
+                                                placeholder="e.g. Argonauts"
                                             />
                                             <div className="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-300 group-focus-within/input:w-full"
                                                 style={{ background: `linear-gradient(90deg, ${teamCheck === 'registered' ? '#f59e0b' : teamCheck === 'available' ? '#8ba85a' : domain.color}, transparent)` }} />
@@ -1110,21 +1107,13 @@ function DetailModal({
                                             {/* Warning shown right below the field when team is already registered */}
                                             {teamCheck === 'registered' && registeredInfo && (
                                                 <p className="mt-2 text-[11px] leading-snug" style={{ fontFamily: 'Cinzel, serif', color: 'rgba(251,191,36,0.9)' }}>
-                                                    ⚠ You have already registered for <em>{registeredInfo.problemTitle}</em> ({registeredInfo.domain}).
-                                                    If you register here, your earlier registration will be struck off and{' '}
+                                                    ⚠ This team name has already registered for <em>{registeredInfo.problemTitle}</em> ({registeredInfo.domain}).
+                                                    If you proceed, your earlier registration will be struck off and{' '}
                                                     <strong>this will be your final submission.</strong>
                                                 </p>
                                             )}
                                         </div>
 
-                                        <div className="flex flex-col relative group/input mt-1 sm:col-span-2">
-                                            <label className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
-                                                Team Name <span style={{ color: domain.color }}>♦</span>
-                                            </label>
-                                            <input required type="text" value={formData.teamName} onChange={e => setFormData({...formData, teamName: e.target.value})} className="bg-black/40 border-b border-white/10 px-3 py-1.5 text-xl sm:text-2xl text-white placeholder-neutral-700/50 focus:outline-none focus:bg-black/60 transition-all w-full shadow-inner" style={{ fontFamily: '"IM Fell English", serif', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.5)' }} placeholder="e.g. Argonauts" />
-                                            <div className="absolute bottom-0 left-0 h-[2px] w-0 transition-all duration-300 group-focus-within/input:w-full" style={{ background: `linear-gradient(90deg, ${domain.color}, transparent)` }} />
-                                            <div className="absolute top-0 right-0 w-4 h-4 border-t border-r opacity-20 pointer-events-none transition-opacity group-focus-within/input:opacity-100" style={{ borderColor: domain.color }} />
-                                        </div>
                                         <div className="flex flex-col relative group/input mt-1 sm:col-span-2">
                                             <label className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
                                                 Leader Name <span style={{ color: domain.color }}>♦</span>

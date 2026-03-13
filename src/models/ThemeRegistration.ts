@@ -5,7 +5,7 @@ export interface IThemeRegistration extends Document {
     leaderName: string;
     email: string;
     phone: string;
-    teamNumber: string;
+    teamNumber?: string;
     domain: string;
     problemId: string;
     problemTitle: string;
@@ -31,7 +31,7 @@ const ThemeRegistrationSchema: Schema = new Schema({
         },
         teamNumber: {
             type: String,
-            required: [true, 'Please provide a team number'],
+            required: false,
         },
         domain: {
             type: String,

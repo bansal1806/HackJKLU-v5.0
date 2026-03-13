@@ -15,18 +15,18 @@ function getLimitForDomain(domain: string): number {
     return 2;
 }
 
-// ─── GET: look up a single team by teamNumber ────────────────────────────────
+// ─── GET: look up a single team by teamName ──────────────────────────────────
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
-    const teamNumber = searchParams.get('teamNumber')?.trim();
+    const teamName = searchParams.get('teamName')?.trim();
 
-    if (!teamNumber) {
-        return NextResponse.json({ error: 'teamNumber is required' }, { status: 400, headers: NO_CACHE });
+    if (!teamName) {
+        return NextResponse.json({ error: 'teamName is required' }, { status: 400, headers: NO_CACHE });
     }
 
     await connectDB();
     const existing = await ThemeRegistration.findOne(
-        { teamNumber },
+        { teamName: { $regex: new RegExp(`^${teamName}$`, 'i') } },
         { teamName: 1, domain: 1, problemTitle: 1, problemId: 1 }
     ).lean();
 
@@ -40,16 +40,18 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { teamName, leaderName, email, phone, teamNumber, domain, problemId, problemTitle } = body;
+        const { teamName, leaderName, email, phone, domain, problemId, problemTitle } = body;
 
-        if (!teamName || !leaderName || !email || !phone || !teamNumber || !domain || !problemId || !problemTitle) {
+        if (!teamName || !leaderName || !email || !phone || !domain || !problemId || !problemTitle) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400, headers: NO_CACHE });
         }
 
         await connectDB();
 
-        // 1. Find if this team already has a registration
-        const existing = await ThemeRegistration.findOne({ teamNumber }).lean() as any;
+        // 1. Find if this team already has a registration by teamName (case-insensitive)
+        const existing = await ThemeRegistration.findOne({ 
+            teamName: { $regex: new RegExp(`^${teamName}$`, 'i') } 
+        }).lean() as any;
 
         let oldProblemId: string | null = null;
         let oldCount: number | null = null;
@@ -60,11 +62,11 @@ export async function POST(req: Request) {
             if (isSameProblem) {
                 // ── CASE A: same problem → just update their details in place ──
                 await ThemeRegistration.updateOne(
-                    { teamNumber },
+                    { _id: existing._id },
                     { $set: { teamName, leaderName, email, phone, domain, problemTitle } }
                 );
                 const count = await ThemeRegistration.countDocuments({ problemId });
-                console.log(`[Sacred Labors] Updated team ${teamNumber} in place for ${domain}`);
+                console.log(`[Sacred Labors] Updated team ${teamName} in place for ${domain}`);
                 return NextResponse.json(
                     { message: 'Entry updated successfully!', count, updated: true },
                     { status: 200, headers: NO_CACHE }
@@ -86,7 +88,7 @@ export async function POST(req: Request) {
             oldProblemId = existing.problemId;
 
             // Delete old registration
-            await ThemeRegistration.deleteOne({ teamNumber });
+            await ThemeRegistration.deleteOne({ _id: existing._id });
 
             // Recalculate old problem count after deletion
             oldCount = await ThemeRegistration.countDocuments({ problemId: oldProblemId });
@@ -108,13 +110,12 @@ export async function POST(req: Request) {
             leaderName,
             email,
             phone,
-            teamNumber,
             domain,
             problemId,
             problemTitle,
         });
 
-        console.log(`[Sacred Labors] Registered team ${teamNumber} (${teamName}) for ${domain} / ${problemId}`);
+        console.log(`[Sacred Labors] Registered team ${teamName} for ${domain} / ${problemId}`);
 
         const count = await ThemeRegistration.countDocuments({ problemId });
 
