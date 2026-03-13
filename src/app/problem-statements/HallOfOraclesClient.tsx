@@ -703,14 +703,11 @@ function ProblemCard({
                             {domain.icon}
                         </div>
                         <div>
-                            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-1 transition-colors duration-400 flex items-center flex-wrap gap-2" style={{ fontFamily: 'Cinzel, serif', color: hovered ? accentColor : 'rgba(212,175,55,0.7)' }}>
-                                {domain.label}
+                            <div className="text-[10px] font-bold uppercase tracking-[0.3em] mb-1 transition-colors duration-400 flex flex-col gap-0.5" style={{ fontFamily: 'Cinzel, serif' }}>
+                                <span style={{ color: hovered ? accentColor : 'rgba(212,175,55,0.7)', letterSpacing: '0.5em' }}>{domain.label}</span>
                                 {domain.sponsor && (
-                                    <span className="text-[8px] tracking-[0.2em] opacity-60 font-medium">by {domain.sponsor}</span>
+                                    <span className="text-[10px] tracking-[0.2em] font-bold text-white/90">by {domain.sponsor}</span>
                                 )}
-                            </div>
-                            <div className="text-[9px] uppercase tracking-[0.3em] font-medium" style={{ fontFamily: 'Cinzel, serif', color: 'rgba(255,255,255,0.4)' }}>
-                                Codex Entry
                             </div>
                         </div>
                     </div>
