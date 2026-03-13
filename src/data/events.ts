@@ -1,14 +1,5 @@
 export const eventsData = [
     {
-        id: 6, title: 'RoboSoccer',
-        desc: 'Watch custom-built autonomous robots play soccer against each other on the field.',
-        time: '13th March, 6:00 PM onwards', location: 'IET Building',
-        color: '#51cf66', poster: '/events/robo_soccer.webp',
-        isEpic: false, isMythic: true,
-        entryFee: 0, requiresBooking: false,
-        details: 'Robo Soccer Challenge is a robotics competition organized by the Robotics Club of JK Lakshmipat University. In this event, two participants control robots to play a small soccer match and try to score more goals than their opponent within a set time. The robots used for the game are available in the university robotics lab. The event aims to encourage student participation in robotics, promote hands-on learning, and create a fun competitive environment',
-    },
-    {
         id: 1, title: 'KING OF PLANETS!',
         desc: 'Enjoy a stargazing session from the Tech Block Terrace under the open night sky.',
         time: '13th March, 10:00 PM - 12:00 AM', location: 'Tech Block Terrace',

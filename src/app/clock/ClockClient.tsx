@@ -44,7 +44,6 @@ const SCHEDULE: HackathonEvent[] = [
     { title: "Hackathon Starts", start: new Date('2026-03-13T14:00:00+05:30'), dateLabel: "13 March", timeLabel: "2:00 PM" },
     { title: "PS Selection Time", start: new Date('2026-03-13T14:00:00+05:30'), end: new Date('2026-03-13T15:00:00+05:30'), dateLabel: "13 March", timeLabel: "2:00 – 3:00 PM" },
     { title: "Speaker Session (Urvij Saroliya)", start: new Date('2026-03-13T16:00:00+05:30'), end: new Date('2026-03-13T17:00:00+05:30'), dateLabel: "13 March", timeLabel: "4:00 – 5:00 PM" },
-    { title: "RoboSoccer", start: new Date('2026-03-13T18:00:00+05:30'), dateLabel: "13 March", timeLabel: "6:00 onwards" },
     { title: "Dinner + Networking", start: new Date('2026-03-13T21:00:00+05:30'), end: new Date('2026-03-13T22:00:00+05:30'), dateLabel: "13 March", timeLabel: "9:00 – 10:00 PM" },
     { title: "Space Observation", start: new Date('2026-03-13T22:00:00+05:30'), end: new Date('2026-03-14T00:00:00+05:30'), dateLabel: "13 March", timeLabel: "10:00 – 12:00" },
     { title: "Mentoring Round 1", start: new Date('2026-03-13T22:00:00+05:30'), end: new Date('2026-03-14T00:00:00+05:30'), dateLabel: "13 March", timeLabel: "10:00 PM – 12:00 AM" },
