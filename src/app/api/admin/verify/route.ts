@@ -71,6 +71,7 @@ export async function POST(req: NextRequest) {
                     siteUrl: siteUrl,
                     accessTier: ticket.accessTier,
                     teamMembers: ticket.teamMembers,
+                    danceStyle: ticket.danceStyle,
                 })}
                 
                 <div style="margin-top:40px; border-top:1px solid #3d3520; padding-top:20px; color:#8b8680; font-size:14px;">

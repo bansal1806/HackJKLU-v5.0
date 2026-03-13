@@ -165,6 +165,12 @@ export default function VerificationDashboard() {
                       <span className="text-xs uppercase tracking-wider font-bold text-[#d4af37]">Transaction ID</span>
                       <span className="text-[#d4af37] font-mono">{ticket.transactionId || 'N/A'}</span>
                     </div>
+                    {ticket.danceStyle && (
+                      <div className="flex flex-col">
+                        <span className="text-stone-500 text-xs uppercase tracking-wider">Dance Style</span>
+                        <span className="text-stone-200 font-bold">{ticket.danceStyle}</span>
+                      </div>
+                    )}
                   </div>
 
                   {ticket.teamMembers && ticket.teamMembers.length > 0 && (

@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
         const teamMembersStr = formData.get('teamMembers') as string;
         const transactionId = formData.get('transactionId') as string;
         const receiptFile = formData.get('receipt') as File;
+        const danceStyle = formData.get('danceStyle') as string;
 
         let teamMembers: string[] = [];
         if (teamMembersStr) {
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
             attendeePhone: attendeePhone || 'N/A',
             college: college || 'N/A',
             teamMembers: teamMembers,
+            danceStyle: danceStyle || undefined,
             isPaid: true,
             isCheckedIn: false,
             accessTier: 'GA',

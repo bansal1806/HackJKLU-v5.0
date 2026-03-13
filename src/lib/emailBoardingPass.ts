@@ -16,6 +16,7 @@ interface BoardingPassEmailParams {
     siteUrl: string;
     accessTier?: string;
     teamMembers?: string[];
+    danceStyle?: string;
 }
 
 export function generateBoardingPassHTML({
@@ -28,6 +29,7 @@ export function generateBoardingPassHTML({
     siteUrl,
     accessTier = 'GA',
     teamMembers = [],
+    danceStyle,
 }: BoardingPassEmailParams): string {
     const shortId = ticketId.length > 10
         ? ticketId.slice(0, 6) + '...' + ticketId.slice(-4)
@@ -59,7 +61,7 @@ export function generateBoardingPassHTML({
     };
 
     const style = tierColors[accessTier] || tierColors['GA'];
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(ticketId)}`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(ticketId)}`;
 
     return `
     <div style="max-width:640px;margin:24px auto;font-family:Georgia,'Times New Roman',serif;background:#020205;padding:20px;border-radius:16px;">
@@ -165,6 +167,14 @@ export function generateBoardingPassHTML({
                                                     <td style="border-bottom:1px solid #3d3520;padding:12px 0;">
                                                         <p style="color:${style.accent};font-size:8px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;margin:0 0 4px 0;">TEAM MEMBERS</p>
                                                         <p style="color:#fff;font-size:12px;font-weight:900;margin:0;">${teamMembers.join(', ')}</p>
+                                                    </td>
+                                                </tr>
+                                                ` : ''}
+                                                ${danceStyle ? `
+                                                <tr>
+                                                    <td style="border-bottom:1px solid #3d3520;padding:12px 0;">
+                                                        <p style="color:${style.accent};font-size:8px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;margin:0 0 4px 0;">DANCE STYLE</p>
+                                                        <p style="color:#fff;font-size:14px;font-weight:900;margin:0;">${danceStyle}</p>
                                                     </td>
                                                 </tr>
                                                 ` : ''}

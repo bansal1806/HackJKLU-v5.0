@@ -39,7 +39,7 @@ export default function AttendeesPage() {
     const handleExportCSV = () => {
         if (attendees.length === 0) return;
 
-        const headers = ['Ticket ID', 'Event Title', 'Name', 'Email', 'Phone', 'College', 'Team Members', 'Paid', 'Checked In', 'Registration Date'];
+        const headers = ['Ticket ID', 'Event Title', 'Name', 'Email', 'Phone', 'College', 'Dance Style', 'Team Members', 'Paid', 'Checked In', 'Registration Date'];
         const csvContent = [
             headers.join(','),
             ...attendees.map(a => [
@@ -49,6 +49,7 @@ export default function AttendeesPage() {
                 `"${a.attendeeEmail}"`,
                 `"${a.attendeePhone || ''}"`,
                 `"${a.college || ''}"`,
+                `"${a.danceStyle || ''}"`,
                 `"${(a.teamMembers || []).join(', ')}"`,
                 a.isPaid ? 'Yes' : 'No',
                 a.isCheckedIn ? 'Yes' : 'No',
@@ -131,6 +132,7 @@ export default function AttendeesPage() {
                                     <th className="px-6 py-4 hidden md:table-cell whitespace-nowrap">Contact</th>
                                     <th className="px-6 py-4 hidden lg:table-cell whitespace-nowrap">Reg. Details</th>
                                     <th className="px-6 py-4 whitespace-nowrap">Team</th>
+                                    <th className="px-6 py-4 whitespace-nowrap">Dance Style</th>
                                     <th className="px-6 py-4 text-center whitespace-nowrap">Status</th>
                                 </tr>
                             </thead>
@@ -180,6 +182,15 @@ export default function AttendeesPage() {
                                                             </span>
                                                         ))}
                                                     </div>
+                                                ) : (
+                                                    <span className="text-stone-600 text-[10px]">—</span>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4 min-w-[120px]">
+                                                {a.danceStyle ? (
+                                                    <span className="text-xs bg-[#d4af37]/10 border border-[#d4af37]/20 px-2 py-1 rounded text-[#d4af37] font-bold uppercase tracking-wider">
+                                                        {a.danceStyle}
+                                                    </span>
                                                 ) : (
                                                     <span className="text-stone-600 text-[10px]">—</span>
                                                 )}

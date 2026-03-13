@@ -1152,7 +1152,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                 >
                     {/* Backdrop blur pill container */}
                     <div
-                        className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-2 py-3 rounded-sm"
+                        className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-5 py-5 sm:py-6 rounded-sm"
                         style={{
                             background: 'rgba(10,8,6,0.92)',
                             backdropFilter: 'blur(20px)',
@@ -1165,7 +1165,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                             onClick={() => setActiveTheme('all')}
                             whileHover={{ scale: 1.04 }}
                             whileTap={{ scale: 0.97 }}
-                            className="px-3 sm:px-5 py-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] transition-all duration-200 rounded-sm font-semibold"
+                            className="px-5 sm:px-8 py-3 sm:py-3.5 text-xs sm:text-sm uppercase tracking-[0.2em] sm:tracking-[0.3em] transition-all duration-200 rounded-sm font-semibold"
                             style={{
                                 fontFamily: 'Cinzel, serif',
                                 background: activeTheme === 'all' ? 'rgba(212,175,55,0.2)' : 'rgba(255,255,255,0.04)',
@@ -1176,7 +1176,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                             }}
                         >
                             All&nbsp;
-                            <span className="opacity-60 text-[8px]">({PROBLEMS.length})</span>
+                            <span className="opacity-60 text-[11px] sm:text-xs">({PROBLEMS.length})</span>
                         </motion.button>
 
                         {DOMAINS.map(domain => {
@@ -1188,7 +1188,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                                     onClick={() => setActiveTheme(domain.key)}
                                     whileHover={{ scale: 1.04 }}
                                     whileTap={{ scale: 0.97 }}
-                                    className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] transition-all duration-200 rounded-sm font-semibold"
+                                    className="flex items-center gap-2.5 sm:gap-3 px-5 sm:px-8 py-3 sm:py-3.5 text-xs sm:text-sm uppercase tracking-[0.15em] sm:tracking-[0.25em] transition-all duration-200 rounded-sm font-semibold"
                                     style={{
                                         fontFamily: 'Cinzel, serif',
                                         background: isActive ? `rgba(${domain.rgb},0.2)` : 'rgba(255,255,255,0.04)',
@@ -1198,9 +1198,9 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                                         boxShadow: isActive ? `0 0 20px rgba(${domain.rgb},0.25), inset 0 0 10px rgba(${domain.rgb},0.08)` : 'none',
                                     }}
                                 >
-                                    <span>{domain.icon}</span>
+                                    <span className="text-base sm:text-lg">{domain.icon}</span>
                                     <span>{domain.label}</span>
-                                    <span className="opacity-50 text-[8px]">({count})</span>
+                                    <span className="opacity-50 text-[11px] sm:text-xs">({count})</span>
                                 </motion.button>
                             );
                         })}
@@ -1231,7 +1231,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                         key={activeTheme}
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                         transition={{ duration: 0.25 }}
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
                     >
                         {filtered.map((p, i) => {
                             const dom = DOMAINS.find(d => d.key === p.domain)!;
