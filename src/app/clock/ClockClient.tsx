@@ -377,6 +377,45 @@ export function ClockClient() {
                         </div>
                     )}
                 </div>
+
+                {/* WiFi Credentials Card */}
+                <div className="w-full max-w-6xl mt-6 z-10 font-inter backdrop-blur-md rounded-2xl border border-[#F4C430]/30 bg-black/60 overflow-hidden shadow-[0_0_40px_rgba(244,196,48,0.1)]">
+                    <div className="flex flex-col md:flex-row items-stretch divide-y md:divide-y-0 md:divide-x divide-[#F4C430]/20">
+                        {/* WiFi Section */}
+                        <div className="flex-1 p-5 sm:p-6 flex flex-col gap-3">
+                            <div className="flex items-center gap-2.5">
+                                <span className="text-[0.7rem] text-[#F4C430] font-mono tracking-[0.4em] font-bold uppercase">Sacred Connection (WiFi)</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <div className="text-[0.6rem] text-gray-500 font-mono tracking-widest uppercase">SSID</div>
+                                    <div className="text-lg font-bold text-white">JKLU</div>
+                                </div>
+                                <div>
+                                    <div className="text-[0.6rem] text-gray-500 font-mono tracking-widest uppercase">Password</div>
+                                    <div className="text-lg font-bold text-[#F4C430] font-mono tracking-wider">wifi@jklu21</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Sign In Section */}
+                        <div className="flex-1 p-5 sm:p-6 flex flex-col gap-3 bg-gradient-to-br from-[#F4C430]/5 to-transparent">
+                            <div className="flex items-center gap-2.5">
+                                <span className="text-[0.7rem] text-[#F4C430] font-mono tracking-[0.4em] font-bold uppercase">Oracle Access (Portal Login)</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <div className="text-[0.6rem] text-gray-500 font-mono tracking-widest uppercase">Username</div>
+                                    <div className="text-lg font-bold text-white">hackjklu</div>
+                                </div>
+                                <div>
+                                    <div className="text-[0.6rem] text-gray-500 font-mono tracking-widest uppercase">Password</div>
+                                    <div className="text-lg font-bold text-[#F4C430] font-mono tracking-wider">hackjklu@26</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* SPACER BETWEEN MAIN FRAME AND TIMELINE */}
