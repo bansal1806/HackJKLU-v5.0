@@ -1527,7 +1527,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                                     domain={dom}
                                     index={i}
                                     isRevealed={isRevealed}
-                                    onClick={() => { if ((countsMap[p.id] ?? 0) < 2) setSelectedPS(p); }}
+                                    onClick={() => { if ((countsMap[p.id] ?? 0) < dom.maxTeams) setSelectedPS(p); }}
                                     count={countsMap[p.id] ?? 0}
                                 />
                             );
