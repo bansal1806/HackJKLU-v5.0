@@ -6,6 +6,8 @@ export const dynamic = 'force-dynamic';
 
 const NO_CACHE = { 'Cache-Control': 'no-store' };
 
+const SUBMISSIONS_CLOSED = true;
+
 function getLimitByProblemId(problemId: string): number {
     const key = problemId.split('-')[0].toLowerCase();
     if (key === 'blockchain') return 5;
@@ -44,6 +46,13 @@ export async function POST(req: Request) {
 
         if (!teamName || !leaderName || !email || !phone || !domain || !problemId || !problemTitle) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400, headers: NO_CACHE });
+        }
+
+        if (SUBMISSIONS_CLOSED) {
+            return NextResponse.json(
+                { error: 'SUBMISSIONS_CLOSED', message: 'Submissions are now closed. The Oracles have spoken.' },
+                { status: 403, headers: NO_CACHE }
+            );
         }
 
         await connectDB();

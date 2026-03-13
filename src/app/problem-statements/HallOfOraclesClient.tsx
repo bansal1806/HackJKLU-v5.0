@@ -51,6 +51,8 @@ interface Domain {
     prize?: string;
 }
 
+const SUBMISSIONS_CLOSED = true;
+
 const DOMAINS: Domain[] = [
     { key: 'aiml',          label: 'AI / ML',          icon: '🤖', color: '#8b5cf6', rgb: '139,92,246',  glyph: 'I',   count: 29, maxTeams: 2 },
     { key: 'cybersecurity', label: 'Cyber Security',   icon: '🛡️', color: '#10b981', rgb: '16,185,129',  glyph: 'II',  count: 24, maxTeams: 2 },
@@ -1307,6 +1309,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                     p={selectedPS}
                     domain={DOMAINS.find(d => d.key === selectedPS.domain)!}
                     initialFull={(() => {
+                        if (SUBMISSIONS_CLOSED) return true;
                         const dom = DOMAINS.find(d => d.key === selectedPS.domain);
                         if (!dom || dom.maxTeams >= 999) return false;
                         return (countsMap[selectedPS.id] ?? 0) >= dom.maxTeams;
