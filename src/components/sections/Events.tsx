@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
 import { QRCodeCanvas } from 'qrcode.react';
-import { ShoppingCart, CheckCircle, Clock, MapPin, X, Loader2, User, Ticket as TicketIcon, Gamepad2, Music, Map, Mic, Cpu, Zap, Star, Camera, Code2, Search, SlidersHorizontal, Sparkles, Flame, Bot, Palette, Glasses, Download } from 'lucide-react';
+import { ShoppingCart, CheckCircle, Clock, MapPin, X, Loader2, User, Ticket as TicketIcon, Gamepad2, Music, Map, Mic, Cpu, Zap, Star, Camera, Code2, Search, SlidersHorizontal, Sparkles, Flame, Bot, Palette, Glasses, Download, Linkedin } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import BoardingPass from '@/components/ui/BoardingPass';
 
@@ -79,8 +79,31 @@ const EMBER_CSS = [
   ),
 ].join('\n');
 
+const SPEAKERS = [
+  {
+    id: 1,
+    name: 'Urvij Saroliya',
+    role: 'Keynote Speaker',
+    topic: 'Engine Behind Innovation: HPC in the Age of AI',
+    bio: 'An expert in High-Performance Computing (HPC) and its critical role in modern innovation. In this talk, Urvij explores how HPC serves as the essential engine behind the AI revolution, enabling the massive compute power required to train large-scale models and drive next-generation breakthroughs across industries.',
+    photo: '/events/Speaker_1.webp',
+    linkedin: 'https://www.linkedin.com/in/urvijsaroliya/?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+  },
+  {
+    id: 2,
+    name: 'Keerti Purswani',
+    role: 'Judge & Speaker',
+    company: 'Founder of Educosys',
+    topic: 'How to Be Job-Ready in the AI Era',
+    bio: 'Founder of Educosys and a renowned tech educator. Keerti will be delivering an essential talk on "How to Be Job-Ready in the AI Era," exploring how to leverage AI tools to enhance productivity, staying relevant in a rapidly evolving tech landscape, and the core skills every developer needs to thrive in the age of artificial intelligence.',
+    photo: '/events/Speaker_2.webp',
+    linkedin: 'https://www.linkedin.com/in/keertipurswani/',
+  },
+];
+
 export function Events() {
   const [selectedEvent, setSelectedEvent] = useState<typeof events[0] | null>(null);
+  const [selectedSpeaker, setSelectedSpeaker] = useState<typeof SPEAKERS[0] | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'popular' | 'trending'>('all');
   type FilterId = 'all' | 'popular' | 'trending';
@@ -355,32 +378,45 @@ export function Events() {
         </div>
       </div>
 
-      {/* Eminent Speakers Section Hidden by Request
-      (
+      {(
         <div className="relative z-10 w-full max-w-7xl mx-auto mb-16 sm:mb-24 px-4">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-px flex-1 bg-linear-to-l from-[#d4af37]/50 to-transparent" />
             <h3 className="text-3xl md:text-5xl font-[Cinzel] font-black text-[#d4af37] tracking-wider uppercase text-right">Eminent Speakers</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {[1, 2, 3].map((speaker) => (
-              <div key={speaker} className="relative group rounded-3xl overflow-hidden border border-[#d4af37]/20 bg-[#1A1C23] aspect-4/5 flex flex-col justify-end">
+          <div className="flex flex-col sm:flex-row justify-center gap-6 md:gap-8">
+            {SPEAKERS.map((spk) => (
+              <motion.div
+                key={spk.id}
+                onClick={() => setSelectedSpeaker(spk)}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="relative group rounded-3xl overflow-hidden border border-[#d4af37]/20 bg-[#1A1C23] min-h-[420px] w-full sm:w-[380px] flex flex-col justify-end cursor-pointer shadow-[0_0_0_1px_rgba(212,175,55,0.1)] hover:shadow-[0_0_40px_rgba(212,175,55,0.15)] transition-shadow duration-500"
+              >
                 <div className="absolute inset-0 bg-black">
-                  <img src="/events/tech.png" alt={`Speaker ${speaker}`} className="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-110 transition-all duration-700" />
+                  <img src={spk.photo} alt={spk.name} className="w-full h-full object-cover object-top opacity-70 group-hover:opacity-90 group-hover:scale-110 transition-all duration-700" />
                 </div>
-                <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-[#0B0C10]/60 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-[#0B0C10]/50 to-transparent" />
                 <div className="relative z-10 p-6 sm:p-8">
-                  <p className="text-[#d4af37] text-xs font-black tracking-widest uppercase mb-1">Keynote Speaker</p>
-                  <h4 className="text-2xl sm:text-3xl font-[Cinzel] font-black text-white uppercase mb-2">Guest Speaker {speaker}</h4>
-                  <p className="text-stone-400 text-sm italic line-clamp-2">Industry pioneer and expert joining the council to share profound knowledge and insights.</p>
+                  <p className="text-[#d4af37] text-xs font-black tracking-widest uppercase mb-1">{spk.role}</p>
+                  <h4 className="text-2xl sm:text-3xl font-[Cinzel] font-black text-white uppercase mb-1">{spk.name}</h4>
+                  {/* @ts-ignore */}
+                  {spk.topic && (
+                    <p className="text-[#d4af37]/80 text-[10px] font-black tracking-widest uppercase mb-3 line-clamp-1">
+                      Topic: {spk.topic}
+                    </p>
+                  )}
+                  <div className="mt-4 flex items-center gap-2 text-[#d4af37] text-xs font-black tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span>View Profile</span>
+                    <span>→</span>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      )
-      */}
+      )}
 
       {(
         <div className="relative z-10 w-full mb-8 flex items-center justify-center">
@@ -787,6 +823,129 @@ export function Events() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Speaker Detail Modal */}
+      <AnimatePresence>
+        {selectedSpeaker && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-100 flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-8"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedSpeaker(null)}
+              className="absolute inset-0 bg-[#020205]/98 backdrop-blur-3xl"
+            />
+            <motion.div
+              initial={{ scale: 0.8, y: 60, opacity: 0, rotateY: 90 }}
+              animate={{ scale: 1, y: 0, opacity: 1, rotateY: 0 }}
+              exit={{ scale: 0.8, y: 60, opacity: 0, rotateY: -90 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 180 }}
+              style={{ perspective: 2000 }}
+              className="relative z-10 w-full sm:max-w-3xl md:max-w-5xl lg:max-w-6xl h-[80vh] sm:max-h-[85vh] bg-[#0B0C10] border border-[#d4af37]/30 rounded-t-3xl sm:rounded-3xl shadow-[0_0_100px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col md:flex-row mythic-border-gold"
+            >
+              <button
+                onClick={() => setSelectedSpeaker(null)}
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-black/50 text-white rounded-full hover:scale-110 transition-transform backdrop-blur-md border border-[#d4af37]/30 hover:bg-[#d4af37] hover:text-black"
+                aria-label="Close speaker details"
+              >
+                <X size={20} />
+              </button>
+
+              {/* Photo Side */}
+              <div className="w-full md:w-1/2 relative shrink-0 overflow-hidden bg-black">
+                <motion.img
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  src={selectedSpeaker.photo}
+                  alt={selectedSpeaker.name}
+                  className="w-full h-[40vh] md:h-full object-cover object-top"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-[#0B0C10] via-transparent to-black/40 md:bg-linear-to-r md:from-[#0B0C10]/80 md:to-transparent pointer-events-none" />
+              </div>
+
+              {/* Info Side */}
+              <div className="flex-1 p-6 sm:p-8 md:p-12 overflow-y-auto bg-[#1A1C23]/30 backdrop-blur-sm custom-scrollbar flex flex-col justify-center">
+                <motion.p
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-[#d4af37] text-xs font-black tracking-[0.3em] uppercase mb-1"
+                >
+                  {selectedSpeaker.role}
+                </motion.p>
+                {/* @ts-ignore */}
+                {selectedSpeaker.company && (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-stone-400 text-sm font-bold tracking-widest uppercase mb-3"
+                  >
+                    {/* @ts-ignore */}
+                    {selectedSpeaker.company}
+                  </motion.p>
+                )}
+                <motion.h2
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 }}
+                  className="text-3xl sm:text-4xl lg:text-5xl font-[Cinzel] font-black text-white mb-2 uppercase tracking-wider leading-tight"
+                >
+                  {selectedSpeaker.name}
+                </motion.h2>
+
+                {/* @ts-ignore */}
+                {selectedSpeaker.topic && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="mb-6"
+                  >
+                    <span className="text-[#d4af37] text-[10px] font-black tracking-[0.2em] uppercase block mb-1">Talk Topic</span>
+                    <h3 className="text-white text-lg sm:text-xl font-bold italic tracking-wide">
+                      {/* @ts-ignore */}
+                      "{selectedSpeaker.topic}"
+                    </h3>
+                  </motion.div>
+                )}
+
+                <div className="h-px w-16 bg-[#d4af37]/40 mb-6" />
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.15 }}
+                  className="text-stone-300 text-base sm:text-lg leading-relaxed italic font-serif mb-8"
+                >
+                  {selectedSpeaker.bio}
+                </motion.p>
+
+                {/* @ts-ignore */}
+                {selectedSpeaker.linkedin && (
+                  <motion.a
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    /* @ts-ignore */
+                    href={selectedSpeaker.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-[#d4af37] hover:text-white transition-colors group/link w-fit"
+                  >
+                    <div className="w-10 h-10 rounded-full border border-[#d4af37]/30 flex items-center justify-center group-hover/link:border-[#d4af37] transition-all">
+                      <Linkedin size={18} />
+                    </div>
+                    <span className="font-black tracking-[0.2em] uppercase text-xs">View LinkedIn Profile</span>
+                  </motion.a>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
@@ -851,9 +1010,6 @@ function EventCard({ evt, onClick }: { evt: typeof events[0], onClick: () => voi
           {evt.title}
         </h3>
 
-        <p className="text-stone-500 text-[10px] sm:text-xs mb-3 sm:mb-6 line-clamp-2 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
-          {evt.desc}
-        </p>
 
         <div className="mt-auto flex items-center justify-between py-2 sm:py-3 border-t border-[#d4af37]/10">
           <div className="flex items-center gap-1 sm:gap-1.5 text-stone-500 min-w-0">

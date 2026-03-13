@@ -6,7 +6,7 @@ export const eventsData = [
         color: '#51cf66', poster: '/events/robo_soccer.webp',
         isEpic: false, isMythic: true,
         entryFee: 0, requiresBooking: false,
-        details: 'Watch an exciting game where autonomous custom-built robots clash in a soccer match testing engineering, programming, and strategy.',
+        details: 'Robo Soccer Challenge is a robotics competition organized by the Robotics Club of JK Lakshmipat University. In this event, two participants control robots to play a small soccer match and try to score more goals than their opponent within a set time. The robots used for the game are available in the university robotics lab. The event aims to encourage student participation in robotics, promote hands-on learning, and create a fun competitive environment',
     },
     {
         id: 1, title: 'KING OF PLANETS!',
@@ -15,7 +15,7 @@ export const eventsData = [
         color: '#eebefa', poster: '/events/KING OF PLANETS!.webp',
         isEpic: true, isMythic: false,
         entryFee: 0, requiresBooking: false,
-        details: 'View the stars and planets from the Tech Block Terrace. Take a break from coding and enjoy a relaxing stargazing session under the night sky.',
+        details: 'King of Planets!" Description: During this event students will see Jupiter as the brightest star-like object in the sky, shining steadily in Gemini and easily visible even through our naked eyes, in this event we\'ll show Jupiter. Telescopes will reveal Jupiter’s cloud bands, belts, and potentially the Great Red Spot storm, offering stunning views under clear conditions. And if you are lucky, you can even see a Starlink train and even Space Station!',
     },
     {
         id: 3, title: 'Open Mic Night',
@@ -24,7 +24,7 @@ export const eventsData = [
         color: '#4ecdc4', poster: '/events/Open mike.webp',
         isEpic: true, isMythic: false,
         entryFee: 0, requiresBooking: false,
-        details: 'The stage is yours! Share your voice, stories, or art during our late-night open mic session on the Tech Lawn.',
+        details: 'Open Mic is a creative platform where students can express themselves through poetry, storytelling, spoken word, music, or stand-up. The event encourages participants to share their ideas, experiences, and talents in a supportive and engaging environment. It aims to promote creativity, confidence, and artistic expression while bringing together diverse voices from the student community.',
     },
     {
         id: 14, title: 'Dreamscape VR',
@@ -61,7 +61,7 @@ export const eventsData = [
         color: '#4dabf7', poster: '/events/bit by bit.png',
         isEpic: false, isMythic: true,
         entryFee: 0, requiresBooking: false,
-        details: 'Test your programming skills by solving complex algorithmic challenges under strict time pressure. Only the most efficient coders will win.',
+        details: 'Step into the arena for the ultimate test of logic and efficiency. Hosted by The Matrix, this intense programming gauntlet will push your problem-solving limits to the edge. Whether you\'re scripting complex algorithms, optimizing loops, or debugging on the fly, every keystroke counts when you\'re racing against the clock. Bring your sharpest logic and see if you have what it takes to out-code the competition.',
     },
     {
         id: 5, title: 'Media Maze',
@@ -70,7 +70,7 @@ export const eventsData = [
         color: '#fcc419', poster: '/events/media maze.webp',
         isEpic: false, isMythic: false,
         entryFee: 0, requiresBooking: false,
-        details: 'Answer rapid-fire trivia questions covering technology, science, pop culture, and more. Test your general knowledge in this fun competition.',
+        details: 'Think you know it all? Take a breather from building and compiling to navigate the Media Maze! Brought to you by HackJKLU 5.0 and Sociama, this fast-paced trivia showdown is designed to test your mental reflexes. Navigate through a labyrinth of rapid-fire questions and prove you have the ultimate general knowledge toolkit. Gather at the IM Amphi, trust your instincts, and see who truly knows it all.',
     },
     {
         id: 9, title: 'Block Printing',
@@ -79,7 +79,7 @@ export const eventsData = [
         color: '#ff922b', poster: '/events/Block Printing.webp',
         isEpic: false, isMythic: false,
         entryFee: 0, requiresBooking: false,
-        details: 'Step away from the screen to learn the traditional craft of block printing. Create and stamp your own custom artistic designs onto fabric.',
+        details: 'Ready to get hands-on? Step away from the screen and join the Design Club\'s Block Printing Experience! Learn the art of traditional fabric stamping, create unique designs on tote bags and pouches, and take your handcrafted masterpiece home. A perfect blend of creativity and mindfulness amidst the hackathon hustle.',
     },
     {
         id: 7, title: 'Curtain Call',
@@ -88,7 +88,7 @@ export const eventsData = [
         color: '#9775fa', poster: '/events/Curtain call.webp',
         isEpic: true, isMythic: false,
         entryFee: 0, requiresBooking: false,
-        details: 'Take a break and watch a live theatrical performance and storytelling spectacle presented by the talented college Drama Club on the LRC Stairs.',
+        details: 'Lights, action, and live drama on the LRC Stairs! Don\'t miss Curtain Call, a captivating theatrical skit by the Drama Club. It\'s 30 minutes of pure storytelling magic — just grab a spot on the steps, take a breather, and enjoy the show! No tickets, no hassle — just raw, immersive performance art.',
     },
     {
         id: 12, title: 'Dance Battle',
@@ -100,13 +100,13 @@ export const eventsData = [
         details: 'INSANE Dance Battle is a high-energy 1 vs 1 street dance competition happening at JK Lakshmipat University, Jaipur on 14th March. The event features two battle categories — Popping and Rep Your Style, bringing together dancers to showcase their individuality, creativity, and stage presence. With a total prize pool of ₹14,000 (Popping: ₹7000, Rep your style: ₹7000) and Manish Pop as the judge, the battle aims to highlight raw talent and celebrate street dance culture.\n\nRegistration:\n- Online: ₹399 (before 1 PM on 14th)\n- On-spot: ₹499',
     },
     {
-        id: 11, title: 'Astro Aim Chalange',
-        desc: 'Explore the campus at night in this fun scavenger hunt to find hidden space-themed objects.',
+        id: 11, title: 'Astro Aim Challenge',
+        desc: 'The Telescopic Pointing Contest is an exciting and educational astronomy event where participants test their skills in accurately locating celestial objects using a telescope.',
         time: '14th March, 9:00 PM - 12:00 AM', location: 'Tech Block Terrace',
         color: '#ffd43b', poster: '/events/astro aim.webp',
         isEpic: false, isMythic: true,
         entryFee: 25, requiresBooking: true,
-        details: 'Join an exciting night-time scavenger hunt. Follow the clues and map to find hidden space-themed objects scattered across the entire campus.',
+        details: 'Astro Aim Challenge Description: The Telescopic Pointing Contest is an exciting and educational astronomy event where participants test their skills in accurately locating celestial objects using a telescope. In this contest, competitors are given the names of objects in the night sky such as planets, stars, star clusters, or nebula and must quickly and precisely point their telescope toward the correct target. Participants are judged based on accuracy, speed, and proper telescope handling techniques.',
     },
     {
         id: 10, title: 'Jamming Night',
@@ -115,6 +115,6 @@ export const eventsData = [
         color: '#ff8787', poster: '/events/jamming_night_poster.webp',
         isEpic: true, isMythic: false,
         entryFee: 0, requiresBooking: false,
-        details: 'Bring your instruments or just sing along for a relaxed night of live music and open jamming on the Tech Lawn under the stars.',
+        details: 'After hours of intense brainstorming and building at Hack JKLU, it’s time to step away from the screens and soak in the vibes at the Tech Lawn. Organized by Anunaad, the Music Club of JKLU, our Jamming Night is all about raw talent, soulful fusion, and a relaxed campus atmosphere. Whether you\'re a vocalist, an instrumentalist, or just someone who loves a good rhythm, this is your stage. From acoustic melodies and unplugged sessions to the rhythmic beats of the tabla, come join us for a night of freestyle music under the stars. • Date: 14th March 2026 • Time: Midnight (12:00 AM) onwards • Venue: Tech Lawn, JKLU Campus • Vibe: Subtle, Acoustic, and Purely Magical. Grab a spot on the grass, bring your instruments, and let’s create some midnight harmony.',
     }
 ];
