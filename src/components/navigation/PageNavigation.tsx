@@ -11,13 +11,13 @@ const pageOrder = [
   { path: '/themes', name: 'Themes' },
   { path: '/prizes', name: 'Prizes' },
   { path: '/partners', name: 'Partners' },
+  { path: '/itinerary', name: 'Itinerary' },
+  { path: '/events', name: 'Events' },
   { path: '/gallery', name: 'Past Photos' },
   { path: '/faq', name: 'FAQ' },
   { path: '/team', name: 'Team' },
   { path: '/sponsor', name: 'Why Sponsor Us ?' },
   { path: '/call-for-problems', name: 'Call for Problems' },
-  { path: '/itinerary', name: 'Itinerary' },
-  { path: '/events', name: 'Events' },
 ];
 
 export function PageNavigation({ onNext }: { onNext?: () => void }) {
