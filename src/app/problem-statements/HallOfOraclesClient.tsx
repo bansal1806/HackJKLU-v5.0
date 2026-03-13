@@ -1306,7 +1306,11 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                 <DetailModal
                     p={selectedPS}
                     domain={DOMAINS.find(d => d.key === selectedPS.domain)!}
-                    initialFull={(countsMap[selectedPS.id] ?? 0) >= (DOMAINS.find(d => d.key === selectedPS.domain)?.maxTeams ?? 2)}
+                    initialFull={(() => {
+                        const dom = DOMAINS.find(d => d.key === selectedPS.domain);
+                        if (!dom || dom.maxTeams >= 999) return false;
+                        return (countsMap[selectedPS.id] ?? 0) >= dom.maxTeams;
+                    })()}
                     onClose={() => setSelectedPS(null)}
                     onSuccess={handleRegistrationSuccess}
                 />

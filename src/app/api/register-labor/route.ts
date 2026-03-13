@@ -96,7 +96,7 @@ export async function POST(req: Request) {
             // ── CASE C: brand new team ──
             const currentCount = await ThemeRegistration.countDocuments({ problemId });
             const limit = getLimitForDomain(domain);
-            if (currentCount >= limit) {
+            if (limit < 999 && currentCount >= limit) {
                 return NextResponse.json(
                     { error: 'PROBLEM_FULL', message: 'This problem statement has already reached its team limit.' },
                     { status: 403, headers: NO_CACHE }
