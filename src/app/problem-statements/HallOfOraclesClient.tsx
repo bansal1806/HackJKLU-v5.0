@@ -858,14 +858,15 @@ function ProblemCard({
 // ─── DETAIL MODAL ────────────────────────────────────────────────────────────
 
 function DetailModal({
-    p, domain, onClose, onSuccess,
+    p, domain, onClose, onSuccess, initialFull = false,
 }: {
     p: ProblemStatement;
     domain: Domain;
     onClose: () => void;
     onSuccess: (problemId: string, newCount: number, oldProblemId?: string | null, oldCount?: number | null) => void;
+    initialFull?: boolean;
 }) {
-    const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error' | 'full'>('idle');
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error' | 'full'>(initialFull ? 'full' : 'idle');
     // teamCheck: 'idle' | 'checking' | 'available' | 'registered'
     // 'registered' = team already exists in DB for ANY problem (same or different)
     const [teamCheck, setTeamCheck] = useState<'idle' | 'checking' | 'available' | 'registered'>('idle');
@@ -1170,7 +1171,7 @@ function DetailModal({
                                     )}
                                     {status === 'full' && (
                                         <div className="text-red-400 text-xs mt-2 bg-red-500/10 p-2 border border-red-500/20 rounded-sm" style={{ fontFamily: 'Cinzel, serif' }}>
-                                            ⚒ This labor has been claimed by 2 teams and is now sealed.
+                                            ⚒ This labor has been claimed by {domain.maxTeams} teams and is now sealed.
                                         </div>
                                     )}
 
@@ -1300,11 +1301,12 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                 style={{ background: `linear-gradient(90deg,transparent,${activeDomain?.color ?? '#d4af37'}80,transparent)` }}
             />
 
-            {/* Detail modal - only open if problem not sealed */}
+            {/* Detail modal - always open to let users read desc, but disabled if sealed */}
             {selectedPS && (
                 <DetailModal
                     p={selectedPS}
                     domain={DOMAINS.find(d => d.key === selectedPS.domain)!}
+                    initialFull={(countsMap[selectedPS.id] ?? 0) >= (DOMAINS.find(d => d.key === selectedPS.domain)?.maxTeams ?? 2)}
                     onClose={() => setSelectedPS(null)}
                     onSuccess={handleRegistrationSuccess}
                 />
@@ -1527,7 +1529,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                                     domain={dom}
                                     index={i}
                                     isRevealed={isRevealed}
-                                    onClick={() => { if ((countsMap[p.id] ?? 0) < dom.maxTeams) setSelectedPS(p); }}
+                                    onClick={() => setSelectedPS(p)}
                                     count={countsMap[p.id] ?? 0}
                                 />
                             );
