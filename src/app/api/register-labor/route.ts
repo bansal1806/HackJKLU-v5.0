@@ -6,12 +6,12 @@ export const dynamic = 'force-dynamic';
 
 const NO_CACHE = { 'Cache-Control': 'no-store' };
 
-function getLimitForDomain(domain: string): number {
-    const d = domain.toLowerCase();
-    if (d === 'blockchain') return 5;
-    if (d === 'webdev') return 2;
-    if (d === 'bounty') return 5;
-    if (d === 'bounty_tishitu') return 999;
+function getLimitByProblemId(problemId: string): number {
+    const key = problemId.split('-')[0].toLowerCase();
+    if (key === 'blockchain') return 5;
+    if (key === 'webdev') return 2;
+    if (key === 'bounty') return 5;
+    if (key === 'bounty_tishitu') return 999;
     return 2;
 }
 
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
             // ── CASE B: different problem → switching ──
             // Check capacity on the NEW problem (excluding current team since they'll move)
             const newProblemCount = await ThemeRegistration.countDocuments({ problemId });
-            const limit = getLimitForDomain(domain);
+            const limit = getLimitByProblemId(problemId);
             if (newProblemCount >= limit) {
                 return NextResponse.json(
                     { error: 'PROBLEM_FULL', message: 'This problem statement has already reached its team limit.' },
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
         } else {
             // ── CASE C: brand new team ──
             const currentCount = await ThemeRegistration.countDocuments({ problemId });
-            const limit = getLimitForDomain(domain);
+            const limit = getLimitByProblemId(problemId);
             if (limit < 999 && currentCount >= limit) {
                 return NextResponse.json(
                     { error: 'PROBLEM_FULL', message: 'This problem statement has already reached its team limit.' },
