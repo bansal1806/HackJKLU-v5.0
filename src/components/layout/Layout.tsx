@@ -22,13 +22,13 @@ const menuItems = [
   { number: 'III', name: 'Themes', path: '/themes' },
   { number: 'IV', name: 'Prizes', path: '/prizes' },
   { number: 'V', name: 'Partners', path: '/partners' },
-  { number: 'VI', name: 'Past Photos', path: '/gallery' },
-  { number: 'VII', name: 'FAQ', path: '/faq' },
-  { number: 'VIII', name: 'Team', path: '/team' },
-  { number: 'IX', name: 'Why Sponsor Us ?', path: '/sponsor' },
-  { number: 'X', name: 'Call for Problems', path: '/call-for-problems' },
-  { number: 'XI', name: 'Itinerary', path: '/itinerary' },
-  { number: 'XII', name: 'Events', path: '/events' },
+  { number: 'VI', name: 'Itinerary', path: '/itinerary' },
+  { number: 'VII', name: 'Events', path: '/events' },
+  { number: 'VIII', name: 'Past Photos', path: '/gallery' },
+  { number: 'IX', name: 'FAQ', path: '/faq' },
+  { number: 'X', name: 'Team', path: '/team' },
+  { number: 'XI', name: 'Why Sponsor Us ?', path: '/sponsor' },
+  { number: 'XII', name: 'Call for Problems', path: '/call-for-problems' },
 ];
 
 export function Layout({ children }: LayoutProps) {
