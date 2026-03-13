@@ -50,7 +50,7 @@ export async function POST(req: Request) {
 
         if (SUBMISSIONS_CLOSED) {
             return NextResponse.json(
-                { error: 'SUBMISSIONS_CLOSED', message: 'Submissions are now closed. The Oracles have spoken.' },
+                { error: 'SUBMISSIONS_CLOSED', message: 'REGISTRATION CLOSED' },
                 { status: 403, headers: NO_CACHE }
             );
         }

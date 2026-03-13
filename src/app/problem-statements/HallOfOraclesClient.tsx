@@ -1173,7 +1173,7 @@ function DetailModal({
                                     )}
                                     {status === 'full' && (
                                         <div className="text-red-400 text-xs mt-2 bg-red-500/10 p-2 border border-red-500/20 rounded-sm" style={{ fontFamily: 'Cinzel, serif' }}>
-                                            ⚒ This labor has been claimed by {domain.maxTeams} teams and is now sealed.
+                                            ⚒ REGISTRATION CLOSED
                                         </div>
                                     )}
 
