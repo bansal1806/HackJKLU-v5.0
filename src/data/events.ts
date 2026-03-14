@@ -90,15 +90,7 @@ export const eventsData = [
         entryFee: 399, requiresBooking: true,
         details: 'INSANE Dance Battle is a high-energy 1 vs 1 street dance competition happening at JK Lakshmipat University, Jaipur on 14th March. The event features two battle categories — Popping and Rep Your Style, bringing together dancers to showcase their individuality, creativity, and stage presence. With a total prize pool of ₹14,000 (Popping: ₹7000, Rep your style: ₹7000) and Manish Pop as the judge, the battle aims to highlight raw talent and celebrate street dance culture.\n\nRegistration:\n- Online: ₹399 (before 1 PM on 14th)\n- On-spot: ₹499',
     },
-    {
-        id: 11, title: 'Astro Aim Challenge',
-        desc: 'The Telescopic Pointing Contest is an exciting and educational astronomy event where participants test their skills in accurately locating celestial objects using a telescope.',
-        time: '14th March, 9:00 PM - 12:00 AM', location: 'Tech Block Terrace',
-        color: '#ffd43b', poster: '/events/astro aim.webp',
-        isEpic: false, isMythic: true,
-        entryFee: 25, requiresBooking: true,
-        details: 'Astro Aim Challenge Description: The Telescopic Pointing Contest is an exciting and educational astronomy event where participants test their skills in accurately locating celestial objects using a telescope. In this contest, competitors are given the names of objects in the night sky such as planets, stars, star clusters, or nebula and must quickly and precisely point their telescope toward the correct target. Participants are judged based on accuracy, speed, and proper telescope handling techniques.',
-    },
+
     {
         id: 10, title: 'Jamming Night',
         desc: 'Bring your instruments or just your voice for a relaxed night of live music and open jamming.',
