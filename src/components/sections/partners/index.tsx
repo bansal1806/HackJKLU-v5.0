@@ -37,6 +37,7 @@ import juVerseLogo from '../../../../public/partners/ju_vers.jpeg';
 type Partner = {
   name: string;
   logo: string | StaticImageData;
+  logoScale?: number;
 };
 
 type PartnerGroup = {
@@ -128,7 +129,7 @@ const partnersData: PartnerData[] = [
         ring: bronzeRing,
         color: '#CD7F32',
         partners: [
-          { name: 'InterviewBuddy', logo: interviewBuddyLogo },
+          { name: 'InterviewBuddy', logo: interviewBuddyLogo, logoScale: 0.98 },
           { name: 'TruScholar', logo: truScholarLogo },
           { name: 'Commudle', logo: commudleLogo },
           { name: 'DMV Core Tech', logo: dmvCoreLogo },

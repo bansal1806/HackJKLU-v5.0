@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import bgThemes from '@/assets/themes/bg-themes.webp';
 
 // ─── COUNTDOWN ───────────────────────────────────────────────────────────────
 
@@ -66,119 +67,119 @@ function makePSTitle(domain: DomainKey, n: number, domainLabel: string) {
 
 const PS_DESCRIPTIONS: Record<DomainKey, string[]> = {
     aiml: [
-        'Build a real-time deepfake video detection system that flags manipulated media with frame-level confidence scores and auto-submits takedown requests to platforms.',
-        'Develop an LLM fine-tuning platform for Indian regional languages, enabling organisations to localise enterprise AI assistants without proprietary training data.',
-        'Create an AI-powered job-skill matching engine that maps candidate trajectories from unstructured resumes to verified employer-defined competency frameworks.',
-        'Design a computer-vision navigation assistant for visually impaired users that narrates real-world obstacles, street signs, and public transport options in real time.',
-        'Build an adaptive content-moderation AI for multilingual social media that handles code-switching between Hindi, Hinglish, and regional scripts.',
-        'Create a federated ML framework for privacy-preserving health diagnostics where hospitals collaboratively train models without ever sharing patient records.',
-        'Develop an AI code-review tool that detects security vulnerabilities, explains risks in plain language, and suggests production-ready remediation patches.',
-        'Build a multi-modal AI system that converts hand-drawn UX wireframes photographed on a smartphone into production-ready React component code.',
-        'Design an AI-powered legal-document summarisation and risk-extraction engine that surfaces hidden liabilities in contracts for SME founders in under 60 seconds.',
-        'Create a real-time Indian Sign Language interpreter using webcam-based pose estimation and transformer models for inclusive classroom integration.',
-        'Develop an AI-assisted satellite imagery analyser for rapid disaster-damage assessment that generates prioritised rescue resource maps within hours of an event.',
-        'Build a personalised AI tutoring agent that adapts explanation depth, pacing, and example choice to individual student learning velocity using concept-mastery graphs.',
-        'Design an on-device AI personal finance advisor for feature-phone users that processes SMS bank alerts and delivers budgeting advice via voice in local languages.',
-        'Create an autonomous drone-navigation AI for last-mile delivery in GPS-denied zones using visual odometry and landmark recognition.',
-        'Develop an NLP-based misinformation-detection pipeline for WhatsApp-scale messaging that classifies content and traces its origin across forward chains.',
-        'Build an AI-powered accessibility layer that makes any web application usable by people with motor disabilities through eye-gaze control and switch-access interfaces.',
-        'Create a self-supervised speech model for low-resource tribal languages of India that enables basic voice search and emergency services access.',
-        'Design an AI demand-forecasting system for perishable FMCG goods that optimises procurement and reduces spoilage losses across multi-tier distribution networks.',
-        'Develop a multi-agent AI framework for real-time energy trading in urban microgrids, balancing solar generation, battery storage, and grid demand autonomously.',
-        'Build an AI medical-imaging analyser for early-stage TB detection in chest X-rays, targeting deployment on low-cost Android tablets at primary health centres.',
-        'Create a reinforcement-learning platform for dynamic pricing in ride-sharing that maximises driver earnings and passenger fill-rates across surge and off-peak periods.',
-        'Design an explainable AI system for credit-underwriting decisions at NBFCs that generates plain-language justifications compliant with RBI fair-practice guidelines.',
-        'Develop a generative AI tool that auto-personalises government-scheme eligibility communications from complex policy documents into simple regional-language SMS.',
-        'Build an AI-powered traffic-flow optimisation engine for tier-2 Indian cities using intersection sensor data and predictive signal-timing models.',
-        'Create a multi-modal emotional AI for customer-service automation that detects caller distress from voice tone and text semantics to escalate empathetically.',
+        'Build a system that detects deepfake videos in real time, scores how confident it is about each frame, and automatically reports fake content to platforms.',
+        'Create a platform that lets organisations fine-tune AI language models for Indian regional languages — without needing private training data.',
+        'Build an AI tool that reads unstructured resumes, understands a candidate\'s career path, and matches them to the right job roles based on verified skill requirements.',
+        'Design an AI navigation app for visually impaired users that uses a phone camera to describe obstacles, read street signs, and announce nearby public transport in real time.',
+        'Build an AI content moderator for social media that works across Hindi, Hinglish, and regional languages — even when users mix languages in the same sentence.',
+        'Create a privacy-first health AI framework where multiple hospitals train a shared diagnostic model together, without any hospital ever sharing its patient data.',
+        'Build an AI code-review assistant that spots security flaws in code, explains the risks in simple terms, and suggests ready-to-use fixes.',
+        'Create an AI system that takes a photo of a hand-drawn UI sketch and turns it into clean, working React component code.',
+        'Build an AI tool that reads legal contracts, highlights hidden risks and liabilities, and gives a clear summary — all in under 60 seconds.',
+        'Create a real-time Indian Sign Language translator that uses a webcam to detect hand gestures and displays the translated text, designed for use in classrooms.',
+        'Build an AI tool that analyses satellite images after a disaster to quickly map the most affected areas and suggest where rescue teams should go first.',
+        'Create a personalised AI tutor that adjusts how it explains topics — speed, depth, and examples — based on how quickly each student is learning.',
+        'Design an AI finance advisor that runs on basic feature phones, reads SMS bank alerts, and gives budgeting tips through voice calls in local languages.',
+        'Build an AI system that lets drones navigate and deliver packages in areas with no GPS signal, using camera-based location tracking and landmark detection.',
+        'Create an AI system for messaging apps (like WhatsApp) that can detect misinformation, classify its type, and trace how it spread through message forwards.',
+        'Build an AI accessibility tool that lets people with motor disabilities control any website using eye movements or switch-based input devices.',
+        'Create a speech recognition model for India\'s lesser-known tribal languages, enabling voice search and access to emergency helplines.',
+        'Build an AI system that predicts demand for perishable products (like food/FMCG) and helps distributors order the right amount to reduce waste.',
+        'Create a multi-agent AI system for local energy grids that automatically balances solar power generation, battery storage, and electricity demand.',
+        'Build an AI tool that analyses chest X-rays to detect early-stage Tuberculosis, designed to run on affordable Android tablets at rural health centres.',
+        'Create an AI pricing engine for ride-sharing services that dynamically sets fares to maximise both driver earnings and passenger availability across peak and off-peak hours.',
+        'Build an AI credit-scoring system for non-banking lenders that explains every lending decision in simple language, following RBI fair-practice guidelines.',
+        'Create an AI tool that takes complex government scheme documents and automatically generates simple, personalised eligibility messages in regional languages via SMS.',
+        'Build an AI traffic management system for smaller Indian cities that uses sensor data from intersections to predict congestion and optimise signal timings.',
+        'Create an AI for customer service that detects when a caller is upset or stressed — from their voice tone and words — and automatically escalates the call to a human agent.',
     ],
     cybersecurity: [
-        'Build a zero-trust network architecture simulator for enterprise hybrid environments that scores policy gaps and generates remediation playbooks automatically.',
-        'Design an AI-powered threat-intelligence aggregator that correlates multi-source indicators of compromise into actionable incident timelines with MITRE ATT&CK mapping.',
-        'Create a browser extension that detects phishing pages in real time using on-device ML, protecting users even on private-browsing sessions without cloud lookup.',
-        'Develop a secure passwordless authentication system using continuous behavioural biometrics — keystroke dynamics and mouse patterns — without dedicated hardware.',
-        'Build an automated vulnerability scanner for containerised cloud-native applications that integrates into CI/CD pipelines and blocks high-severity builds automatically.',
-        'Design a dark-web monitoring service that alerts organisations within minutes when employee credentials or internal data appear on paste sites and hacker forums.',
-        'Create an open-source SIEM dashboard for SMEs that delivers enterprise-grade threat detection on commodity hardware costing under ₹20,000 per deployment.',
-        'Develop a firmware-integrity verification system for IoT devices that detects tampered binaries at boot time across heterogeneous manufacturer ecosystems.',
-        'Build a cryptographic audit-trail system for election ballot transparency that guarantees voter anonymity while enabling any observer to verify the final tally.',
-        'Design a red-team simulation platform using AI adversarial agents that generates novel attack paths against target networks for SOC training exercises.',
-        'Create a real-time API abuse-detection system for fintech open-banking endpoints that distinguishes legitimate aggregators from credential-stuffing bots.',
-        'Develop a supply-chain software-attestation framework for critical national infrastructure that verifies build provenance from source commit to deployed binary.',
-        'Build an automated patch-prioritisation engine that ranks enterprise CVEs by exploitability, asset criticality, and lateral-movement blast radius for resource-constrained teams.',
-        'Design a privacy-preserving identity-federation protocol for cross-organisational single sign-on that eliminates central honeypot identity stores.',
-        'Create an anomaly-detection system for industrial control systems that identifies APT reconnaissance and lateral movement without requiring ICS protocol expertise.',
-        'Develop a secure multi-party computation toolkit that lets competing organisations collaboratively analyse shared fraud datasets without exposing proprietary records.',
-        'Build a honeypot-as-a-service platform that automatically adapts its attack surface in response to evolving attacker TTPs captured from global threat feeds.',
-        'Design an AI-powered malware sandbox that generates behavioural signatures from dynamic execution analysis in under 30 seconds for zero-day classification.',
-        'Create a social-engineering attack simulator that generates spear-phishing emails and voice-scam scenarios for employee resilience training, with measurable outcomes.',
-        'Develop a post-quantum cryptography migration assistant that identifies non-PQC algorithms in enterprise codebases and generates compliant replacement implementations.',
-        'Build a runtime application self-protection layer for Python microservices that blocks injection attacks and privilege escalations without code changes by the developer.',
-        'Design a blockchain-anchored digital evidence custody chain for cybercrime prosecution that is admissible as court evidence under Indian IT Act Section 65B.',
-        'Create a DNS-layer security platform that identifies and blocks C2 communications for malware in outbound traffic before data exfiltration can occur.',
-        'Develop a mobile app security analyser that detects misuse of sensitive device APIs — camera, microphone, location — even when apps are backgrounded.',
-        'Build a cyber-incident tabletop simulation engine that runs branching scenario exercises for CISOs and board members to practise crisis-decision protocols.',
+        'Build a zero-trust network simulator for businesses that checks for security policy gaps and automatically generates step-by-step remediation guides.',
+        'Create an AI-powered threat intelligence dashboard that pulls data from multiple sources, connects the dots between attack indicators, and maps them to known attack frameworks (MITRE ATT&CK).',
+        'Build a browser extension that detects phishing websites in real time using on-device AI — works even in private/incognito mode without sending data to the cloud.',
+        'Create a passwordless login system that continuously verifies users by how they type and move their mouse — no special hardware needed.',
+        'Build an automated security scanner for containerised cloud apps that plugs into CI/CD pipelines and blocks risky code from being deployed.',
+        'Create a dark-web monitoring service that alerts organisations within minutes when employee passwords or company data show up on hacker forums.',
+        'Build an affordable, open-source security monitoring dashboard (SIEM) for small businesses that runs on hardware costing under ₹20,000.',
+        'Create a system that checks IoT device firmware for tampering every time the device boots up, working across devices from different manufacturers.',
+        'Build a tamper-proof digital audit trail for elections that keeps voter identity anonymous while letting anyone verify the final vote count.',
+        'Create an AI-powered red-team platform that simulates realistic cyberattacks against a network, helping security teams train for real-world threats.',
+        'Build a real-time system that detects API abuse on fintech / open-banking services — telling apart legitimate data aggregators from automated credential-stuffing attacks.',
+        'Create a framework that verifies the entire software supply chain for critical infrastructure — tracking code from the original commit all the way to the deployed version.',
+        'Build a smart patch-prioritisation tool that ranks security vulnerabilities by how exploitable they are, which systems they affect, and how much damage they could cause.',
+        'Design a privacy-preserving single sign-on system for cross-organisation use that doesn\'t store all user identities in one central (and hackable) database.',
+        'Build a security monitoring system for industrial control systems (ICS/SCADA) that detects advanced threats without needing specialised protocol knowledge from the user.',
+        'Create a toolkit that lets competing organisations jointly analyse shared fraud data without any company revealing its private records to others.',
+        'Build a honeypot-as-a-service platform that automatically changes its fake attack surface based on the latest attacker techniques seen worldwide.',
+        'Create an AI-powered malware analysis sandbox that runs suspicious files and generates behaviour-based threat signatures in under 30 seconds.',
+        'Build a phishing and social-engineering simulator that generates realistic spear-phishing emails and voice-scam calls for employee security training, with measurable results.',
+        'Create a tool that scans enterprise codebases for encryption algorithms that won\'t be safe against quantum computers, and suggests quantum-resistant replacements.',
+        'Build a runtime security shield for Python web services that blocks injection attacks and privilege escalation — without developers needing to change any code.',
+        'Design a blockchain-based digital evidence chain-of-custody system for cybercrime cases that is admissible as court evidence under Indian IT Act Section 65B.',
+        'Build a DNS-level security platform that detects and blocks malware trying to communicate with command-and-control servers before any data can be stolen.',
+        'Create a mobile app analyser that detects when apps secretly access your camera, microphone, or location — even when running in the background.',
+        'Build a cyber crisis simulation engine that runs interactive, branching scenario exercises for CISOs and board members to practise making decisions during security incidents.',
     ],
     blockchain: [
-        'Build a decentralised identity protocol that lets citizens own and selectively disclose government-verified credentials without relying on a central identity provider.',
-        'Design a smart-contract audit copilot that explains vulnerabilities in plain language to non-technical founders, with one-click fix suggestions and re-verification.',
-        'Create a cross-chain bridge with formal-verification guarantees for DeFi asset transfers, eliminating the class of re-entrancy and slippage exploits seen in past hacks.',
-        'Develop an NFT-based supply-chain provenance system for pharmaceuticals that records cold-chain temperature, custody, and batch-testing results immutably.',
-        'Build a DAO governance toolkit optimised for large-scale public-sector stakeholder participation, supporting quadratic voting and delegated liquid democracy.',
-        'Design a Layer-2 rollup framework for high-throughput micropayments in creator economies, supporting off-chain tipping at sub-rupee denominations.',
-        'Create a decentralised dispute-resolution protocol for freelance marketplace escrow that uses reputation-weighted jury selection and evidence pinned to IPFS.',
-        'Develop a tokenised carbon-credit marketplace with automated measurement, reporting, and verification, and on-chain retirement preventing double counting.',
-        'Build a zero-knowledge-proof identity layer that lets users reuse a single KYC verification across multiple financial services without revealing underlying data.',
-        'Design a blockchain-based land-registry system for transparent property-title management, reducing fraud and registration delays for rural landholders.',
-        'Create a peer-to-peer renewable-energy trading settlement platform on an EVM-compatible chain, enabling society-level bilateral contracts without utility intermediation.',
-        'Develop a decentralised academic-credential verification system that enables employers to validate degrees globally in under 10 seconds without contacting institutions.',
-        'Build a smart-contract-powered parametric crop-insurance platform that auto-pays farmers when satellite-measured rainfall deviates from policy thresholds.',
-        'Design a multi-signature NGO treasury management protocol for cross-border fund disbursement with donor-mandated spending categories enforced at protocol level.',
-        'Create a token-curated registry for vetted professional certifications that freelancers carry across platforms, with stake-backed credibility and community curation.',
-        'Develop a coercion-resistant on-chain voting system using commit-reveal and homomorphic tallying, suitable for shareholder meetings and cooperative governance.',
-        'Build a decentralised oracle network aggregating verified real-world sports and financial data for prediction markets, with economic penalties for dishonest reporters.',
-        'Design a blockchain royalty-distribution system for Indian classical music artists that auto-splits streaming revenue among composer, performer, and label instantly.',
-        'Create a DeFi liquidity aggregator optimised for INR-stablecoin trading pairs, routing through DEXs and CEX liquidity bridges for best-execution price.',
-        'Develop a self-sovereign data marketplace where users monetise anonymised personal-health or mobility datasets, retaining full revocation rights at granular field level.',
-        'Build a supply-chain financing protocol that auto-releases working capital to MSMEs on blockchain-confirmed delivery without requiring bank-intermediated invoice discounting.',
-        'Design a blockchain document-notarisation service that produces court-admissible timestamps for contracts and intellectual-property claims under Indian law.',
-        'Create a decentralised reputation system for gig-economy workers that aggregates verified ratings across platforms and follows workers through career transitions.',
-        'Develop an automated smart-contract security pipeline integrating static analysis, fuzz testing, and formal verification into a single developer-facing CI check.',
-        'Build a blockchain-based medical-records consent-management layer that gives patients granular control over which providers access which diagnostic data and for how long.',
+        'Build a decentralised identity system where citizens own their government-verified credentials and can choose exactly what information to share — without depending on any central authority.',
+        'Create a smart-contract audit assistant that explains security flaws in simple language for non-technical founders, offers one-click fixes, and re-verifies the contract.',
+        'Build a secure cross-chain bridge for moving assets between DeFi protocols, with mathematical proofs that prevent the re-entrancy and slippage attacks seen in past hacks.',
+        'Create an NFT-powered supply chain tracker for medicines that permanently records temperature, handling, and test results at every step from factory to pharmacy.',
+        'Build a DAO governance toolkit for large-scale public participation, supporting quadratic voting and liquid democracy (where you can delegate your vote).',
+        'Design a Layer-2 system for instant, ultra-low-cost micropayments in the creator economy — supporting tips as small as fractions of a rupee.',
+        'Create a decentralised dispute resolution system for freelance marketplaces that uses reputation-based jury selection and stores evidence on IPFS.',
+        'Build a tokenised carbon credit marketplace with automated tracking and verification, where retired credits are recorded on-chain to prevent double counting.',
+        'Create a zero-knowledge proof identity layer that lets users complete KYC once and reuse it across multiple financial services — without revealing their underlying personal data.',
+        'Build a blockchain-based land registry system for transparent property records, reducing title fraud and registration delays for rural landowners.',
+        'Create a peer-to-peer renewable energy trading platform on an EVM-compatible blockchain, letting housing societies trade solar power directly without utility company intermediation.',
+        'Build a decentralised degree verification system that lets employers verify any candidate\'s academic credentials globally in under 10 seconds — without contacting the institution.',
+        'Create a smart-contract crop insurance platform that automatically pays farmers when satellite data shows rainfall levels outside the insured range.',
+        'Build a multi-signature treasury management system for NGOs that enforces donor-specified spending categories at the protocol level for cross-border fund transfers.',
+        'Create a token-curated registry of verified professional certifications that freelancers can carry across platforms, backed by community curation and staked credibility.',
+        'Build a coercion-resistant on-chain voting system using commit-reveal and encrypted tallying — suitable for shareholder meetings and cooperative governance.',
+        'Create a decentralised oracle network that feeds verified real-world sports and financial data into prediction markets, with financial penalties for dishonest data reporters.',
+        'Build a blockchain royalty distribution system for Indian classical music artists that instantly splits streaming revenue among the composer, performer, and label.',
+        'Create a DeFi liquidity aggregator optimised for INR-stablecoin trading pairs that finds the best price across decentralised and centralised exchanges.',
+        'Build a self-sovereign data marketplace where users can sell their anonymised health or location data while keeping full control and the ability to revoke access at any time.',
+        'Create a supply-chain financing protocol that automatically releases working capital to small businesses (MSMEs) once blockchain confirms delivery — no bank intermediary needed.',
+        'Build a blockchain-based document notarisation service that produces legally admissible timestamps for contracts and IP claims under Indian law.',
+        'Create a decentralised reputation system for gig workers that combines verified ratings from multiple platforms and follows them across career changes.',
+        'Build an automated smart-contract security pipeline that combines static analysis, fuzz testing, and formal verification into a single CI/CD check for developers.',
+        'Create a blockchain-based medical records system that gives patients fine-grained control over which doctors can access which test results, and for how long.',
     ],
     fintech: [
-        'Build an AI-powered financial inclusion platform that helps unbanked rural populations access micro-credit, insurance, and savings through a voice-first vernacular interface.',
-        'Design a real-time fraud-detection engine for UPI transactions using graph neural networks to identify anomalous payment clusters within milliseconds of initiation.',
-        'Create an NLP-powered personal-finance coach that converts messy bank SMS alerts into a structured monthly budget with actionable advice in local languages.',
-        'Develop a community-lending protocol where trusted neighbourhood savings groups pool funds, disburse micro-loans, and track repayment on a transparent ledger.',
-        'Build a regulatory-compliance automation platform that maps new RBI guidelines to banking product policies and auto-generates gap-analysis audit reports.',
-        'Design a carbon-linked savings account where return rates improve as the account holder reduces their measured carbon footprint, verified by API-connected lifestyle data.',
-        'Create an insurance-underwriting assistant for micro-entrepreneurs that ingests GST filings, bank flows, and social signals to generate fair risk scores instantly.',
-        'Develop a cross-border remittance optimiser that splits transfers across multiple currency corridors in real time to minimise fees and FX slippage for diaspora senders.',
-        'Build a financial-literacy simulation game for teenagers that teaches investing, budgeting, and compound interest through a realistic gamified virtual economy.',
-        'Design a BNPL risk-stratification platform that dynamically adjusts credit limits based on real-time cash-flow velocity from UPI transaction streams and GST data.',
-        'Create a fractional real-estate investment token platform that lets individuals invest as little as ₹500 in verified properties with daily rental-yield distributions.',
-        'Develop an AI document-intelligence system that auto-fills loan applications from scanned ID proofs, income certificates, and utility bills with over 98% accuracy.',
-        'Build a merchant credit-score engine that derives creditworthiness from point-of-sale transaction histories for kirana stores with no formal credit records.',
-        'Design a pension-gap analyser that projects retirement-income shortfalls for gig workers and recommends hybrid NPS/equity SIP portfolios tailored to their income volatility.',
-        'Create a hyperlocal insurance marketplace that aggregates parametric products for climate, health, and business risks, tailored to tier-3 city SME risk profiles.',
-        'Develop a mutual-fund distribution platform for Bharat that uses vernacular chatbots and WhatsApp to guide first-time investors through SIP setup and goal-based planning.',
-        'Build a predictive cash-flow management tool for MSMEs that anticipates payment delays from buyers and auto-triggers invoice factoring requests to partner NBFCs.',
-        'Design an open banking aggregation platform that lets customers authorise salary advances from embedded fintech apps using Account Aggregator consent artefacts.',
-        'Create a real-time treasury management system for mid-size corporates that optimises idle-cash allocation across overnight instruments using ML-driven yield prediction.',
-        'Develop a co-operative-bank core-banking modernisation toolkit that replaces legacy systems with API-first microservices without disrupting daily banking operations.',
-        'Build an algorithmic wealth-management robo-advisor for HNIs that constructs tax-loss-harvested, ESG-screened portfolios rebalanced in real time with FnO hedges.',
-        'Design a gig-worker income-smoothing platform that advances earned wages daily and automatically withdraws repayments on high-income days to avoid repayment stress.',
-        'Create a trade-finance digitisation platform for export MSMEs that auto-generates Letters of Credit, ECGC cover, and shipping-document packages from invoice data.',
-        'Develop a lending collections intelligence system that identifies at-risk borrowers 90 days before default using early behavioural signals and proactively offers restructuring.',
-        'Build a privacy-first personal financial data vault that lets individuals store, aggregate, and selectively share their financial identity for instant credit decisioning.',
+        'Build an AI-powered financial inclusion app that helps unbanked rural populations access micro-loans, insurance, and savings through a voice-first interface in local languages.',
+        'Create a real-time fraud detection engine for UPI payments that uses graph neural networks to spot suspicious payment patterns within milliseconds.',
+        'Build an AI personal finance coach that reads your messy bank SMS alerts and turns them into a clear monthly budget with actionable tips — in your local language.',
+        'Create a community lending platform where neighbourhood savings groups can pool money, give out small loans, and track repayments on a transparent digital ledger.',
+        'Build a regulatory compliance tool that automatically maps new RBI guidelines to banking products and generates gap-analysis reports.',
+        'Design a green savings account where your interest rate improves as you reduce your carbon footprint, verified through connected lifestyle data APIs.',
+        'Create an AI insurance assistant for small business owners that reads their GST filings and bank statements to generate fair risk scores instantly.',
+        'Build a cross-border money transfer optimiser that splits remittances across different corridors in real time to minimise fees and exchange rate losses.',
+        'Create a financial literacy game for teenagers that teaches investing, budgeting, and compound interest through a realistic virtual economy.',
+        'Build a Buy Now Pay Later (BNPL) risk platform that dynamically adjusts credit limits based on real-time cash flow from UPI transactions and GST data.',
+        'Create a fractional real estate investment platform that lets anyone invest as little as ₹500 in verified properties and receive daily rental income.',
+        'Build an AI system that auto-fills loan applications by scanning ID proofs, income certificates, and utility bills — with over 98% accuracy.',
+        'Create a credit scoring engine for small neighbourhood shops (kirana stores) that builds creditworthiness from their point-of-sale transaction history.',
+        'Build a retirement planning tool for gig workers that calculates pension gaps and recommends tailored investment plans (NPS/SIP) based on their income patterns.',
+        'Create a hyperlocal insurance marketplace for Tier-3 city businesses with tailored products for climate risks, health risks, and business risks.',
+        'Build a mutual fund platform for first-time investors in India that uses WhatsApp chatbots in local languages to guide SIP setup and goal-based planning.',
+        'Create a cash flow prediction tool for small businesses (MSMEs) that spots likely payment delays from buyers and automatically requests invoice financing.',
+        'Build an open banking platform that lets employees authorise salary advances from fintech apps using the Account Aggregator consent framework.',
+        'Create a real-time treasury management tool for mid-size companies that uses ML to optimise how idle cash is invested across overnight instruments.',
+        'Build a core-banking modernisation toolkit for cooperative banks that replaces legacy systems with modern APIs — without disrupting daily operations.',
+        'Create a robo-advisor for high-net-worth individuals that builds tax-optimised, ESG-screened portfolios with real-time rebalancing and derivatives hedging.',
+        'Build an income smoothing platform for gig workers that advances earned wages daily and auto-collects repayments on high-income days.',
+        'Create a trade finance platform for export-focused small businesses that auto-generates Letters of Credit, insurance cover, and shipping documents from invoice data.',
+        'Build an early-warning system for lenders that identifies borrowers at risk of default 90 days in advance and proactively offers restructuring options.',
+        'Create a privacy-first personal financial data vault where individuals can store, combine, and selectively share their financial identity for instant loan approvals.',
     ],
     bounty: [
-        'Design and deploy a live production-grade cybersecurity threat-monitoring dashboard that integrates with at least three real-world threat-intelligence feeds and sends verified SMS alerts to a registered incident-response team — bonus awarded if zero false positives are recorded during a 2-hour live evaluation.',
-        'Build a fully functional decentralised finance protocol on a public testnet with a working frontend, audited smart contracts, and at least ₹10,000 equivalent of simulated liquidity demonstrating a novel AMM curve or lending mechanism not previously deployed on the chosen chain.',
-        'Create a working AI agent that autonomously completes a multi-step financial task — researching, comparing, and initiating a best-execution micro-investment plan — entirely via API calls with a verifiable audit trail, evaluated on accuracy, latency, and explainability of each decision.',
-        'Develop and publish an open-source developer toolkit that meaningfully reduces integration effort for a real fintech or blockchain API by at least 60% as benchmarked by lines of code and time-to-hello-world — judged on documentation quality, test coverage, and community adoption potential.',
-        'Build a cross-domain AI + blockchain solution that addresses a verifiable real-world problem in India — land rights, supply-chain fraud, or financial exclusion — with live data ingestion, a working smart-contract back end, and a demonstrable improvement metric against a documented baseline.',
+        'Build and deploy a live cybersecurity threat-monitoring dashboard that connects to at least 3 real threat-intelligence feeds and sends verified SMS alerts — bonus for zero false positives during a 2-hour live test.',
+        'Build a working DeFi protocol on a public testnet with a frontend, audited smart contracts, and ₹10,000+ simulated liquidity — must demonstrate a novel AMM curve or lending mechanism.',
+        'Create an AI agent that autonomously researches, compares, and initiates a micro-investment plan via API calls, with a full audit trail — judged on accuracy, speed, and explainability.',
+        'Build and publish an open-source developer toolkit that cuts integration effort for a real fintech or blockchain API by at least 60% — judged on docs quality, test coverage, and adoption potential.',
+        'Build a combined AI + blockchain solution that solves a real problem in India (land rights, supply-chain fraud, or financial exclusion) with live data, working smart contracts, and measurable improvement over existing solutions.',
     ],
 };
 
@@ -196,87 +197,37 @@ const PROBLEMS: ProblemStatement[] = DOMAINS.flatMap(d =>
 
 
 
-// ─── ATMOSPHERIC BACKGROUND ──────────────────────────────────────────────────
-
 function DivineAuraCanvas() {
     return (
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#030201]">
-            {/* Base Background Image */}
+        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#050403]">
+            {/* CSS Light Pillar effect — zero JS overhead */}
+            <div
+                className="absolute inset-0"
+                style={{
+                    background: `
+                        radial-gradient(ellipse 30% 80% at 45% 30%, rgba(82,39,255,0.12) 0%, transparent 70%),
+                        radial-gradient(ellipse 25% 70% at 55% 50%, rgba(255,239,158,0.08) 0%, transparent 65%),
+                        radial-gradient(ellipse 20% 90% at 50% 40%, rgba(120,60,255,0.06) 0%, transparent 60%)
+                    `,
+                    mixBlendMode: 'screen',
+                    transform: 'rotate(25deg) scale(1.3)',
+                }}
+            />
+
+            {/* Background Image Layer */}
             <div 
                 className="absolute inset-0" 
                 style={{ 
-                    backgroundImage: "url('/labors_bg.png')", 
+                    backgroundImage: `url('${bgThemes.src}')`, 
                     backgroundSize: 'cover', 
                     backgroundPosition: 'center top',
-                    opacity: 0.4,
-                    filter: 'contrast(1.2) brightness(0.8)',
+                    opacity: 0.55, 
+                    filter: 'brightness(0.6) saturate(0.8)',
                 }} 
             />
 
-            {/* Sacred Sunlight Beam */}
-            <div 
-                className="absolute inset-0 bg-transparent opacity-30"
-                style={{
-                    background: 'linear-gradient(135deg, rgba(212,175,55,0.15) 0%, transparent 40%, transparent 100%)',
-                    filter: 'blur(60px)'
-                }}
-            />
-            
-            <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.15 }}
-                className="absolute top-[-10%] left-[-10%] w-[60%] h-[150%] origin-top-left -rotate-12 bg-linear-to-b from-yellow-500/30 via-transparent to-transparent pointer-events-none"
-                style={{ filter: 'blur(100px)' }}
-            />
-
-            {/* Dust Motes / Particles */}
-            <DustMotes />
-
-            {/* Film Grain / Texture */}
-            <div 
-                className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                style={{ 
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                }}
-            />
-
-            {/* Vignette */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_transparent_20%,_rgba(0,0,0,0.8)_100%)]" />
-            
-            {/* Deep Shadow Bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-64 bg-linear-to-t from-[#030201] to-transparent" />
-        </div>
-    );
-}
-
-function DustMotes() {
-    const motes = Array.from({ length: 40 });
-    return (
-        <div className="absolute inset-0 overflow-hidden">
-            {motes.map((_, i) => (
-                <motion.div
-                    key={i}
-                    className="absolute bg-yellow-200/40 rounded-full"
-                    style={{
-                        width: Math.random() * 3 + 1,
-                        height: Math.random() * 3 + 1,
-                        left: `${Math.random() * 100}%`,
-                        top: `${Math.random() * 100}%`,
-                        filter: 'blur(1px)'
-                    }}
-                    animate={{
-                        x: [0, Math.random() * 100 - 50],
-                        y: [0, Math.random() * 100 - 50],
-                        opacity: [0, 0.6, 0]
-                    }}
-                    transition={{
-                        duration: Math.random() * 10 + 10,
-                        repeat: Infinity,
-                        ease: "linear",
-                        delay: Math.random() * 10
-                    }}
-                />
-            ))}
+            {/* Dark vignette overlay for readability */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_rgba(40,30,15,0)_0%,_rgba(10,8,5,0.8)_65%,_#050403_100%)]" />
         </div>
     );
 }
@@ -317,21 +268,21 @@ function MistOverlay({ isRevealed, onReveal }: { isRevealed: boolean; onReveal: 
                     <motion.div className="text-center z-10 px-6" animate={{ y: [0, -10, 0] }} transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}>
                         <motion.div className="text-7xl mb-8" animate={{ scale: [1, 1.08, 1] }} transition={{ duration: 3, repeat: Infinity }}>⚱️</motion.div>
                         <h2 className="text-3xl sm:text-5xl font-bold text-white/90 tracking-[0.15em] mb-4 uppercase" style={{ fontFamily: 'Cinzel, serif' }}>
-                            Labors Are Veiled
+                            Challenges Are Hidden
                         </h2>
-                        <p className="text-neutral-500 text-sm tracking-widest mb-10 max-w-sm mx-auto leading-relaxed" style={{ fontFamily: 'Cinzel, serif' }}>
-                            The sacred challenges remain concealed until the Oracle commands their revelation.
+                        <p className="text-neutral-400 text-base tracking-widest mb-10 max-w-sm mx-auto leading-relaxed" style={{ fontFamily: 'Cinzel, serif' }}>
+                            Problem statements will be revealed soon. Click below or type ORACLE to see them now.
                         </p>
                         <motion.button
                             onClick={onReveal}
                             whileHover={{ scale: 1.04 }}
                             whileTap={{ scale: 0.97 }}
-                            className="px-10 py-4 text-xs uppercase tracking-[0.5em] border border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/10 transition-all"
+                            className="px-10 py-4 text-sm uppercase tracking-[0.4em] border border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/10 transition-all"
                             style={{ fontFamily: 'Cinzel, serif' }}
                             animate={{ boxShadow: ['0 0 0 rgba(212,175,55,0)', '0 0 40px rgba(212,175,55,0.3)', '0 0 0 rgba(212,175,55,0)'] }}
                             transition={{ duration: 2.5, repeat: Infinity }}
                         >
-                            Lift the Mist
+                            Reveal Challenges
                         </motion.button>
                         <p className="text-neutral-700 text-[10px] mt-5 tracking-[0.4em] uppercase" style={{ fontFamily: 'Cinzel, serif' }}>or type ORACLE</p>
                     </motion.div>
@@ -398,7 +349,7 @@ function ProblemCard({
                 background: hovered ? 'rgba(12, 10, 8, 0.8)' : 'rgba(8, 6, 5, 0.65)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
-                minHeight: 340,
+                minHeight: 360,
                 boxShadow: hovered ? `0 16px 40px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(${domain.rgb},0.2)` : '0 8px 24px rgba(0,0,0,0.5)',
                 transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
                 transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
@@ -413,10 +364,7 @@ function ProblemCard({
                      clipPath: 'polygon(20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px), 0 20px)'
                 }}
             >
-                {/* 
-                     Classical Greek Corner Ornaments (Square Spiral/Meander corner motif)
-                     We use SVG background images for a sharp, geometric look.
-                */}
+                {/* Classical Greek Corner Ornaments */}
                 <div 
                     className="absolute top-0 left-0 w-8 h-8 opacity-60 transition-opacity duration-300 group-hover:opacity-100" 
                     style={{
@@ -446,7 +394,7 @@ function ProblemCard({
                 />
             </div>
 
-            {/* Inner "Parchment/Tablet" simple double line inset border */}
+            {/* Inner double line inset border */}
             <div 
                  className="absolute inset-[6px] pointer-events-none z-10 transition-colors duration-500 rounded-sm"
                  style={{
@@ -464,7 +412,7 @@ function ProblemCard({
                 style={{ borderColor: hovered ? `rgba(${domain.rgb}, 0.15)` : 'rgba(255,255,255,0.03)' }}
             />
 
-            {/* Greek Meander / Key pattern bounding top inner area */}
+            {/* Greek Meander pattern */}
             <div 
                 className="absolute top-4 left-8 right-8 h-2 opacity-[0.25] bg-repeat-x pointer-events-none z-10 transition-opacity duration-500 group-hover:opacity-[0.5]"
                 style={{
@@ -509,11 +457,11 @@ function ProblemCard({
                             {domain.icon}
                         </div>
                         <div>
-                            <div className="text-[10px] font-bold uppercase tracking-[0.5em] mb-1 transition-colors duration-400" style={{ fontFamily: 'Cinzel, serif', color: hovered ? accentColor : 'rgba(212,175,55,0.7)' }}>
+                            <div className="text-[12px] font-bold uppercase tracking-[0.5em] mb-1 transition-colors duration-400" style={{ fontFamily: 'Cinzel, serif', color: hovered ? accentColor : 'rgba(212,175,55,0.7)' }}>
                                 {domain.label}
                             </div>
-                            <div className="text-[9px] uppercase tracking-[0.3em] font-medium" style={{ fontFamily: 'Cinzel, serif', color: 'rgba(255,255,255,0.4)' }}>
-                                Codex Entry
+                            <div className="text-[11px] uppercase tracking-[0.3em] font-medium" style={{ fontFamily: 'Cinzel, serif', color: 'rgba(255,255,255,0.4)' }}>
+                                Problem Statement
                             </div>
                         </div>
                     </div>
@@ -521,7 +469,7 @@ function ProblemCard({
                     {/* Availability Status */}
                     <div className="flex flex-col items-end shrink-0 transition-all duration-400">
                         <span 
-                            className="text-[9px] uppercase tracking-[0.4em] font-bold mb-2 transition-colors" 
+                            className="text-[11px] uppercase tracking-[0.4em] font-bold mb-2 transition-colors" 
                             style={{ fontFamily: 'Cinzel, serif', color: hovered ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.4)' }}
                         >
                             Status
@@ -558,7 +506,7 @@ function ProblemCard({
                                         : { textShadow: '0 0 12px rgba(239,68,68,0.6)' }
                                 }
                                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                                className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] leading-none ml-2 w-[70px] text-right"
+                                className="text-sm sm:text-base font-bold uppercase tracking-[0.2em] leading-none ml-2 w-[70px] text-right"
                                 style={{
                                     fontFamily: 'Cinzel, serif',
                                     color: count >= 2 
@@ -582,7 +530,7 @@ function ProblemCard({
                         className="font-bold leading-snug mb-3 transition-colors duration-400"
                         style={{
                             fontFamily: 'Cinzel, serif',
-                            fontSize: '1.25rem',
+                            fontSize: '1.4rem',
                             color: hovered ? '#ffffff' : '#ede0c4',
                             letterSpacing: '0.04em',
                         }}
@@ -597,13 +545,13 @@ function ProblemCard({
                     </div>
 
                     <p
-                        className="leading-[1.7] transition-colors duration-400"
+                        className="leading-[1.8] transition-colors duration-400"
                         style={{
-                            fontFamily: '"Libre Baskerville", serif',
+                            fontFamily: 'Inter, system-ui, sans-serif',
                             fontSize: '16px',
-                            color: hovered ? 'rgba(255,255,255,0.85)' : 'rgba(237,224,196,0.65)',
+                            color: hovered ? 'rgba(255,255,255,0.8)' : 'rgba(237,224,196,0.6)',
                             display: '-webkit-box',
-                            WebkitLineClamp: 3,
+                            WebkitLineClamp: 4,
                             WebkitBoxOrient: 'vertical' as const,
                             overflow: 'hidden',
                         }}
@@ -615,10 +563,10 @@ function ProblemCard({
                 {/* Footer Area */}
                 <div className="mt-5 flex items-center justify-between pt-5 transition-colors duration-400">
                     <span 
-                        className="text-[11px] uppercase tracking-[0.3em] font-bold"
+                        className="text-[13px] uppercase tracking-[0.3em] font-bold"
                         style={{ fontFamily: 'Cinzel, serif', color: hovered ? '#ffffff' : 'rgba(212,175,55,0.5)' }}
                     >
-                        Labor {roman}
+                        Problem {roman}
                     </span>
                     
                     <div 
@@ -629,10 +577,10 @@ function ProblemCard({
                         }}
                     >
                         <span 
-                            className="text-[9px] uppercase tracking-[0.4em] font-bold transition-colors duration-300"
+                            className="text-[11px] uppercase tracking-[0.4em] font-bold transition-colors duration-300"
                             style={{ fontFamily: 'Cinzel, serif', color: hovered ? '#ffffff' : 'rgba(212,175,55,0.7)' }}
                         >
-                            Decipher
+                            View Details
                         </span>
                         <motion.span
                             className="transition-colors duration-300"
@@ -833,19 +781,16 @@ function DetailModal({
                                     className="px-6 py-2.5 text-[10px] uppercase tracking-[0.3em] font-bold mt-4"
                                     style={{ fontFamily: 'Cinzel, serif', background: 'rgba(139,168,90,0.2)', border: '1px solid rgba(139,168,90,0.5)', color: '#8ba85a' }}
                                 >
-                                    Return to Hall
+                                    Go Back
                                 </motion.button>
                             </motion.div>
                         ) : (
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                                 <div>
-                                    <h4 className="text-[11px] sm:text-xs uppercase tracking-[0.3em] font-bold mb-4" style={{ fontFamily: 'Cinzel, serif', color: domain.color }}>
-                                        The Oracle's Decree
+                                    <h4 className="text-[13px] sm:text-sm uppercase tracking-[0.3em] font-bold mb-4" style={{ fontFamily: 'Cinzel, serif', color: domain.color }}>
+                                        Problem Description
                                     </h4>
-                                    <p 
-                                        className="text-neutral-200 leading-[1.8] text-lg sm:text-xl mb-8 pr-4"
-                                        style={{ fontFamily: '"Libre Baskerville", serif' }}
-                                    >
+                                    <p className="text-neutral-300 leading-relaxed text-lg sm:text-xl mb-8 pr-4" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                                         {p.description}
                                     </p>
                                 </div>
@@ -853,8 +798,8 @@ function DetailModal({
                                 <form onSubmit={handleSubmit} className="flex flex-col gap-6 relative p-1 pb-2">
                                     <div className="flex items-center gap-3">
                                         <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, transparent, rgba(${domain.rgb},0.4))` }} />
-                                        <h4 className="text-[11px] uppercase tracking-[0.4em] font-bold text-center" style={{ fontFamily: 'Cinzel, serif', color: domain.color, textShadow: `0 0 10px rgba(${domain.rgb},0.3)` }}>
-                                            Accept this Labor
+                                        <h4 className="text-[12px] uppercase tracking-[0.4em] font-bold text-center" style={{ fontFamily: 'Cinzel, serif', color: domain.color, textShadow: `0 0 10px rgba(${domain.rgb},0.3)` }}>
+                                            Register for This Challenge
                                         </h4>
                                         <div className="h-px flex-1" style={{ background: `linear-gradient(270deg, transparent, rgba(${domain.rgb},0.4))` }} />
                                     </div>
@@ -863,7 +808,7 @@ function DetailModal({
                                         {/* ── TEAM NUMBER (primary, first) ── */}
                                         <div className="flex flex-col relative group/input mt-1 sm:col-span-2">
                                             <label
-                                                className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold mb-1 absolute -top-6 left-0 transition-colors flex items-center gap-2"
+                                                className="text-[12px] sm:text-[13px] uppercase tracking-[0.2em] font-bold mb-1 absolute -top-6 left-0 transition-colors flex items-center gap-2"
                                                 style={{
                                                     fontFamily: 'Cinzel, serif',
                                                     color: teamCheck === 'registered' ? 'rgba(251,191,36,0.9)' : teamCheck === 'available' ? '#8ba85a' : 'rgba(180,140,50,0.85)',
@@ -902,7 +847,7 @@ function DetailModal({
                                         </div>
 
                                         <div className="flex flex-col relative group/input mt-1 sm:col-span-2">
-                                            <label className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
+                                            <label className="text-[12px] sm:text-[13px] uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
                                                 Team Name <span style={{ color: domain.color }}>♦</span>
                                             </label>
                                             <input required type="text" value={formData.teamName} onChange={e => setFormData({...formData, teamName: e.target.value})} className="bg-black/40 border-b border-white/10 px-3 py-1.5 text-xl sm:text-2xl text-white placeholder-neutral-700/50 focus:outline-none focus:bg-black/60 transition-all w-full shadow-inner" style={{ fontFamily: '"IM Fell English", serif', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.5)' }} placeholder="e.g. Argonauts" />
@@ -910,7 +855,7 @@ function DetailModal({
                                             <div className="absolute top-0 right-0 w-4 h-4 border-t border-r opacity-20 pointer-events-none transition-opacity group-focus-within/input:opacity-100" style={{ borderColor: domain.color }} />
                                         </div>
                                         <div className="flex flex-col relative group/input mt-1 sm:col-span-2">
-                                            <label className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
+                                            <label className="text-[12px] sm:text-[13px] uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
                                                 Leader Name <span style={{ color: domain.color }}>♦</span>
                                             </label>
                                             <input required type="text" value={formData.leaderName} onChange={e => setFormData({...formData, leaderName: e.target.value})} className="bg-black/40 border-b border-white/10 px-3 py-1.5 text-xl sm:text-2xl text-white placeholder-neutral-700/50 focus:outline-none focus:bg-black/60 transition-all w-full shadow-inner" style={{ fontFamily: '"IM Fell English", serif', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.5)' }} placeholder="e.g. Kartik" />
@@ -918,7 +863,7 @@ function DetailModal({
                                             <div className="absolute top-0 right-0 w-4 h-4 border-t border-r opacity-20 pointer-events-none transition-opacity group-focus-within/input:opacity-100" style={{ borderColor: domain.color }} />
                                         </div>
                                         <div className="flex flex-col relative group/input mt-1 sm:col-span-2">
-                                            <label className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
+                                            <label className="text-[12px] sm:text-[13px] uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
                                                 Email <span style={{ color: domain.color }}>♦</span>
                                             </label>
                                             <input required type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="bg-black/40 border-b border-white/10 px-3 py-1.5 text-xl sm:text-2xl text-white placeholder-neutral-700/50 focus:outline-none focus:bg-black/60 transition-all w-full shadow-inner" style={{ fontFamily: '"IM Fell English", serif', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.5)' }} placeholder="contact@example.com" />
@@ -926,7 +871,7 @@ function DetailModal({
                                             <div className="absolute top-0 right-0 w-4 h-4 border-t border-r opacity-20 pointer-events-none transition-opacity group-focus-within/input:opacity-100" style={{ borderColor: domain.color }} />
                                         </div>
                                         <div className="flex flex-col relative group/input mt-1 sm:col-span-2">
-                                            <label className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
+                                            <label className="text-[12px] sm:text-[13px] uppercase tracking-[0.2em] font-bold text-neutral-500 mb-1 absolute -top-6 left-0 transition-colors group-focus-within/input:text-white" style={{ fontFamily: 'Cinzel, serif' }}>
                                                 Phone <span style={{ color: domain.color }}>♦</span>
                                             </label>
                                             <input required type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="bg-black/40 border-b border-white/10 px-3 py-1.5 text-xl sm:text-2xl text-white placeholder-neutral-700/50 focus:outline-none focus:bg-black/60 transition-all w-full shadow-inner" style={{ fontFamily: '"IM Fell English", serif', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.5)' }} placeholder="+91 9876543210" />
@@ -946,8 +891,8 @@ function DetailModal({
                                         <div className="absolute bottom-3 right-3 w-3 h-3 border-b border-r opacity-60 pointer-events-none z-10" style={{ borderColor: domain.color }} />
                                         
                                         <div className="relative z-20 flex flex-col items-center text-center">
-                                            <div className="text-[10px] uppercase tracking-[0.5em] font-bold text-neutral-400 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>
-                                                — Selected Labor —
+                                            <div className="text-[11px] uppercase tracking-[0.5em] font-bold text-neutral-400 mb-3" style={{ fontFamily: 'Cinzel, serif' }}>
+                                                — Your Selection —
                                             </div>
                                             <div className="text-3xl sm:text-4xl font-bold tracking-widest mb-2" style={{ fontFamily: 'Cinzel, serif', color: domain.color, textShadow: '0 4px 15px rgba(0,0,0,0.9)' }}>
                                                 {domain.label}
@@ -987,10 +932,10 @@ function DetailModal({
                                             }}
                                         >
                                             <span className="relative z-10 drop-shadow-md font-bold">
-                                                {status === 'submitting' ? 'Scribing…'
+                                                {status === 'submitting' ? 'Submitting…'
                                                     : teamCheck === 'checking' ? 'Verifying…'
-                                                    : teamCheck === 'registered' ? 'Switch & Seal the Pact'
-                                                    : 'Seal the Pact'}
+                                                    : teamCheck === 'registered' ? 'Switch & Register'
+                                                    : 'Submit Registration'}
                                             </span>
                                             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
                                         </button>
@@ -1122,7 +1067,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                         className="flex items-center justify-center gap-4 mb-8 relative z-10"
                     >
                         <div className="h-px flex-1 max-w-[80px]" style={{ background: 'rgba(212,175,55,0.4)' }} />
-                        <span className="text-[9px] uppercase tracking-[0.5em] text-neutral-400 font-bold" style={{ fontFamily: 'Cinzel, serif', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
+                        <span className="text-[11px] uppercase tracking-[0.5em] text-neutral-400 font-bold" style={{ fontFamily: 'Cinzel, serif', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
                             HackJKLU v5.0 · Sacred Labors
                         </span>
                         <div className="h-px flex-1 max-w-[80px]" style={{ background: 'rgba(212,175,55,0.4)' }} />
@@ -1155,7 +1100,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
 
                     <motion.p
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-                        className="text-neutral-300 text-sm sm:text-base tracking-widest italic mb-10 relative z-10 font-medium"
+                        className="text-neutral-300 text-base sm:text-lg tracking-widest italic mb-10 relative z-10 font-medium"
                         style={{ fontFamily: 'Cinzel, serif', textShadow: '0 2px 15px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.8)' }}
                     >
                         &ldquo;Choose your labor and etch your name into the stars.&rdquo;
@@ -1192,7 +1137,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                                         {stat.value}
                                     </div>
                                     <div
-                                        className="text-[9px] sm:text-[10px] uppercase tracking-[0.35em] font-bold"
+                                        className="text-[11px] sm:text-[12px] uppercase tracking-[0.35em] font-bold"
                                         style={{
                                             fontFamily: 'Cinzel, serif',
                                             color: 'rgba(255,255,255,0.55)',
@@ -1231,7 +1176,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                             onClick={() => setActiveTheme('all')}
                             whileHover={{ scale: 1.04 }}
                             whileTap={{ scale: 0.97 }}
-                            className="px-3 sm:px-5 py-2 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] transition-all duration-200 rounded-sm font-semibold"
+                            className="px-3 sm:px-5 py-2 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] transition-all duration-200 rounded-sm font-semibold"
                             style={{
                                 fontFamily: 'Cinzel, serif',
                                 background: activeTheme === 'all' ? 'rgba(212,175,55,0.2)' : 'rgba(255,255,255,0.04)',
@@ -1254,7 +1199,7 @@ export function HallOfOraclesClient({ initialCounts = {} }: { initialCounts?: Re
                                     onClick={() => setActiveTheme(domain.key)}
                                     whileHover={{ scale: 1.04 }}
                                     whileTap={{ scale: 0.97 }}
-                                    className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] transition-all duration-200 rounded-sm font-semibold"
+                                    className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 text-[10px] sm:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.25em] transition-all duration-200 rounded-sm font-semibold"
                                     style={{
                                         fontFamily: 'Cinzel, serif',
                                         background: isActive ? `rgba(${domain.rgb},0.2)` : 'rgba(255,255,255,0.04)',

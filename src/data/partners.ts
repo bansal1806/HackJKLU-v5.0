@@ -122,7 +122,7 @@ export const partnersData: PartnerData[] = [
                 ring: bronzeRing,
                 color: '#CD7F32',
                 partners: [
-                    { name: 'InterviewBuddy', logo: interviewBuddyLogo, logoScale: 0.4 },
+                    { name: 'InterviewBuddy', logo: interviewBuddyLogo, logoScale: 0.392 },
                     { name: 'TruScholar', logo: truScholarLogo, logoScale: 0.8 },
                     { name: 'Commudle', logo: commudleLogo, logoScale: 0.8 },
                     { name: 'DMV Core Tech', logo: dmvCoreLogo, logoScale: 0.85 },
