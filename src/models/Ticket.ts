@@ -10,6 +10,7 @@ export interface ITicket extends Document {
     attendeePhone: string;
     college: string;
     teamMembers?: string[];
+    danceStyle?: string; // Dance Battle only: 'Popping' or 'Rep Your Style'
     isPaid: boolean;
     paymentReference?: string;
     isCheckedIn: boolean;
@@ -33,6 +34,7 @@ const TicketSchema = new Schema<ITicket>(
         attendeePhone: { type: String, required: true },
         college: { type: String, required: true },
         teamMembers: { type: [String], default: [] },
+        danceStyle: { type: String },
         isPaid: { type: Boolean, default: false },
         paymentReference: { type: String },
         isCheckedIn: { type: Boolean, default: false },

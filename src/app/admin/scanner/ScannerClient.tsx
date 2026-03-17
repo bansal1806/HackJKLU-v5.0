@@ -15,10 +15,11 @@ export function ScannerClient() {
         eventTitle?: string;
     } | null>(null);
     const [isVerifying, setIsVerifying] = useState(false);
-    const [lastScannedId, setLastScannedId] = useState<string | null>(null);
     const [selectedEventId, setSelectedEventId] = useState<string>('4');
 
     const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+    const processingRef = useRef(false);
+    const lastScannedIdRef = useRef<string | null>(null);
 
     // Simple client-side PIN for basic protection. In production, use a secure backend session.
     const handleLogin = (e: React.FormEvent) => {
@@ -49,16 +50,19 @@ export function ScannerClient() {
                     console.error("Failed to clear html5QrcodeScanner. ", error);
                 });
             }
+            processingRef.current = false;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthorized, selectedEventId]);
 
     const onScanSuccess = async (decodedText: string) => {
         // Prevent rapid repeated scans of the same ticket
-        if (isVerifying || decodedText === lastScannedId) return;
+        if (processingRef.current || decodedText === lastScannedIdRef.current) return;
 
+        processingRef.current = true;
+        lastScannedIdRef.current = decodedText;
+        
         setIsVerifying(true);
-        setLastScannedId(decodedText);
         setScanResult(null);
 
         try {
@@ -90,30 +94,23 @@ export function ScannerClient() {
 
             setScanResult(data);
 
-            // Pause the scanner safely
-            if (scannerRef.current) {
-                try {
-                    // Only pause if actually scanning/started
-                    scannerRef.current.pause(true);
-                } catch (e) {
-                    console.log('Ignore pause error:', e);
-                }
-            }
-
+            // Intentionally not pausing the scanner using .pause(true).
+            // It breaks on many mobile browsers when .resume() is called.
+            // Using processingRef disables the callback logic efficiently.
         } catch (err: any) {
             console.error(err);
             setScanResult({ valid: false, message: `Network error: ${err.message || 'Check connection'}` });
         } finally {
             setIsVerifying(false);
+            // We intentionally keep processingRef.current = true here.
+            // It only gets reset when the user clicks 'Scan Next Ticket'.
         }
     };
 
     const resetScanner = () => {
         setScanResult(null);
-        setLastScannedId(null);
-        if (scannerRef.current) {
-            scannerRef.current.resume();
-        }
+        lastScannedIdRef.current = null;
+        processingRef.current = false;
     };
 
     const onScanFailure = (error: any) => {

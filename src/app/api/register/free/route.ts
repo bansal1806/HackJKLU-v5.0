@@ -56,7 +56,8 @@ export async function POST(req: NextRequest) {
 
         // Send Email (optional/async)
         if (process.env.RESEND_API_KEY || (process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
-            const eventInfo: any = eventsData.find(e => Number(e.id) === Number(eventId)) || eventsData.find(e => e.title === eventTitle) || { time: 'TBD', location: 'Campus' };
+            const maanPanuFallback = { time: '15th March, 2026 \u2022 07:00 PM onwards', location: 'JK Lakshmipat University', poster: '/events/maan_panu_ticket.webp' };
+            const eventInfo: any = eventsData.find(e => Number(e.id) === Number(eventId)) || eventsData.find(e => e.title === eventTitle) || (Number(eventId) === 999 || eventTitle.toLowerCase().includes('maan panu') ? maanPanuFallback : { time: 'TBD', location: 'Campus' });
 
             const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
             const siteUrl = rawSiteUrl.includes('localhost') ? 'https://hackjklu-v5.vercel.app' : (rawSiteUrl || 'https://hackjklu-v5.vercel.app');

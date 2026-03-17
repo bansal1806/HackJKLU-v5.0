@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     const ticketId = searchParams.get('ticketId') || 'FT-PNMI18SAI-XQ2026DEMO';
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `http://localhost:${process.env.PORT || 3000}`;
-    const posterUrl = `${siteUrl}/events/mann_pannu.webp`;
+    const posterUrl = `${siteUrl}/events/maan_panu_ticket.webp`;
 
     const html = generateBoardingPassHTML({
         ticketId,

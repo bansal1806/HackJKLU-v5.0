@@ -82,20 +82,6 @@ export function Footer({ className = '' }: FooterProps) {
                         </div>
                     </Link>
 
-                    {/* Compact Registration Section */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 bg-[#d4af37]/5 px-5 py-3 rounded-xl border border-[#d4af37]/10 hover:border-[#d4af37]/30 transition-colors">
-                        <div className="flex flex-col">
-                            <span className="text-[10px] text-[#d4af37] font-[Cinzel] tracking-widest uppercase mb-0.5">Registration Queries</span>
-                            <span className="text-sm font-[Cinzel] text-white tracking-wider">Siddharth Ranka</span>
-                        </div>
-                        <div className="hidden sm:block w-px h-8 bg-linear-to-b from-transparent via-[#d4af37]/30 to-transparent" />
-                        <div className="flex items-center gap-4">
-                            <a href="tel:+918955395771" className="flex items-center gap-2 text-sm hover:text-[#d4af37] transition-colors group/link">
-                                <Phone className="w-4 h-4 text-[#d4af37] group-hover/link:animate-pulse" />
-                                <span className="font-mono">+91 89553 95771</span>
-                            </a>
-                        </div>
-                    </div>
                 </div>
 
                 {/* MAIN GRID - SMALLER HEIGHT */}

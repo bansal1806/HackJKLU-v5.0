@@ -111,7 +111,7 @@ export function Events() {
   const { addItem, items } = useCart();
 
   const [showRsvpForm, setShowRsvpForm] = useState(false);
-  const [rsvpForm, setRsvpForm] = useState({ name: '', email: '', phone: '', college: '', accessCode: '', transactionId: '', receipt: null as File | null, teamMembers: [] as string[] });
+  const [rsvpForm, setRsvpForm] = useState({ name: '', email: '', phone: '', college: '', accessCode: '', transactionId: '', receipt: null as File | null, teamMembers: [] as string[], danceStyle: '' });
   const [rsvpStatus, setRsvpStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [rsvpError, setRsvpError] = useState('');
   const [rsvpTicketId, setRsvpTicketId] = useState<string | null>(null);
@@ -149,7 +149,7 @@ export function Events() {
     setRsvpStatus('idle');
     setRsvpTicketId(null);
     setRsvpAccessTier('GA');
-    setRsvpForm({ name: '', email: '', phone: '', college: '', accessCode: '', transactionId: '', receipt: null, teamMembers: [] });
+    setRsvpForm({ name: '', email: '', phone: '', college: '', accessCode: '', transactionId: '', receipt: null, teamMembers: [], danceStyle: '' });
   };
 
   const handleRsvpSubmit = async (e: React.FormEvent) => {
@@ -186,6 +186,9 @@ export function Events() {
         formData.append('transactionId', rsvpForm.transactionId);
         formData.append('receipt', rsvpForm.receipt as Blob);
         formData.append('teamMembers', JSON.stringify(rsvpForm.teamMembers));
+        if (rsvpForm.danceStyle) {
+          formData.append('danceStyle', rsvpForm.danceStyle);
+        }
 
         res = await fetch('/api/register/paid', {
           method: 'POST',
@@ -697,6 +700,20 @@ export function Events() {
                               required
                             />
                           </div>
+
+                          {selectedEvent.id === 12 && (
+                            <select
+                              title="Select Dance Style"
+                              value={rsvpForm.danceStyle}
+                              onChange={e => setRsvpForm(prev => ({ ...prev, danceStyle: e.target.value }))}
+                              className="w-full bg-black/40 border border-[#d4af37]/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#d4af37] font-[Cinzel] text-sm appearance-none cursor-pointer"
+                              required
+                            >
+                              <option value="" disabled>Select Dance Style</option>
+                              <option value="Popping">Popping</option>
+                              <option value="Rep Your Style">Rep Your Style</option>
+                            </select>
+                          )}
 
                           {(selectedEvent.id === 4 || selectedEvent.id === 13) && (
                             Array.from({ length: selectedEvent.id === 4 ? 3 : 4 }).map((_, idx) => (
