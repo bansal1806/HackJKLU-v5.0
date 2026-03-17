@@ -9,9 +9,7 @@ export const COMMITTEE_DATA: Record<string, { core: string[], coordinators: stri
         "volunteers": []
     },
     "Registrations": {
-        "core": [
-            "Siddharth Ranka"
-        ],
+        "core": [],
         "coordinators": [
             "Bhawesh Chandnani",
             "Kartavya Garhwal",
